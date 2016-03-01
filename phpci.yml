@@ -32,7 +32,7 @@ test:
     codeception:
         config: "test/codeception/"
 #    php_mess_detector:
-#        path: 'backend/application'
+#        path: 'cis/application'
 #        ignore:
 #          - 'vendor'
 #        allowed_warnings: -1
@@ -47,7 +47,7 @@ test:
     php_code_sniffer:
         path: "cis/application/controllers"
 #        ignore:
-#            - "backend/application/views"
+#            - "cis/application/views"
         standard: "PSR1"
         allowed_errors: 200
         allowed_warnings: 200
