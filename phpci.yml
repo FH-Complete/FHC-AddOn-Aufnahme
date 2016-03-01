@@ -53,18 +53,18 @@ test:
         allowed_warnings: 200
     
 complete:
-    xmpp:
-        username: "fhcomplete@blah.im"
-        password: "fhcomplete1q2w3blah.im"
-        recipients:
-            - "fhcomplete@darkness.su"
-            - "tschux@jabber.org"
-            - "tschux@jabber.at"      
-        server: "jabber.blah.im"
-        tls: 1
-        alias: "jabber.blah.im"
-        date_format: "%d.%m.%Y"
-    clean_build:
+#    xmpp:
+#        username: "fhcomplete@blah.im"
+#        password: "fhcomplete1q2w3blah.im"
+#        recipients:
+#            - "fhcomplete@darkness.su"
+#            - "tschux@jabber.org"
+#            - "tschux@jabber.at"      
+#        server: "jabber.blah.im"
+#        tls: 1
+#        alias: "jabber.blah.im"
+#        date_format: "%d.%m.%Y"
+#    clean_build:
 #        remove:
 #            - cis/application/config/database.php
 #            - cis/application/config/config.php
