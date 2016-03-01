@@ -33,7 +33,7 @@ cp cis/application/config/database.dist.php cis/application/config/database.php
 cp cis/application/config/aufnahme.dist.php cis/application/config/aufnahme.php
 # ./composer.phar install
 # ln -s "$cwd/vendor" ./web/js/vendor
-chown www-data cis/application/config/config.php
+chgrp -R www-data *
 
 echo "Done!"
 exit 0
