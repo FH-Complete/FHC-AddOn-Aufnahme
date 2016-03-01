@@ -6,3 +6,7 @@
 !*/cache/.htaccess
 bin
 vendor
+
+test/codeception/tests/acceptance.suite.yml
+test/codeception/tests/functional.suite.yml
+test/codeception/tests/unit.suite.yml
