@@ -1,0 +1,41 @@
+{
+  "name": "fh-complete/fhc-aufnahme",
+  "type": "app",
+  "description": "FH-Complete Aufnahmeverfahren",
+  "keywords": ["fhc", "fh-complete", "campusmanagement"],
+  "homepage": "https://github.com/FH-Complete/FHC-Core",
+  "license": "GPLv2",
+  "authors": [
+  {
+    "name": "Christian Paminger",
+    "email": "christian.paminger@fhcomplete.org",
+    "homepage": "http://fhcomplete.org"
+  },
+  {
+    "name": "Andreas Österreicher",
+    "email": "oesi@technikum-wien.at",
+    "homepage": "http://fhcomplete.org"
+  }],
+  "support": 
+  {
+        "email": "info@fhcomplete.org",
+        "forum": "https://plus.google.com/communities/113278802529782592610",
+        "wiki": "http://wiki.fhcomplete.org/"
+  },
+  "require": 
+  {
+    "php": ">=5.4.0",
+    "components/bootstrap":"*",
+    "components/jquery": "*",
+    "components/font-awesome": "*",
+    "components/angular.js": "*"
+  },
+  "require-dev": 
+  {
+    "codeception/codeception": "*"
+  },
+  "config": 
+  {
+    "bin-dir": "bin"
+  }
+}

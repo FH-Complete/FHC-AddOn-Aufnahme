@@ -1,0 +1,79 @@
+build_settings:
+    verbose: false
+    prefer_symlink: false
+    ignore:
+        - "vendor"
+        - "tests"     
+
+setup:
+    composer:
+        action: "install"
+    shell:
+        - "cd %BUILD_PATH% && chmod u+x installPHPCI.sh && ./installPHPCI.sh" # Install AddOn
+        - "rm -f /home/fhc/FHC-Core/addons/aufnahme" # SymLink löschen falls vorhanden
+        - "ln -s %BUILD_PATH% /home/fhc/FHC-Core/addons/aufnahme" # SymLink to the actual build
+        - "curl 'http://localhost/addons/aufnahme/cis/index.php/Migrate/'" # DB-Migaration
+
+test:
+    lint:
+        directories:
+        - "cis/application/"
+#        - "backend/install/"
+#        - "backend/web/"
+        recursive: true
+    php_unit:
+        directory: "test/phpunit/"
+    php_loc:
+        directory: "cis/application"
+    php_docblock_checker:
+        path: "cis/application/controllers/"
+        allowed_warnings: 100
+        skip_classes: false
+    codeception:
+        config: "test/codeception/"
+#    php_mess_detector:
+#        path: 'backend/application'
+#        ignore:
+#          - 'vendor'
+#        allowed_warnings: -1
+#        rules:
+#          - "naming"
+#          - "cleancode"
+#          - "controversial"
+#          - "codesize"
+#          - "design"
+#          - "unusedcode"
+#        zero_config: true
+    php_code_sniffer:
+        path: "cis/application/controllers"
+#        ignore:
+#            - "backend/application/views"
+        standard: "PSR1"
+        allowed_errors: 200
+        allowed_warnings: 200
+    
+complete:
+    xmpp:
+        username: "fhcomplete@blah.im"
+        password: "fhcomplete1q2w3blah.im"
+        recipients:
+            - "fhcomplete@darkness.su"
+            - "tschux@jabber.org"
+            - "tschux@jabber.at"      
+        server: "jabber.blah.im"
+        tls: 1
+        alias: "jabber.blah.im"
+        date_format: "%d.%m.%Y"
+    clean_build:
+#        remove:
+#            - cis/application/config/database.php
+#            - cis/application/config/config.php
+#            - cis/application/config/aufnahme.php
+
+success:
+#    shell:
+#        - "cd %BUILD_PATH%backend/ && chmod u+x copyBackend.sh && ./copyBackend.sh" # Copy Build
+#        - "cd %BUILD_PATH%frontend/ && chmod u+x copyFrontend.sh && ./copyFrontend.sh" # Copy Build
+#        - "curl 'http://localhost/backend/Migrate/'" # DB-Installation
+#        - "cd /var/www/html/ && sudo -u wsp doxygen DoxyfileBackend" # Doxygen
+

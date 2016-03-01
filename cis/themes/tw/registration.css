@@ -1,0 +1,16 @@
+
+#lp h1, #lp img {
+	margin: 50px auto;
+}
+
+#ResendCodeForm h1, #ResendCodeForm img {
+	margin: 50px auto;
+}
+
+p.infotext {
+	margin: 40px 0;
+}
+
+.padding-10 {
+    padding: 10px;
+}
