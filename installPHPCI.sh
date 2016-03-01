@@ -27,7 +27,7 @@ echo "==============================================================="
 
 cwd=$(pwd)
 echo "Starting..."
-# cp index.dist.php index.php
+cp cis/index.dist.php cis/index.php
 cp cis/application/config/config.dist.php cis/application/config/config.php
 cp cis/application/config/database.dist.php cis/application/config/database.php
 cp cis/application/config/aufnahme.dist.php cis/application/config/aufnahme.php
