@@ -53,26 +53,28 @@ test:
         allowed_warnings: 200
     
 complete:
-#    xmpp:
-#        username: "fhcomplete@blah.im"
-#        password: "fhcomplete1q2w3blah.im"
-#        recipients:
+    xmpp:
+        username: "fhcomplete"
+        password: "fhcomplete1q2w3blah.im"
+        recipients:
 #            - "fhcomplete@darkness.su"
-#            - "tschux@jabber.org"
-#            - "tschux@jabber.at"      
-#        server: "jabber.blah.im"
-#        tls: 1
-#        alias: "jabber.blah.im"
-#        date_format: "%d.%m.%Y"
+            - "tschux@jabber.org"
+            - "tschux@jabber.at"      
+        server: "jabber.blah.im"
+        tls: 1
+        alias: "jabber.blah.im"
+        date_format: "%d.%m.%Y"
 #    clean_build:
 #        remove:
 #            - cis/application/config/database.php
 #            - cis/application/config/config.php
 #            - cis/application/config/aufnahme.php
+    shell:
+		- "ln -s %BUILD_PATH%/../aufnahme /home/fhc/FHC-Core/addons/aufnahme" # SymLink back to stable
 
 success:
 #    shell:
-#        - "cd %BUILD_PATH%backend/ && chmod u+x copyBackend.sh && ./copyBackend.sh" # Copy Build
+#        - "cd %BUILD_PATH% && chmod u+x copyBackend.sh && ./copyBackend.sh" # Copy Build
 #        - "cd %BUILD_PATH%frontend/ && chmod u+x copyFrontend.sh && ./copyFrontend.sh" # Copy Build
 #        - "curl 'http://localhost/backend/Migrate/'" # DB-Installation
 #        - "cd /var/www/html/ && sudo -u wsp doxygen DoxyfileBackend" # Doxygen

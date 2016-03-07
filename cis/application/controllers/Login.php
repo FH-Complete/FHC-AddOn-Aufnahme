@@ -55,9 +55,9 @@ class Login extends MY_Controller
 		{
 			$this->session->person_id=$data['person'][0]->person_id;
 			redirect('/Aufnahme');
-			$this->load->view('templates/header');
-			$this->load->view('aufnahme',$data);
-			$this->load->view('templates/footer');
+			//$this->load->view('templates/header');
+			//$this->load->view('aufnahme',$data);
+			//$this->load->view('templates/footer');
 		}
 		else
 			$data['wrong_code'] = true;
