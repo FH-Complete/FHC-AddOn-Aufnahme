@@ -69,8 +69,8 @@ complete:
 #            - cis/application/config/database.php
 #            - cis/application/config/config.php
 #            - cis/application/config/aufnahme.php
-    shell:
-		- "ln -s %BUILD_PATH%/../aufnahme /home/fhc/FHC-Core/addons/aufnahme" # SymLink back to stable
+    shell: 
+    - "ln -s %BUILD_PATH%/../aufnahme /home/fhc/FHC-Core/addons/aufnahme" # SymLink back to stable
 
 success:
 #    shell:
