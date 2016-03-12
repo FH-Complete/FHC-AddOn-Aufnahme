@@ -28,6 +28,7 @@
     "components/bootstrap":"*",
     "components/jquery": "*",
     "components/font-awesome": "*",
+	"rogeriopradoj/codeigniter-restclient": "2.*",
     "components/angular.js": "*"
   },
   "require-dev": 

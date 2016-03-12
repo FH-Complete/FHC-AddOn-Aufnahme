@@ -6,6 +6,6 @@
         <div class="main">
                 <?php echo $person_item->vorname,' ',$person_item->nachname ?>
         </div>
-        <p><a href="<?php echo 'person/',$person_item->person_id ?>">View Person</a></p>
+        <p><a href="<?php echo 'Person/',$person_item->person_id ?>">View Person</a></p>
 
 <?php endforeach ?>

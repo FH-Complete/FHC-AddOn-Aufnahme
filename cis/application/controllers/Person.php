@@ -4,31 +4,33 @@ class Person extends MY_Controller {
         public function __construct()
         {
                 parent::__construct();
-                $this->load->model($this->config->item('fhc_models').'person_model');
+                $this->load->model('person_model');
         }
 
         public function index()
         {
-                $data['person'] = $this->person_model->get_personen();
+                $this->person_model->getPersonen();
+				$persondata['person'] = $this->person_model->result->data;
 				$data['title'] = 'Personen Archiv';
 
 				$this->load->view('templates/header', $data);
-				$this->load->view('person/index', $data);
+				$this->load->view('person/index', $persondata);
 				$this->load->view('templates/footer');
         }
 
-        public function view($slug = NULL)
+        public function view($id = NULL)
         {
-            $data['person_item'] = $this->person_model->get_personen($slug);
-			if (empty($data['person_item']))
+            $this->person_model->getPersonen();
+			$persondata['person'] = $this->person_model->result->data[0];
+			if (empty($persondata['person']))
 		    {
 		            show_404();
 		    }
 
-		    $data['title'] = $data['person_item']->titelpre;
+		    $data['title'] = $persondata['person']->titelpre;
 
 		    $this->load->view('templates/header', $data);
-		    $this->load->view('person/view', $data);
+		    $this->load->view('person/view', $persondata);
 		    $this->load->view('templates/footer');
         }
 }

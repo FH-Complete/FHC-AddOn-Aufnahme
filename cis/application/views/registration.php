@@ -7,7 +7,7 @@
 		<li class="active">Registration</li>
 	</ol>
 	<form method="post" action="registration.php?method=registration" id="RegistrationLoginForm" name="RegistrationLoginForm" class="form-horizontal">
-		<img style="width:150px;" class="center-block img-responsive" src="../themes/<?php echo $this->config->item('theme'); ?>/logo.png">	
+		<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('themes/'.$this->config->item('theme')); ?>/logo.png">	
 		<h2 class="text-center"><?php echo $this->lang->line('login_greeting_text');?></h2>		
 					<p class="infotext">
 						Bitte füllen Sie das Formular aus, wählen Sie die gewünschte(n) Studienrichtung(en) und klicken Sie auf "Abschicken".<br>Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse.

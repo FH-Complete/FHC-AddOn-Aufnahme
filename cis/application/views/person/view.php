@@ -1,4 +1,4 @@
 <?php
-echo '<h2>'.$person_item->titelpre.'</h2>';
-echo $person_item->vorname;
-echo $person_item->nachname;
+echo '<h2>'.$person->titelpre.'</h2>';
+echo $person->vorname;
+echo $person->nachname;

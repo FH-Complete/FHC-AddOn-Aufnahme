@@ -16,5 +16,4 @@ class MY_Loader extends CI_Loader
 				$this->load->view($v);
 		}
 	}
-  
 }

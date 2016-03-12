@@ -8,7 +8,9 @@ class MY_Controller extends CI_Controller
         parent::__construct();
 		$this->load->config('aufnahme.dist');
 		$this->load->config('aufnahme', FALSE, TRUE);
+		$this->load->helper('url');
 		$this->load->library('session');
+		//$this->load->spark('restclient/2.1.0');
     }
 
 	function get_language()
