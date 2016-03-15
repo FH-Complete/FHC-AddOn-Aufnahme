@@ -40,7 +40,7 @@ $config['fhc_models'] = '../../../../../application/models/';
 |
 */
 $config['fhc_api'] = array(
-	'server' => 'http://localhost/fhcomplete/index.php/api/v1/',
+	'server' => 'http://localhost/fhcomplete/index.ci.php/api/v1/',
 	'api_key'         => 'testapikey@fhcomplete.org',
     'api_name'        => 'FHC-API-KEY',
     'http_user'       => 'pam',
