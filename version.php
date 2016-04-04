@@ -18,7 +18,7 @@
  */
 
 // Name des Addons
-$addon_name = 'Bewerbung';
+$addon_name = 'Aufnahme';
 
 // Versionsnummer des Addons
 $addon_version = '0.01';

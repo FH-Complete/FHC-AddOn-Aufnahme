@@ -16,10 +16,10 @@ $this->phrasen['bewerbung/mailtextHtml']='Bitte sehen Sie sich die Nachricht in 
 $this->phrasen['bewerbung/anredeMaennlich']='geehrter Herr';
 $this->phrasen['bewerbung/anredeWeiblich']='geehrte Frau';
 $this->phrasen['bewerbung/mailtext']='Sehr %4$s %1$s %2$s!<br><br>
-        Vielen Dank für Ihr Interesse an einem Studiengang oder Lehrgang der '.CAMPUS_NAME.'. <br>
-        Verwenden Sie für Ihre Bewerbung bitte folgenden Link und Zugangscode: <br><br>
-        <a href="'.APP_ROOT.'addons/bewerbung/cis/registration.php?code=%3$s">Link zur Bewerbung</a><br>
-        Zugangscode: %3$s<br><br>
+        Vielen Dank für Ihr Interesse an einem Studiengang oder Lehrgang der '.CAMPUS_NAME.'. <br><br>
+	Bevor Sie fortfahren können bestätigen Sie bitte Ihre Registrierung unter folgendem Link: <br>
+        <a href="'.APP_ROOT.'addons/aufnahme/cis/confirm.php?code=%3$s">Registrierung bestätigen</a><br>
+        Dieser Link ist 24 Stunden gültig.<br><br>
         Mit freundlichen Grüßen, <br>
         '.CAMPUS_NAME;
 $this->phrasen['bewerbung/zugangsdatenFalsch']='Der eingegebene Zugangscode ist falsch oder Sie haben sich noch nicht registriert.';
@@ -35,6 +35,7 @@ $this->phrasen['bewerbung/bitteNachnameAngeben']='Bitte geben Sie Ihren Nachname
 $this->phrasen['bewerbung/bitteGeburtsdatumEintragen']='Bitte geben Sie Ihr Geburtsdatum ein.';
 $this->phrasen['bewerbung/bitteGeschlechtWaehlen']='Bitte geben Sie Ihr Geschlecht ein.';
 $this->phrasen['bewerbung/bitteEmailAngeben']='Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+$this->phrasen['bewerbung/bittePasswortAngeben']='Bitte geben Sie ein Passwort ein.';
 $this->phrasen['bewerbung/bitteStudienbeginnWaehlen']='Bitte wählen Sie den gewünschten Studienbeginn.';
 $this->phrasen['bewerbung/captcha']='Geben Sie bitte hier die Zeichen aus der Grafik ein (Spamschutz).';
 $this->phrasen['bewerbung/andereGrafik']='Andere Grafik';
@@ -197,5 +198,7 @@ $this->phrasen['bewerbung/zugangscodeVergessen']='Zugangscode vergessen?';
 $this->phrasen['bewerbung/dannHiermitAccountEinloggen']='Dann loggen Sie sich hier mit Ihrem CIS-Account ein';
 $this->phrasen['bewerbung/dannHierEinloggen']='Dann loggen Sie sich hier ein';
 $this->phrasen['bewerbung/dokumentHerunterladen']='Dokument herunterladen';
+$this->phrasen['bewerbung/ihrPasswortLautet']='Ihr neues Passwort lautet %1$s. Bitte notieren Sie es und melden sich damit an, es kann nicht geändert werden.';
+
 
 ?>
