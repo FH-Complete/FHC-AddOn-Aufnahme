@@ -31,19 +31,19 @@ class Login extends MY_Controller
 		$data['sprache'] = $this->get_language();
 		$data['stg_kz'] = $this->input->get('stg_kz');
 		if ($data['stg_kz'])
-			$this->session->stg_kz = $data['stg_kz'];
+		    $this->session->stg_kz = $data['stg_kz'];
 		$data['username'] = $this->input->post('username');
 		$data['password'] = $this->input->post('password');
 		// First _POST then _GET
 		$data['code'] = $this->input->post('code') ? $this->input->post('code') : $this->input->get('code');
 
 		if ($data['code'])
-			$this->code_login($data['code'],$data);
+		    $this->code_login($data['code'],$data);
 		else
 		{
-			$this->load->view('templates/header');
-			$this->load->view('login',$data);
-			$this->load->view('templates/footer');
+		    $this->load->view('templates/header');
+		    $this->load->view('login',$data);
+		    $this->load->view('templates/footer');
 		}
 	}
 
@@ -53,14 +53,14 @@ class Login extends MY_Controller
 		//var_dump($data);
 		if (isset($data['person'][0]->person_id))
 		{
-			$this->session->person_id=$data['person'][0]->person_id;
-			redirect('/Aufnahme');
-			//$this->load->view('templates/header');
-			//$this->load->view('aufnahme',$data);
-			//$this->load->view('templates/footer');
+		    $this->session->person_id=$data['person'][0]->person_id;
+		    redirect('/Aufnahme');
+		    //$this->load->view('templates/header');
+		    //$this->load->view('aufnahme',$data);
+		    //$this->load->view('templates/footer');
 		}
 		else
-			$data['wrong_code'] = true;
+		    $data['wrong_code'] = true;
 	}
 }
 

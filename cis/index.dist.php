@@ -97,7 +97,7 @@ switch (ENVIRONMENT)
  * Include the path if the folder is not in the same directory
  * as this file.
  */
-	$system_path = '/home/fhc/FHC-Core/vendor/codeigniter/framework/system';
+	$system_path = '../../../vendor/codeigniter/framework/system';
 
 /*
  *---------------------------------------------------------------
@@ -294,7 +294,8 @@ switch (ENVIRONMENT)
 
 // First load the FHC-Config-Files
 
-require_once '/home/fhc/FHC-Core/config/global.config.inc.php';
-require_once '/home/fhc/FHC-Core/config/vilesci.config.inc.php';
+require_once '../../../config/global.config.inc.php';
+//require_once '../../../config/vilesci.config.inc.php';
+require_once '../../../config/cis.config.inc.php';
 // Now the bootstrap file
 require_once BASEPATH.'core/CodeIgniter.php';

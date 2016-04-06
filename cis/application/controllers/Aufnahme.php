@@ -29,11 +29,11 @@ class Aufnahme extends MY_Controller
 	public function index()
 	{
 		$data['sprache'] = $this->get_language();
-		$data['person']=$this->person_model->get_person($this->session->person_id);
+		$data['person']=$this->person_model->getPersonen($this->session->person_id);
 
-		$this->load->view('header');
+		$this->load->view('templates/header');
 		$this->load->view('aufnahme',$data);
-		$this->load->view('footer');
+		$this->load->view('templates/footer');
 	}
 
 }
