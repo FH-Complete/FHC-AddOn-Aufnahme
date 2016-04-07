@@ -119,7 +119,6 @@ class Registration extends MY_Controller
 	    "sprache" => $this->get_language()
 	);
 
-
 	$this->Person_model->checkZugangscodePerson(array("code" => $this->input->get("code")));
 	if ($this->Person_model->result->success && (count($this->Person_model->result->data) == 1))
 	{
@@ -136,6 +135,7 @@ class Registration extends MY_Controller
 		{
 		    $person = $this->Person_model->result->data;
 		    $person->zugangscode = $data["zugangscode"];
+		    $this->Person_model->updatePerson($person);
 		}
 	    }
 	    $this->load->view('templates/header');
@@ -264,6 +264,21 @@ class Registration extends MY_Controller
 	    $msg = sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . "<br><br><a href=" . $_SERVER['PHP_SELF'] . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
 
 	return $msg;
+    }
+    
+    public function code_login()
+    {
+	$code = $this->input->post("password");
+	$email = $this->input->post("email");
+	$this->Person_model->getPersonFromCode($code, $email);
+	$data['person'] = $this->Person_model->result;
+	if (isset($data['person']->data[0]->person_id))
+	{
+	    $this->session->person_id=$data['person']->data[0]->person_id;
+	    redirect('/Aufnahme');
+	}
+	else
+	    $data['wrong_code'] = true;
     }
 
 }

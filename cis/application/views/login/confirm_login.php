@@ -6,7 +6,7 @@
     <ol class="breadcrumb">
 	<li class="active">Registration</li>
     </ol>
-    <?php echo form_open("Registration", array("id" => "ChangePasswordForm", "name" => "ChangePasswordForm", "class" => "form-horizontal")); ?>
+    <?php echo form_open("Registration/code_login", array("id" => "ChangePasswordForm", "name" => "ChangePasswordForm", "class" => "form-horizontal")); ?>
     <img style="width:150px;" class="center-block img-responsive" src="<?php echo APP_ROOT . 'skin/styles/' . $this->config->item('theme'); ?>/logo.png">
     <p class="infotext">
 	<?php echo sprintf($this->lang->line('aufnahme/ihrPasswortLautet'), $zugangscode);?>
