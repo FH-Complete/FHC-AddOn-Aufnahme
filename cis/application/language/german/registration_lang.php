@@ -18,7 +18,7 @@ $lang['aufnahme/anredeWeiblich']='geehrte Frau';
 $lang['aufnahme/mailtext']='Sehr %4$s %1$s %2$s!<br><br>
         Vielen Dank für Ihr Interesse an einem Studiengang oder Lehrgang der '.CAMPUS_NAME.'. <br><br>
 	Bevor Sie fortfahren können bestätigen Sie bitte Ihre Registrierung unter folgendem Link: <br>
-        <a href="'.APP_ROOT.'addons/aufnahme/cis/index.dist.php/Registration/confirm?code=%3$s">Registrierung bestätigen</a><br>
+        <a href="'.APP_ROOT.'addons/aufnahme/cis/index.dist.php/Registration/confirm?code=%3$s&stg_kz=%5$s">Registrierung bestätigen</a><br>
         Dieser Link ist 24 Stunden gültig.<br><br>
         Mit freundlichen Grüßen, <br>
         '.CAMPUS_NAME;
@@ -199,6 +199,6 @@ $lang['aufnahme/dannHiermitAccountEinloggen']='Dann loggen Sie sich hier mit Ihr
 $lang['aufnahme/dannHierEinloggen']='Dann loggen Sie sich hier ein';
 $lang['aufnahme/dokumentHerunterladen']='Dokument herunterladen';
 $lang['aufnahme/ihrPasswortLautet']='Ihr neues Passwort lautet %1$s. Bitte notieren Sie es und melden sich damit an, es kann nicht geändert werden.';
-
+$lang['aufnahme/codeNichtMehrGueltig']='Der angegeben Zugangscode ist nicht mehr gültig.';
 
 ?>

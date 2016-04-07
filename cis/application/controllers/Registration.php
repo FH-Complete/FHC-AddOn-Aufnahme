@@ -118,10 +118,10 @@ class Registration extends MY_Controller
 	$data = array(
 	    "sprache" => $this->get_language()
 	);
-
+	
 	$this->Person_model->checkZugangscodePerson(array("code" => $this->input->get("code")));
 	if ($this->Person_model->result->success && (count($this->Person_model->result->data) == 1))
-	{
+	{   
 	    $person_id = $this->Person_model->result->data[0]->person_id;
 	    $data["zugangscode"] = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
 
@@ -134,13 +134,24 @@ class Registration extends MY_Controller
 		if ($this->Person_model->result->success && (count($this->Person_model->result->data) == 1))
 		{
 		    $person = $this->Person_model->result->data;
-		    $person->zugangscode = $data["zugangscode"];
-		    $this->Person_model->updatePerson($person);
+		    //check if timestamp code is not older than 24 hours 
+		    if(strtotime(date('Y-m-d H:i:s')) < strtotime($person->zugangscode_timestamp." +24 hours"))
+		    {
+			$person->zugangscode = $data["zugangscode"];
+			$this->Person_model->updatePerson($person);
+			$this->load->view('templates/header');
+			$this->load->view('login/confirm_login', $data);
+			$this->load->view('templates/footer');
+		    }
+		    else
+		    {
+			$data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+			$this->load->view('templates/header');
+			$this->load->view('login/confirm_error', $data);
+			$this->load->view('templates/footer');
+		    }
 		}
 	    }
-	    $this->load->view('templates/header');
-	    $this->load->view('login/confirm_login', $data);
-	    $this->load->view('templates/footer');
 	}
 	elseif (empty($this->Person_model->result->data))
 	{
@@ -192,7 +203,7 @@ class Registration extends MY_Controller
 
 		    if ($this->Kontakt_model->result->success)
 		    {
-			$message = $this->sendMail($zugangscode, $data["email"], $kontakt->person_id);
+			$message = $this->sendMail($zugangscode, $data["email"], $kontakt->person_id, $data["stg_kz"]);
 			$data["message"] = $message;
 			$this->load->view('templates/header');
 			$this->load->view('registration', $data);
@@ -203,7 +214,7 @@ class Registration extends MY_Controller
 	}
     }
 
-    private function sendMail($zugangscode, $email, $person_id = null)
+    private function sendMail($zugangscode, $email, $person_id = null, $stg_kz="")
     {
 	if ($person_id != '')
 	{
@@ -226,7 +237,7 @@ class Registration extends MY_Controller
 	    $anrede = $this->lang->line('aufnahme/anredeWeiblich');
 
 	$this->load->library("mail", array("to" => $email, "from" => 'no-reply', "subject" => $this->lang->line('aufnahme/registration'), "text" => $this->lang->line('aufnahme/mailtextHtml')));
-	$text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede);
+	$text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, $stg_kz);
 	$this->mail->setHTMLContent($text);
 	if (!$this->mail->send())
 	    $msg = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . $_SERVER['PHP_SELF'] . '?method=registration>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
