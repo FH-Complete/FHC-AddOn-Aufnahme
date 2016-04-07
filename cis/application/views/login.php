@@ -18,7 +18,7 @@
 		    </div>
 		    <div class="panel-body text-center">
 			<br>
-			<a class="btn btn-primary btn-lg" href="Registration?stg_kz=" role="button"><?php echo $this->lang->line('login_SubscribeHere'); ?></a>
+			<a class="btn btn-primary btn-lg" href="<?php echo base_url("index.dist.php/Registration")?>" role="button"><?php echo $this->lang->line('login_SubscribeHere'); ?></a>
 			<br><br>
 		    </div>
 		</div>

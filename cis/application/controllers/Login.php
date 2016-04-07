@@ -34,11 +34,16 @@ class Login extends MY_Controller
 		    $this->session->stg_kz = $data['stg_kz'];
 		$data['username'] = $this->input->post('username');
 		$data['password'] = $this->input->post('password');
+		$data['email'] = $this->input->post('email');
 		// First _POST then _GET
 		$data['code'] = $this->input->post('code') ? $this->input->post('code') : $this->input->get('code');
 
 		if ($data['code'])
-		    $this->code_login($data['code'],$data);
+		    $this->code_login($data['code'], $data, $data["email"]);
+		elseif($data['username'] && $data["password"])
+		{
+		    var_dump($this->input->post());
+		}
 		else
 		{
 		    $this->load->view('templates/header');
@@ -49,15 +54,12 @@ class Login extends MY_Controller
 
 	private function code_login($code, &$data, $email=null)
 	{
-		$data['person'] = $this->person_model->get_personfromcode($code, $email);
-		//var_dump($data);
-		if (isset($data['person'][0]->person_id))
+		$this->person_model->getPersonFromCode($code, $email);
+		$data['person'] = $this->person_model->result;
+		if (isset($data['person']->data[0]->person_id))
 		{
-		    $this->session->person_id=$data['person'][0]->person_id;
+		    $this->session->person_id=$data['person']->data[0]->person_id;
 		    redirect('/Aufnahme');
-		    //$this->load->view('templates/header');
-		    //$this->load->view('aufnahme',$data);
-		    //$this->load->view('templates/footer');
 		}
 		else
 		    $data['wrong_code'] = true;

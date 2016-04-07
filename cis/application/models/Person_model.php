@@ -26,6 +26,7 @@ class Person_model extends MY_Model
 	    'code' => $code,
 	    'email' => $email
 	);
+	
 	if ($restquery = $this->rest->get('Person/person', $data))
 	{
 	    $this->result = $restquery;
