@@ -63,3 +63,17 @@ $config['view_login'][] = 'login/code_login';
 $config['view_login'][] = 'login/uid_login';
 
 
+
+/*
+|--------------------------------------------------------------------------
+| Tab to load in Aufnhame view
+|--------------------------------------------------------------------------
+|
+| list of tabs with their language file representation
+|
+ */
+$config['aufnahme_tabs'][] = array("label"=>"aufnahme/studiengaenge", "id"=>"studiengaenge");
+$config['aufnahme_tabs'][] = array("label"=>"aufnahme/termine", "id"=>"termine");
+$config['aufnahme_tabs'][] = array("label"=>"aufnahme/nachrichten", "id"=>"nachrichten");
+$config['aufnahme_tabs'][] = array("label"=>"aufnahme/downloads", "id"=>"downloads");
+

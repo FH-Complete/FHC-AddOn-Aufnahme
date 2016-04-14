@@ -16,7 +16,7 @@
 	function changeSprache(sprache)
 	{
 	    var method = '';
-	    window.location.href = "?sprache=" + sprache + "&stg_kz=<?php echo $stg_kz; ?>";
+	    window.location.href = "?sprache=" + sprache + "&stg_kz=<?php echo (isset($stg_kz)) ? $stg_kz :  ''; ?>";
 	}
 
 	$(function () {

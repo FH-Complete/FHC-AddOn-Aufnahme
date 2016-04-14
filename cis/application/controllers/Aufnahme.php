@@ -28,12 +28,37 @@ class Aufnahme extends MY_Controller
 	
 	public function index()
 	{
+		$this->checkSession();
+		$this->load->helper("form");
+		$this->load->library("form_validation");
+		$this->lang->load('global', $this->get_language());
+		$this->lang->load('aufnahme', $this->get_language());
 		$data['sprache'] = $this->get_language();
 		$data['person']=$this->person_model->getPersonen($this->session->person_id);
+		$data['tab'] = ($this->input->get("tab")!= null)? $this->input->get("tab"): "studiengaenge";
+		$data["tabs"] = $this->config->item("aufnahme_tabs");
+		$studiengaenge[] = array("stgkz"=>1,"bezeichnung"=>"Teststudiengang 1");
+		$studiengaenge[] = array("stgkz"=>2,"bezeichnung"=>"Teststudiengang 2");
+		$data["studiengaenge"] = $studiengaenge;
+		
+		//TODO fetch data from webservice
+		$data["nation"] = array();
+		$data["plz"] = array();
+		$data["bundesland"] = array();
 
+		//loading views
 		$this->load->view('templates/header');
 		$this->load->view('aufnahme',$data);
 		$this->load->view('templates/footer');
+	}
+	
+	private function checkSession()
+	{
+		//TODO
+//		if(!isset($this->session->person_id))
+//		{
+//			redirect('/Login');
+//		}
 	}
 
 }

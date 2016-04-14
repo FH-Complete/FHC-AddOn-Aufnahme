@@ -1,3 +1,4 @@
+<?php $this->lang->load(array('aufnahme'), $sprache); ?>
 <nav class="navbar navbar-default">
 	<div class="container">
 		<div class="navbar-header">
@@ -10,7 +11,16 @@
 		</div>
 
 		<div class="collapse navbar-collapse" id="bewerber-navigation">
-			<ul class="nav navbar-nav">
+			<ul class="nav nav-tabs">
+				<?php foreach($tabs as $t): ?>
+					<li class="<?php echo (isset($tab) && $tab==$t["id"]) ? 'active' : ''; ?>">
+						<a href="<?php  echo base_url("index.dist.php/Aufnahme?tab=".$t["id"]); ?>">
+							<?php echo $this->lang->line($t["label"]); ?>
+						</a>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+<!--			<ul class="nav navbar-nav">
 				<li>
 					<a href="#allgemein" aria-controls="allgemein" role="tab" data-toggle="tab">
 						Allgemein <br> &nbsp;
@@ -40,7 +50,7 @@
 					<a href="bewerbung.php?logout=true">
 						Logout <br> <span class="glyphicon glyphicon-log-out"></span>
 					</a>
-				</li>
+				</li>-->
 			</ul>
 		</div>
 	</div>
