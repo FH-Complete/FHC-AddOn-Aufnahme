@@ -11,7 +11,7 @@
 					<legend><?php echo $this->lang->line("aufnahme/angabenZurPerson"); ?></legend>
 					<?php echo form_open("Person", array("id" => "PersonForm", "name" => "PersonForm")); ?>
 					<div class="row">
-						<div class="col-sm-1">
+						<div class="col-sm-2">
 							<div class="form-group <?php echo (form_error("anrede") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('aufnahme/formAnrede'), "anrede", array("name" => "anrede", "for" => "anrede", "class" => "control-label")) ?>
 								<?php echo form_dropdown("anrede", array("Herr" => "Herr", "Frau" => "Frau"), "Herr", array('id' => 'anrede', 'name' => 'anrede', "value" => set_value("anrede"), "class" => "form-control")); ?>
@@ -27,14 +27,14 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-3 ">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("vorname") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('global/vorname'), "vorname", array("name" => "vorname", "for" => "vorname", "class" => "control-label")) ?>
 								<?php echo form_input(array('id' => 'vorname', 'name' => 'vorname', 'maxlength' => 32, "type" => "text", "value" => set_value("vorname"), "class" => "form-control")); ?>
 								<?php echo form_error("vorname"); ?>
 							</div>
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("nachname") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('global/nachname'), "nachname", array("name" => "nachname", "for" => "nachname", "class" => "control-label")) ?>
 								<?php echo form_input(array('id' => 'nachname', 'name' => 'nachname', 'maxlength' => 64, "type" => "text", "value" => set_value("nachname"), "class" => "form-control")); ?>
@@ -43,7 +43,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-3 ">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("geburtsdatum") != "") ? 'has-error' : '' ?>">
 								<?php
 								//TODO generate data
@@ -69,7 +69,7 @@
 								<?php echo form_error("geburtsdatum"); ?>
 							</div>
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("geburtsort") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('global/geburtsort'), "geburtsort", array("name" => "geburtsort", "for" => "geburtsort", "class" => "control-label")) ?>
 								<?php echo form_input(array('id' => 'geburtsort', 'name' => 'geburtsort', "type" => "text", "value" => set_value("geburtsort"), "class" => "form-control")); ?>
@@ -78,14 +78,14 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-3 ">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("staatsbuergerschaft") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('global/staatsbuergerschaft'), "staatsbuergerschaft", array("name" => "staatsbuergerschaft", "for" => "staatsbuergerschaft", "class" => "control-label")) ?>
 								<?php echo form_dropdown("staatsbuergerschaft", $nation, null, array('id' => 'staatsbuergerschaft', 'name' => 'staatsbuergerschaft', "value" => set_value("staatsbuergerschaft"), "class" => "form-control")); ?>
 								<?php echo form_error("staatsbuergerschaft"); ?>
 							</div>
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("nation") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('aufnahme/formGeburtsnation'), "nation", array("name" => "nation", "for" => "nation", "class" => "control-label")) ?>
 								<?php echo form_dropdown("nation", $nation, null, array('id' => 'nation', 'name' => 'nation', "value" => set_value("nation"), "class" => "form-control")); ?>
@@ -94,14 +94,14 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-3 ">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("svn") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('aufnahme/formSvn'), "svn", array("name" => "svn", "for" => "svn", "class" => "control-label")) ?>
 								<?php echo form_input(array('id' => 'svn', 'name' => 'svn', "type" => "text", "value" => set_value("svn"), "class" => "form-control")); ?>
 								<?php echo form_error("svn"); ?>
 							</div>
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("geschlecht") != "") ? 'has-error' : '' ?>">
 								<fieldset><?php echo $this->lang->line('global/geschlecht'); ?></fieldset>
 								<?php echo form_radio(array("id" => "geschlecht", "name" => "geschlecht"), null, null); ?>
@@ -126,7 +126,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-4 ">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("strasse") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('global/strasse'), "strasse", array("name" => "strasse", "for" => "strasse", "class" => "control-label")) ?>
 								<?php echo form_input(array('id' => 'strasse', 'name' => 'strasse', "type" => "text", "value" => set_value("strasse"), "class" => "form-control")); ?>
@@ -140,7 +140,7 @@
 								<?php echo form_error("plz"); ?>
 							</div>
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("bundesland") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('aufnahme/formBundesland'), "bundesland", array("name" => "bundesland", "for" => "bundesland", "class" => "control-label")) ?>
 								<?php echo form_dropdown("bundesland", $bundesland, null, array('id' => 'bundesland', 'name' => 'bundesland', "value" => set_value("bundesland"), "class" => "form-control")); ?>
@@ -150,14 +150,14 @@
 					</div>
 					<legend class=""><?php echo $this->lang->line("aufnahme/formKontakt"); ?></legend>
 					<div class="row">
-						<div class="col-sm-4 ">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("telefon") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('global/telefon'), "telefon", array("name" => "telefon", "for" => "telefon", "class" => "control-label")) ?>
 								<?php echo form_input(array('id' => 'telefon', 'name' => 'telefon', "type" => "text", "value" => set_value("telefon"), "class" => "form-control")); ?>
 								<?php echo form_error("telefon"); ?>
 							</div>
 						</div>
-						<div class="col-sm-4 ">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("fax") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('global/fax'), "fax", array("name" => "fax", "for" => "fax", "class" => "control-label")) ?>
 								<?php echo form_input(array('id' => 'fax', 'name' => 'fax', "type" => "text", "value" => set_value("fax"), "class" => "form-control")); ?>
@@ -166,7 +166,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-4 ">
+						<div class="col-sm-4">
 							<div class="form-group <?php echo (form_error("email") != "") ? 'has-error' : '' ?>">
 								<?php echo form_label($this->lang->line('global/email'), "email", array("name" => "email", "for" => "email", "class" => "control-label")) ?>
 								<?php echo form_input(array('id' => 'email', 'name' => 'email', "type" => "text", "value" => set_value("email"), "class" => "form-control")); ?>
@@ -201,8 +201,12 @@
 	<script type="text/javascript">
 		function togglePanel(id)
 		{
-			$(".panel").hide();
-			$('#stg_' + id).show();
+			if($('#stg_' + id).css("display") === "none")
+				$('#stg_' + id).show();
+			else
+			{
+				$(".panel").hide();
+			}
 		}
 	</script>
 
