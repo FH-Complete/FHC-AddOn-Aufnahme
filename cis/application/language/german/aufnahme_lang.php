@@ -1,4 +1,6 @@
 <?php 
+$lang['english'] = 'English';
+$lang['german'] = 'German';
 $lang['aufnahme/login_greeting_text'] = 'Willkommen bei der Online Bewerbung';
 $lang['aufnahme/login_infotext'] = 'Bitte füllen Sie das Formular aus, wählen Sie die gewünschte(n) Studienrichtung(en) und klicken Sie auf "Abschicken".<br>Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit dem Zugangscode können Sie sich jederzeit einloggen, Ihre Daten vervollständigen, Studienrichtungen hinzufügen und sich unverbindlich bewerben.';
 $lang['aufnahme/ungueltigerZugriff']='ungültiger Zugriff';

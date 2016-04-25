@@ -6,7 +6,7 @@
     echo $this->template->widget("menu", array('aktive' => 'Allgemein'));
 ?>
 
-
+<!--
 <div class="container">
     <?php $this->load->view('language'); ?>
 
@@ -14,7 +14,6 @@
 	<li class="active">Login</li>
     </ol>
     <div class="row">
-	<!--<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3">-->
 	<div class="col-sm-8 col-sm-offset-2">
 	    <form method="POST" id="lp" class="form-horizontal">
 		<img class="center-block img-responsive" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/logo.png'); ?>" />
@@ -30,10 +29,13 @@
 		    </div>
 		</div>
 
-		<?php $this->load_views('view_person'); ?>
 	    </form>
 	</div>
     </div>
+</div>
+-->
+<div class="container">
+	<?php $this->load_views('view_person'); ?>
 </div>
 
 <script type="text/javascript">
