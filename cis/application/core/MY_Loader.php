@@ -10,7 +10,7 @@ class MY_Loader extends CI_Loader
 
 	function load_views($view)
 	{
-		if (!is_null($this->config->item($view)))
+		if (! is_null($this->config->item($view)))
 		{
 			foreach($this->config->item($view) as $v)
 				$this->load->view($v);

@@ -1,7 +1,11 @@
 <?php 
 	$this->load->view('templates/header');
-	$this->lang->load(array('aufnahme', 'login'), $sprache); 
+	//$this->load->view('menu', 'person');
+	$this->lang->load(array('aufnahme', 'person'), $sprache);
+    // This is an example to show that you can load stuff from inside the template file
+    echo $this->template->widget("menu", array('aktive' => 'Allgemein'));
 ?>
+
 
 <div class="container">
     <?php $this->load->view('language'); ?>
@@ -26,7 +30,7 @@
 		    </div>
 		</div>
 
-		<?php $this->load_views('view_login'); ?>
+		<?php $this->load_views('view_person'); ?>
 	    </form>
 	</div>
     </div>

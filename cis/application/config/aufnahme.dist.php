@@ -62,6 +62,9 @@ $config['fhc_api'] = array(
 $config['view_login'][] = 'login/code_login';
 $config['view_login'][] = 'login/uid_login';
 
+$config['view_person'][] = 'person/person';
+$config['view_person'][] = 'person/kontakt';
+
 
 
 /*

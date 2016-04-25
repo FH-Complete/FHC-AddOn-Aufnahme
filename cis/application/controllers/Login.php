@@ -46,9 +46,9 @@ class Login extends MY_Controller
 		}
 		else
 		{
-		    $this->load->view('templates/header');
+		    // $this->load->view('templates/header');
 		    $this->load->view('login',$data);
-		    $this->load->view('templates/footer');
+		    // $this->load->view('templates/footer');
 		}
 	}
 

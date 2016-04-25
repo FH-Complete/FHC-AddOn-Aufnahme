@@ -29,13 +29,14 @@ require_once('../../include/benutzerberechtigung.class.php');
 // Datenbank Verbindung
 $db = new basis_db();
 
-echo '<!DOCTYPE html>
+echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="stylesheet" href="../../skin/fhcomplete.css" type="text/css">
 	<link rel="stylesheet" href="../../skin/vilesci.css" type="text/css">
-	<title>Addon LV-Info Datenbank Check</title>
+	<title>Addon Aufnahme Datenbank Check</title>
 </head>
 <body>
 <h1>Addon Aufnahme Datenbank Check</h1>';
