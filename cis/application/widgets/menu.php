@@ -2,11 +2,11 @@
 
 class Menu extends Widget 
 {
-    public function display() 
+    public function display($data) 
 	{
         if (is_null($this->config->item('menu')))
 		{
-            $data['items'] = array(
+            $menu['items'] = array(
 				array('href' =>'Overview', 'name' => 'Allgemein'),
 				array('href' =>'Person', 'name' => 'Perönliche Daten', 'glyphicon' => 'glyphicon-ok'),
 				array('href' =>'Contact', 'name' => 'Kontakt'),
@@ -16,9 +16,12 @@ class Menu extends Widget
 			);
         }
 		else
-			$data['items'] = $this->config->item('menu');
+			$menu['items'] = $this->config->item('menu');
 
-		$this->view('widgets/menu', $data);
+		//foreach ()
+		
+
+		$this->view('widgets/menu', $menu);
     }
     
 }

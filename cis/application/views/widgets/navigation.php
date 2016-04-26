@@ -1,12 +1,9 @@
-<div class="navbar navbar-inverse navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="brand" href="#"><?php echo $title; ?></a>
-      <ul class="nav">
+<nav class="col-xs-6 col-sm-3 navbar navbar-default navbar-fixed-right">
+
+<ul class="nav nav-pills nav-stacked">
         <?php foreach($items as $item): ?>
         <li><a href="#<?php echo $item; ?>"><?php echo $item; ?></a></li>
         <?php endforeach; ?>
       </ul>
-    </div>
-  </div>
-</div>
+
+</nav>

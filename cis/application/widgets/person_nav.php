@@ -1,6 +1,6 @@
 <?php
 
-class Navigation extends Widget 
+class Person_nav extends Widget 
 {
 
     public function display($data) 
@@ -8,7 +8,7 @@ class Navigation extends Widget
         
         if (!isset($data['items'])) 
 		{
-            $data['items'] = array('Allgemein', 'Perönliche Daten', 'Kontakt');
+            $data['items'] = array('Allgemein', 'Persönliche Daten', 'Kontakt');
         }
 
         $this->view('widgets/navigation', $data);
