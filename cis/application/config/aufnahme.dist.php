@@ -50,6 +50,20 @@ $config['fhc_api'] = array(
     //'ssl_cainfo'      => '/certs/cert.pem'
 );
 
+/*
+|--------------------------------------------------------------------------
+| Main Menu
+|--------------------------------------------------------------------------
+|
+| ordered list of Main Menu Entries
+|
+*/
+$config['menu'][] = array('href' =>'Overview', 'name' => 'Allgemein');
+$config['menu'][] = array('href' =>'Person', 'name' => 'Perönliche Daten', 'glyphicon' => 'glyphicon-ok');
+$config['menu'][] = array('href' =>'Contact', 'name' => 'Kontakt');
+$config['menu'][] = array('href' =>'Admittance', 'name' => 'ZGV');
+$config['menu'][] = array('href' =>'Documents', 'name' => 'Dokumente');
+$config['menu'][] = array('href' =>'Logout', 'name' => 'Logout', 'glyphicon' => 'glyphicon-log-out');
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +77,10 @@ $config['view_login'][] = 'login/code_login';
 $config['view_login'][] = 'login/uid_login';
 
 $config['view_person'][] = 'person/person';
-$config['view_person'][] = 'person/kontakt';
+
+$config['view_contact'][] = 'person/contact';
+
+$config['view_overview'][] = 'overview/status';
 
 
 

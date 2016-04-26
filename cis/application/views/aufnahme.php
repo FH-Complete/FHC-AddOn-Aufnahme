@@ -1,4 +1,4 @@
-<?php $this->lang->load(array('global', 'aufnahme'), $sprache); ?>
+<?php $this->lang->load(array('global', 'aufnahme'), $language); ?>
 
 <div class="container">
 	<?php $this->load->view('language'); ?>

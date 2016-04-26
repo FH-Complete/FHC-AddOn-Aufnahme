@@ -9,9 +9,8 @@ class Person extends MY_Controller {
 
         public function index()
         {
-            $data['sprache'] = $this->get_language();
-			$data['title'] = 'Personendate';
-			$this->load->view('person', $data);
+            $this->_data['title'] = 'Personendaten';
+			$this->load->view('person', $this->_data);
         }
 
 }
