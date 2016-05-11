@@ -1,6 +1,6 @@
 <?php
 
-class Person extends MY_Controller {
+class Bewerbung extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -8,17 +8,13 @@ class Person extends MY_Controller {
         $this->load->model('nation_model');
         $this->load->model('bundesland_model');
         $this->load->helper("form");
-    }
-
-    public function index() {
-        $this->_data['title'] = 'Personendaten';
         
         //load nationen
         if($this->nation_model->getNationen())
         {
-            if($this->nation_model->result->error == 0)
+            if($this->nation_model->result->success)
             {
-                foreach($this->nation_model->result->retval as $n)
+                foreach($this->nation_model->result->data as $n)
                 {
                     $this->_data["nationen"][$n->nation_code] = $n->kurztext;
                 }
@@ -29,9 +25,9 @@ class Person extends MY_Controller {
         //load bundeslaender
         if($this->bundesland_model->getBundeslaender())
         {
-            if($this->bundesland_model->result->error == 0)
+            if($this->bundesland_model->result->success)
             {
-                foreach($this->bundesland_model->result->retval as $b)
+                foreach($this->bundesland_model->result->data as $b)
                 {
                     $this->_data["bundeslaender"][$b->bundesland_code] = $b->bezeichnung;
                 }
@@ -39,7 +35,16 @@ class Person extends MY_Controller {
         }
         
         $this->_data["plz"] = array();
+    }
 
+    public function index() {
+        $this->_data['title'] = 'Personendaten';
+        $this->load->view('person', $this->_data);
+    }
+    
+    public function studiengang()
+    {
+        var_dump($this->input->get);
         $this->load->view('person', $this->_data);
     }
 

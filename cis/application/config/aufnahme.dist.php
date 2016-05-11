@@ -43,7 +43,7 @@ $config['fhc_api'] = array(
     'server' => APP_ROOT.'index.ci.php/api/v1/',
     'api_key'         => 'testapikey@fhcomplete.org',
     'api_name'        => 'FHC-API-KEY',
-    'http_user'       => 'pam',
+    'http_user'       => 'admin',
     'http_pass'       => '1q2w3',
     'http_auth'       => 'basic',
     //'ssl_verify_peer' => TRUE,
@@ -58,11 +58,11 @@ $config['fhc_api'] = array(
 | ordered list of Main Menu Entries
 |
 */
-$config['menu'][] = array('href' =>'Overview', 'name' => 'Allgemein');
-$config['menu'][] = array('href' =>'Person', 'name' => 'Perönliche Daten', 'glyphicon' => 'glyphicon-ok');
-$config['menu'][] = array('href' =>'Contact', 'name' => 'Kontakt');
-$config['menu'][] = array('href' =>'Admittance', 'name' => 'ZGV');
-$config['menu'][] = array('href' =>'Documents', 'name' => 'Dokumente');
+$config['menu'][] = array('href' =>'Studiengaenge', 'name' => 'Studiengänge');
+$config['menu'][] = array('href' =>'Person', 'name' => 'Bewerbung', 'glyphicon' => 'glyphicon-ok');
+$config['menu'][] = array('href' =>'Contact', 'name' => 'Aufnahmetermine');
+$config['menu'][] = array('href' =>'Admittance', 'name' => 'Nachrichten');
+$config['menu'][] = array('href' =>'Documents', 'name' => 'Downloads');
 $config['menu'][] = array('href' =>'Logout', 'name' => 'Logout', 'glyphicon' => 'glyphicon-log-out');
 
 /*
@@ -81,6 +81,10 @@ $config['view_person'][] = 'person/person';
 $config['view_contact'][] = 'person/contact';
 
 $config['view_overview'][] = 'overview/status';
+
+$config['view_studiengaenge'][] = 'studiengaenge/header';
+$config['view_studiengaenge'][] = 'studiengaenge/bachelor';
+$config['view_studiengaenge'][] = 'studiengaenge/master';
 
 
 

@@ -28,7 +28,6 @@ class Registration extends MY_Controller
 		$this->load->library("securimage/securimage");
 		$this->load->model("Person_model");
 		$this->load->model("Kontakt_model");
-		$this->lang->load('global', $this->get_language());
 		$this->lang->load('aufnahme', $this->get_language());
     }
 
@@ -52,7 +51,8 @@ class Registration extends MY_Controller
 		$this->form_validation->set_rules("geb_datum", "Geburtsdatum", "required");
 		$this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
 		$this->form_validation->set_rules("email2", "E-Mail", "required|valid_email|callback_check_email");
-		$this->form_validation->set_rules("captcha_code", "Captcha", "required|max_length[6]|callback_check_captcha");
+                //TODO		
+                //$this->form_validation->set_rules("captcha_code", "Captcha", "required|max_length[6]|callback_check_captcha");
 
 
 		if ($this->form_validation->run() == FALSE)
@@ -184,12 +184,14 @@ class Registration extends MY_Controller
 	$person->gebdatum = date('Y-m-d', strtotime($data["geb_datum"]));
 	$person->zugangscode = $zugangscode;
 	$person->insertvon = 'online';
+        $person->vornamen = "";
 
 	$this->Person_model->checkBewerbung(array("email" => $data["email"]));
-	
-	if ($this->Person_model->result->success)
+        
+        //TODO error handling
+	if ($this->Person_model->result->error == 0)
 	{
-	    if (count($this->Person_model->result->data) > 0)
+	    if (count($this->Person_model->result->retval) > 0)
 	    {
 		$data["message"] = '<p class="alert alert-danger" id="danger-alert">' . sprintf($this->lang->line('aufnahme/mailadresseBereitsGenutzt'), $data["email"]) . '</p>'
 			. '<a href="' . base_url("index.dist.php/Registration/resendCode") . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button>'
@@ -201,18 +203,22 @@ class Registration extends MY_Controller
 	    else
 	    {
 		$this->Person_model->savePerson($person);
+//                echo $this->Person_model->result;
+//                var_dump($this->Person_model->result);
 
-		if ($this->Person_model->result->success)
+                //TODO error handling
+		if ($this->Person_model->result->error == 0)
 		{
-		    $kontakt = new stdClass();
-		    $kontakt->person_id = $this->Person_model->result->data;
+                    $kontakt = new stdClass();
+		    $kontakt->person_id = $this->Person_model->result->retval;
 		    $kontakt->kontakttyp = "email";
 		    $kontakt->kontakt = $data["email"];
 		    $kontakt->insertamum = date('Y-m-d H:i:s');
 		    $kontakt->insertvon = 'online';
 		    $this->Kontakt_model->saveKontakt($kontakt);
 		    
-		    if ($this->Kontakt_model->result->success)
+                    //TODO error handling
+		    if ($this->Kontakt_model->result->error == 0)
 		    {
 			$message = $this->sendMail($zugangscode, $data["email"], $kontakt->person_id, $data["stg_kz"]);
 			$data["message"] = $message;
@@ -230,9 +236,9 @@ class Registration extends MY_Controller
 	if ($person_id != '')
 	{
 	    $this->Person_model->getPersonen($person_id);
-	    if ($this->Person_model->result->success)
+	    if ($this->Person_model->result->error == 0)
 	    {
-		$person = $this->Person_model->result->data;
+		$person = $this->Person_model->result->retval[0];
 		$vorname = $person->vorname;
 		$nachname = $person->nachname;
 		$geschlecht = $person->geschlecht;

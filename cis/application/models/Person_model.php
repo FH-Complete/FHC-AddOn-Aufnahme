@@ -6,12 +6,11 @@ class Person_model extends MY_Model
     public function __construct()
     {
 	parent::__construct();
-	//$this->load->database();
     }
 
     public function getPersonen($person_id = NULL)
     {
-	if ($restquery = $this->rest->get('Person/person', array("person_id" => $person_id, 'json')))
+	if ($restquery = $this->rest->get('person/person/person', array("person_id" => $person_id, 'json')))
 	{
 	    $this->result = $restquery;
 	    return true;
@@ -40,7 +39,7 @@ class Person_model extends MY_Model
 
     public function savePerson($data)
     {
-	if ($restquery = $this->rest->post('Person/person', $data))
+	if ($restquery = $this->rest->post('person/person/person', $data))
 	{
 	    $this->result = $restquery;
 	    return true;
@@ -53,7 +52,7 @@ class Person_model extends MY_Model
     
     public function updatePerson($data)
     {
-	if ($restquery = $this->rest->post('Person/personUpdate', $data))
+	if ($restquery = $this->rest->post('person/person/person', $data))
 	{
 	    $this->result = $restquery;
 	    return true;
@@ -66,7 +65,7 @@ class Person_model extends MY_Model
     
     public function checkBewerbung($data)
     {
-	if ($restquery = $this->rest->get('Person/checkBewerbung', $data))
+	if ($restquery = $this->rest->get('person/person/CheckBewerbung', $data))
 	{
 	    $this->result = $restquery;
 	    return true;

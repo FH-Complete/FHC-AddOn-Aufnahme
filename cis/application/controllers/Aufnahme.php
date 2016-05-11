@@ -31,7 +31,7 @@ class Aufnahme extends MY_Controller
 		$this->checkSession();
 		$this->load->helper("form");
 		$this->load->library("form_validation");
-		$this->lang->load('global', $this->get_language());
+		//$this->lang->load('global', $this->get_language());
 		$this->lang->load('aufnahme', $this->get_language());
 		$data['sprache'] = $this->get_language();
 		$data['person']=$this->person_model->getPersonen($this->session->person_id);

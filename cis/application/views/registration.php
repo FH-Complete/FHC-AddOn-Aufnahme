@@ -1,4 +1,4 @@
-<?php $this->lang->load(array('aufnahme'), $language);?>
+<?php $this->lang->load(array('aufnahme'), $sprache);?>
 
 <div class="container">
     <?php $this->load->view('language'); ?>
@@ -15,28 +15,28 @@
 	</p>
 
 	<div class="form-group <?php echo (form_error("vorname")!="")? 'has-error': '' ?>">
-	    <?php echo form_label($this->lang->line('global/vorname'), "vorname", array("name"=>"vorname","for"=>"vorname", "class"=>"col-sm-3 control-label")) ?>
+	    <?php echo form_label($this->lang->line('aufnahme/vorname'), "vorname", array("name"=>"vorname","for"=>"vorname", "class"=>"col-sm-3 control-label")) ?>
 	    <div class="col-sm-4">
 		<?php echo form_input(array('id' => 'vorname', 'name' => 'vorname', 'maxlength'=>32, "type"=>"text", "value"=>set_value("vorname"), "class"=>"form-control")); ?>
 		<?php echo form_error("vorname");?>
 	    </div>
 	</div>
 	<div class="form-group <?php echo (form_error("nachname")!="")? 'has-error': '' ?>">
-	    <?php echo form_label($this->lang->line('global/nachname'), "nachname", array("name"=>"nachname","for"=>"nachname", "class"=>"col-sm-3 control-label")) ?>
+	    <?php echo form_label($this->lang->line('aufnahme/nachname'), "nachname", array("name"=>"nachname","for"=>"nachname", "class"=>"col-sm-3 control-label")) ?>
 	    <div class="col-sm-4">
 		<?php echo form_input(array('id' => 'nachname', 'name' => 'nachname', 'maxlength'=>64, "type"=>"text", "value"=>set_value("nachname"), "class"=>"form-control")); ?>
 		<?php echo form_error("nachname");?>
 	    </div>
 	</div>
 	<div class="form-group <?php echo (form_error("geb_datum")!="")? 'has-error': '' ?>">
-	    <?php echo form_label($this->lang->line('global/geburtsdatum'), "geb_datum", array("name"=>"geb_datum","for"=>"geb_datum", "class"=>"col-sm-3 control-label")) ?>
+	    <?php echo form_label($this->lang->line('aufnahme/geburtsdatum'), "geb_datum", array("name"=>"geb_datum","for"=>"geb_datum", "class"=>"col-sm-3 control-label")) ?>
 	    <div class="col-sm-4">
 		<?php echo form_input(array('id' => 'vorname', 'name' => 'geb_datum', 'placeholder'=>'tt.mm.jjjj', "type"=>"datetime", "value"=>set_value("geb_datum"), "class"=>"form-control")); ?>
 		<?php echo form_error("geb_datum");?>
 	    </div>
 	</div>
 	<div class="form-group <?php echo (form_error("email")!="")? 'has-error': '' ?>">
-	    <?php echo form_label($this->lang->line('global/emailAdresse'), "email", array("name"=>"email","for"=>"email", "class"=>"col-sm-3 control-label")) ?>
+	    <?php echo form_label($this->lang->line('aufnahme/emailAdresse'), "email", array("name"=>"email","for"=>"email", "class"=>"col-sm-3 control-label")) ?>
 	    <div class="col-sm-4">
 		<?php echo form_input(array('id' => 'email', 'name' => 'email', 'maxlength'=>128, "type"=>"email", "value"=>set_value("email"), "class"=>"form-control")); ?>
 		<?php echo form_error("email");?>

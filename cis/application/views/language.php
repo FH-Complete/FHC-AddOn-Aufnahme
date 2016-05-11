@@ -1,6 +1,6 @@
 <div class="dropdown pull-right">
     <button class="btn btn-default dropdown-toggle" type="button" id="language-label" data-toggle="dropdown" aria-expanded="true">
-	<?php echo $this->lang->line($language); ?>
+	<?php echo $this->lang->line($sprache); ?>
 	<span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu" aria-labelledby="language-label" id="language-dropdown">

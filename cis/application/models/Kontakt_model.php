@@ -11,7 +11,7 @@ class Kontakt_model extends MY_Model
 
     public function saveKontakt($data)
     {
-	if ($restquery = $this->rest->post('Kontakt/kontakt', $data))
+	if ($restquery = $this->rest->post('person/kontakt/kontakt', $data))
 	{
 	    $this->result = $restquery;
 	    return true;
@@ -22,9 +22,9 @@ class Kontakt_model extends MY_Model
 	}
     }
     
-    public function getKontaktPerson($person_id)
+    public function getKontakt($person_id = NULL)
     {
-	if ($restquery = $this->rest->get('Kontakt/kontaktPerson', array("person_id" => $person_id)))
+	if ($restquery = $this->rest->get('person/kontakt/kontakt', array("person_id" => $person_id)))
 	{
 	    $this->result = $restquery;
 	    return true;

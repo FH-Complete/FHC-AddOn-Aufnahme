@@ -1,0 +1,14 @@
+{
+    "name": "rogeriopradoj/codeigniter-curl",
+    "type": "codeigniter-spark",
+    "description": "codeigniter-curl philsturgeon's library via composer",
+    "authors": [
+        {
+            "name": "Rogerio Prado de Jesus",
+            "email": "rogeriopradoj@gmail.com"
+        }
+    ],
+    "require": {
+        "compwright/codeigniter-installers": "*"
+    }
+}
