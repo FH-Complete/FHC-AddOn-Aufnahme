@@ -11,7 +11,7 @@ class Bundesland_model extends MY_Model
 
     public function getBundeslaender()
     {
-	if ($restquery = $this->rest->get('nation/bundesland'))
+	if ($restquery = $this->rest->get('codex/bundesland/all'))
 	{
 	    $this->result = $restquery;
 	    return true;

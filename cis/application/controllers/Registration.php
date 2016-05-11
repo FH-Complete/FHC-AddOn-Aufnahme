@@ -33,6 +33,11 @@ class Registration extends MY_Controller
 
     public function index()
     {
+        if(!is_null($this->session->person_id))
+        {
+            redirect("/Person");
+        }
+        
 		$data = array(
 			"sprache" => $this->get_language(),
 			"stg_kz" => $this->input->get('stg_kz'),
@@ -131,20 +136,20 @@ class Registration extends MY_Controller
 		);
 
 		$this->Person_model->checkZugangscodePerson(array("code" => $this->input->get("code")));
-		if ($this->Person_model->result->success && (count($this->Person_model->result->data) == 1))
+		if (($this->Person_model->result->error == 0) && (count($this->Person_model->result->retval) == 1))
 		{   
-			$person_id = $this->Person_model->result->data[0]->person_id;
+			$person_id = $this->Person_model->result->retval[0]->person_id;
 			$data["zugangscode"] = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
 
-			if ($this->Kontakt_model->getKontaktPerson($person_id))
+			if ($this->Kontakt_model->getKontakt($person_id))
 			{
-			$data["email"] = $this->Kontakt_model->result->data[0]->kontakt;
+			$data["email"] = $this->Kontakt_model->result->retval[0]->kontakt;
 			$person = new stdClass();
 			$person->person_id = $person_id;
 			$this->Person_model->getPersonen($person_id);
-			if ($this->Person_model->result->success && (count($this->Person_model->result->data) == 1))
+			if (($this->Person_model->result->error == 0) && (count($this->Person_model->result->retval) == 1))
 			{
-				$person = $this->Person_model->result->data;
+				$person = $this->Person_model->result->retval[0];
 				//check if timestamp code is not older than 24 hours 
 				if(strtotime(date('Y-m-d H:i:s')) < strtotime($person->zugangscode_timestamp." +24 hours"))
 				{
@@ -299,14 +304,22 @@ class Registration extends MY_Controller
 	$code = $this->input->post("password");
 	$email = $this->input->post("email");
 	$this->Person_model->getPersonFromCode($code, $email);
-	$data['person'] = $this->Person_model->result;
-	if (isset($data['person']->data[0]->person_id))
-	{
-	    $this->session->person_id=$data['person']->data[0]->person_id;
-	    redirect('/Aufnahme');
-	}
-	else
-	    $data['wrong_code'] = true;
+        
+        if($this->Person_model->result->error == 0)
+        {
+            $data['person'] = $this->Person_model->result->retval[0];
+            if (isset($data['person']->person_id))
+            {
+                $this->session->person_id = $data['person']->person_id;
+                redirect('/Person');
+            }
+            else
+                $data['wrong_code'] = true;
+        }
+        else
+        {
+            //TODO view error
+        }
     }
 
 }
