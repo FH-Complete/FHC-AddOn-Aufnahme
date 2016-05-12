@@ -20,6 +20,17 @@ class Studiengang_model extends MY_Model
 	else
 	    return false;
     }
+    
+    function getStudiengang($stgkz)
+    {
+        if ($restquery = $this->rest->get('organisation/studiengang2/studiengang', array("studiengang_kz"=>$stgkz)))
+	{
+	    $this->result = $restquery;
+	    return true;
+	}
+	else
+	    return false;
+    }
 }
 
 /* End of file Studiengang_model.php */

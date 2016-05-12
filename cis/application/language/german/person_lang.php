@@ -21,3 +21,4 @@ $lang["person_geburtsort"] = "Geburtsort";
 $lang["person_strasse"] = "Straße";
 $lang["person_fax"] = "Fax";
 $lang["person_telefon"] = "Telefon";
+$lang["person_geschlecht"] = "Geschlecht";

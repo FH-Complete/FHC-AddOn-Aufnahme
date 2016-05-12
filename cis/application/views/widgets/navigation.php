@@ -1,4 +1,4 @@
-<nav class="col-xs-6 col-sm-3 navbar navbar-default navbar-fixed-right">
+<nav class="col-sm-12 navbar navbar-default navbar-fixed-right">
 
 <ul class="nav nav-pills nav-stacked">
         <?php foreach($items as $item): ?>

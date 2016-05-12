@@ -10,6 +10,7 @@ class Bewerbung extends MY_Controller {
         $this->load->model('bundesland_model');
         $this->load->model('adresse_model', "AdresseModel");
         $this->load->model('studiengang_model', "StudiengangModel");
+        $this->load->model('preinteressent_model', "PreinteressentModel");
         $this->load->helper("form");
         $this->load->library("form_validation");
     }
@@ -24,6 +25,12 @@ class Bewerbung extends MY_Controller {
 
         //load kontakt data
         $this->_loadKontakt();
+        
+        //load preinteressent data
+//        $this->_loadPreinteressent();
+        
+        //load studiengang
+        $this->_loadStudiengang(227);
 
         //load adress data
         $this->_loadAdresse();
@@ -43,7 +50,7 @@ class Bewerbung extends MY_Controller {
 
         if ($this->form_validation->run() == FALSE)
         {
-                $this->load->view('person', $this->_data);
+                $this->load->view('bewerbung', $this->_data);
         }
         else
         {
@@ -89,7 +96,6 @@ class Bewerbung extends MY_Controller {
     
     public function studiengang($stgkz)
     {
-        var_dump($stgkz);
         //load person data
         $this->_loadPerson();
 
@@ -102,8 +108,10 @@ class Bewerbung extends MY_Controller {
         //load bundeslaender
         $this->_loadBundeslaender();
         
+        //load studiengang
+        $this->_loadStudiengang($stgkz);
         
-        $this->load->view('person', $this->_data);
+        $this->load->view('bewerbung', $this->_data);
     }
     
     private function _loadPerson()
@@ -113,6 +121,17 @@ class Bewerbung extends MY_Controller {
             if(($this->PersonModel->result->error == 0) && (count($this->PersonModel->result->retval) == 1))
             {
                 $this->_data["person"] = $this->PersonModel->result->retval[0];
+            }
+        }
+    }
+    
+    private function _loadPreinteressent()
+    {
+        if($this->PreinteressentModel->getPreinteressent(array("person_id"=>$this->session->person_id)))
+        {
+            if(($this->PreinteressentModel->result->error == 0) && (count($this->PreinteressentModel->result->retval) == 1))
+            {
+                $this->_data["preinteressent"] = $this->PreinteressentModel->result->retval[0];
             }
         }
     }
@@ -175,7 +194,25 @@ class Bewerbung extends MY_Controller {
             }
         }
     }
-
+    
+    private function _loadStudiengang($stgkz = null)
+    {
+        if(is_null($stgkz))
+        {
+            $stgkz = $this->_data["preinteressent"]->studiengang_kz;
+        }
+        if($this->StudiengangModel->getStudiengang($stgkz))
+        {
+            if(($this->StudiengangModel->result->error == 0) && (count($this->StudiengangModel->result->retval) == 1))
+            {
+                $this->_data["studiengang"] = $this->StudiengangModel->result->retval[0];
+            }
+            else
+            {
+                //TODO Daten konnten nicht geladen werden
+            }
+        }
+    }
 
     private function _savePerson($person)
     {
@@ -224,21 +261,6 @@ class Bewerbung extends MY_Controller {
         if($this->AdresseModel->saveAdresse($adresse))
         {
             if($this->AdresseModel->result->error == 0)
-            {
-                //TODO Daten erfolgreich gespeichert
-            }
-            else
-            {
-                //TODO Daten konnten nicht gespeichert werden
-            }
-        }
-    }
-    
-    private function _loadStudiengang($stgkz)
-    {
-        if($this->StudiengangModel->getStudiengang($stgkz))
-        {
-            if($this->StudiengangModel->result->error == 0)
             {
                 //TODO Daten erfolgreich gespeichert
             }
