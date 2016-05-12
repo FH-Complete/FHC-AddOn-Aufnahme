@@ -1,10 +1,6 @@
-<?php
-
-?>
-
 <div role="tabpanel" class="tab-pane" id="daten">
     <legend><?php echo $this->lang->line("person_angabenZurPerson"); ?></legend>
-    <?php echo form_open("Person", array("id" => "PersonForm", "name" => "PersonForm")); ?>
+    <?php echo form_open("Bewerbung", array("id" => "PersonForm", "name" => "PersonForm")); ?>
     <div class="row">
         <div class="col-sm-2">
             <div class="form-group <?php echo (form_error("anrede") != "") ? 'has-error' : '' ?>">
@@ -135,22 +131,35 @@
         <div class="col-sm-4">
             <div class="form-group <?php echo (form_error("strasse") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_strasse'), "strasse", array("name" => "strasse", "for" => "strasse", "class" => "control-label")) ?>
-                <?php echo form_input(array('id' => 'strasse', 'name' => 'strasse', "type" => "text", "value" => set_value("strasse"), "class" => "form-control")); ?>
+                <?php echo form_input(array('id' => 'strasse', 'name' => 'strasse', "type" => "text", "value" => set_value("strasse", (isset($adresse->strasse) ? $adresse->strasse : NULL)), "class" => "form-control")); ?>
                 <?php echo form_error("strasse"); ?>
             </div>
         </div>
         <div class="col-sm-2">
             <div class="form-group <?php echo (form_error("plz") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formPlz'), "plz", array("name" => "plz", "for" => "plz", "class" => "control-label")) ?>
-                <?php echo form_input(array('id' => 'plz', 'name' => 'plz', "type" => "text", "value" => set_value("plz"), "class" => "form-control")); ?>
+                <?php echo form_input(array('id' => 'plz', 'name' => 'plz', "type" => "text", "value" => set_value("plz", (isset($adresse->plz) ? $adresse->plz : NULL)), "class" => "form-control")); ?>
                 <?php echo form_error("plz"); ?>
             </div>
         </div>
         <div class="col-sm-4">
             <div class="form-group <?php echo (form_error("bundesland") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formBundesland'), "bundesland", array("name" => "bundesland", "for" => "bundesland", "class" => "control-label")) ?>
-                <?php echo form_dropdown("bundesland", $bundeslaender, null, array('id' => 'bundesland', 'name' => 'bundesland', "value" => set_value("bundesland"), "class" => "form-control")); ?>
+                <?php echo form_dropdown("bundesland", $bundeslaender, (isset($person->bundesland_code) ? $person->bundesland_code : NULL), array('id' => 'bundesland', 'name' => 'bundesland', "class" => "form-control")); ?>
                 <?php echo form_error("bundesland"); ?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group <?php echo (form_error("zustelladresse") != "") ? 'has-error' : '' ?>">
+                <div class="checkbox">
+                    <label>
+                        <?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => FALSE)); ?>
+                        Meine Zustelladresse weicht von der Heimatadresse ab.
+                    </label>
+                </div>
+                <?php echo form_error("zustelladresse"); ?>
             </div>
         </div>
     </div>
