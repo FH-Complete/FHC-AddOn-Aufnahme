@@ -10,3 +10,5 @@ cis/index.php
 test/codeception/tests/acceptance.suite.yml
 test/codeception/tests/functional.suite.yml
 test/codeception/tests/unit.suite.yml
+cis/application/config/development/
+/cis/application/logs/

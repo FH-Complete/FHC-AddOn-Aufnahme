@@ -267,7 +267,7 @@ class Registration extends MY_Controller {
             $data['person'] = $this->Person_model->result->retval[0];
             if (isset($data['person']->person_id)) {
                 $this->session->person_id = $data['person']->person_id;
-                redirect('/Person');
+                redirect('/Studiengaenge');
             } else
                 $data['wrong_code'] = true;
         }

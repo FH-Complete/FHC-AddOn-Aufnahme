@@ -12,7 +12,7 @@ class Studiengang_model extends MY_Model
 
     function getAll()
     {
-        if ($restquery = $this->rest->get('organisation/studiengang2/allForBewerbung'))
+        if ($restquery = $this->rest->get('organisation/studiengang/allForBewerbung'))
 	{
 	    $this->result = $restquery;
 	    return true;
@@ -23,7 +23,7 @@ class Studiengang_model extends MY_Model
     
     function getStudiengang($stgkz)
     {
-        if ($restquery = $this->rest->get('organisation/studiengang2/studiengang', array("studiengang_kz"=>$stgkz)))
+        if ($restquery = $this->rest->get('organisation/studiengang/studiengang', array("studiengang_kz"=>$stgkz)))
 	{
 	    $this->result = $restquery;
 	    return true;
