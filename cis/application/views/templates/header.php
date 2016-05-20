@@ -14,6 +14,7 @@
 	<script src="<?php echo base_url('../vendor/components/jquery/jquery.min.js') ?>"></script>
 	<script src="<?php echo base_url('../include/js/lodash/lodash.min.js') ?>"></script>
 	<script src="<?php echo base_url('../vendor/components/bootstrap/js/bootstrap.min.js') ?>"></script>
+<script src="<?php echo base_url('themes/' . $this->config->item('theme') . '/global.js') ?>"></script>
     </head>
     <body>
 

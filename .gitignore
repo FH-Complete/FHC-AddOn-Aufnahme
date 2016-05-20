@@ -6,6 +6,7 @@
 !*/cache/.htaccess
 bin
 vendor
+cis/application/config/development
 cis/index.php
 test/codeception/tests/acceptance.suite.yml
 test/codeception/tests/functional.suite.yml

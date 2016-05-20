@@ -18,12 +18,12 @@ $lang['aufnahme/mailtextHtml']='Bitte sehen Sie sich die Nachricht in der HTML-A
 $lang['aufnahme/anredeMaennlich']='geehrter Herr';
 $lang['aufnahme/anredeWeiblich']='geehrte Frau';
 $lang['aufnahme/mailtext']='Sehr %4$s %1$s %2$s!<br><br>
-        Vielen Dank für Ihr Interesse an einem Studiengang oder Lehrgang der '.CAMPUS_NAME.'. <br><br>
+        Vielen Dank für Ihr Interesse an einem Studiengang oder Lehrgang der FH. <br><br>
 	Bevor Sie fortfahren können bestätigen Sie bitte Ihre Registrierung unter folgendem Link: <br>
-        <a href="'.APP_ROOT.'addons/aufnahme/cis/index.dist.php/Registration/confirm?code=%3$s&stg_kz=%5$s">Registrierung bestätigen</a><br>
+        <a href="'.SELF.'/Registration/confirm?code=%3$s&stg_kz=%5$s">Registrierung bestätigen</a><br>
         Dieser Link ist 24 Stunden gültig.<br><br>
         Mit freundlichen Grüßen, <br>
-        '.CAMPUS_NAME;
+        FH';
 $lang['aufnahme/zugangsdatenFalsch']='Der eingegebene Zugangscode ist falsch oder Sie haben sich noch nicht registriert.';
 $lang['aufnahme/fehlerBeimSenden']='Beim Senden der E-Mail ist ein Fehler aufgetreten.';
 $lang['aufnahme/emailgesendetan']='Die E-Mail mit Ihrem Zugangscode wurde erfolgreich an %s verschickt.';
