@@ -13,6 +13,8 @@ class Bewerbung extends MY_Controller {
         $this->load->model('studiengang_model', "StudiengangModel");
         $this->load->model('prestudent_model', "PrestudentModel");
         $this->load->model('prestudentStatus_model', "PrestudentStatusModel");
+        $this->load->model('studiensemester_model', "StudiensemesterModel");
+        $this->load->model('studienplan_model', "StudienplanModel");
         $this->load->helper("form");
         $this->load->library("form_validation");
     }
@@ -100,8 +102,8 @@ class Bewerbung extends MY_Controller {
         }
     }
     
-    public function studiengang($studiengang_kz)
-    {
+    public function studiengang($studiengang_kz, $studienplan_id)
+    {        
         $this->checkLogin();
         
         //load person data
@@ -109,6 +111,9 @@ class Bewerbung extends MY_Controller {
 
         //load preinteressent data
         $this->_loadPrestudent();
+        
+        //load Studienplan
+        $this->_loadStudienplan($studienplan_id);
         
         if((!isset($this->_data["prestudent"]) ||(count($this->_data["prestudent"]) == 0))&& ($this->PrestudentModel->result->error == 0))
         {
@@ -261,6 +266,21 @@ class Bewerbung extends MY_Controller {
             }
         }
     }
+    
+    private function _loadStudienplan($studienplan_id)
+    {
+        if($this->StudienplanModel->getStudienplan($studienplan_id))
+        {
+            if(($this->StudienplanModel->result->error == 0) && (count($this->StudienplanModel->result->retval) == 1))
+            {
+                $this->_data["studienplan"] = $this->StudienplanModel->result->retval[0];
+            }
+            else
+            {
+                //TODO Daten konnten nicht geladen werden
+            }
+        }
+    }
 
     private function _savePerson($person)
     {
@@ -317,30 +337,41 @@ class Bewerbung extends MY_Controller {
         $prestudentStatus = new stdClass();
         $prestudentStatus->prestudent_id = $prestudent->prestudent_id;
         $prestudentStatus->status_kurzbz = "Interessent";
-        //TODO get studiensemester
-        $prestudentStatus->studiensemester_kurzbz = "WS2016";
-        $prestudentStatus->ausbildungssemester = "1";
-        $prestudentStatus->orgform_kurzbz = NULL;
-        $prestudentStatus->studienplan_id = NULL;
         
-        if($this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus))
+        $this->StudiensemesterModel->getNextStudiensemester("WS");
+        
+        if(($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
         {
-            var_dump($this->PrestudentStatusModel->result);
-            if($this->PrestudentStatusModel->result->error == 0)
+            $studiensemester_kurzbz = $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz;
+            $prestudentStatus->studiensemester_kurzbz = $studiensemester_kurzbz;
+            //nicht notwendig da defaultwert 1
+//            $prestudentStatus->ausbildungssemester = "1";
+            $prestudentStatus->orgform_kurzbz = $this->_data["studienplan"]->orgform_kurzbz;
+            $prestudentStatus->studienplan_id = $this->_data["studienplan"]->studienplan_id;
+            $prestudentStatus->datum = date("Y-m-d");
+
+            if($this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus))
             {
-                //TODO Daten erfolgreich gespeichert
-                foreach($this->_data["prestudent"] as $key=>$value)
+                if($this->PrestudentStatusModel->result->error == 0)
                 {
-                    if($value->prestudent_id == $prestudent->prestudent_id)
+                    //TODO Daten erfolgreich gespeichert
+                    foreach($this->_data["prestudent"] as $key=>$value)
                     {
-                        $this->_data["prestudent"][$key]->prestudentstatus = $prestudentStatus;
+                        if($value->prestudent_id == $prestudent->prestudent_id)
+                        {
+                            $this->_data["prestudent"][$key]->prestudentstatus = $prestudentStatus;
+                        }
                     }
                 }
+                else
+                {
+                    //TODO Daten konnten nicht gespeichert werden
+                }
             }
-            else
-            {
-                //TODO Daten konnten nicht gespeichert werden
-            }
+        }
+        else
+        {
+            //TODO studiensemester not found
         }
     }
     
