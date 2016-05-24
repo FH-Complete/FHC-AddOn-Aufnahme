@@ -20,11 +20,13 @@ class Bewerbung extends MY_Controller {
     }
 
     public function index() 
-    {
-        //TODO
-        $this->session->person_id = 62839;
-        
+    {    
         $this->checkLogin();
+        
+        if(!isset($this->session->userdata()["studiengang_kz"]))
+        {
+            redirect("/Studiengaenge");
+        }
         
         $this->_data['title'] = 'Personendaten';
         
@@ -38,7 +40,7 @@ class Bewerbung extends MY_Controller {
         $this->_loadPrestudent();
         
         //load studiengang
-        $this->_loadStudiengang(227);
+        $this->_loadStudiengang();
 
         //load adress data
         $this->_loadAdresse();
@@ -67,10 +69,17 @@ class Bewerbung extends MY_Controller {
 
             //TODO save Adresse
             $adresse = new stdClass();
+            if(isset($this->_data["adresse"]))
+            {
+                $adresse = $this->_data["adresse"];
+            }
+            else
+            {
+                $adresse->heimatadresse = true;
+            }
             $adresse->person_id = $this->_data["person"]->person_id;
             $adresse->strasse = $post["strasse"];
             $adresse->plz = $post["plz"];
-            $adresse->heimatadresse = true;
 
             $this->_saveAdresse($adresse);
 
@@ -105,6 +114,8 @@ class Bewerbung extends MY_Controller {
     public function studiengang($studiengang_kz, $studienplan_id)
     {        
         $this->checkLogin();
+        
+        $this->session->set_userdata("studiengang_kz", $studiengang_kz);
         
         //load person data
         $this->_loadPerson();
@@ -151,7 +162,7 @@ class Bewerbung extends MY_Controller {
     
     private function _loadPerson()
     {
-        if($this->PersonModel->getPersonen(array("person_id"=>$this->session->person_id)))
+        if($this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"])))
         {
             if(($this->PersonModel->result->error == 0) && (count($this->PersonModel->result->retval) == 1))
             {
@@ -162,7 +173,7 @@ class Bewerbung extends MY_Controller {
     
     private function _loadPrestudent()
     {
-        if($this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->person_id)))
+        if($this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"])))
         {
             if($this->PrestudentModel->result->error == 0)
             {
@@ -191,7 +202,7 @@ class Bewerbung extends MY_Controller {
 
     private function _loadKontakt()
     {
-        if($this->KontaktModel->getKontakt($this->session->person_id))
+        if($this->KontaktModel->getKontakt($this->session->userdata()["person_id"]))
         {
             if(($this->KontaktModel->result->error == 0))
             {   
@@ -205,7 +216,7 @@ class Bewerbung extends MY_Controller {
     
     private function _loadAdresse()
     {
-        if($this->AdresseModel->getAdresse($this->session->person_id))
+        if($this->AdresseModel->getAdresse($this->session->userdata()["person_id"]))
         {
             if(($this->AdresseModel->result->error == 0))
             {   
@@ -252,7 +263,7 @@ class Bewerbung extends MY_Controller {
     {
         if(is_null($stgkz))
         {
-            $stgkz = $this->_data["preinteressent"]->studiengang_kz;
+            $stgkz = $this->_data["prestudent"][0]->studiengang_kz;
         }
         if($this->StudiengangModel->getStudiengang($stgkz))
         {
@@ -312,7 +323,7 @@ class Bewerbung extends MY_Controller {
     private function _savePrestudent($studiengang_kz)
     {
         $prestudent = new stdClass();
-        $prestudent->person_id = $this->session->person_id;
+        $prestudent->person_id = $this->session->userdata()["person_id"];
         $prestudent->studiengang_kz = $studiengang_kz;
         //TODO welches Studiensemester soll gewählt werden
         $prestudent->aufmerksamdurch_kurzbz = 'k.A.';
@@ -335,6 +346,7 @@ class Bewerbung extends MY_Controller {
     private function _savePrestudentStatus($prestudent)
     {
         $prestudentStatus = new stdClass();
+        $prestudentStatus->new = true;
         $prestudentStatus->prestudent_id = $prestudent->prestudent_id;
         $prestudentStatus->status_kurzbz = "Interessent";
         
@@ -352,6 +364,7 @@ class Bewerbung extends MY_Controller {
 
             if($this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus))
             {
+                var_dump($this->PrestudentStatusModel->result);
                 if($this->PrestudentStatusModel->result->error == 0)
                 {
                     //TODO Daten erfolgreich gespeichert

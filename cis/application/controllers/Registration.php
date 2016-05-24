@@ -30,9 +30,7 @@ class Registration extends MY_Controller {
     }
 
     public function index() {
-        if (!is_null($this->session->person_id)) {
-            redirect("/Bewerbung");
-        }
+        $this->checkLogin();
 
         $data = array(
             "sprache" => $this->get_language(),
@@ -266,7 +264,7 @@ class Registration extends MY_Controller {
         if ($this->Person_model->result->error == 0) {
             $data['person'] = $this->Person_model->result->retval[0];
             if (isset($data['person']->person_id)) {
-                $this->session->person_id = $data['person']->person_id;
+                $this->session->set_userdata("person_id", $data['person']->person_id);
                 redirect('/Studiengaenge');
             } else
                 $data['wrong_code'] = true;

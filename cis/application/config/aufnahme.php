@@ -60,7 +60,7 @@ $config['fhc_api'] = array(
 */
 $config['menu'][] = array('href' => site_url('Studiengaenge'), 'name' => 'Studiengänge');
 $config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => 'Bewerbung', 'glyphicon' => 'glyphicon-ok');
-$config['menu'][] = array('href' => site_url('Contact'), 'name' => 'Aufnahmetermine');
+$config['menu'][] = array('href' => site_url('Aufnahmetermine'), 'name' => 'Aufnahmetermine');
 $config['menu'][] = array('href' => site_url('Admittance'), 'name' => 'Nachrichten');
 $config['menu'][] = array('href' => site_url('Documents'), 'name' => 'Downloads');
 $config['menu'][] = array('href' => site_url('Logout'), 'name' => 'Logout', 'glyphicon' => 'glyphicon-log-out');
@@ -93,6 +93,8 @@ $config['view_summary'][] = 'summary/summary';
 
 $config['view_send'][] = 'send/send';
 
+$config['view_aufnahmetermine'][] = 'aufnahmetermine/bachelor_termine';
+$config['view_aufnahmetermine'][] = 'aufnahmetermine/master_termine';
 
 
 /*

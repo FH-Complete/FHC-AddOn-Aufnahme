@@ -7,7 +7,7 @@ class Menu extends Widget {
             $menu['items'] = array(
                 array('href' => 'Overview', 'name' => 'Studiengänge'),
                 array('href' => 'Person', 'name' => 'Bewerbung', 'glyphicon' => 'glyphicon-ok'),
-                array('href' => 'Contact', 'name' => 'Aufnahmetermine'),
+                array('href' => 'Aufnahmetermine', 'name' => 'Aufnahmetermine'),
                 array('href' => 'Admittance', 'name' => 'Nachrichten'),
                 array('href' => 'Documents', 'name' => 'Downloads'),
                 array('href' => 'Logout', 'name' => 'Logout', 'glyphicon' => 'glyphicon-log-out')

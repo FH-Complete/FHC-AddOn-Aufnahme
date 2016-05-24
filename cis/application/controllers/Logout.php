@@ -25,7 +25,8 @@ class Logout extends MY_Controller {
     }
 
     public function index() {
-       $this->session->person_id = null;
+       $data = array("person_id", "studiengang_kz");
+       $this->session->unset_userdata($data);
        redirect("/Login");
     }
 
