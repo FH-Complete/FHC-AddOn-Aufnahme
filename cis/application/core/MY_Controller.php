@@ -8,8 +8,9 @@ class MY_Controller extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->config('aufnahme.dist');
-        $this->load->config('aufnahme', FALSE, TRUE);
+        //$this->load->config('aufnahme.dist');
+        //$this->load->config('aufnahme', FALSE, TRUE);
+        $this->load->config('aufnahme');
         $this->load->helper('url');
         $this->load->library('session');
         //$this->load->spark('restclient/2.1.0');

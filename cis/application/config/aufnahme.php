@@ -19,7 +19,7 @@ $config['default_language'] = 'german';
 | Must be the same name as the directory in the "themes" directory.
 |
 */
-$config['theme'] = 'tw';
+$config['theme'] = 'fhstp';
 
 /*
 |--------------------------------------------------------------------------

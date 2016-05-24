@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = APP_ROOT.'addons/aufnahme/cis/';
+$config['base_url'] = 'http://phpci.fhomplete.org/build/aufnahme/cis/';
 
 /*
 |--------------------------------------------------------------------------
@@ -70,7 +70,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']	= 'english';
+$config['language']	= 'german';
 
 /*
 |--------------------------------------------------------------------------
