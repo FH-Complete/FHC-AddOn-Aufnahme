@@ -152,6 +152,11 @@ class Summary extends MY_Controller {
                     }
                 }
             }
+            
+            if(!isset($this->_data["adresse"]))
+            {
+                $this->_data["adresse"] = new stdClass();
+            }
         }
     }
     

@@ -128,13 +128,15 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("strasse") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_strasse'), "strasse", array("name" => "strasse", "for" => "strasse", "class" => "control-label")) ?>
                 <?php echo form_input(array('id' => 'strasse', 'name' => 'strasse', "type" => "text", "value" => set_value("strasse", (isset($adresse->strasse) ? $adresse->strasse : NULL)), "class" => "form-control")); ?>
                 <?php echo form_error("strasse"); ?>
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-2">
             <div class="form-group <?php echo (form_error("plz") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formPlz'), "plz", array("name" => "plz", "for" => "plz", "class" => "control-label")) ?>
@@ -142,6 +144,15 @@
                 <?php echo form_error("plz"); ?>
             </div>
         </div>
+        <div class="col-sm-6">
+            <div class="form-group <?php echo (form_error("ort") != "") ? 'has-error' : '' ?>">
+                <?php echo form_label($this->lang->line('person_formOrt'), "ort", array("name" => "ort", "for" => "ort", "class" => "control-label")) ?>
+                <?php echo form_input(array('id' => 'ort', 'name' => 'ort', "type" => "text", "value" => set_value("ort", (isset($adresse->ort) ? $adresse->ort : NULL)), "class" => "form-control")); ?>
+                <?php echo form_error("ort"); ?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-4">
             <div class="form-group <?php echo (form_error("bundesland") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formBundesland'), "bundesland", array("name" => "bundesland", "for" => "bundesland", "class" => "control-label")) ?>

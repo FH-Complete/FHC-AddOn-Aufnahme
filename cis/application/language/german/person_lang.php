@@ -10,6 +10,7 @@ $lang['person_formMaennlich'] = "männlich";
 $lang['person_formWeiblich'] = "weiblich";
 $lang['person_formBundesland'] = "Bundesland";
 $lang['person_formPlz'] = "PLZ";
+$lang['person_formOrt'] = "Ort";
 $lang['person_formKontakt'] = "Kontakt";
 $lang["person_formDokumentupload"] = "Dokumenten-Upload";
 $lang['person_formHeimatadresse']='Meine Heimatadresse befindet sich im %1$s.';

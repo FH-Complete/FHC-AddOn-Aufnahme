@@ -1,0 +1,1 @@
+<legend><?php echo $this->lang->line("summary_motivation_header"); ?></legend>

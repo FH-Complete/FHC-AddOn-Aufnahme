@@ -16,8 +16,10 @@ echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
             <?php echo $this->template->widget("person_nav", array('aktiv' => 'Person')); ?>
         </div>
         <div class="col-sm-8">
-
-            <?php $this->load_views('view_summary'); ?>
+            <div role="tabpanel" class="tab-pane" id="summary">
+                <h1><?php echo $this->lang->line("summary_header"); ?></h1>
+                <?php $this->load_views('view_summary'); ?>
+            </div>
         </div>
     </div>
 </div>

@@ -80,6 +80,7 @@ class Bewerbung extends MY_Controller {
             $adresse->person_id = $this->_data["person"]->person_id;
             $adresse->strasse = $post["strasse"];
             $adresse->plz = $post["plz"];
+            $adresse->ort = $post["ort"];
 
             $this->_saveAdresse($adresse);
 

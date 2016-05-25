@@ -15,7 +15,7 @@
                     <li>
                         <a href="<?php echo $item['href']; ?>">
                             <?php echo $item['name']; ?>
-                            <?php if (isset($item['glyphicon'])) echo '<br> <span class="glyphicon ' . $item['glyphicon'] . '"></span>'; ?>
+                            <?php if (isset($item['glyphicon'])) echo ' <span class="glyphicon ' . $item['glyphicon'] . '"></span>'; ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
