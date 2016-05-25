@@ -40,7 +40,7 @@ $config['fhc_models'] = '../../../../../application/models/';
 |
 */
 $config['fhc_api'] = array(
-    'server'          => 'http://calva.technikum-wien.at/puraner/fhcomplete/trunk/index.ci.php/api/v1/',
+    'server' => APP_ROOT.'index.ci.php/api/v1/',
     'api_key'         => 'testapikey@fhcomplete.org',
     'api_name'        => 'FHC-API-KEY',
     'http_user'       => 'admin',
@@ -87,7 +87,9 @@ $config['view_studiengaenge'][] = 'studiengaenge/header';
 $config['view_studiengaenge'][] = 'studiengaenge/bachelor';
 $config['view_studiengaenge'][] = 'studiengaenge/master';
 
-$config['view_requirements'][] = 'requirements/requirements';
+$config['view_requirements'][] = 'requirements/requirements_allgemein';
+$config['view_requirements'][] = 'requirements/requirements_spezifisch';
+//$config['view_requirements'][] = 'requirements/requirements_motivation';
 
 $config['view_summary'][] = 'summary/summary';
 

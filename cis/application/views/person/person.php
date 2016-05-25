@@ -83,14 +83,14 @@
         <div class="col-sm-4">
             <div class="form-group <?php echo (form_error("staatsbuergerschaft") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_staatsbuergerschaft'), "staatsbuergerschaft", array("name" => "staatsbuergerschaft", "for" => "staatsbuergerschaft", "class" => "control-label")) ?>
-                <?php echo form_dropdown("staatsbuergerschaft", $nationen, (isset($person->staatsbuergerschaft) ? $person->staatsbuergerschaft : NULL), array('id' => 'staatsbuergerschaft', 'name' => 'staatsbuergerschaft', "class" => "form-control")); ?>
+                <?php echo form_dropdown("staatsbuergerschaft", $nationen, (isset($person->staatsbuergerschaft) ? $person->staatsbuergerschaft : "A"), array('id' => 'staatsbuergerschaft', 'name' => 'staatsbuergerschaft', "class" => "form-control")); ?>
                 <?php echo form_error("staatsbuergerschaft"); ?>
             </div>
         </div>
         <div class="col-sm-4">
             <div class="form-group <?php echo (form_error("nation") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formGeburtsnation'), "nation", array("name" => "nation", "for" => "nation", "class" => "control-label")) ?>
-                <?php echo form_dropdown("nation", $nationen, (isset($person->geburtsnation) ? $person->geburtsnation : NULL), array('id' => 'nation', 'name' => 'nation', "value" => set_value("nation"), "class" => "form-control")); ?>
+                <?php echo form_dropdown("nation", $nationen, (isset($person->geburtsnation) ? $person->geburtsnation : "A"), array('id' => 'nation', 'name' => 'nation', "value" => set_value("nation"), "class" => "form-control")); ?>
                 <?php echo form_error("nation"); ?>
             </div>
         </div>

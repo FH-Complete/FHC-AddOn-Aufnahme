@@ -1,6 +1,6 @@
 <?php 
 	$this->load->view('templates/header');
-	$this->lang->load(array('aufnahme', 'login'), $sprache); 
+	$this->lang->load(array('aufnahme', 'login'), $sprache);
 ?>
 
 <div class="container">
@@ -21,7 +21,7 @@
 		    </div>
 		    <div class="panel-body text-center">
 			<br>
-			<a class="btn btn-primary btn-lg" href="<?php echo base_url("index.dist.php/Registration")?>" role="button"><?php echo $this->lang->line('login_SubscribeHere'); ?></a>
+			<a class="btn btn-primary btn-lg" href="<?php echo base_url("index.dist.php/Registration".(isset($studiengang_kz) ? "?studiengang_kz=".$studiengang_kz : ""))?>" role="button"><?php echo $this->lang->line('login_SubscribeHere'); ?></a>
 			<br><br>
 		    </div>
 		</div>

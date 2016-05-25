@@ -25,9 +25,10 @@ class Logout extends MY_Controller {
     }
 
     public function index() {
-       $data = array("person_id", "studiengang_kz");
-       $this->session->unset_userdata($data);
-       redirect("/Login");
+        $this->session->sess_destroy();
+//        $data = array("person_id", "studiengang_kz");
+//        $this->session->unset_userdata($data);
+        redirect("/Login");
     }
 
 }

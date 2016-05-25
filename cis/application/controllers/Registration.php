@@ -29,12 +29,11 @@ class Registration extends MY_Controller {
         $this->lang->load('aufnahme', $this->get_language());
     }
 
-    public function index() {
-        $this->checkLogin();
-
-        $data = array(
+    public function index()
+    {
+        $this->_data = array(
             "sprache" => $this->get_language(),
-            "stg_kz" => $this->input->get('stg_kz'),
+            "studiengang_kz" => $this->input->get('studiengang_kz'),
             "vorname" => $this->input->post("vorname"),
             "nachname" => $this->input->post("nachname"),
             "geb_datum" => $this->input->post("geb_datum"),
@@ -42,7 +41,7 @@ class Registration extends MY_Controller {
             "captcha_code" => $this->input->post("captcha_code"),
             "zugangscode" => $this->input->post("zugangscode")
         );
-
+        
         //form validation rules
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
         $this->form_validation->set_rules("vorname", "Vorname", "required|max_length[32]");
@@ -56,10 +55,10 @@ class Registration extends MY_Controller {
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
-            $this->load->view('registration', $data);
+            $this->load->view('registration',  $this->_data);
             $this->load->view('templates/footer');
         } else {
-            $this->saveRegistration($data);
+            $this->saveRegistration($this->_data);
         }
     }
 
@@ -87,68 +86,80 @@ class Registration extends MY_Controller {
     }
 
     public function resendCode() {
-        //TODO
-        $data = array(
+        //TODO 
+         $this->_data = array(
             "sprache" => $this->get_language()
         );
 
         if (($this->input->post("email") != null)) {
-            $data["email"] = $this->input->post("email");
-            $this->Person_model->checkBewerbung(array("email" => $data["email"]));
+             $this->_data["email"] = $this->input->post("email");
+            $this->Person_model->checkBewerbung(array("email" =>  $this->_data["email"]));
 
-            if ($this->Person_model->result->success) {
-                if (count($this->Person_model->result->data) > 0) {
-                    $zugangscode = $this->Person_model->result->data[0]->zugangscode;
-                    $person_id = $this->Person_model->result->data[0]->person_id;
-                    $message = $this->resendMail($zugangscode, $data["email"], $person_id);
-                    $data["message"] = $message;
+            var_dump($this->Person_model->result);
+            if ($this->Person_model->result->error == 0) {
+                if (count($this->Person_model->result->retval) > 0) {
+                    $zugangscode = $this->Person_model->result->retval[0]->zugangscode;
+                    $person_id = $this->Person_model->result->retval[0]->person_id;
+                    $message = $this->resendMail($zugangscode,  $this->_data["email"], $person_id);
+                    $this->_data["message"] = $message;
                 }
+            }
+            else
+            {
+                //TODO could not load data
             }
         }
 
         $this->load->view('templates/header');
-        $this->load->view('registration/resendCode', $data);
+        $this->load->view('registration/resendCode',  $this->_data);
         $this->load->view('templates/footer');
     }
 
-    public function confirm() {
-        $data = array(
+    public function confirm()
+    {    
+         $this->_data = array(
             "sprache" => $this->get_language()
         );
+         
+         if(isset($this->input->get()["studiengang_kz"]))
+         {
+             $this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
+         }
 
         $this->Person_model->checkZugangscodePerson(array("code" => $this->input->get("code")));
         if (($this->Person_model->result->error == 0) && (count($this->Person_model->result->retval) == 1)) {
             $person_id = $this->Person_model->result->retval[0]->person_id;
-            $data["zugangscode"] = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
+             $this->_data["zugangscode"] = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
 
             if ($this->Kontakt_model->getKontakt($person_id)) {
-                $data["email"] = $this->Kontakt_model->result->retval[0]->kontakt;
+                 $this->_data["email"] = $this->Kontakt_model->result->retval[0]->kontakt;
                 $person = new stdClass();
                 $person->person_id = $person_id;
                 $this->Person_model->getPersonen($person_id);
                 if (($this->Person_model->result->error == 0) && (count($this->Person_model->result->retval) == 1)) {
                     $person = $this->Person_model->result->retval[0];
                     //check if timestamp code is not older than 24 hours 
+                    //TODO define timespan until invalidation of timestamp in config
                     if (strtotime(date('Y-m-d H:i:s')) < strtotime($person->zugangscode_timestamp . " +24 hours")) {
-                        $person->zugangscode = $data["zugangscode"];
+                        $person->zugangscode =  $this->_data["zugangscode"];
                         $this->Person_model->updatePerson($person);
                         $this->load->view('templates/header');
-                        $this->load->view('login/confirm_login', $data);
+                        $this->load->view('login/confirm_login',  $this->_data);
                         $this->load->view('templates/footer');
                     } else {
-                        $data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+                         $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
                         $this->load->view('templates/header');
-                        $this->load->view('login/confirm_error', $data);
+                        $this->load->view('login/confirm_error',  $this->_data);
                         $this->load->view('templates/footer');
                     }
                 }
             }
         } elseif (empty($this->Person_model->result->data)) {
-            $data["zugangscode"] = "";
-            $data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
-            $data["email"] = "";
+            $this->_data["zugangscode"] = "";
+            $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+            $this->_data["email"] = "";
             $this->load->view('templates/header');
-            $this->load->view('login/confirm_login', $data);
+            $this->load->view('login/confirm_login',  $this->_data);
             $this->load->view('templates/footer');
         }
     }
@@ -160,6 +171,7 @@ class Registration extends MY_Controller {
         $person->nachname = $data["nachname"];
         $person->gebdatum = date('Y-m-d', strtotime($data["geb_datum"]));
         $person->zugangscode = $zugangscode;
+        $person->zugangscode_timestamp = date('Y-m-d H:i:s');
         $person->insertvon = 'online';
         $person->vornamen = "";
 
@@ -176,8 +188,7 @@ class Registration extends MY_Controller {
                 $this->load->view('templates/footer');
             } else {
                 $this->Person_model->savePerson($person);
-//                echo $this->Person_model->result;
-//                var_dump($this->Person_model->result);
+
                 //TODO error handling
                 if ($this->Person_model->result->error == 0) {
                     $kontakt = new stdClass();
@@ -190,18 +201,26 @@ class Registration extends MY_Controller {
 
                     //TODO error handling
                     if ($this->Kontakt_model->result->error == 0) {
-                        $message = $this->sendMail($zugangscode, $data["email"], $kontakt->person_id, $data["stg_kz"]);
+                        $message = $this->sendMail($zugangscode, $data["email"], $kontakt->person_id, $data["studiengang_kz"]);
                         $data["message"] = $message;
                         $this->load->view('templates/header');
                         $this->load->view('registration', $data);
                         $this->load->view('templates/footer');
                     }
+                    else
+                    {
+                        //TODO could not save kontakt
+                    }
+                }
+                else
+                {
+                    //TODO could not save person
                 }
             }
         }
     }
 
-    private function sendMail($zugangscode, $email, $person_id = null, $stg_kz = "") {
+    private function sendMail($zugangscode, $email, $person_id = null, $studiengang_kz = "") {
         if ($person_id != '') {
             $this->Person_model->getPersonen($person_id);
             if ($this->Person_model->result->error == 0) {
@@ -219,7 +238,7 @@ class Registration extends MY_Controller {
             $anrede = $this->lang->line('aufnahme/anredeWeiblich');
 
         $this->load->library("mail", array("to" => $email, "from" => 'no-reply', "subject" => $this->lang->line('aufnahme/registration'), "text" => $this->lang->line('aufnahme/mailtextHtml')));
-        $text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, $stg_kz);
+        $text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, $studiengang_kz);
         $this->mail->setHTMLContent($text);
         if (!$this->mail->send())
             $msg = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . $_SERVER['PHP_SELF'] . '?method=registration>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
@@ -232,8 +251,8 @@ class Registration extends MY_Controller {
     private function resendMail($zugangscode, $email, $person_id = null) {
         if ($person_id != '') {
             $this->Person_model->getPersonen($person_id);
-            if ($this->Person_model->result->success) {
-                $person = $this->Person_model->result->data;
+            if ($this->Person_model->result->error == 0) {
+                $person = $this->Person_model->result->retval[0];
                 $vorname = $person->vorname;
                 $nachname = $person->nachname;
                 $geschlecht = $person->geschlecht;
@@ -246,7 +265,7 @@ class Registration extends MY_Controller {
             $anrede = $this->lang->line('aufnahme/anredeWeiblich');
 
         $this->load->library("mail", array("to" => $email, "from" => 'no-reply', "subject" => $this->lang->line('aufnahme/registration'), "text" => $this->lang->line('aufnahme/mailtextHtml')));
-        $text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, NULL);
+        $text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, NULL);
         $this->mail->setHTMLContent($text);
         if (!$this->mail->send())
             $msg = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . $_SERVER['PHP_SELF'] . '?method=registration>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
@@ -256,16 +275,26 @@ class Registration extends MY_Controller {
         return $msg;
     }
 
-    public function code_login() {
+    public function code_login()
+    {
+        $studiengang_kz = $this->input->get()["studiengang_kz"];
         $code = $this->input->post("password");
         $email = $this->input->post("email");
         $this->Person_model->getPersonFromCode($code, $email);
 
         if ($this->Person_model->result->error == 0) {
             $data['person'] = $this->Person_model->result->retval[0];
-            if (isset($data['person']->person_id)) {
+            if (isset($data['person']->person_id))
+            {
                 $this->session->set_userdata("person_id", $data['person']->person_id);
-                redirect('/Studiengaenge');
+                if((isset($studiengang_kz)) && ($studiengang_kz != ""))
+                {
+                    redirect('/Studiengaenge/?studiengang_kz='.$studiengang_kz);
+                }
+                else
+                {
+                    redirect('/Studiengaenge');
+                }
             } else
                 $data['wrong_code'] = true;
         }

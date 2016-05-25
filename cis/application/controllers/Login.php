@@ -24,12 +24,19 @@ class Login extends MY_Controller {
         $this->load->model('person_model');
     }
 
-    public function index() {
-        var_dump($this->session->userdata());
+    public function index()
+    {    
+        if(isset($this->input->get()["studiengang_kz"]))
+        {
+            $this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
+        }
+        
         $this->_data['sprache'] = $this->get_language();
-        $this->_data['stg_kz'] = $this->input->get('stg_kz');
-        if ($this->_data['stg_kz'])
-            $this->session->set_userdata("stg_kz", $this->_data['stg_kz']);
+        $this->_data['studiengang_kz'] = $this->input->get('studiengang_kz');
+        if ($this->_data['studiengang_kz'])
+        {
+            $this->session->set_userdata("studiengang_kz", $this->_data['studiengang_kz']);
+        }
         $this->_data['username'] = $this->input->post('username');
         $this->_data['password'] = $this->input->post('password');
         $this->_data['email'] = $this->input->post('email');
@@ -54,6 +61,11 @@ class Login extends MY_Controller {
             $data['person'] = $this->person_model->result->retval[0];
             if (isset($data['person']->person_id)) {
                 $this->session->set_userdata("person_id", $data['person']->person_id);
+                if(isset($this->_data["studiengang_kz"]))
+                {
+                    $this->session->set_userdata("studiengang_kz", $this->_data["studiengang_kz"]);
+                    redirect('/Bewerbung/'.$this->_data["studiengang_kz"]);
+                }
                 redirect('/Studiengaenge');
             } else {
                 //TODO error

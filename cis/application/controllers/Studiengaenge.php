@@ -11,8 +11,15 @@ class Studiengaenge extends MY_Controller {
         $this->lang->load('studiengaenge', $this->get_language());
     }
 
-    public function index() {
+    public function index() 
+    {
         $this->checkLogin();
+        
+        if(isset($this->input->get()["studiengang_kz"]))
+        {
+            $this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
+        }
+        
         $this->_data['title'] = 'Overview';
         $this->_data['sprache'] = $this->get_language();
         

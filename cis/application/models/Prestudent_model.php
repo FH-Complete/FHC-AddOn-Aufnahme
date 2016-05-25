@@ -32,6 +32,7 @@ class Prestudent_model extends MY_Model
 
     public function savePrestudent($data)
     {
+        
 	if ($restquery = $this->rest->post('crm/prestudent/prestudent', $data))
 	{
 	    $this->result = $restquery;
@@ -39,6 +40,7 @@ class Prestudent_model extends MY_Model
 	}
 	else
 	{
+            var_dump($restquery);
 	    return false;
 	}
     }

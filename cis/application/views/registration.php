@@ -7,7 +7,7 @@
 	<li class="active">Registration</li>
     </ol>
     
-    <?php echo form_open("Registration",array("id"=>"RegistrationLoginForm", "name"=>"RegistrationLoginForm", "class"=>"form-horizontal")); ?>
+    <?php echo form_open("Registration?studiengang_kz=".$studiengang_kz,array("id"=>"RegistrationLoginForm", "name"=>"RegistrationLoginForm", "class"=>"form-horizontal")); ?>
 	<img style="width:150px;" class="center-block img-responsive" src="<?php echo APP_ROOT . 'skin/styles/' . $this->config->item('theme'); ?>/logo.png">	
 	<h2 class="text-center"><?php echo $this->lang->line('aufnahme/login_greeting_text'); ?></h2>		
 	<p class="infotext">
@@ -52,6 +52,7 @@
 	<div class="form-group">
 	    <div class="col-sm-3">
 		<img id="captcha" src="<?=site_url('/Registration/securimage')?>" alt='captcha' class="center-block img-responsive" />
+                <!-- TODO set link -->
 		<a href="#" onclick="document.getElementById('captcha').src = 'https://cis.technikum-wien.at/include/securimage/securimage_show.php?' + Math.random();return false">
 		    Andere Grafik
 		</a>

@@ -129,6 +129,7 @@ class Bewerbung extends MY_Controller {
         if((!isset($this->_data["prestudent"]) ||(count($this->_data["prestudent"]) == 0))&& ($this->PrestudentModel->result->error == 0))
         {
             $prestudent = $this->_savePrestudent($studiengang_kz);
+            var_dump($prestudent);
             $this->_loadPrestudent();
             $this->_savePrestudentStatus($prestudent);
         }
@@ -327,9 +328,11 @@ class Bewerbung extends MY_Controller {
         $prestudent->studiengang_kz = $studiengang_kz;
         //TODO welches Studiensemester soll gewählt werden
         $prestudent->aufmerksamdurch_kurzbz = 'k.A.';
-        
+        var_dump($prestudent);
+        var_dump($this->PrestudentModel->savePrestudent($prestudent));
         if($this->PrestudentModel->savePrestudent($prestudent))
         {
+            var_dump($this->PrestudentModel->result);
             if($this->PrestudentModel->result->error == 0)
             {
                 //TODO Daten erfolgreich gespeichert
