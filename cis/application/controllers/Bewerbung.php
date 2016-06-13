@@ -20,7 +20,7 @@ class Bewerbung extends MY_Controller {
     }
 
     public function index() 
-    {    
+    {   
         $this->checkLogin();
         
         if(!isset($this->session->userdata()["studiengang_kz"]))
@@ -39,9 +39,17 @@ class Bewerbung extends MY_Controller {
         //load preinteressent data
         $this->_loadPrestudent();
         
-        //load studiengang
-        $this->_loadStudiengang();
-
+        $this->_data["studiengaenge"] = array();
+        foreach($this->_data["prestudent"] as $prestudent)
+        {
+            //load studiengaenge der prestudenten
+            $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+            $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+            $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+            $studiengang->studienplan = $studienplan;
+            array_push($this->_data["studiengaenge"], $studiengang);
+        }
+        
         //load adress data
         $this->_loadAdresse();
 
@@ -118,6 +126,9 @@ class Bewerbung extends MY_Controller {
         
         $this->session->set_userdata("studiengang_kz", $studiengang_kz);
         
+        $this->StudiensemesterModel->getNextStudiensemester("WS");
+        $this->session->set_userdata("studiensemester_kurzbz", $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz);
+        
         //load person data
         $this->_loadPerson();
 
@@ -125,26 +136,25 @@ class Bewerbung extends MY_Controller {
         $this->_loadPrestudent();
         
         //load Studienplan
-        $this->_loadStudienplan($studienplan_id);
+        $this->_data["studienplan"] = $this->_loadStudienplan($studienplan_id); 
         
-        if((!isset($this->_data["prestudent"]) ||(count($this->_data["prestudent"]) == 0))&& ($this->PrestudentModel->result->error == 0))
+        $exists = false;
+        $prestudentStatus = null;
+        foreach($this->_data["prestudent"] as $prestudent)
+        {
+            $prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+            if(($prestudent->studiengang_kz == $studiengang_kz) && (!is_null($prestudentStatus)) && ($prestudentStatus->studienplan_id == $studienplan_id))
+            {
+                $exists = true;
+            }
+            $prestudentStatus = null;
+        }
+        
+        if((!$exists) && ($this->PrestudentModel->result->error == 0))
         {
             $prestudent = $this->_savePrestudent($studiengang_kz);
-            var_dump($prestudent);
             $this->_loadPrestudent();
             $this->_savePrestudentStatus($prestudent);
-        }
-        else
-        {
-            foreach($this->_data['prestudent'] as $prestudent)
-            {
-                $this->_loadPrestudentStatus($prestudent->prestudent_id, $studiengang_kz);
-                /*
-                if(!isset($this->_data["preinteressentStudiengang"]))
-                {
-                    $this->_savePreinteressentStudiengang($preinteressent, $studiengang_kz);
-                }*/
-            }
         }
 
         //load kontakt data
@@ -157,7 +167,18 @@ class Bewerbung extends MY_Controller {
         $this->_loadBundeslaender();
         
         //load studiengang
-        $this->_loadStudiengang($studiengang_kz);
+        $this->_data["studiengang"] = $this->_loadStudiengang($studiengang_kz);
+
+         $this->_data["studiengaenge"] = array();
+        foreach($this->_data["prestudent"] as $prestudent)
+        {
+            //load studiengaenge der prestudenten
+            $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+            $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+            $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+            $studiengang->studienplan = $studienplan;
+            array_push($this->_data["studiengaenge"], $studiengang);
+        }
         
         $this->load->view('bewerbung', $this->_data);
     }
@@ -184,20 +205,13 @@ class Bewerbung extends MY_Controller {
         }
     }
     
-    private function _loadPrestudentStatus($prestudent_id, $studiengang_kz)
+    private function _loadPrestudentStatus($prestudent_id)
     {
-        if($this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiengang_kz"=>$studiengang_kz)))
+        if($this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent")))
         {
             if(($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
             {
-                foreach($this->_data["prestudent"] as $key=>$value)
-                {
-                    if($value->prestudent_id == $prestudent_id)
-                    {
-                        $this->_data["prestudent"][$key]->prestudentstatus = $this->PrestudentStatusModel->result->retval[0];
-                    }
-                }
-                $this->_data["prestudent"]["prestudentstatus"] = $this->PrestudentStatusModel->result->retval;
+                return $this->PrestudentStatusModel->result->retval[0];
             }
         }
     }
@@ -271,7 +285,7 @@ class Bewerbung extends MY_Controller {
         {
             if(($this->StudiengangModel->result->error == 0) && (count($this->StudiengangModel->result->retval) == 1))
             {
-                $this->_data["studiengang"] = $this->StudiengangModel->result->retval[0];
+                return $this->StudiengangModel->result->retval[0];
             }
             else
             {
@@ -286,7 +300,7 @@ class Bewerbung extends MY_Controller {
         {
             if(($this->StudienplanModel->result->error == 0) && (count($this->StudienplanModel->result->retval) == 1))
             {
-                $this->_data["studienplan"] = $this->StudienplanModel->result->retval[0];
+                return $this->StudienplanModel->result->retval[0];
             }
             else
             {
@@ -329,11 +343,8 @@ class Bewerbung extends MY_Controller {
         $prestudent->studiengang_kz = $studiengang_kz;
         //TODO welches Studiensemester soll gewählt werden
         $prestudent->aufmerksamdurch_kurzbz = 'k.A.';
-        var_dump($prestudent);
-        var_dump($this->PrestudentModel->savePrestudent($prestudent));
         if($this->PrestudentModel->savePrestudent($prestudent))
         {
-            var_dump($this->PrestudentModel->result);
             if($this->PrestudentModel->result->error == 0)
             {
                 //TODO Daten erfolgreich gespeichert
@@ -354,12 +365,9 @@ class Bewerbung extends MY_Controller {
         $prestudentStatus->prestudent_id = $prestudent->prestudent_id;
         $prestudentStatus->status_kurzbz = "Interessent";
         
-        $this->StudiensemesterModel->getNextStudiensemester("WS");
-        
         if(($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
         {
-            $studiensemester_kurzbz = $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz;
-            $prestudentStatus->studiensemester_kurzbz = $studiensemester_kurzbz;
+            $prestudentStatus->studiensemester_kurzbz = $this->session->userdata()["studiensemester_kurzbz"];
             //nicht notwendig da defaultwert 1
 //            $prestudentStatus->ausbildungssemester = "1";
             $prestudentStatus->orgform_kurzbz = $this->_data["studienplan"]->orgform_kurzbz;
@@ -368,7 +376,6 @@ class Bewerbung extends MY_Controller {
 
             if($this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus))
             {
-                var_dump($this->PrestudentStatusModel->result);
                 if($this->PrestudentStatusModel->result->error == 0)
                 {
                     //TODO Daten erfolgreich gespeichert

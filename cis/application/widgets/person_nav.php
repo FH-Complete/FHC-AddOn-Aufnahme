@@ -6,10 +6,10 @@ class Person_nav extends Widget {
 
         if (!isset($data['items'])) {
             $data['items'] = array(
-                array('href'=>site_url('/Bewerbung'), 'name'=>'Persönliche Daten'),
-                array('href'=>site_url('/Requirements'), 'name'=>'Zugangsvoraussetzung'),
-                array('href'=>site_url('/Summary'), 'name'=>'Zusammenfassung'),
-                array('href'=>site_url('/Send'), 'name'=>'Absenden')
+                array('href'=>site_url('/Bewerbung'), 'name'=>'Persönliche Daten', "id"=>"personalData"),
+                array('href'=>site_url('/Requirements'), 'name'=>'Zugangsvoraussetzung', "id"=>"requirements"),
+                array('href'=>site_url('/Summary'), 'name'=>'Zusammenfassung', "id"=>"summary"),
+                array('href'=>site_url('/Send'), 'name'=>'Absenden', "id"=>"send")
                 );
         }
 

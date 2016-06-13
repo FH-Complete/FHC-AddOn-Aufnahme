@@ -91,7 +91,10 @@ $config['view_requirements'][] = 'requirements/requirements_allgemein';
 $config['view_requirements'][] = 'requirements/requirements_spezifisch';
 //$config['view_requirements'][] = 'requirements/requirements_motivation';
 
-$config['view_summary'][] = 'summary/summary';
+$config['view_summary'][] = 'summary/summary_personal';
+$config['view_summary'][] = 'summary/summary_requirements';
+$config['view_summary'][] = 'summary/summary_requirements_specific';
+//$config['view_summary'][] = 'summary/summary_motivation';
 
 $config['view_send'][] = 'send/send';
 

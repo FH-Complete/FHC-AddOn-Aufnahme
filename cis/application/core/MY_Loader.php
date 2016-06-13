@@ -8,12 +8,12 @@ class MY_Loader extends CI_Loader
         parent::__construct();
     }
 
-	function load_views($view)
+	function load_views($view, $data=array())
 	{
 		if (! is_null($this->config->item($view)))
 		{
 			foreach($this->config->item($view) as $v)
-				$this->load->view($v);
+				$this->load->view($v, $data);
 		}
 	}
 }

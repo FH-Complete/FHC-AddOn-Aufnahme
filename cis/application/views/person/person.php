@@ -207,8 +207,7 @@
 		<?php echo form_submit(array("value"=>"Speichern", "name"=>"submit_btn", "class"=>"btn btn-primary")); ?>
 	    </div>
 	</div>
-        </div>
     </div>
 </div>
+
 <?php echo form_close(); ?>
-</div>

@@ -10,7 +10,7 @@ class PrestudentStatus_model extends MY_Model
 
     public function getPrestudentStatus($data)
     {
-        if ($restquery = $this->rest->get('crm/prestudentstatus/prestudentstatus', array("prestudent_id" => $data["prestudent_id"],"studiengang_kz"=>$data["studiengang_kz"], 'json')))
+        if ($restquery = $this->rest->get('crm/prestudentstatus/prestudentstatus', $data))
         {
             $this->result = $restquery;
             return true;

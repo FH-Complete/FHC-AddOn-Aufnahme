@@ -1,3 +1,1 @@
-<div class="page-header">
-    <h1><?php echo $studiengang->bezeichnung." (".$studiengang->orgform_kurzbz.")"?></h1>
-</div>
+<a data-toggle='collapse' data-target='#<?php echo $studiengang->studiengang_kz; ?>'><h1><?php echo $studiengang->bezeichnung ?> (<?php echo $studiengang->orgform_kurzbz; ?>)</h1></a></br>

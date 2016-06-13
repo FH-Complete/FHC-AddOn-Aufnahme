@@ -24,7 +24,7 @@ class Kontakt_model extends MY_Model
     
     public function getKontakt($person_id = NULL)
     {
-	if ($restquery = $this->rest->get('person/kontakt/kontakt', array("person_id" => $person_id)))
+	if ($restquery = $this->rest->get('person/kontakt/kontaktByPersonId', array("person_id" => $person_id)))
 	{
 	    $this->result = $restquery;
 	    return true;

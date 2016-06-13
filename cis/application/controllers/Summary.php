@@ -12,11 +12,17 @@ class Summary extends MY_Controller {
         $this->load->model('adresse_model', "AdresseModel");
         $this->load->model('bundesland_model', "BundeslandModel");
         $this->load->model('kontakt_model', "KontaktModel");
+        $this->load->model('prestudentStatus_model', "PrestudentStatusModel");
+        $this->load->model('studienplan_model', "StudienplanModel");
     }
 
     public function index() {
         $this->checkLogin();
         $this->_data['sprache'] = $this->get_language();
+        var_dump($this->session->userdata());
+        
+        //load studiengang
+        $this->_loadStudiengang($this->input->get()["studiengang_kz"]);
         
         //load nationen
         $this->_loadNationen();
@@ -41,7 +47,9 @@ class Summary extends MY_Controller {
         {
             if($prestudent->studiengang_kz == $this->session->userdata()["studiengang_kz"])
             {
-                $this->_loadStudiengang($prestudent->studiengang_kz);
+                $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+                $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);         
+                $this->_data["studiengang"]->studienplan = $studienplan;
             }
         }
         
@@ -170,6 +178,32 @@ class Summary extends MY_Controller {
                 {
                     $this->_data["kontakt"][$kontakt->kontakttyp] = $kontakt;  
                 }  
+            }
+        }
+    }
+    
+    private function _loadPrestudentStatus($prestudent_id)
+    {
+        if($this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent")))
+        {
+            if(($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
+            {
+                return $this->PrestudentStatusModel->result->retval[0];
+            }
+        }
+    }
+    
+    private function _loadStudienplan($studienplan_id)
+    {
+        if($this->StudienplanModel->getStudienplan($studienplan_id))
+        {
+            if(($this->StudienplanModel->result->error == 0) && (count($this->StudienplanModel->result->retval) == 1))
+            {
+                return $this->StudienplanModel->result->retval[0];
+            }
+            else
+            {
+                //TODO Daten konnten nicht geladen werden
             }
         }
     }
