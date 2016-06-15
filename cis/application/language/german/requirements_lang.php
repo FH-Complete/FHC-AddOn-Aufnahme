@@ -12,4 +12,9 @@ $lang['requirements_abschluss_matura'] = 'Matura/Abitur';
 $lang['requirements_abschluss_studienberechtigung'] = 'Studienberechtigungsprüfung';
 $lang['requirements_abschluss_berufsreife'] = 'Berufsreifeprüfung';
 $lang['requirements_abschlusszeugnis_header'] = 'Bitte laden Sie Ihr Abschlusszeugnis im Format .pdf, .doc oder .jpg hoch';
+$lang['requirements_abschlusszeugnis'] = 'Maturazeugnis';
+$lang["requirements_keinDokHochgeladen"] = "Kein Dokument hochgeladen";
+$lang["requirements_DokHochgeladen"] = "Dokument bereits vorhanden";
+
+
 
