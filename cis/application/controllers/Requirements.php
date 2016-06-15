@@ -73,10 +73,7 @@ class Requirements extends MY_Controller {
 			if(($akte->dokument_kurzbz == $obj->dokument_kurzbz) && ($akte->dms_id != null) && ($obj->dokument_kurzbz != "Sonst"))
 			{
 			    $dms = $this->_loadDms($akte->dms_id);
-			    var_dump($dms);
 			    $obj->version = $dms->version+1;
-			    $obj->dms_id = $akte->dms_id;
-			    var_dump($obj->version);
 			}
 		    }
 
@@ -86,9 +83,7 @@ class Requirements extends MY_Controller {
 		    $data = file_get_contents($file["tmp_name"]);
 		    $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
-		    var_dump($obj);
 		    $this->DmsModel->saveDms($obj);
-		    var_dump($this->DmsModel->result);
 
 		    if($this->DmsModel->result->error == 0)
 		    {
@@ -103,7 +98,6 @@ class Requirements extends MY_Controller {
 			$akte->insertvon = 'online';
 
 			$this->AkteModel->saveAkte($akte);
-			var_dump($this->AkteModel->result);
 		    }
 
 		    if(unlink($file["tmp_name"]))

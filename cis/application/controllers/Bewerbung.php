@@ -122,10 +122,7 @@ class Bewerbung extends MY_Controller {
 			    if(($akte->dokument_kurzbz == $obj->dokument_kurzbz) && ($akte->dms_id != null) && ($obj->dokument_kurzbz != "Sonst"))
 			    {
 				$dms = $this->_loadDms($akte->dms_id);
-				var_dump($dms);
 				$obj->version = $dms->version+1;
-				$obj->dms_id = $akte->dms_id;
-				var_dump($obj->version);
 			    }
 			}
 
@@ -135,10 +132,7 @@ class Bewerbung extends MY_Controller {
                         $data = file_get_contents($file["tmp_name"]);
                         $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
 			
-			var_dump($obj);
                         $this->DmsModel->saveDms($obj);
-			echo $this->DmsModel->result;
-                        var_dump($this->DmsModel->result);
 
                         if($this->DmsModel->result->error == 0)
                         {
@@ -153,18 +147,20 @@ class Bewerbung extends MY_Controller {
                             $akte->insertvon = 'online';
 
                             $this->AkteModel->saveAkte($akte);
-                            var_dump($this->AkteModel->result);
                         }
+			else
+			{
+			    //TODO handle error
+			    var_dump($this->DmsModel->result);
+			}
 
                         if(unlink($file["tmp_name"]))
                         {
                             //removing tmp file successful
                         }
                     }
-                    
                 }
             }
-            
             
             $this->_savePerson($this->_data["person"]);
 
@@ -249,6 +245,14 @@ class Bewerbung extends MY_Controller {
             $this->_loadPrestudent();
             $this->_savePrestudentStatus($prestudent);
         }
+	else
+	{
+	    //TODO handle error
+	    if($this->PrestudentModel->result->error != 0)
+	    {
+		var_dump($this->PrestudentModel->result);
+	    }
+	}
 
         //load kontakt data
         $this->_loadKontakt();
@@ -284,6 +288,10 @@ class Bewerbung extends MY_Controller {
             {
                 $this->_data["person"] = $this->PersonModel->result->retval[0];
             }
+	    else
+	    {
+		var_dump($this->PersonModel->result);
+	    }
         }
     }
     
@@ -295,6 +303,10 @@ class Bewerbung extends MY_Controller {
             {
                 $this->_data["prestudent"] = $this->PrestudentModel->result->retval;        
             }
+	    else
+	    {
+		var_dump($this->PrestudentModel->result);
+	    }
         }
     }
     
@@ -306,6 +318,10 @@ class Bewerbung extends MY_Controller {
             {
                 return $this->PrestudentStatusModel->result->retval[0];
             }
+	    else
+	    {
+		var_dump($this->PrestudentStatusModel->result);
+	    }
         }
     }
 
@@ -320,6 +336,10 @@ class Bewerbung extends MY_Controller {
                     $this->_data["kontakt"][$value->kontakttyp] = $value;
                 }
             }
+	    else
+	    {
+		var_dump($this->KontaktModel->result);
+	    }
         }
     }
     
@@ -337,6 +357,10 @@ class Bewerbung extends MY_Controller {
                     }
                 }
             }
+	    else
+	    {
+		var_dump($this->AdresseModel->result);
+	    }
         }
     }
     
@@ -351,6 +375,10 @@ class Bewerbung extends MY_Controller {
                     $this->_data["nationen"][$n->nation_code] = $n->kurztext;
                 }
             }
+	    else
+	    {
+		var_dump($this->nation_model->result);
+	    }
         }
     }
     
@@ -365,6 +393,10 @@ class Bewerbung extends MY_Controller {
                     $this->_data["bundeslaender"][$b->bundesland_code] = $b->bezeichnung;
                 }
             }
+	    else
+	    {
+		var_dump($this->bundesland_model->result);
+	    }
         }
     }
     
@@ -383,6 +415,7 @@ class Bewerbung extends MY_Controller {
             else
             {
                 //TODO Daten konnten nicht geladen werden
+		var_dump($this->StudiengangModel->result);
             }
         }
     }
@@ -398,6 +431,7 @@ class Bewerbung extends MY_Controller {
             else
             {
                 //TODO Daten konnten nicht geladen werden
+		var_dump($this->StudienplanModel->result);
             }
         }
     }
@@ -424,6 +458,7 @@ class Bewerbung extends MY_Controller {
             }
             else
             {
+		var_dump($this->PersonModel->result);
                 //TODO Daten konnten nicht gespeichert werden
             }
         }
@@ -489,6 +524,7 @@ class Bewerbung extends MY_Controller {
         else
         {
             //TODO studiensemester not found
+	    var_dump($this->StudiensemesterModel->result);
         }
     }
     
@@ -503,6 +539,7 @@ class Bewerbung extends MY_Controller {
             else
             {
                 //TODO Daten konnten nicht gespeichert werden
+		var_dump($this->KontaktModel->result);
             }
         }
     }
@@ -518,6 +555,7 @@ class Bewerbung extends MY_Controller {
             else
             {
                 //TODO Daten konnten nicht gespeichert werden
+		var_dump($this->AdresseModel->result);
             }
         }
     }
@@ -534,6 +572,11 @@ class Bewerbung extends MY_Controller {
                 $this->_data["dokumente"][$akte->dokument_kurzbz] = $akte;
             }
         }
+	else
+	{
+	    //TODO handle error
+	    var_dump($this->AkteModel->result);
+	}
     }
     
     private function _loadDms($dms_id)
@@ -550,5 +593,10 @@ class Bewerbung extends MY_Controller {
 		return false;
 	    }
         }
+	else
+	{
+	    //TODO handle error
+	    var_dump($this->DmsModel->result);
+	}
     }
 }

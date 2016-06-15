@@ -95,7 +95,6 @@ class Registration extends MY_Controller {
              $this->_data["email"] = $this->input->post("email");
             $this->Person_model->checkBewerbung(array("email" =>  $this->_data["email"]));
 
-            var_dump($this->Person_model->result);
             if ($this->Person_model->result->error == 0) {
                 if (count($this->Person_model->result->retval) > 0) {
                     $zugangscode = $this->Person_model->result->retval[0]->zugangscode;

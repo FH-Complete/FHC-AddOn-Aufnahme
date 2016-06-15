@@ -40,7 +40,6 @@ class Prestudent_model extends MY_Model
 	}
 	else
 	{
-            var_dump($restquery);
 	    return false;
 	}
     }
