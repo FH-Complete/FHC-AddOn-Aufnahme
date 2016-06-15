@@ -15,6 +15,8 @@ class Bewerbung extends MY_Controller {
         $this->load->model('prestudentStatus_model', "PrestudentStatusModel");
         $this->load->model('studiensemester_model', "StudiensemesterModel");
         $this->load->model('studienplan_model', "StudienplanModel");
+        $this->load->model('dms_model', "DmsModel");
+        $this->load->model('akte_model', "AkteModel");
         $this->load->helper("form");
         $this->load->library("form_validation");
     }
@@ -23,12 +25,10 @@ class Bewerbung extends MY_Controller {
     {   
         $this->checkLogin();
         
-        if(!isset($this->session->userdata()["studiengang_kz"]))
-        {
-            redirect("/Studiengaenge");
-        }
-        
         $this->_data['title'] = 'Personendaten';
+        
+        $this->StudiensemesterModel->getNextStudiensemester("WS");
+        $this->session->set_userdata("studiensemester_kurzbz", $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz);
         
         //load person data
         $this->_loadPerson();
@@ -50,6 +50,11 @@ class Bewerbung extends MY_Controller {
             array_push($this->_data["studiengaenge"], $studiengang);
         }
         
+        if(count($this->_data["studiengaenge"]) == 0)
+        {
+            redirect("/Studiengaenge");
+        }
+        
         //load adress data
         $this->_loadAdresse();
 
@@ -58,6 +63,18 @@ class Bewerbung extends MY_Controller {
 
         //load bundeslaender
         $this->_loadBundeslaender();
+        
+        //load dokumente
+        $this->_loadDokumente($this->session->userdata()["person_id"]);
+	
+	foreach($this->_data["dokumente"] as $akte)
+	{
+	    if($akte->dms_id != null)
+	    {
+		$dms = $this->_loadDms($akte->dms_id);
+		$akte->dokument = $dms;
+	    }
+	}
 
         //form validation rules
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
@@ -73,6 +90,82 @@ class Bewerbung extends MY_Controller {
         else
         {
             $post = $this->input->post();
+            $files = $_FILES;
+            
+            if(count($files) > 0)
+            {
+                foreach($files as $key=>$file)
+                {
+                    if(is_uploaded_file($file["tmp_name"]))
+                    {
+                        $obj = new stdClass();
+                        $obj->version = 0;
+                        $obj->mimetype = $file["type"];
+                        $obj->name = $file["name"];
+                        $obj->oe_kurzbz = null;
+
+                        switch($key)
+                        {
+                            case "reisepass":
+                                $obj->dokument_kurzbz = "pass";
+                                break;                        
+                            case "lebenslauf":
+                                $obj->dokument_kurzbz = "Lebenslf";
+                                break;
+                            default:
+                                $obj->dokument_kurzbz = "Sonst";
+                                break;
+                        }
+			
+			foreach($this->_data["dokumente"] as $akte)
+			{
+			    if(($akte->dokument_kurzbz == $obj->dokument_kurzbz) && ($akte->dms_id != null) && ($obj->dokument_kurzbz != "Sonst"))
+			    {
+				$dms = $this->_loadDms($akte->dms_id);
+				var_dump($dms);
+				$obj->version = $dms->version+1;
+				$obj->dms_id = $akte->dms_id;
+				var_dump($obj->version);
+			    }
+			}
+
+                        $obj->kategorie_kurzbz = "Akte";
+
+                        $type = pathinfo($file["name"], PATHINFO_EXTENSION);
+                        $data = file_get_contents($file["tmp_name"]);
+                        $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
+			
+			var_dump($obj);
+                        $this->DmsModel->saveDms($obj);
+			echo $this->DmsModel->result;
+                        var_dump($this->DmsModel->result);
+
+                        if($this->DmsModel->result->error == 0)
+                        {
+                            $akte = new stdClass();
+                            $akte->dms_id = $this->DmsModel->result->retval;
+                            $akte->person_id = $this->_data["person"]->person_id;
+                            $akte->mimetype = $file["type"];
+
+                            $akte->bezeichnung = mb_substr($obj->name, 0, 32);
+                            $akte->dokument_kurzbz = $obj->dokument_kurzbz;
+                            $akte->titel = $key;
+                            $akte->insertvon = 'online';
+
+                            $this->AkteModel->saveAkte($akte);
+                            var_dump($this->AkteModel->result);
+                        }
+
+                        if(unlink($file["tmp_name"]))
+                        {
+                            //removing tmp file successful
+                        }
+                    }
+                    
+                }
+            }
+            
+            
             $this->_savePerson($this->_data["person"]);
 
             //TODO save Adresse
@@ -428,5 +521,34 @@ class Bewerbung extends MY_Controller {
             }
         }
     }
-
+    
+    private function _loadDokumente($person_id, $dokumenttyp_kurzbz=null)
+    {
+        $this->_data["dokumente"] = array();
+        $this->AkteModel->getAkten($person_id, $dokumenttyp_kurzbz);
+        
+        if($this->AkteModel->result->error == 0)
+        {
+            foreach($this->AkteModel->result->retval as $akte)
+            {
+                $this->_data["dokumente"][$akte->dokument_kurzbz] = $akte;
+            }
+        }
+    }
+    
+    private function _loadDms($dms_id)
+    {
+        $this->DmsModel->loadDms($dms_id);
+        if($this->DmsModel->result->error == 0)
+        {
+            if(count($this->DmsModel->result->retval) == 1)
+	    {
+		return $this->DmsModel->result->retval[0];
+	    }
+	    else
+	    {
+		return false;
+	    }
+        }
+    }
 }

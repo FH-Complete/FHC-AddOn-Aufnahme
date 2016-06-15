@@ -16,7 +16,6 @@ class Requirements extends MY_Controller {
     public function index() {
         $this->checkLogin();
         $this->_data['sprache'] = $this->get_language();
-        var_dump($this->session->userdata());
         
         //load studiengang
         $this->_loadStudiengang($this->input->get()["studiengang_kz"]);

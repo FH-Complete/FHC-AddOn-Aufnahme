@@ -1,6 +1,6 @@
 <div role="tabpanel" class="tab-pane" id="daten">
     <legend><?php echo $this->lang->line("person_angabenZurPerson"); ?></legend>
-    <?php echo form_open("Bewerbung", array("id" => "PersonForm", "name" => "PersonForm")); ?>
+    <?php echo form_open_multipart("Bewerbung", array("id" => "PersonForm", "name" => "PersonForm")); ?>
     <div class="row">
         <div class="col-sm-2">
             <div class="form-group <?php echo (form_error("anrede") != "") ? 'has-error' : '' ?>">
@@ -201,6 +201,59 @@
         </div>
     </div>
     <legend class=""><?php echo $this->lang->line("person_formDokumentupload"); ?></legend>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <?php echo $this->lang->line("person_formDokumentupload_text"); ?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-5">
+            <?php echo form_label($this->lang->line('person_formDokumentupload_reisepass'), "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
+            <div class="form-group">
+                <?php if(!isset($dokumente["pass"])){
+                    echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
+                 }
+		 else
+		 {
+		     echo $this->lang->line('person_formDokumentupload_DokHochgeladen');
+		 }
+                 ?>
+            </div>
+        </div>
+        <div class="col-sm-">
+            <div class="form-group">
+                <div class="form-group <?php echo (form_error("reisepass") != "") ? 'has-error' : '' ?>">
+                    <?php echo form_input(array('id' => 'reisepass', 'name' => 'reisepass', "type" => "file")); ?>
+                    <?php echo form_error("reisepass"); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-5">
+            <?php echo form_label($this->lang->line('person_formDokumentupload_lebenslauf'), "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?>
+            <div class="form-group">
+                <?php if(!isset($dokumente["Lebenslf"])) {
+                    echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
+                 }
+		 else
+		 {
+		     echo $this->lang->line('person_formDokumentupload_DokHochgeladen');
+		 }
+                 ?>
+            </div>
+        </div>
+        <div class="col-sm-">
+            <div class="form-group">
+                <div class="form-group <?php echo (form_error("lebenslauf") != "") ? 'has-error' : '' ?>">
+                    <?php echo form_input(array('id' => 'lebenslauf', 'name' => 'lebenslauf', "type" => "file")); ?>
+                    <?php echo form_error("lebenslauf"); ?>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">

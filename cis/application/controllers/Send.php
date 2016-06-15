@@ -72,6 +72,8 @@ class Send extends MY_Controller {
                 {
                     $prestudentStatus->bestaetigtam=date('Y-m-d H:i:s');
                     $this->_savePrestudentStatus($prestudentStatus);
+                    
+                    //TODO send mails
                 }
                 else
                 {
