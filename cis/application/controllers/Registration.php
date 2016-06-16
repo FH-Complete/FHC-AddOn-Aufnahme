@@ -92,20 +92,46 @@ class Registration extends MY_Controller {
         );
 
         if (($this->input->post("email") != null)) {
-             $this->_data["email"] = $this->input->post("email");
+	    $this->_data["email"] = $this->input->post("email");
             $this->Person_model->checkBewerbung(array("email" =>  $this->_data["email"]));
 
             if ($this->Person_model->result->error == 0) {
-                if (count($this->Person_model->result->retval) > 0) {
-                    $zugangscode = $this->Person_model->result->retval[0]->zugangscode;
-                    $person_id = $this->Person_model->result->retval[0]->person_id;
-                    $message = $this->resendMail($zugangscode,  $this->_data["email"], $person_id);
-                    $this->_data["message"] = $message;
+                if (count($this->Person_model->result->retval) === 1) {
+		    $person = $this->Person_model->result->retval[0];
+		    $this->Person_model->getPersonen($person->person_id);
+		    
+		    if($this->Person_model->result->error === 0)
+		    {
+			$person = $this->Person_model->result->retval[0];
+			//TODO define timespan until invalidation of timestamp in config
+			$person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +1 hour"));
+			$person->zugangscode = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
+			$this->Person_model->savePerson($person);
+			
+			if($this->Person_model->result->error === 0)
+			{
+			    $message = $this->resendMail($person->zugangscode,  $this->_data["email"], $person->person_id);
+			    $this->_data["message"] = $message;
+			}
+			else
+			{
+			    //could not set new zugangscode
+			}
+		    }
+		    else
+		    {
+			//could not load person data
+		    }
                 }
+		else
+		{
+		    //email is unique
+		}
             }
             else
             {
                 //TODO could not load data
+		var_dump($this->Person_model->result);
             }
         }
 
@@ -137,9 +163,8 @@ class Registration extends MY_Controller {
                 $this->Person_model->getPersonen($person_id);
                 if (($this->Person_model->result->error == 0) && (count($this->Person_model->result->retval) == 1)) {
                     $person = $this->Person_model->result->retval[0];
-                    //check if timestamp code is not older than 24 hours 
-                    //TODO define timespan until invalidation of timestamp in config
-                    if (strtotime(date('Y-m-d H:i:s')) < strtotime($person->zugangscode_timestamp . " +24 hours")) {
+                    //check if timestamp code is not older than now
+                    if (strtotime(date('Y-m-d H:i:s')) < strtotime($person->zugangscode_timestamp)) {
                         $person->zugangscode =  $this->_data["zugangscode"];
                         $this->Person_model->updatePerson($person);
                         $this->load->view('templates/header');
@@ -170,7 +195,9 @@ class Registration extends MY_Controller {
         $person->nachname = $data["nachname"];
         $person->gebdatum = date('Y-m-d', strtotime($data["geb_datum"]));
         $person->zugangscode = $zugangscode;
-        $person->zugangscode_timestamp = date('Y-m-d H:i:s');
+	//set timestamp which is indicated how long the code is valid
+	//TODO define timespan until invalidation of timestamp in config
+        $person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +24 hours"));
         $person->insertvon = 'online';
         $person->vornamen = "";
 
