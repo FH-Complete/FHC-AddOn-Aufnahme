@@ -119,7 +119,7 @@
         <div class="col-sm-12">
             <div class="form-group <?php echo (form_error("heimatadresse") != "") ? 'has-error' : '' ?>">
                 <fieldset><?php echo $this->lang->line('person_heimatadresse'); ?></fieldset>
-                <?php echo form_radio(array("id" => "heimatadresse", "name" => "heimatadresse"), null, null); ?>
+                <?php echo form_radio(array("id" => "heimatadresse", "name" => "heimatadresse", "checked"=>"checked"), null, null); ?>
                 <span><?php echo sprintf($this->lang->line("person_formHeimatadresse"), "Inland"); ?></span>
                 <?php echo form_radio(array("id" => "heimatadresse", "name" => "heimatadresse"), null, null); ?>
                 <span><?php echo sprintf($this->lang->line("person_formHeimatadresse"), "Ausland"); ?></span>
@@ -162,17 +162,46 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12">
-            <div class="form-group <?php echo (form_error("zustelladresse") != "") ? 'has-error' : '' ?>">
-                <div class="checkbox">
-                    <label>
-                        <?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => FALSE)); ?>
-                        Meine Zustelladresse weicht von der Heimatadresse ab.
-                    </label>
-                </div>
-                <?php echo form_error("zustelladresse"); ?>
-            </div>
-        </div>
+	<div class="col-sm-12">
+	    <div class="form-group <?php echo (form_error("zustelladresse") != "") ? 'has-error' : '' ?>">
+		<div class="checkbox">
+		    <label>
+			<?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => FALSE, "class"=>"zustelladresse", "studienplan_id"=>$studiengang->studienplan->studienplan_id));
+			    echo $this->lang->line('person_zustelladresseWeichtAb').".";
+			?>			
+		    </label>
+		</div>
+		<?php echo form_error("zustelladresse"); ?>
+	    </div>
+	</div>
+    </div>
+    <div id="zustelladresse_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="display: none;">
+	<legend class=""><?php echo $this->lang->line("person_formZustelladresse"); ?></legend>
+	<div class="row">
+	    <div class="col-sm-6">
+		<div class="form-group <?php echo (form_error("zustell_strasse") != "") ? 'has-error' : '' ?>">
+		    <?php echo form_label($this->lang->line('person_strasse'), "zustell_strasse", array("name" => "zustell_strasse", "for" => "zustell_strasse", "class" => "control-label")) ?>
+		    <?php echo form_input(array('id' => 'zustell_strasse', 'name' => 'zustell_strasse', "type" => "text", "value" => set_value("zustell_strasse", (isset($zustell_adresse->strasse) ? $zustell_adresse->strasse : NULL)), "class" => "form-control")); ?>
+		    <?php echo form_error("zustell_strasse"); ?>
+		</div>
+	    </div>
+	</div>
+	<div class="row">
+	    <div class="col-sm-2">
+		<div class="form-group <?php echo (form_error("zustell_plz") != "") ? 'has-error' : '' ?>">
+		    <?php echo form_label($this->lang->line('person_formPlz'), "zustell_plz", array("name" => "zustell_plz", "for" => "zustell_plz", "class" => "control-label")) ?>
+		    <?php echo form_input(array('id' => 'zustell_plz', 'name' => 'zustell_plz', "type" => "text", "value" => set_value("zustell_plz", (isset($zustell_adresse->plz) ? $zustell_adresse->plz : NULL)), "class" => "form-control")); ?>
+		    <?php echo form_error("zustell_plz"); ?>
+		</div>
+	    </div>
+	    <div class="col-sm-6">
+		<div class="form-group <?php echo (form_error("zustell_ort") != "") ? 'has-error' : '' ?>">
+		    <?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("name" => "zustell_ort", "for" => "zustell_ort", "class" => "control-label")) ?>
+		    <?php echo form_input(array('id' => 'zustell_ort', 'name' => 'zustell_ort', "type" => "text", "value" => set_value("zustell_ort", (isset($zustell_adresse->ort) ? $zustell_adresse->ort : NULL)), "class" => "form-control")); ?>
+		    <?php echo form_error("zustell_ort"); ?>
+		</div>
+	    </div>
+	</div>
     </div>
     <legend class=""><?php echo $this->lang->line("person_formKontakt"); ?></legend>
     <div class="row">

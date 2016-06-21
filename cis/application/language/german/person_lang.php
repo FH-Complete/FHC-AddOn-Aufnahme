@@ -28,3 +28,6 @@ $lang["person_strasse"] = "Straße";
 $lang["person_fax"] = "Fax";
 $lang["person_telefon"] = "Telefon";
 $lang["person_geschlecht"] = "Geschlecht";
+$lang["person_zustelladresseWeichtAb"] = "Meine Zustelladresse weicht von der Heimatadresse ab";
+$lang["person_formZustelladresse"] = "Zustelladresse";
+

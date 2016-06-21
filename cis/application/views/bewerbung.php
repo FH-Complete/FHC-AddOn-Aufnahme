@@ -43,3 +43,26 @@ echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
 
 <?php
 $this->load->view('templates/footer');
+?>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+	console.log($(".zustelladresse"));
+
+	$(".zustelladresse").click(function(event)
+	{
+	    console.log(event);
+	    console.log($(event.currentTarget).attr("studienplan_id"));
+	    var id = $(event.currentTarget).attr("studienplan_id");
+	    if($(event.currentTarget).prop("checked"))
+	    {
+		$("#zustelladresse_"+id).show();
+	    }
+	    else
+	    {
+		$("#zustelladresse_"+id).hide();
+	    }
+	});
+
+    });
+</script>

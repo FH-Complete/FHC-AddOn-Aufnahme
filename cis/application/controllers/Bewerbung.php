@@ -90,6 +90,7 @@ class Bewerbung extends MY_Controller {
         else
         {
             $post = $this->input->post();
+	    var_dump($post);
             $files = $_FILES;
             
             if(count($files) > 0)
@@ -165,21 +166,55 @@ class Bewerbung extends MY_Controller {
             $this->_savePerson($this->_data["person"]);
 
             //TODO save Adresse
-            $adresse = new stdClass();
-            if(isset($this->_data["adresse"]))
-            {
-                $adresse = $this->_data["adresse"];
-            }
-            else
-            {
-                $adresse->heimatadresse = true;
-            }
-            $adresse->person_id = $this->_data["person"]->person_id;
-            $adresse->strasse = $post["strasse"];
-            $adresse->plz = $post["plz"];
-            $adresse->ort = $post["ort"];
+	    if(($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort"] != ""))
+	    {
+		$adresse = new stdClass();
+		if(isset($this->_data["adresse"]))
+		{
+		    $adresse = $this->_data["adresse"];
+		}
+		else
+		{
+		    $adresse->heimatadresse = true;
+		}
+		
+		if(($post["zustell_strasse"] != "") && ($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))
+		{
+		    $adresse->zustelladresse = "f";
+		}
+		else
+		{
+		    $adresse->zustelladresse = true;
+		}
+		
+		$adresse->person_id = $this->_data["person"]->person_id;
+		$adresse->strasse = $post["strasse"];
+		$adresse->plz = $post["plz"];
+		$adresse->ort = $post["ort"];
+		
+		$this->_saveAdresse($adresse);
+	    }
+	    
+	    if(($post["zustell_strasse"] != "") && ($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))
+	    {
+		$zustell_adresse = new stdClass();
+		if(isset($this->_data["zustell_adresse"]))
+		{
+		    $zustell_adresse = $this->_data["zustell_adresse"];
+		}
+		else
+		{
+		    $zustell_adresse->heimatadresse = false;
+		    $zustell_adresse->zustelladresse = true;
+		}
+		$zustell_adresse->person_id = $this->_data["person"]->person_id;
+		$zustell_adresse->strasse = $post["zustell_strasse"];
+		$zustell_adresse->plz = $post["zustell_plz"];
+		$zustell_adresse->ort = $post["zustell_ort"];
 
-            $this->_saveAdresse($adresse);
+		var_dump($zustell_adresse);
+		$this->_saveAdresse($zustell_adresse);
+	    }
 
             //TODO save new contact
             if(($post["telefon"] != "") && !(isset($this->_data["kontakt"]["telefon"])))
@@ -354,6 +389,10 @@ class Bewerbung extends MY_Controller {
                     if($adresse->heimatadresse == "t")
                     {
                         $this->_data["adresse"] = $adresse;
+                    }
+		    else if(($adresse->heimatadresse == "f") && ($adresse->zustelladresse == "t"))
+                    {
+                        $this->_data["zustell_adresse"] = $adresse;
                     }
                 }
             }
@@ -548,6 +587,7 @@ class Bewerbung extends MY_Controller {
     {
         if($this->AdresseModel->saveAdresse($adresse))
         {
+	    var_dump($this->AdresseModel->result);
             if($this->AdresseModel->result->error == 0)
             {
                 //TODO Daten erfolgreich gespeichert
