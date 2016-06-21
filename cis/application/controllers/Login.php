@@ -67,6 +67,7 @@ class Login extends MY_Controller {
     private function code_login($code, &$data, $email = null)
     {
         $this->StudiensemesterModel->getNextStudiensemester("WS");
+	var_dump($this->StudiensemesterModel);
         $this->session->set_userdata("studiensemester_kurzbz", $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz);   
         
         $this->person_model->getPersonFromCode($code, $email);
@@ -107,6 +108,11 @@ class Login extends MY_Controller {
                 //TODO error
             }
         }
+	else
+	{
+	    //TODO person not found
+	    var_dump($this->person_model->result);
+	}
     }
     
     private function _cisLogin($username, $password)
@@ -158,11 +164,20 @@ class Login extends MY_Controller {
 			//TODO error
 		    }
 		}
+		else
+		{
+		    echo "person not found";
+		}
 	    }
 	    else
 	    {
 		//TODO user not found
+		echo "user not found";
 	    }
+	}
+	else
+	{
+	    echo "auth failed";
 	}
     }
     
