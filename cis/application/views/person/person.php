@@ -274,7 +274,7 @@
                  ?>
             </div>
         </div>
-        <div class="col-sm-">
+        <div class="col-sm-5">
             <div class="form-group">
                 <div class="form-group <?php echo (form_error("lebenslauf") != "") ? 'has-error' : '' ?>">
                     <?php echo form_input(array('id' => 'lebenslauf', 'name' => 'lebenslauf', "type" => "file")); ?>
