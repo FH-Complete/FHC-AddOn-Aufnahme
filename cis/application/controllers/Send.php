@@ -30,13 +30,16 @@ class Send extends MY_Controller {
             foreach($this->_data["prestudent"] as $prestudent)
             {
                 //load studiengaenge der prestudenten
-                if($prestudent->studiengang_kz == $this->session->userdata()["studiengang_kz"])
+                if($prestudent->studiengang_kz == $this->input->get()["studiengang_kz"])
                 {
                     $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
                     $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);         
                     $this->_data["studiengang"]->studienplan = $studienplan;
+		    $this->_data["prestudentStatus"] = $prestudent->prestudentStatus;
                 } 
             }
+	    
+//	    var_dump($this->_data["prestudent"]);
             
             $this->load->view('send', $this->_data);
         }
@@ -61,17 +64,18 @@ class Send extends MY_Controller {
         foreach($this->_data["prestudent"] as $prestudent)
         {
             //load studiengaenge der prestudenten
-            if($prestudent->studiengang_kz == $this->session->userdata()["studiengang_kz"])
+            if($prestudent->studiengang_kz == $studiengang_kz)
             {
                 $prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
                 $studienplan = $this->_loadStudienplan($prestudentStatus->studienplan_id);         
                 $this->_data["studiengang"]->studienplan = $studienplan;
-                
+		
                 //TODO check if status exists
-                if(is_null($prestudentStatus->bestaetigtam))
+                if(is_null($prestudentStatus->bewerbung_abgeschicktamum))
                 {
-                    $prestudentStatus->bestaetigtam=date('Y-m-d H:i:s');
+                    $prestudentStatus->bewerbung_abgeschicktamum=date('Y-m-d H:i:s');
                     $this->_savePrestudentStatus($prestudentStatus);
+		    
                     
                     //TODO send mails
                 }
@@ -79,6 +83,7 @@ class Send extends MY_Controller {
                 {
                     //TODO bewerbung bereits abgeschickt;
                 }
+		$this->_data["prestudentStatus"] = $prestudentStatus;
 
                 $this->load->view('send', $this->_data);
             } 

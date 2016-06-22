@@ -7,11 +7,29 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
-                    <?php echo form_submit(array("value"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary")); ?>
+		    <?php if($prestudentStatus->bewerbung_abgeschicktamum != null)
+		    {
+			echo form_submit(array("value"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary", "disabled"=>"disabled"));
+		    }
+		    else
+		    {
+			echo form_submit(array("value"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary"));
+		    }
+		    ?>
                 </div>
-            </div>
             </div>
         </div>
     <?php echo form_close(); ?>
-    
+    <div class="row">
+	<div class="col-sm-6">
+	    <div class="form-group">
+		<?php
+		if($prestudentStatus->bewerbung_abgeschicktamum != null)
+		{
+		    echo $this->lang->line("send_bereitsAbgeschickt");
+		}
+		?>
+	    </div>
+	</div>
+    </div>
 </div>
