@@ -1,6 +1,6 @@
 <div>
     <h1><?php echo $title; ?></h1>
-    <a href="<?php echo base_url('index.dist.php/Messages/newMessage'); ?>">
+    <a href="<?php echo base_url($this->config->config["index_page"].'/Messages/newMessage'); ?>">
 	<button class="answer">
 	    <?php echo $this->lang->line('msg_newMessage'); ?>
 	</button>
@@ -41,7 +41,7 @@
 	<?php foreach($messages as $msg) { ?>
 	    <div id="message_<?php echo $msg->message_id; ?>" style="display: none;" class="message">
 		<div class="buttons">
-		    <a href="<?php echo base_url('index.dist.php/Messages/answerMessage/'.$msg->message_id."/".$msg->oe_kurzbz); ?>">
+		    <a href="<?php echo base_url($this->config->config["index_page"].'/Messages/answerMessage/'.$msg->message_id."/".$msg->oe_kurzbz); ?>">
 			<button class="answer" id="answer_<?php echo $msg->message_id; ?>">
 			    <?php echo $this->lang->line('msg_answer'); ?>
 			</button>

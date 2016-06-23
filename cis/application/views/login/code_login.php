@@ -24,7 +24,7 @@
 		<button class="btn btn-primary" type="submit" name="submit_btn">Login</button>
 	    </div>
 	    <div class="col-sm-4 col-sm-offset-4">
-		<a href="<?php echo base_url("index.dist.php/Registration/resendCode") ?>">Zugangscode vergessen?</a>
+		<a href="<?php echo base_url($this->config->config["index_page"]."/Registration/resendCode") ?>">Zugangscode vergessen?</a>
 	    </div>
 	</div>
     </div>

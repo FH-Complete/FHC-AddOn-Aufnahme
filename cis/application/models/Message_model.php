@@ -29,4 +29,15 @@ class Message_model extends MY_Model
 	else
 	    return false;
     }
+    
+    public function sendMessageVorlage($data)
+    {
+	if ($restquery = $this->rest->post('system/message/messageVorlage', $data))
+	{
+	    $this->result = $restquery;
+	    return true;
+	}
+	else
+	    return false;
+    }
 }

@@ -23,7 +23,7 @@ foreach ($studiengaenge as $stg)
                         <option>Termin 3</option>
                     </select>
                 </div>
-                <div class="col-sm-6"><a href="<?php echo base_url("index.dist.php/Bewerbung/studiengang/".$stg->studiengang_kz."/".$studienplan->studienplan_id) ?>"><button type="button" class="btn btn-sm">Absenden</button></a></div>
+                <div class="col-sm-6"><a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung/studiengang/".$stg->studiengang_kz."/".$studienplan->studienplan_id) ?>"><button type="button" class="btn btn-sm">Absenden</button></a></div>
             </div>
             <div class="row">
                 

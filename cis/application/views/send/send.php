@@ -26,7 +26,8 @@
 		<?php
 		if($prestudentStatus->bewerbung_abgeschicktamum != null)
 		{
-		    echo $this->lang->line("send_bereitsAbgeschickt");
+		    echo $this->lang->line("send_bereitsAbgeschickt")."</br>";
+		    echo $this->PhraseModel->getLoadedPhrase("test_1");
 		}
 		?>
 	    </div>
