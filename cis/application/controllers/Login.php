@@ -39,6 +39,7 @@ class Login extends MY_Controller {
         }
         
         $this->_data['sprache'] = $this->get_language();
+	$this->_loadLanguage($this->_data["sprache"]);
         $this->_data['studiengang_kz'] = $this->input->get('studiengang_kz');
         if ($this->_data['studiengang_kz'])
         {

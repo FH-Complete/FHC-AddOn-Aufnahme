@@ -27,7 +27,7 @@
 		if($prestudentStatus->bewerbung_abgeschicktamum != null)
 		{
 		    echo $this->lang->line("send_bereitsAbgeschickt")."</br>";
-		    echo $this->PhraseModel->getLoadedPhrase("test_1");
+		    echo $this->getPhrase("test_1", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
 		}
 		?>
 	    </div>

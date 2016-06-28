@@ -115,7 +115,7 @@
         </div>
     </div>
     <legend class=""><?php echo $this->lang->line("person_adresse"); ?></legend>
-    <div class="row">
+    <!--<div class="row">
         <div class="col-sm-12">
             <div class="form-group <?php echo (form_error("heimatadresse") != "") ? 'has-error' : '' ?>">
                 <fieldset><?php echo $this->lang->line('person_heimatadresse'); ?></fieldset>
@@ -126,7 +126,7 @@
                 <?php echo form_error("heimatadresse"); ?>
             </div>
         </div>
-    </div>
+    </div>-->
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("strasse") != "") ? 'has-error' : '' ?>">

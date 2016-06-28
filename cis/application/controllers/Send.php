@@ -18,6 +18,7 @@ class Send extends MY_Controller {
     public function index() {
         $this->checkLogin();
         $this->_data['sprache'] = $this->get_language();
+	$this->_loadLanguage($this->_data["sprache"]);
         
         if(isset($this->input->get()["studiengang_kz"]))
         {           
@@ -39,7 +40,6 @@ class Send extends MY_Controller {
 		    $this->_data["prestudentStatus"] = $prestudent->prestudentStatus;
                 } 
             }
-	    $this->_getPhrasen($this->_data["sprache"], $this->_data["studiengang"]->oe_kurzbz, $this->_data["studiengang"]->studienplan->orgform_kurzbz);
             
             $this->load->view('send', $this->_data);
         }
@@ -158,25 +158,5 @@ class Send extends MY_Controller {
 	    //TODO
 	    var_dump($this->PrestudentStatusModel->getErrorMessage());
 	}
-	
-    }
-    
-    private function _getPhrasen($language, $oe_kurzbz, $orgform_kurzbz)
-    {
-	$this->PhraseModel->getPhrasen(ucfirst($language), $oe_kurzbz, $orgform_kurzbz);
-	if($this->PhraseModel->isResultValid() == true)
-	{
-	    //TODO Phrasen loaded
-	}
-	else
-	{
-	    //TODO
-	    var_dump($this->PhraseModel->getErrorMessage());
-	}
-    }
-    
-    private function getPhrase($phrase)
-    {
-	return $this->PhraseModel->getLoadedPhrase($phrase);
     }
 }

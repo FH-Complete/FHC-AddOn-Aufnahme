@@ -13,6 +13,7 @@ class MY_Controller extends CI_Controller {
         $this->load->config('aufnahme');
         $this->load->helper('url');
         $this->load->library('session');
+	$this->load->model("phrase_model", "PhraseModel");
         //$this->load->spark('restclient/2.1.0');
         $this->_data['language'] = $this->get_language();
     }
@@ -38,4 +39,27 @@ class MY_Controller extends CI_Controller {
         }
     }
 
+    protected function _loadLanguage($sprache)
+    {
+	if((is_null($this->session->phrasen)) || (empty($this->session->phrasen)))
+        {
+            $this->_getPhrasen($sprache);
+        }
+    }
+    
+    private function _getPhrasen($language)
+    {
+	$this->PhraseModel->getPhrasen(ucfirst($language));
+	if($this->PhraseModel->isResultValid() == true)
+	{
+	    //TODO Phrasen loaded
+	    $this->session->phrasen = $this->PhraseModel->result->retval;
+	}
+	else
+	{
+	    //TODO
+	    echo $this->PhraseModel->getErrorMessage();
+	    var_dump($this->PhraseModel->getErrorMessage());
+	}
+    }
 }
