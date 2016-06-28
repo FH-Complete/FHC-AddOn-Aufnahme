@@ -8,5 +8,6 @@ $lang["msg_answer"] = "Antworten";
 $lang["msg_recepient"] = "Empfänger";
 $lang["msg_send"] = "absenden";
 $lang["msg_newMessage"] = "neue Nachricht";
+$lang["msg_view"] = "anzeigen";
 
 

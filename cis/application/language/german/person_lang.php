@@ -2,6 +2,7 @@
 $lang['person_Firstname'] = 'Vorname';
 $lang['person_staatsbuergerschaft'] = "Staatsbürgerschaft";
 $lang["person_angabenZurPerson"] = "Angaben zur Person";
+$lang["person_adresse"] = "Adresse";
 $lang["person_formAnrede"] = "Anrede";
 $lang["person_formAkadgrad"] = "Akad. Titel";
 $lang['person_formGeburtsnation'] = "Geburtsnation";
