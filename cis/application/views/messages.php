@@ -14,8 +14,20 @@ $this->lang->load(array('aufnahme', 'messages'), $language);
 
 
     <?php 
+    switch($view)
+    {
+	case "newMessage":
+	    $this->load->view('messages/newMessage');
+	    break;
+	case "message":
+	    $this->load->view("messages/message");
+	    break;
+	default:
+	    $this->load->view('messages/inbox');
+	    break;
+    }
     
-    $this->load_views('view_messages'); ?>
+    ?>
 
 
     

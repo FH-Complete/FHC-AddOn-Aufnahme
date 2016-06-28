@@ -22,6 +22,8 @@ class Messages extends MY_Controller {
 	
 	$this->_loadData();
 	
+	$this->_loadLanguage($this->_data["sprache"]);
+	
 	$this->load->view('messages', $this->_data);
     }
     
@@ -87,6 +89,29 @@ class Messages extends MY_Controller {
 	    
 	     $this->load->view('messages', $this->_data);
 	}
+    }
+    
+    public function viewMessage($messageId)
+    {
+	//TODO set status to read
+	$this->_data["messages"] = $this->_getMessages($this->session->userdata()["person_id"]);
+	
+	if($this->MessageModel->isResultValid() === true)
+	{
+	    foreach($this->_data["messages"] as $msg)
+	    {
+		if($msg->message_id === $messageId)
+		{
+		    $this->_data["msg"] = $msg;
+		}
+	    }
+	    
+	    $this->_data["view"] = "message";
+	    $this->load->view('messages', $this->_data);
+	}
+	
+	
+	
     }
     
     private function _loadData()
