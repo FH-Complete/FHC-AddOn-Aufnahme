@@ -10,6 +10,7 @@ class Messages extends MY_Controller {
 	$this->load->model('oe_model', 'OeModel');
 	$this->load->helper("form");
 	$this->load->library("form_validation");
+	$this->config->load('message');
 	
 	$this->_data['title'] = 'Nachrichten';
 	$this->_data["sprache"] = $this->get_language();
@@ -42,6 +43,14 @@ class Messages extends MY_Controller {
 	$this->checkLogin();
 	
 	$this->_loadData();
+	
+	foreach($this->_data["messages"] as $msg)
+	{
+	    if($msg->message_id === $message_id)
+	    {
+		$this->_data["msg"] = $msg;
+	    }
+	}
 	
 	$this->_data["oe_kurzbz"] = $oe_kurzbz;
 	$this->_data["message_id"] = $message_id;
@@ -103,6 +112,7 @@ class Messages extends MY_Controller {
 		if($msg->message_id === $messageId)
 		{
 		    $this->_data["msg"] = $msg;
+		    $this->_changeMessageStatus($this->session->userdata()["person_id"], $msg);
 		}
 	    }
 	    
@@ -151,7 +161,7 @@ class Messages extends MY_Controller {
 	{
 	    $message["relationmessage_id"] = $relationMessage_id;
 	}
-	
+
 	$this->MessageModel->sendMessage($message);
 	if($this->MessageModel->isResultValid() == true)
 	{
@@ -212,6 +222,19 @@ class Messages extends MY_Controller {
 	else
 	{
 	    var_dump($this->OeModel->getErrorMessage());
+	}
+    }
+    
+    private function _changeMessageStatus($person_id, $msg)
+    {
+	$this->MessageModel->changeMessageStatus($person_id, $msg->message_id, MSG_STATUS_READ);
+	if($this->MessageModel->isResultValid() == true)
+	{
+	    return $this->MessageModel->result->retval;
+	}
+	else
+	{
+	    var_dump($this->MessageModel->getErrorMessage());
 	}
     }
 }

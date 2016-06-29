@@ -19,8 +19,7 @@
 		    </tr>
 		</thead>
 		    <tbody>
-			<?php foreach($messages as $msg) { 
-			    var_dump($msg);
+			<?php foreach($messages as $msg) {
 			    
 			    ?>
 			<tr class="message" id="<?php echo $msg->message_id; ?>">

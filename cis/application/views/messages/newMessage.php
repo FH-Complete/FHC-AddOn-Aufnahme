@@ -5,7 +5,7 @@
 	    <div class="col-sm-6">
 		<div class="form-group <?php echo (form_error("msg_subject") != "") ? 'has-error' : '' ?>">
 		    <?php echo form_label($this->lang->line('msg_subject'), "msg_subject", array("name" => "msg_subject", "for" => "msg_subject", "class" => "control-label")) ?>
-		    <?php echo form_input(array('id' => 'msg_subject', 'name' => 'msg_subject', "type" => "text", "value" => "", "class" => "form-control")); ?>
+		    <?php echo form_input(array('id' => 'msg_subject', 'name' => 'msg_subject', "type" => "text", "value" =>set_value("msg_subject", isset($msg->subject) ? $msg->subject : "") , "class" => "form-control")); ?>
 		    <?php echo form_error("msg_subject"); ?>
 		</div>
 	    </div>   

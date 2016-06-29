@@ -48,4 +48,15 @@ class Message_model extends MY_Model
 	else
 	    return false;
     }
+    
+    public function changeMessageStatus($person_id, $message_id, $status)
+    {
+	if ($restquery = $this->rest->post('system/message/changeStatus', array("person_id" => $person_id, "message_id"=>$message_id, "status"=>$status)))
+	{
+	    $this->result = $restquery;
+	    return true;
+	}
+	else
+	    return false;
+    }
 }
