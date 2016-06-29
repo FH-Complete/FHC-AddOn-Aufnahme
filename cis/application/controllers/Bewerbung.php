@@ -17,6 +17,7 @@ class Bewerbung extends MY_Controller {
         $this->load->model('studienplan_model', "StudienplanModel");
         $this->load->model('dms_model', "DmsModel");
         $this->load->model('akte_model', "AkteModel");
+	$this->load->model('gemeinde_model', "GemeindeModel");
         $this->load->helper("form");
         $this->load->library("form_validation");
 	$this->_data["sprache"] = $this->get_language();
@@ -64,6 +65,21 @@ class Bewerbung extends MY_Controller {
 
         //load bundeslaender
         $this->_loadBundeslaender();
+	
+	//load gemeinden
+	$this->_data["gemeinden"] = $this->_getGemeinde();
+	
+	$this->_data["gemeinde"] = $this->_data["adresse"]->plz." ".$this->_data["adresse"]->gemeinde.", ".$this->_data["adresse"]->ort;
+	
+	$this->_data["plz"] = array();
+	foreach($this->_data["gemeinden"] as $gemeinde)
+	{
+	    $this->_data["plz"][$gemeinde->gemeinde_id] = $gemeinde->plz." ".$gemeinde->name.", ".$gemeinde->ortschaftsname;
+	    if($this->_data["plz"][$gemeinde->gemeinde_id] === $this->_data["gemeinde"])
+	    {
+		$this->_data["gemeinde_id"] = $gemeinde->gemeinde_id;
+	    }
+	}
         
         //load dokumente
         $this->_loadDokumente($this->session->userdata()["person_id"]);
@@ -91,7 +107,6 @@ class Bewerbung extends MY_Controller {
         else
         {
             $post = $this->input->post();
-	    var_dump($post);
             $files = $_FILES;
             
             if(count($files) > 0)
@@ -163,13 +178,46 @@ class Bewerbung extends MY_Controller {
                     }
                 }
             }
-            
-            $this->_savePerson($this->_data["person"]);
+
+	    $person = $this->_data["person"];
+	    $person->anrede = $post["anrede"];
+	    $person->bundesland_code = $post["bundesland"];
+	    $person->gebdatum = $post["gebdatum"];
+	    $person->gebort = $post["geburtsort"];
+	    $person->geburtsnation = $post["nation"];
+	    $person->geschlecht = $post["geschlecht"];
+	    $person->staatsbuergerschaft = $post["staatsbuergerschaft"];
+	    $person->svnr = $post["svnr"];
+	    $person->titelpre = $post["titelpre"];
+	    
+	    $adresse = new stdClass();
+	    if($post["adresse_nation"] === "A")
+	    {
+		foreach($this->_data["gemeinden"] as $gemeinde)
+		{
+		    if($gemeinde->gemeinde_id === $post["plzOrt"])
+		    {
+			$adresse->plz = $gemeinde->plz;
+			$adresse->ort = $gemeinde->ortschaftsname;
+			$adresse->gemeinde = $gemeinde->name;
+		    }
+		}
+
+		foreach($this->_data["bundesland"] as $bundesland)
+		{
+		    if($bundesland->bundesland_code === $gemeinde->bulacode)
+		    {
+			$person->bundesland_code = $bundesland->bundesland_code;
+		    }
+		}
+	    }
+	    
+	    
+            $this->_savePerson($person);
 
             //TODO save Adresse
 	    if(($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort"] != ""))
 	    {
-		$adresse = new stdClass();
 		if(isset($this->_data["adresse"]))
 		{
 		    $adresse = $this->_data["adresse"];
@@ -190,8 +238,13 @@ class Bewerbung extends MY_Controller {
 		
 		$adresse->person_id = $this->_data["person"]->person_id;
 		$adresse->strasse = $post["strasse"];
-		$adresse->plz = $post["plz"];
-		$adresse->ort = $post["ort"];
+		
+		if($post["adresse_nation"] !== "A")
+		{
+		    $adresse->plz = $post["plz"];
+		    $adresse->ort = $post["ort"];
+		    $adresse->nation = $post["adresse_nation"];
+		}
 		
 		$this->_saveAdresse($adresse);
 	    }
@@ -213,7 +266,6 @@ class Bewerbung extends MY_Controller {
 		$zustell_adresse->plz = $post["zustell_plz"];
 		$zustell_adresse->ort = $post["zustell_ort"];
 
-		var_dump($zustell_adresse);
 		$this->_saveAdresse($zustell_adresse);
 	    }
 
@@ -428,6 +480,7 @@ class Bewerbung extends MY_Controller {
         {
             if($this->bundesland_model->result->error == 0)
             {
+		$this->_data["bundesland"] = $this->bundesland_model->result->retval;
                 foreach($this->bundesland_model->result->retval as $b)
                 {
                     $this->_data["bundeslaender"][$b->bundesland_code] = $b->bezeichnung;
@@ -478,18 +531,6 @@ class Bewerbung extends MY_Controller {
 
     private function _savePerson($person)
     {
-        $post = $this->input->post();
-
-        $person->anrede = $post["anrede"];
-        $person->bundesland_code = $post["bundesland"];
-        $person->gebdatum = $post["gebdatum"];
-        $person->gebort = $post["geburtsort"];
-        $person->geburtsnation = $post["nation"];
-        $person->geschlecht = $post["geschlecht"];
-        $person->staatsbuergerschaft = $post["staatsbuergerschaft"];
-        $person->svnr = $post["svnr"];
-        $person->titelpre = $post["titelpre"];
-
         if($this->PersonModel->savePerson($person))
         {
             if($this->PersonModel->result->error == 0)
@@ -588,7 +629,6 @@ class Bewerbung extends MY_Controller {
     {
         if($this->AdresseModel->saveAdresse($adresse))
         {
-	    var_dump($this->AdresseModel->result);
             if($this->AdresseModel->result->error == 0)
             {
                 //TODO Daten erfolgreich gespeichert
@@ -638,6 +678,20 @@ class Bewerbung extends MY_Controller {
 	{
 	    //TODO handle error
 	    var_dump($this->DmsModel->result);
+	}
+    }
+    
+    private function _getGemeinde()
+    {
+	$this->GemeindeModel->getGemeinde();
+	if($this->GemeindeModel->isResultValid() == true)
+	{
+	    return $this->GemeindeModel->result->retval;
+	}
+	else
+	{
+	    //TODO show error
+	    var_dump($this->GemeindeModel->getErrorMessage());
 	}
     }
 }

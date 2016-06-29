@@ -47,12 +47,8 @@ $this->load->view('templates/footer');
 
 <script type="text/javascript">
     $(document).ready(function(){
-	console.log($(".zustelladresse"));
-
 	$(".zustelladresse").click(function(event)
 	{
-	    console.log(event);
-	    console.log($(event.currentTarget).attr("studienplan_id"));
 	    var id = $(event.currentTarget).attr("studienplan_id");
 	    if($(event.currentTarget).prop("checked"))
 	    {
@@ -64,5 +60,40 @@ $this->load->view('templates/footer');
 	    }
 	});
 
+	$("#adresse_nation").on("change", function(event){
+	   toggleAdresse();
+	});
+	
+	toggleAdresse();
     });
+    
+    function toggleAdresse()
+    {
+	var code = $("#adresse_nation option:selected").val();
+	if(code === "A")
+	{
+	    hideElement($("#plz").closest(".row"));
+	    hideElement($("#ort").closest(".row"));
+	    hideElement($("#bundesland").closest(".row"));
+	    showElement($("#plzOrt").closest(".row"));
+	    //TODO exchange form inputs
+	}
+	else
+	{
+	    hideElement($("#plzOrt").closest(".row"));
+	    showElement($("#plz").closest(".row"));
+	    showElement($("#ort").closest(".row"));
+	    showElement($("#bundesland").closest(".row"));
+	}
+    }
+    
+    function hideElement(ele)
+    {
+	$(ele).hide();
+    }
+    
+    function showElement(ele)
+    {
+	$(ele).show();
+    }
 </script>

@@ -128,6 +128,24 @@
         </div>
     </div>-->
     <div class="row">
+	<div class="col-sm-4">
+            <div class="form-group <?php echo (form_error("adresse_nation") != "") ? 'has-error' : '' ?>">
+                <?php echo form_label($this->lang->line('person_formAdresseNation'), "adresse_nation", array("name" => "adresse_nation", "for" => "adresse_nation", "class" => "control-label")) ?>
+                <?php echo form_dropdown("adresse_nation", $nationen, (isset($adresse->nation) ? $adresse->nation : "A"), array('id' => 'adresse_nation', 'name' => 'adresse_nation', "value" => set_value("adresse_nation"), "class" => "form-control")); ?>
+                <?php echo form_error("adresse_nation"); ?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+	<div class="col-sm-4">
+            <div class="form-group <?php echo (form_error("plzOrt") != "") ? 'has-error' : '' ?>">
+                <?php echo form_label($this->lang->line('person_formPlzOrt'), "plzOrt", array("name" => "plzOrt", "for" => "plzOrt", "class" => "control-label")) ?>
+                <?php echo form_dropdown("plzOrt", $plz, (isset($gemeinde_id) ? $gemeinde_id : null), array('id' => 'plzOrt', 'name' => 'plzOrt', "value" => set_value("plzOrt"), "class" => "form-control")); ?>
+                <?php echo form_error("plzOrt"); ?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("strasse") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_strasse'), "strasse", array("name" => "strasse", "for" => "strasse", "class" => "control-label")) ?>

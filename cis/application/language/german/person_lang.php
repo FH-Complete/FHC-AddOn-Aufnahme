@@ -31,4 +31,5 @@ $lang["person_telefon"] = "Telefon";
 $lang["person_geschlecht"] = "Geschlecht";
 $lang["person_zustelladresseWeichtAb"] = "Meine Zustelladresse weicht von der Heimatadresse ab";
 $lang["person_formZustelladresse"] = "Zustelladresse";
-
+$lang["person_formAdresseNation"] = "Nation";
+$lang["person_formPlzOrt"] = "PLZ/Ort";
