@@ -19,6 +19,7 @@ class Bewerbung extends MY_Controller {
         $this->load->model('akte_model', "AkteModel");
         $this->load->helper("form");
         $this->load->library("form_validation");
+	$this->_data["sprache"] = $this->get_language();
     }
 
     public function index() 

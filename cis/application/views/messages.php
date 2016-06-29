@@ -8,7 +8,6 @@ $this->lang->load(array('aufnahme', 'messages'), $language);
 <div class="container">
     <?php
     echo $this->template->widget("menu", array('aktiv' => 'Overview'));
-    $this->load->view('language');
     ?>
 
 
