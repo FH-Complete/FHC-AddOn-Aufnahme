@@ -8,7 +8,7 @@
     </ol>
     
     <?php echo form_open("Registration?studiengang_kz=".$studiengang_kz,array("id"=>"RegistrationLoginForm", "name"=>"RegistrationLoginForm", "class"=>"form-horizontal")); ?>
-	<img style="width:150px;" class="center-block img-responsive" src="<?php echo APP_ROOT . 'skin/styles/' . $this->config->item('theme'); ?>/logo.png">	
+	<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">	
 	<h2 class="text-center"><?php echo $this->lang->line('aufnahme/login_greeting_text'); ?></h2>		
 	<p class="infotext">
 	    <?php echo $this->lang->line('aufnahme/login_infotext'); ?>

@@ -1,6 +1,6 @@
 <?php
 
-class Kontakt_model extends MY_Model
+class Dms_model extends MY_Model
 {
 
     public function __construct()
@@ -9,9 +9,9 @@ class Kontakt_model extends MY_Model
 	//$this->load->database();
     }
 
-    public function saveKontakt($data)
+    public function saveDms($data)
     {
-	if ($restquery = $this->rest->post('person/kontakt/kontakt', $data))
+	if ($restquery = $this->rest->post('content/dms/dms', $data))
 	{
 	    $this->result = $restquery;
 	    return true;
@@ -22,9 +22,9 @@ class Kontakt_model extends MY_Model
 	}
     }
     
-    public function getKontakt($person_id = NULL)
+    public function loadDms($dms_id)
     {
-	if ($restquery = $this->rest->get('person/kontakt/onlyKontaktByPersonId', array("person_id" => $person_id)))
+	if ($restquery = $this->rest->get('content/dms/dms', array("dms_id"=>$dms_id)))
 	{
 	    $this->result = $restquery;
 	    return true;
@@ -34,5 +34,4 @@ class Kontakt_model extends MY_Model
 	    return false;
 	}
     }
-
 }

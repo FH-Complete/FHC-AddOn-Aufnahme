@@ -14,7 +14,7 @@
 			<ul class="nav nav-tabs">
 				<?php foreach($tabs as $t): ?>
 					<li class="<?php echo (isset($tab) && $tab==$t["id"]) ? 'active' : ''; ?>">
-						<a href="<?php  echo base_url("index.dist.php/Aufnahme?tab=".$t["id"]); ?>">
+						<a href="<?php  echo base_url($this->config->config["index_page"]."/Aufnahme?tab=".$t["id"]); ?>">
 							<?php echo $this->lang->line($t["label"]); ?>
 						</a>
 					</li>

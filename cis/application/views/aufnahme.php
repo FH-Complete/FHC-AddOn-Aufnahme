@@ -1,7 +1,7 @@
 <?php $this->lang->load(array('aufnahme'), $sprache); ?>
 
 <div class="container">
-	<?php $this->load->view('language'); ?>
+	<?php //$this->load->view('language'); ?>
 
 	<ol class="breadcrumb">
 		<li class="active">Aufnahme</li>

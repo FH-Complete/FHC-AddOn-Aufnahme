@@ -1,6 +1,6 @@
 <div role="tabpanel" class="tab-pane" id="daten">
     <legend><?php echo $this->lang->line("person_angabenZurPerson"); ?></legend>
-    <?php echo form_open("Bewerbung", array("id" => "PersonForm", "name" => "PersonForm")); ?>
+    <?php echo form_open_multipart("Bewerbung", array("id" => "PersonForm", "name" => "PersonForm")); ?>
     <div class="row">
         <div class="col-sm-2">
             <div class="form-group <?php echo (form_error("anrede") != "") ? 'has-error' : '' ?>">
@@ -115,15 +115,33 @@
         </div>
     </div>
     <legend class=""><?php echo $this->lang->line("person_adresse"); ?></legend>
-    <div class="row">
+    <!--<div class="row">
         <div class="col-sm-12">
             <div class="form-group <?php echo (form_error("heimatadresse") != "") ? 'has-error' : '' ?>">
                 <fieldset><?php echo $this->lang->line('person_heimatadresse'); ?></fieldset>
-                <?php echo form_radio(array("id" => "heimatadresse", "name" => "heimatadresse"), null, null); ?>
+                <?php echo form_radio(array("id" => "heimatadresse", "name" => "heimatadresse", "checked"=>"checked"), null, null); ?>
                 <span><?php echo sprintf($this->lang->line("person_formHeimatadresse"), "Inland"); ?></span>
                 <?php echo form_radio(array("id" => "heimatadresse", "name" => "heimatadresse"), null, null); ?>
                 <span><?php echo sprintf($this->lang->line("person_formHeimatadresse"), "Ausland"); ?></span>
                 <?php echo form_error("heimatadresse"); ?>
+            </div>
+        </div>
+    </div>-->
+    <div class="row">
+	<div class="col-sm-4">
+            <div class="form-group <?php echo (form_error("adresse_nation") != "") ? 'has-error' : '' ?>">
+                <?php echo form_label($this->lang->line('person_formAdresseNation'), "adresse_nation", array("name" => "adresse_nation", "for" => "adresse_nation", "class" => "control-label")) ?>
+                <?php echo form_dropdown("adresse_nation", $nationen, (isset($adresse->nation) ? $adresse->nation : "A"), array('id' => 'adresse_nation', 'name' => 'adresse_nation', "value" => set_value("adresse_nation"), "class" => "form-control")); ?>
+                <?php echo form_error("adresse_nation"); ?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+	<div class="col-sm-4">
+            <div class="form-group <?php echo (form_error("plzOrt") != "") ? 'has-error' : '' ?>">
+                <?php echo form_label($this->lang->line('person_formPlzOrt'), "plzOrt", array("name" => "plzOrt", "for" => "plzOrt", "class" => "control-label")) ?>
+                <?php echo form_dropdown("plzOrt", $plz, (isset($gemeinde_id) ? $gemeinde_id : null), array('id' => 'plzOrt', 'name' => 'plzOrt', "value" => set_value("plzOrt"), "class" => "form-control")); ?>
+                <?php echo form_error("plzOrt"); ?>
             </div>
         </div>
     </div>
@@ -162,17 +180,46 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12">
-            <div class="form-group <?php echo (form_error("zustelladresse") != "") ? 'has-error' : '' ?>">
-                <div class="checkbox">
-                    <label>
-                        <?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => FALSE)); ?>
-                        Meine Zustelladresse weicht von der Heimatadresse ab.
-                    </label>
-                </div>
-                <?php echo form_error("zustelladresse"); ?>
-            </div>
-        </div>
+	<div class="col-sm-12">
+	    <div class="form-group <?php echo (form_error("zustelladresse") != "") ? 'has-error' : '' ?>">
+		<div class="checkbox">
+		    <label>
+			<?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => FALSE, "class"=>"zustelladresse", "studienplan_id"=>$studiengang->studienplan->studienplan_id));
+			    echo $this->lang->line('person_zustelladresseWeichtAb').".";
+			?>			
+		    </label>
+		</div>
+		<?php echo form_error("zustelladresse"); ?>
+	    </div>
+	</div>
+    </div>
+    <div id="zustelladresse_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="display: none;">
+	<legend class=""><?php echo $this->lang->line("person_formZustelladresse"); ?></legend>
+	<div class="row">
+	    <div class="col-sm-6">
+		<div class="form-group <?php echo (form_error("zustell_strasse") != "") ? 'has-error' : '' ?>">
+		    <?php echo form_label($this->lang->line('person_strasse'), "zustell_strasse", array("name" => "zustell_strasse", "for" => "zustell_strasse", "class" => "control-label")) ?>
+		    <?php echo form_input(array('id' => 'zustell_strasse', 'name' => 'zustell_strasse', "type" => "text", "value" => set_value("zustell_strasse", (isset($zustell_adresse->strasse) ? $zustell_adresse->strasse : NULL)), "class" => "form-control")); ?>
+		    <?php echo form_error("zustell_strasse"); ?>
+		</div>
+	    </div>
+	</div>
+	<div class="row">
+	    <div class="col-sm-2">
+		<div class="form-group <?php echo (form_error("zustell_plz") != "") ? 'has-error' : '' ?>">
+		    <?php echo form_label($this->lang->line('person_formPlz'), "zustell_plz", array("name" => "zustell_plz", "for" => "zustell_plz", "class" => "control-label")) ?>
+		    <?php echo form_input(array('id' => 'zustell_plz', 'name' => 'zustell_plz', "type" => "text", "value" => set_value("zustell_plz", (isset($zustell_adresse->plz) ? $zustell_adresse->plz : NULL)), "class" => "form-control")); ?>
+		    <?php echo form_error("zustell_plz"); ?>
+		</div>
+	    </div>
+	    <div class="col-sm-6">
+		<div class="form-group <?php echo (form_error("zustell_ort") != "") ? 'has-error' : '' ?>">
+		    <?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("name" => "zustell_ort", "for" => "zustell_ort", "class" => "control-label")) ?>
+		    <?php echo form_input(array('id' => 'zustell_ort', 'name' => 'zustell_ort', "type" => "text", "value" => set_value("zustell_ort", (isset($zustell_adresse->ort) ? $zustell_adresse->ort : NULL)), "class" => "form-control")); ?>
+		    <?php echo form_error("zustell_ort"); ?>
+		</div>
+	    </div>
+	</div>
     </div>
     <legend class=""><?php echo $this->lang->line("person_formKontakt"); ?></legend>
     <div class="row">
@@ -201,6 +248,59 @@
         </div>
     </div>
     <legend class=""><?php echo $this->lang->line("person_formDokumentupload"); ?></legend>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <?php echo $this->lang->line("person_formDokumentupload_text"); ?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-5">
+            <?php echo form_label($this->lang->line('person_formDokumentupload_reisepass'), "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
+            <div class="form-group">
+                <?php if(!isset($dokumente["pass"])){
+                    echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
+                 }
+		 else
+		 {
+		     echo $this->lang->line('person_formDokumentupload_DokHochgeladen');
+		 }
+                 ?>
+            </div>
+        </div>
+        <div class="col-sm-">
+            <div class="form-group">
+                <div class="form-group <?php echo (form_error("reisepass") != "") ? 'has-error' : '' ?>">
+                    <?php echo form_input(array('id' => 'reisepass', 'name' => 'reisepass', "type" => "file")); ?>
+                    <?php echo form_error("reisepass"); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-5">
+            <?php echo form_label($this->lang->line('person_formDokumentupload_lebenslauf'), "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?>
+            <div class="form-group">
+                <?php if(!isset($dokumente["Lebenslf"])) {
+                    echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
+                 }
+		 else
+		 {
+		     echo $this->lang->line('person_formDokumentupload_DokHochgeladen');
+		 }
+                 ?>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="form-group">
+                <div class="form-group <?php echo (form_error("lebenslauf") != "") ? 'has-error' : '' ?>">
+                    <?php echo form_input(array('id' => 'lebenslauf', 'name' => 'lebenslauf', "type" => "file")); ?>
+                    <?php echo form_error("lebenslauf"); ?>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">

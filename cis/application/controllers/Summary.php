@@ -19,7 +19,6 @@ class Summary extends MY_Controller {
     public function index() {
         $this->checkLogin();
         $this->_data['sprache'] = $this->get_language();
-        var_dump($this->session->userdata());
         
         //load studiengang
         $this->_loadStudiengang($this->input->get()["studiengang_kz"]);
@@ -45,7 +44,7 @@ class Summary extends MY_Controller {
         //load studiengang
         foreach($this->_data["prestudent"] as $prestudent)
         {
-            if($prestudent->studiengang_kz == $this->session->userdata()["studiengang_kz"])
+            if($prestudent->studiengang_kz == $this->input->get()["studiengang_kz"])
             {
                 $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
                 $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);         
