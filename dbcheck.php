@@ -68,15 +68,34 @@ foreach ($textphrasen AS $tp)
 	if(! $resPhrase = $db->db_fetch_object($db->db_query($qry)))
 	{
 		// INSERT und id merken
-		$qry = "INSERT INTO system.tbl_phrase (app, phrase) VALUES ('$app', '".$tp['phrase']."');";
+		$qry = "BEGIN;INSERT INTO system.tbl_phrase (app, phrase) VALUES ('$app', '".$tp['phrase']."');";
 
 		if(! $db->db_query($qry))
 			echo '<strong>system.tbl_phrase: '.$db->db_last_error().'</strong><br>';
 		else
 		{
-			echo '<br>Phrase '.$tp['phrase'].' angelegt!';
-			// ID holen
-			$phrase_id = null;
+			//Sequence auslesen
+			$qry = "SELECT currval('system.tbl_phrase_phrase_id_seq') as id";
+			if($db->db_query($qry))
+            {
+                if($row = $db->db_fetch_object())
+                {
+                    // ID holen
+                    $phrase_id = $row->id;
+                    $db->db_query('COMMIT');
+                    echo '<br>Phrase '.$tp['phrase'].' angelegt!';
+                }
+                else
+                {
+                    $db->db_query('ROLLBACK');
+                    echo '<strong>system.tbl_phrase: Fehler beim Auslesen der Sequence</strong><br>';
+                }
+            }
+            else
+            {
+                $db->db_query('ROLLBACK');
+                echo '<strong>system.tbl_phrase: Fehler beim Auslesen der Sequence</strong><br>';
+            }
 		}
 	}
 	else
@@ -84,6 +103,22 @@ foreach ($textphrasen AS $tp)
 		$phrase_id = $resPhrase->phrase_id;
 	
 	// Check if Phrasentext in this language exists
+    $qry = "SELECT phrasentext_id FROM system.tbl_phrasentext WHERE phrase_id=$phrase_id AND sprache='".$tp['phrasentext']['sprache']."'";
+    if(! $resPhrasentext = $db->db_fetch_object($db->db_query($qry)))
+    {
+        // INSERT
+        $qry = "INSERT INTO system.tbl_phrasentext (phrase_id, sprache, text, description) "
+             . "VALUES ($phrase_id, '".$tp['phrasentext']['sprache']."', '".$tp['phrasentext']['text']."', '".$tp['phrasentext']['description']."');";
+        
+        if(! $db->db_query($qry))
+			echo '<strong>system.tbl_phrasentext: '.$db->db_last_error().'</strong><br>';
+		else
+		{
+			echo '<br>Phrasentext für Phrase '.$tp['phrase'].' in der Sprache '.$tp['phrasentext']['sprache'].' angelegt!';
+		}
+    }
+    else
+        echo '<br>Phrasentext für Phrase '.$tp['phrase'].' existiert bereits in der Sprache '.$tp['phrasentext']['sprache'].'!';
 }
 
 
