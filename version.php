@@ -24,7 +24,7 @@ $addon_name = 'Aufnahme';
 $addon_version = '0.01';
 
 // FH-Complete Min-Version
-$fhcomplete_target_version = '3.0';
+$fhcomplete_target_version = '3.2';
 
 $addon_description = '
 Tool zur Onlinebewerbung

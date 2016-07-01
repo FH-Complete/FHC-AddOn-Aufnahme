@@ -17,17 +17,15 @@
  *
  */
 /**
- * FH-Complete Addon Aufnahme Datenbank Check
+ * FH-Complete Addon Template Installation
  *
- * Prueft und aktualisiert die Datenbank
+ * Installationsscript zur Erstinitialisierung des Addons
  */
+require_once('version.php');
+require_once('../../version.php');
 require_once('../../config/system.config.inc.php');
-require_once('../../include/basis_db.class.php');
 require_once('../../include/functions.inc.php');
 require_once('../../include/benutzerberechtigung.class.php');
-
-// Datenbank Verbindung
-$db = new basis_db();
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
         "http://www.w3.org/TR/html4/strict.dtd">
@@ -36,56 +34,33 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="stylesheet" href="../../skin/fhcomplete.css" type="text/css">
 	<link rel="stylesheet" href="../../skin/vilesci.css" type="text/css">
-	<title>Addon Aufnahme Datenbank Check</title>
+	<title>Addon Installation</title>
 </head>
 <body>
-<h1>Addon Aufnahme Datenbank Check</h1>';
+<h1>Addon Installation</h1>';
 
 $uid = get_uid();
 $rechte = new benutzerberechtigung();
 $rechte->getBerechtigungen($uid);
-$app = 'aufnahme';
 
 if(!$rechte->isBerechtigt('basis/addon'))
 {
 	exit('Sie haben keine Berechtigung für die Verwaltung von Addons');
 }
 
-echo '<input type="button" onclick="window.location.href=\'dbcheck.php?start\'" value="Aktualisierung starten"><br/><br/>';
-
-if (!isset($_GET['start']))
-	exit;
-
-echo '<h2>Aktualisierung der Datenbank</h2>';
-
-// Textphrasen holen
-require_once('textphrasen.php');
-
-foreach ($textphrasen AS $tp)
+if($fhcomplete_version>=$fhcomplete_target_version)
 {
-	// Check if Phrase exists
-	$qry = "SELECT phrase_id FROM system.tbl_phrase WHERE app='$app' AND phrase='".$tp['phrase']."';";
-	if(! $resPhrase = $db->db_fetch_object($db->db_query($qry)))
-	{
-		// INSERT und id merken
-		$qry = "INSERT INTO system.tbl_phrase (app, phrase) VALUES ('$app', '".$tp['phrase']."');";
+	echo 'Installiere Addon <span class="marked">'.$addon_name.'</span> Version <span class="marked">'.$addon_version.'</span><br><br>';
 
-		if(! $db->db_query($qry))
-			echo '<strong>system.tbl_phrase: '.$db->db_last_error().'</strong><br>';
-		else
-		{
-			echo '<br>Phrase '.$tp['phrase'].' angelegt!';
-			// ID holen
-			$phrase_id = null;
-		}
-	}
-	else
-		// ID holen
-		$phrase_id = $resPhrase->phrase_id;
-	
-	// Check if Phrasentext in this language exists
+	/**
+	 * Fuegen Sie hier Ihre Installationsroutine hinzu
+	 */
+
+ 	echo '<a href="dbcheck.php">&gt;&gt; weiter zur Aktualisierung der Datenbank</a>';
 }
-
-
-echo '<br>Aktualisierung abgeschlossen<br><br>';
+else
+{
+	echo 'Dieses Addon funktioniert erst mit FHComplete Version '.$fhcomplete_target_version;
+	echo 'Installation abgebrochen';
+}
 ?>
