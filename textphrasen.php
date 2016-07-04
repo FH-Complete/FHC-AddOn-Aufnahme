@@ -341,5 +341,25 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => '',
 			'description' => 'Your new password'
 		)
+	),
+    array
+	(
+		'phrase' => 'EmailAddressTaken',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Die E-Mail Adresse %s wurde bereits für eine Bewerbung genutzt und es ist ein Zugangscode vorhanden. Sie können sich den Zugangscode noch einmal an diese Adresse schicken lassen und nach dem Login weitere Bewerbungen hinzufügen.',
+			'description' => 'Die E-Mail Adresse ist bereits vergeben'
+		)
+	),
+	array
+	(
+		'phrase' => 'EmailAddressTaken',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => 'The e-mail address is already taken'
+		)
 	)
 );
