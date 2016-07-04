@@ -21,6 +21,7 @@ class Bewerbung extends MY_Controller {
         $this->load->helper("form");
         $this->load->library("form_validation");
 	$this->_data["sprache"] = $this->get_language();
+	$this->_loadLanguage($this->_data["sprache"]);
     }
 
     public function index() 
@@ -68,14 +69,16 @@ class Bewerbung extends MY_Controller {
 	
 	//load gemeinden
 	$this->_data["gemeinden"] = $this->_getGemeinde();
-	
-	$this->_data["gemeinde"] = $this->_data["adresse"]->plz." ".$this->_data["adresse"]->gemeinde.", ".$this->_data["adresse"]->ort;
+	if(isset($this->_data["adresse"]))
+	{
+	    $this->_data["gemeinde"] = $this->_data["adresse"]->plz." ".$this->_data["adresse"]->gemeinde.", ".$this->_data["adresse"]->ort;
+	}
 	
 	$this->_data["plz"] = array();
 	foreach($this->_data["gemeinden"] as $gemeinde)
 	{
 	    $this->_data["plz"][$gemeinde->gemeinde_id] = $gemeinde->plz." ".$gemeinde->name.", ".$gemeinde->ortschaftsname;
-	    if($this->_data["plz"][$gemeinde->gemeinde_id] === $this->_data["gemeinde"])
+	    if(isset($this->_data["gemeinde"]) && $this->_data["plz"][$gemeinde->gemeinde_id] === $this->_data["gemeinde"])
 	    {
 		$this->_data["gemeinde_id"] = $gemeinde->gemeinde_id;
 	    }
@@ -341,6 +344,9 @@ class Bewerbung extends MY_Controller {
 		var_dump($this->PrestudentModel->result);
 	    }
 	}
+	
+	//load adress data
+        $this->_loadAdresse();
 
         //load kontakt data
         $this->_loadKontakt();
@@ -350,6 +356,23 @@ class Bewerbung extends MY_Controller {
 
         //load bundeslaender
         $this->_loadBundeslaender();
+	
+	//load gemeinden
+	$this->_data["gemeinden"] = $this->_getGemeinde();
+	if(isset($this->_data["adresse"]))
+	{
+	    $this->_data["gemeinde"] = $this->_data["adresse"]->plz." ".$this->_data["adresse"]->gemeinde.", ".$this->_data["adresse"]->ort;
+	}
+	
+	$this->_data["plz"] = array();
+	foreach($this->_data["gemeinden"] as $gemeinde)
+	{
+	    $this->_data["plz"][$gemeinde->gemeinde_id] = $gemeinde->plz." ".$gemeinde->name.", ".$gemeinde->ortschaftsname;
+	    if(isset($this->_data["gemeinde"]) && $this->_data["plz"][$gemeinde->gemeinde_id] === $this->_data["gemeinde"])
+	    {
+		$this->_data["gemeinde_id"] = $gemeinde->gemeinde_id;
+	    }
+	}
         
         //load studiengang
         $this->_data["studiengang"] = $this->_loadStudiengang($studiengang_kz);

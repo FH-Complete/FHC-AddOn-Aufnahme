@@ -1,9 +1,9 @@
 <div class="panel panel-info">
     <div class="panel-heading text-center">
-	<h3 class="panel-title"><?php echo $this->lang->line('login_AlreadyHaveAnAccessCode'); ?></h3>
+	<h3 class="panel-title"><?php echo $this->getPhrase("HomeAccessCodeAvailable", $sprache); ?></h3>
     </div>
     <div class="panel-body text-center">
-	<p>Dann loggen Sie sich hier ein</p>
+	<p><?php echo $this->getPhrase("HomeLogin", $sprache); ?></p>
 	<div class="form-group">
 	    <div class="input-group col-sm-6 col-sm-offset-3">
 		<p class="text-center"><input class="form-control" type="text" placeholder="E-Mail" name="email" autofocus="autofocus" value=""></p>

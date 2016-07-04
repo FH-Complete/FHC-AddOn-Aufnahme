@@ -14,10 +14,10 @@
 	<div class="col-sm-8 col-sm-offset-2">
 	    <form method="POST" id="lp" class="form-horizontal">
 		<img class="center-block img-responsive" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/logo.png'); ?>" />
-		<h1 class="text-center page-header"><?php echo $this->lang->line('login_Welcome'); ?></h1>
+		<h1 class="text-center page-header"><?php echo $this->getPhrase("HomeGreetings", $sprache); ?></h1>
 		<div class="panel panel-info">
 		    <div class="panel-heading text-center">
-			<h3 class="panel-title"><?php echo $this->lang->line('login_NoAccount'); ?></h3>
+			<h3 class="panel-title"><?php echo $this->getPhrase("HomeNoAccountOrAccessCode", $sprache); ?></h3>
 		    </div>
 		    <div class="panel-body text-center">
 			<br>

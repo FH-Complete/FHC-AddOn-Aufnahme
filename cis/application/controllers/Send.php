@@ -9,7 +9,6 @@ class Send extends MY_Controller {
         $this->load->model('studienplan_model', "StudienplanModel");
         $this->load->model('prestudent_model', "PrestudentModel");
         $this->load->model('prestudentStatus_model', "PrestudentStatusModel");
-	$this->load->model('phrase_model', 'PhraseModel');
         
         $this->load->helper("form");
         $this->load->library("form_validation");

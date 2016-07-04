@@ -172,7 +172,7 @@ class Registration extends MY_Controller {
 		$result = $this->_getPerson($person_id);
                 //$this->PersonModel->getPersonen($person_id);
                 if (($this->PersonModel->isResultValid() === true) && (count($result) == 1)) {
-                    $person = $result[0];
+                    $person = $result;
                     //check if timestamp code is not older than now
                     if (strtotime(date('Y-m-d H:i:s')) < strtotime($person->zugangscode_timestamp)) {
                         $person->zugangscode =  $this->_data["zugangscode"];
@@ -251,7 +251,7 @@ class Registration extends MY_Controller {
 			
 			if($this->PersonModel->isResultValid() === true)
 			{
-			    $this->_sendMessageVorlage($this->_data["person"], $zugangscode, base_url($this->config->config["index_page"]."/Registration/confirm?code=".$zugangscode."&studiengang_kz=".$data['studiengang_kz']));
+			    //$this->_sendMessageVorlage($this->_data["person"], $zugangscode, base_url($this->config->config["index_page"]."/Registration/confirm?code=".$zugangscode."&studiengang_kz=".$data['studiengang_kz']));
 			
 			    $data["message"] = $message;
 			    $this->load->view('templates/header');
@@ -427,7 +427,6 @@ class Registration extends MY_Controller {
 	$this->PersonModel->checkZugangscodePerson(array("code" => $code));
 	if($this->PersonModel->isResultValid() == true)
 	{
-	    var_dump($this->PersonModel->result->retval);
 	    return $this->PersonModel->result->retval;
 	}
 	else

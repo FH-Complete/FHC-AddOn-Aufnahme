@@ -22,14 +22,18 @@ class MY_Loader extends CI_Loader
 	if(isset($this->session->userdata()["phrasen"]))
 	{
 	    $phrasen = $this->session->userdata()["phrasen"];
-        foreach($phrasen as $p)
+	    foreach($phrasen as $p)
 	    {
 		if(($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz))
 		{
 		    if ($this->config->item('display_phrase_name'))
-                return $p->phrase;
-            else
-                return $p->text;
+		    {
+			return $p->phrase;
+		    }
+		    else
+		    {
+			return $p->text;
+		    }
 		}
 	    }
 	}

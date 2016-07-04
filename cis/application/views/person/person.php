@@ -1,5 +1,5 @@
 <div role="tabpanel" class="tab-pane" id="daten">
-    <legend><?php echo $this->lang->line("person_angabenZurPerson"); ?></legend>
+    <legend><?php echo $this->getPhrase("PersonalInformation", $sprache); ?></legend>
     <?php echo form_open_multipart("Bewerbung", array("id" => "PersonForm", "name" => "PersonForm")); ?>
     <div class="row">
         <div class="col-sm-2">
@@ -185,7 +185,7 @@
 		<div class="checkbox">
 		    <label>
 			<?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => FALSE, "class"=>"zustelladresse", "studienplan_id"=>$studiengang->studienplan->studienplan_id));
-			    echo $this->lang->line('person_zustelladresseWeichtAb').".";
+			    echo $this->getPhrase("DifferentAddress", $sprache).".";
 			?>			
 		    </label>
 		</div>
@@ -251,7 +251,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="form-group">
-                <?php echo $this->lang->line("person_formDokumentupload_text"); ?>
+                <?php echo $this->getPhrase("PleaseUploadDocuments", $sprache);  ?>
             </div>
         </div>
     </div>

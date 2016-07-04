@@ -1,6 +1,6 @@
 <legend><?php echo $this->lang->line("requirements_header"); ?></legend>
 <?php echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id, array("id" => "RequirementsForm", "name" => "RequirementsForm")); ?>
-<div class="row">
+<!--<div class="row">
     <div class="col-sm-12">
         <div class="form-group <?php echo (form_error("abschluss") != "") ? 'has-error' : '' ?>">
             <fieldset><?php echo $this->lang->line('requirements_abschluss_header').":"; ?></fieldset>
@@ -13,10 +13,10 @@
             <?php echo form_error("abschluss"); ?>
         </div>
     </div>
-</div>
+</div>-->
 <div class="row">
     <div class="col-sm-12">
-        <?php echo $this->lang->line('requirements_abschlusszeugnis_header').":"; ?>
+        <?php echo $this->getPhrase("UploadDiploma", $sprache); ?>
     </div>
 </div>
 <div class="row">
