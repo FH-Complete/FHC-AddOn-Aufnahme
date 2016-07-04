@@ -188,7 +188,7 @@ $textphrasen = array
 		(
 			'sprache' => 'German',
 			'text' => 'Bitte laden Sie Ihr Abschlusszeugnis im Format .pdf, .doc oder .jpg hoch:',
-			'description' => 'Beschreibung für Upload ' 
+			'description' => 'Beschreibung für Upload des Abschlusszeugnisses' 
 		)
 	),
 	array
@@ -198,7 +198,67 @@ $textphrasen = array
 		(
 			'sprache' => 'English',
 			'text' => '',
-			'description' => ''
+			'description' => 'Description for diploma upload'
+		)
+	),
+    array
+	(
+		'phrase' => 'SpecificAdmissionRequirements',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Für diesen Studiengang sind spezifische Zugangsvoraussetzungen erforderlich. Bitte laden Sie geeignete Nachweise über Ihre Kenntnisse oder Praxis hoch:',
+			'description' => 'Beschreibung für spezifische Zugangsvoraussetzungen' 
+		)
+	),
+	array
+	(
+		'phrase' => 'SpecificAdmissionRequirements',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => 'Description for specific admission requirements'
+		)
+	),
+    array
+	(
+		'phrase' => 'ApplicationReadyForSubmitting',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Ihre Daten sind vollständig - Sie können nun Ihre Bewerbung absenden!',
+			'description' => 'Bewerbung bereit zum Absenden' 
+		)
+	),
+	array
+	(
+		'phrase' => 'ApplicationReadyForSubmitting',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => 'The appplication is ready for submitting'
+		)
+	),
+    array
+	(
+		'phrase' => 'CompleteAndCheckData',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Bitte vervollständigen Sie Ihre Daten und prüfen Sie diese Eingaben im Anschluss auf Richtigkeit.',
+			'description' => 'Daten vervollständigen und kontrollieren' 
+		)
+	),
+	array
+	(
+		'phrase' => 'CompleteAndCheckData',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => 'Complete and check your data'
 		)
 	)
 );
