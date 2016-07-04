@@ -301,5 +301,45 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => '',
 			'description' => 'Description for the spam protection feature'
 		)
+	),
+    array
+	(
+		'phrase' => 'EmailWithAccessCodeSent',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Die E-Mail mit Ihrem Zugangscode wurde erfolgreich an %s verschickt.',
+			'description' => 'E-Mail mit Zugangscode versendet' 
+		)
+	),
+	array
+	(
+		'phrase' => 'EmailWithAccessCodeSent',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => 'E-Mail with access code sent'
+		)
+	),
+    array
+	(
+		'phrase' => 'NewPassword',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Ihr neues Passwort lautet %s. Bitte notieren Sie es und melden sich damit an, es kann nicht geändert werden.',
+			'description' => 'Ihr neues Passwort'
+		)
+	),
+	array
+	(
+		'phrase' => 'NewPassword',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => 'Your new password'
+		)
 	)
 );
