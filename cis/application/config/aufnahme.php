@@ -117,3 +117,4 @@ $config['view_messages'][] = 'messages/messages';
 //$config['aufnahme_tabs'][] = array("label"=>"aufnahme/nachrichten", "id"=>"nachrichten");
 //$config['aufnahme_tabs'][] = array("label"=>"aufnahme/downloads", "id"=>"downloads");
 
+$config['display_phrase_name'] = false;
