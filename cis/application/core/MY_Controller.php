@@ -62,4 +62,60 @@ class MY_Controller extends CI_Controller {
 	    var_dump($this->PhraseModel->getErrorMessage());
 	}
     }
+    
+    protected function getPhrase($phrase, $sprache, $oe_kurzbz="", $orgform_kurzbz="")
+    {
+	if(isset($this->session->userdata()["phrasen"]))
+	{
+	    $phrasen = $this->session->userdata()["phrasen"];
+	    foreach($phrasen as $p)
+	    {
+		if(($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz))
+		{
+		    if ($this->config->item('display_phrase_name'))
+		    {
+			return $p->phrase;
+		    }
+		    else
+		    {
+			return $p->text;
+		    }
+		}
+	    }
+	    
+	    foreach($phrasen as $p)
+	    {
+		if(($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz))
+		{
+		    if ($this->config->item('display_phrase_name'))
+		    {
+			return $p->phrase;
+		    }
+		    else
+		    {
+			return $p->text;
+		    }
+		}
+	    }
+	    
+	    foreach($phrasen as $p)
+	    {
+		if(($p->phrase == $phrase))
+		{
+		    if ($this->config->item('display_phrase_name'))
+		    {
+			return $p->phrase;
+		    }
+		    else
+		    {
+			return $p->text;
+		    }
+		}
+	    }
+	}
+	else
+	{
+	    return "please load phrases first";
+	}
+    }
 }
