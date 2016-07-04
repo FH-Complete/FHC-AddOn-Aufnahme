@@ -36,6 +36,36 @@ class MY_Loader extends CI_Loader
 		    }
 		}
 	    }
+	    
+	    foreach($phrasen as $p)
+	    {
+		if(($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz))
+		{
+		    if ($this->config->item('display_phrase_name'))
+		    {
+			return $p->phrase;
+		    }
+		    else
+		    {
+			return $p->text;
+		    }
+		}
+	    }
+	    
+	    foreach($phrasen as $p)
+	    {
+		if(($p->phrase == $phrase))
+		{
+		    if ($this->config->item('display_phrase_name'))
+		    {
+			return $p->phrase;
+		    }
+		    else
+		    {
+			return $p->text;
+		    }
+		}
+	    }
 	}
 	else
 	{
