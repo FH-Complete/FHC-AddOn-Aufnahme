@@ -3,97 +3,97 @@ $textphrasen = array
 (
 	array
 	(
-		'phrase' => 'HomeGreetings',
+		'phrase' => 'Home/Greetings',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Willkommen bei der Online Bewerbung',
-			'description' => 'Begrüßungstext am HomeScreen' 
+			'description' => 'Begrüßungstext am HomeScreen'
 		)
 	),
 	array
 	(
-		'phrase' => 'HomeGreetings',
+		'phrase' => 'Home/Greetings',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
 			'text' => 'Welcome to the Online Application',
-			'description' => 'Greetings on HomeScreen' 
+			'description' => 'Greetings on HomeScreen'
 		)
 	),
 	array
 	(
-		'phrase' => 'HomeNoAccountOrAccessCode',
+		'phrase' => 'Home/NoAccountOrAccessCode',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Sie haben noch keinen Account oder Zugangscode?',
-			'description' => 'Registrierungstext am HomeScreen' 
+			'description' => 'Registrierungstext am HomeScreen'
 		)
 	),
 	array
 	(
-		'phrase' => 'HomeNoAccountOrAccessCode',
+		'phrase' => 'Home/NoAccountOrAccessCode',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
 			'text' => 'You don`t have an account or access code?',
-			'description' => 'Registration text on HomeScreen' 
+			'description' => 'Registration text on HomeScreen'
 		)
 	),
 	array
 	(
-		'phrase' => 'HomeAccessCodeAvailable',
+		'phrase' => 'Home/AccessCodeAvailable',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Sie haben bereits einen Zugangscode?',
-			'description' => 'Mit Access Code einloggen am HomeScreen' 
+			'description' => 'Mit Access Code einloggen am HomeScreen'
 		)
 	),
 	array
 	(
-		'phrase' => 'HomeAccessCodeAvailable',
+		'phrase' => 'Home/AccessCodeAvailable',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
 			'text' => 'You already have an access code?',
-			'description' => 'Login with access code on HomeScreen' 
+			'description' => 'Login with access code on HomeScreen'
 		)
 	),
 	array
 	(
-		'phrase' => 'HomeLogin',
+		'phrase' => 'Home/Login',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Dann loggen Sie sich hier ein',
-			'description' => 'Login am HomeScreen' 
+			'description' => 'Login am HomeScreen'
 		)
 	),
 	array
 	(
-		'phrase' => 'HomeLogin',
+		'phrase' => 'Home/Login',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
 			'text' => '',
-			'description' => 'Login on HomeScreen' 
+			'description' => 'Login on HomeScreen'
 		)
 	),
     array
 	(
-		'phrase' => 'ChooseDateForTest',
+		'phrase' => 'Test/ChooseDateForTest',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Ihre Bewerbung ist eingelangt, bitte wählen Sie einen Termin für das erste Aufnahmeverfahren aus:',
-			'description' => 'Terminauswahl für Aufnahmeverfahren' 
+			'description' => 'Terminauswahl für Aufnahmeverfahren'
 		)
 	),
 	array
 	(
-		'phrase' => 'ChooseDateForTest',
+		'phrase' => 'Test/ChooseDateForTest',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -103,7 +103,7 @@ $textphrasen = array
 	),
     array
 	(
-		'phrase' => 'PersonalInformation',
+		'phrase' => 'Personal/Information',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
@@ -113,7 +113,7 @@ $textphrasen = array
 	),
 	array
 	(
-		'phrase' => 'PersonalInformation',
+		'phrase' => 'Personal/Information',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -123,17 +123,17 @@ $textphrasen = array
 	),
     array
 	(
-		'phrase' => 'DifferentAddress',
+		'phrase' => 'Personal/DifferentAddress',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Meine Zustelladresse weicht von der Heimatadresse ab.',
-			'description' => 'Alternative Zustelladresse' 
+			'description' => 'Alternative Zustelladresse'
 		)
 	),
 	array
 	(
-		'phrase' => 'DifferentAddress',
+		'phrase' => 'Personal/DifferentAddress',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -143,17 +143,17 @@ $textphrasen = array
 	),
     array
 	(
-		'phrase' => 'PleaseUploadDocuments',
+		'phrase' => 'Personal/PleaseUploadDocuments',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Bitte laden Sie Ihre Geburtsurkunde und Ihren Staatbürgerschaftsnachweis im Format .pdf, .doc, oder .jpg hoch. Die maximale Dateigröße beträgt 2MB.',
-			'description' => 'Beschreibung für Dokumentenupload' 
+			'description' => 'Beschreibung für Dokumentenupload'
 		)
 	),
 	array
 	(
-		'phrase' => 'PleaseUploadDocuments',
+		'phrase' => 'Personal/PleaseUploadDocuments',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -163,17 +163,17 @@ $textphrasen = array
 	),
     array
 	(
-		'phrase' => 'AdmissionRequirements',
+		'phrase' => 'ZGV/AdmissionRequirements',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Die aktuellen Zugangsvoraussetzungen finden Sie auf der Website der Fachhochschule St. Pölten. Um sich über die Zugangsvoraussetzungen zu informieren, klicken sie bitte hier.',
-			'description' => 'Beschreibung zur den Zugangsvoraussetzungen' 
+			'description' => 'Beschreibung zur den Zugangsvoraussetzungen'
 		)
 	),
 	array
 	(
-		'phrase' => 'AdmissionRequirements',
+		'phrase' => 'ZGV/AdmissionRequirements',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -183,17 +183,17 @@ $textphrasen = array
 	),
     array
 	(
-		'phrase' => 'UploadDiploma',
+		'phrase' => 'ZGV/UploadDiploma',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Bitte laden Sie Ihr Abschlusszeugnis im Format .pdf, .doc oder .jpg hoch:',
-			'description' => 'Beschreibung für Upload des Abschlusszeugnisses' 
+			'description' => 'Beschreibung für Upload des Abschlusszeugnisses'
 		)
 	),
 	array
 	(
-		'phrase' => 'UploadDiploma',
+		'phrase' => 'ZGV/UploadDiploma',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -203,17 +203,17 @@ $textphrasen = array
 	),
     array
 	(
-		'phrase' => 'SpecificAdmissionRequirements',
+		'phrase' => 'ZGV/SpecificAdmissionRequirements',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Für diesen Studiengang sind spezifische Zugangsvoraussetzungen erforderlich. Bitte laden Sie geeignete Nachweise über Ihre Kenntnisse oder Praxis hoch:',
-			'description' => 'Beschreibung für spezifische Zugangsvoraussetzungen' 
+			'description' => 'Beschreibung für spezifische Zugangsvoraussetzungen'
 		)
 	),
 	array
 	(
-		'phrase' => 'SpecificAdmissionRequirements',
+		'phrase' => 'ZGV/SpecificAdmissionRequirements',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -223,17 +223,17 @@ $textphrasen = array
 	),
     array
 	(
-		'phrase' => 'ApplicationReadyForSubmitting',
+		'phrase' => 'Submission/ApplicationReadyForSubmitting',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Ihre Daten sind vollständig - Sie können nun Ihre Bewerbung absenden!',
-			'description' => 'Bewerbung bereit zum Absenden' 
+			'description' => 'Bewerbung bereit zum Absenden'
 		)
 	),
 	array
 	(
-		'phrase' => 'ApplicationReadyForSubmitting',
+		'phrase' => 'Submission/ApplicationReadyForSubmitting',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -243,17 +243,17 @@ $textphrasen = array
 	),
     array
 	(
-		'phrase' => 'CompleteAndCheckData',
+		'phrase' => 'Overview/CompleteAndCheckData',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Bitte vervollständigen Sie Ihre Daten und prüfen Sie diese Eingaben im Anschluss auf Richtigkeit.',
-			'description' => 'Daten vervollständigen und kontrollieren' 
+			'description' => 'Daten vervollständigen und kontrollieren'
 		)
 	),
 	array
 	(
-		'phrase' => 'CompleteAndCheckData',
+		'phrase' => 'Overview/CompleteAndCheckData',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -263,18 +263,18 @@ $textphrasen = array
 	),
     array
 	(
-		'phrase' => 'RegistrationForm',
+		'phrase' => 'Registration/RegistrationForm',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Bitte füllen Sie das Formular aus, wählen Sie die gewünschte(n) Studienrichtung(en) und klicken Sie auf "Abschicken".
 Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit dem Zugangscode können Sie sich jederzeit einloggen, Ihre Daten vervollständigen, Studienrichtungen hinzufügen und sich unverbindlich bewerben.',
-			'description' => 'Beschreibung zum Registrierungsformular' 
+			'description' => 'Beschreibung zum Registrierungsformular'
 		)
 	),
 	array
 	(
-		'phrase' => 'RegistrationForm',
+		'phrase' => 'Registration/RegistrationForm',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -284,17 +284,17 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 	),
     array
 	(
-		'phrase' => 'SpamProtection',
+		'phrase' => 'Registration/SpamProtection',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Geben Sie bitte hier die Zeichen aus der Grafik ein (Spamschutz).',
-			'description' => 'Beschreibung zum Spamschutz' 
+			'description' => 'Beschreibung zum Spamschutz'
 		)
 	),
 	array
 	(
-		'phrase' => 'SpamProtection',
+		'phrase' => 'Registration/SpamProtection',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -304,17 +304,17 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 	),
     array
 	(
-		'phrase' => 'EmailWithAccessCodeSent',
+		'phrase' => 'Registration/EmailWithAccessCodeSent',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
 			'text' => 'Die E-Mail mit Ihrem Zugangscode wurde erfolgreich an %s verschickt.',
-			'description' => 'E-Mail mit Zugangscode versendet' 
+			'description' => 'E-Mail mit Zugangscode versendet'
 		)
 	),
 	array
 	(
-		'phrase' => 'EmailWithAccessCodeSent',
+		'phrase' => 'Registration/EmailWithAccessCodeSent',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -324,7 +324,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 	),
     array
 	(
-		'phrase' => 'NewPassword',
+		'phrase' => 'Home/NewPassword',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
@@ -334,7 +334,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 	),
 	array
 	(
-		'phrase' => 'NewPassword',
+		'phrase' => 'Home/NewPassword',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -344,7 +344,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 	),
     array
 	(
-		'phrase' => 'EmailAddressTaken',
+		'phrase' => 'Registration/EmailAddressTaken',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
@@ -354,7 +354,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 	),
 	array
 	(
-		'phrase' => 'EmailAddressTaken',
+		'phrase' => 'Registration/EmailAddressTaken',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
