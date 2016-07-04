@@ -260,5 +260,46 @@ $textphrasen = array
 			'text' => '',
 			'description' => 'Complete and check your data'
 		)
+	),
+    array
+	(
+		'phrase' => 'RegistrationForm',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Bitte füllen Sie das Formular aus, wählen Sie die gewünschte(n) Studienrichtung(en) und klicken Sie auf "Abschicken".
+Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit dem Zugangscode können Sie sich jederzeit einloggen, Ihre Daten vervollständigen, Studienrichtungen hinzufügen und sich unverbindlich bewerben.',
+			'description' => 'Beschreibung zum Registrierungsformular' 
+		)
+	),
+	array
+	(
+		'phrase' => 'RegistrationForm',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => 'Description for the registration form'
+		)
+	),
+    array
+	(
+		'phrase' => 'SpamProtection',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Geben Sie bitte hier die Zeichen aus der Grafik ein (Spamschutz).',
+			'description' => 'Beschreibung zum Spamschutz' 
+		)
+	),
+	array
+	(
+		'phrase' => 'SpamProtection',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => 'Description for the spam protection feature'
+		)
 	)
 );
