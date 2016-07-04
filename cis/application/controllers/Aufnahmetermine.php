@@ -30,6 +30,7 @@ class Aufnahmetermine extends MY_Controller {
         $this->load->model('prestudentStatus_model', "PrestudentStatusModel");
 	$this->load->model('person_model', 'PersonModel');
 	$this->load->model('studienplan_model', "StudienplanModel");
+	$this->load->helper("form");
     }
 
     public function index() {
@@ -61,10 +62,26 @@ class Aufnahmetermine extends MY_Controller {
 	    array_push($this->_data["studiengaenge"], $studiengang);
 	    //TODO set stgkz and studiensemester_kurzbz
 	    $reihungstests = $this->_loadReihungstests($prestudent->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
-            $this->_data["reihungstests"][$prestudent->studiengang_kz] = $reihungstests;
+	    if(!empty($reihungstests))
+	    {
+		$this->_data["reihungstests"][$prestudent->studiengang_kz] = array();
+		foreach($reihungstests as $rt)
+		{
+		    $this->_data["reihungstests"][$prestudent->studiengang_kz][$rt->stufe][] = $rt;
+		}
+	    }
         }
 	
         $this->load->view('aufnahmetermine', $this->_data);
+    }
+    
+    public function register()
+    {
+	$this->checkLogin();
+	
+	$this->_data["sprache"] = $this->get_language();
+	
+	var_dump($this->input->post());
     }
     
     private function _loadNextStudiensemester()
