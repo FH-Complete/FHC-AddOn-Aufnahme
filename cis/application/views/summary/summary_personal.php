@@ -1,4 +1,4 @@
-<fieldset><?php echo $this->lang->line("summary_einleitung").'.'; ?></fieldset>
+<fieldset><?php echo $this->getPhrase("PersonalInformation", $sprache); ?></fieldset>
 
 <legend><?php echo $this->lang->line("summary_persoenlicheDaten"); ?></legend>
 <div class="row">
