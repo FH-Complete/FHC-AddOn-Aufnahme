@@ -1,5 +1,5 @@
 <div role="tabpanel" class="tab-pane" id="daten">
-    <legend><?php echo $this->getPhrase("PersonalInformation", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></legend>
+    <legend><?php echo $this->getPhrase("Personal/Information", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></legend>
     <?php echo form_open_multipart("Bewerbung", array("id" => "PersonForm", "name" => "PersonForm")); ?>
     <div class="row">
         <div class="col-sm-2">
@@ -185,7 +185,7 @@
 		<div class="checkbox">
 		    <label>
 			<?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => FALSE, "class"=>"zustelladresse", "studienplan_id"=>$studiengang->studienplan->studienplan_id));
-			    echo $this->getPhrase("DifferentAddress", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz).".";
+			    echo $this->getPhrase("Personal/DifferentAddress", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz).".";
 			?>			
 		    </label>
 		</div>
@@ -251,7 +251,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="form-group">
-                <?php echo $this->getPhrase("PleaseUploadDocuments", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);  ?>
+                <?php echo $this->getPhrase("Personal/PleaseUploadDocuments", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);  ?>
             </div>
         </div>
     </div>

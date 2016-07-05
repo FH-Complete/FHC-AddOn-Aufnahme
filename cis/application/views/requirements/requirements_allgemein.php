@@ -17,7 +17,7 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
 </div>-->
 <div class="row">
     <div class="col-sm-12">
-        <?php echo $this->getPhrase("UploadDiploma", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+        <?php echo $this->getPhrase("ZGV/UploadDiploma", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
     </div>
 </div>
 <div class="row">

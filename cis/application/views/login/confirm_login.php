@@ -9,7 +9,7 @@
     <?php echo form_open("Registration/code_login?studiengang_kz=".((isset($studiengang_kz)) ? $studiengang_kz : ""), array("id" => "ChangePasswordForm", "name" => "ChangePasswordForm", "class" => "form-horizontal")); ?>
     <img style="width:150px;" class="center-block img-responsive" src="<?php echo APP_ROOT . 'skin/styles/' . $this->config->item('theme'); ?>/logo.png">
     <p class="infotext">
-	<?php echo sprintf($this->getPhrase('NewPassword', $sprache), $zugangscode);?>
+	<?php echo sprintf($this->getPhrase('Home/NewPassword', $sprache), $zugangscode);?>
     </p>
     <div class="form-group <?php echo (form_error("email") != "") ? 'has-error' : '' ?>">
 	<?php echo form_label("E-Mail Adresse", "email", array("name" => "email", "for" => "email", "class" => "col-sm-3 control-label")) ?>

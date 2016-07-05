@@ -31,7 +31,7 @@ echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
             <div role="tabpanel" class="tab-pane" id="requirements">
                 <div class="row">
                     <div class="col-sm-12">
-                        <?php echo $this->getPhrase("AdmissionRequirements", $sprache); ?>
+                        <?php echo $this->getPhrase("ZGV/AdmissionRequirements", $sprache); ?>
                     </div>
                 </div>
             <?php $this->load_views('view_requirements'); ?>

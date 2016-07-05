@@ -1,7 +1,7 @@
 <div role="tabpanel" class="tab-pane" id="send">
     <h1><?php echo $this->lang->line("send_header"); ?></h1>
     <!--<fieldset><?php echo $this->lang->line("send_einleitung").'!'; ?></fieldset>-->
-    <fieldset><?php echo $this->getPhrase("ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);?></fieldset>
+    <fieldset><?php echo $this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);?></fieldset>
     <?php echo $studiengang->bezeichnung; ?></br>
     <?php echo form_open("Send/send/".$studiengang->studiengang_kz."/".$studiengang->studienplan->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
         <div class="row">
@@ -27,7 +27,6 @@
 		if($prestudentStatus->bewerbung_abgeschicktamum != null)
 		{
 		    echo $this->lang->line("send_bereitsAbgeschickt")."</br>";
-		    echo $this->getPhrase("test_1", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
 		}
 		?>
 	    </div>

@@ -1,4 +1,4 @@
-<fieldset><?php echo $this->getPhrase("CompleteAndCheckData", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></fieldset>
+<fieldset><?php echo $this->getPhrase("Overview/CompleteAndCheckData", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></fieldset>
 
 <legend><?php echo $this->lang->line("summary_persoenlicheDaten"); ?></legend>
 <div class="row">

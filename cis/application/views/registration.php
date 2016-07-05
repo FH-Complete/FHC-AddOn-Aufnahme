@@ -11,7 +11,7 @@
 	<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">	
 	<h2 class="text-center"><?php echo $this->lang->line('aufnahme/login_greeting_text'); ?></h2>		
 	<p class="infotext">
-		<?php echo $this->getPhrase("RegistrationForm", $sprache); ?>
+		<?php echo $this->getPhrase("Registration/RegistrationForm", $sprache); ?>
 	</p>
 
 	<div class="form-group <?php echo (form_error("vorname")!="")? 'has-error': '' ?>">
@@ -58,7 +58,7 @@
 		</a>
 	    </div>
 	    <div class="col-sm-4 <?php echo (form_error("captcha_code")!="")? 'has-error': '' ?>">
-		<?php echo $this->getPhrase("SpamProtection", $sprache); ?>
+		<?php echo $this->getPhrase("Registration/SpamProtection", $sprache); ?>
 		<?php echo form_input(array('id' => 'captcha', 'name' => 'captcha_code', 'maxlength'=>6, "type"=>"text", "class"=>"form-control")); ?>
 		<?php echo form_input(array('id' => 'zugangscode', 'name' => 'zugangscode', "type"=>"hidden", "value"=>set_value(uniqid()))); ?>
 		<?php echo form_error("captcha_code");?>
