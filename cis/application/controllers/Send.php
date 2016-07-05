@@ -98,8 +98,7 @@ class Send extends MY_Controller {
 	}
 	else
 	{
-	    //TODO
-	    var_dump($this->StudiengangModel->getErrorMessage());
+	    $this->_setError(true, $this->StudiengangModel->getErrorMessage());
 	}
     }
     
@@ -112,8 +111,7 @@ class Send extends MY_Controller {
 	}
 	else
 	{
-	    //TODO
-	    var_dump($this->StudienplanModel->getErrorMessage());
+	    $this->_setError(true, $this->StudienplanModel->getErrorMessage());
 	}
     }
     
@@ -126,8 +124,7 @@ class Send extends MY_Controller {
 	}
 	else
 	{
-	    //TODO
-	    var_dump($this->PrestudentModel->getErrorMessage());
+	    $this->_setError(true, $this->PrestudentModel->getErrorMessage());
 	}
     }
     
@@ -140,8 +137,7 @@ class Send extends MY_Controller {
 	}
 	else
 	{
-	    //TODO
-	    var_dump($this->PrestudentStatusModel->getErrorMessage());
+	    $this->_setError(true, $this->PrestudentStatusModel->getErrorMessage());
 	}
     }
     
@@ -154,8 +150,7 @@ class Send extends MY_Controller {
 	}
 	else
 	{
-	    //TODO
-	    var_dump($this->PrestudentStatusModel->getErrorMessage());
+	    $this->_setError(true, $this->PrestudentStatusModel->getErrorMessage());
 	}
     }
 }
