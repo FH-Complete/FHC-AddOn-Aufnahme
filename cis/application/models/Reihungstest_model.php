@@ -16,4 +16,15 @@ class Reihungstest_model extends MY_Model
 	    return true;
 	}
     }
+    
+    public function getReihungstestByPersonID($person_id)
+    {
+	if ($restquery = $this->rest->get('crm/reihungstest/reihungstestByPersonId', array("person_id" => $person_id,'json')))
+	{
+	    $this->result = $restquery;
+	    return true;
+	}
+    }
+    
+    
 }
