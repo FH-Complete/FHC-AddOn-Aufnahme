@@ -88,60 +88,39 @@ class Registration extends MY_Controller {
 
     public function resendCode()
     {
-        //TODO 
          $this->_data = array(
             "sprache" => $this->get_language()
         );
 
-        if (($this->input->post("email") != null)) {
+        if (($this->input->post("email") != null))
+	{
 	    $this->_data["email"] = $this->input->post("email");
 	    $bewerbung = $this->_checkBewerbung($this->_data["email"]);
 
-            if ($this->PersonModel->isResultValid() === true) 
+	    if (count($bewerbung) === 1)
 	    {
-                if (count($bewerbung) === 1)
-		{
-		    $person = $bewerbung[0];
-		    $person = $this->_getPerson($person->person_id);
-		    //$this->PersonModel->getPersonen($person->person_id);
-		    
-		    if($this->PersonModel->isResultValid() === true)
-		    {
-			//$person = $this->PersonModel->result->retval[0];
-			//TODO define timespan until invalidation of timestamp in config
-			$person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +1 hour"));
-			$person->zugangscode = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
-			$this->_savePerson($person);
-			//$this->PersonModel->savePerson($person);
-			
-			if($this->PersonModel->isResultValid() === true)
-			{
-			    $message = $this->resendMail($person->zugangscode,  $this->_data["email"], $person->person_id);
-			    $this->_data["message"] = $message;
-			}
-			else
-			{
-			    //could not set new zugangscode
-			    echo $this->PersonModel->getErrorMessage();
-			}
-		    }
-		    else
-		    {
-			//could not load person data
-			echo $this->PersonModel->getErrorMessage();
-		    }
-                }
-		else
-		{
-		    //email is unique
-		}
-            }
-            else
-            {
-                //TODO could not load data
-		echo $this->PersonModel->getErrorMessage();
-            }
+		$person = $bewerbung[0];
+		$person = $this->_getPerson($person->person_id);
+
+		//$person = $this->PersonModel->result->retval[0];
+		//TODO define timespan until invalidation of timestamp in config
+		$person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +1 hour"));
+		$person->zugangscode = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
+		$this->_savePerson($person);
+		//$this->PersonModel->savePerson($person);
+
+		$message = $this->resendMail($person->zugangscode,  $this->_data["email"], $person->person_id);
+		$this->_data["message"] = $message;
+	    }
+	    else
+	    {
+		$this->_setError(true, "E-Mail Adresse ist nicht eindeutig zugeordnet.");
+	    }
         }
+	else
+	{
+	    $this->_setError(true, "E-Mail Adresse wurde nicht angegeben.");
+	}
 
         $this->load->view('templates/header');
         $this->load->view('registration/resendCode',  $this->_data);
@@ -159,28 +138,33 @@ class Registration extends MY_Controller {
              $this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
          }
 
-        //$this->PersonModel->checkZugangscodePerson(array("code" => $this->input->get("code")));
 	$result = $this->_checkZugangscodePerson($this->input->get("code"));
-        if (($this->PersonModel->isResultValid() === true) && (count($result) == 1)) {
+        if (($this->PersonModel->isResultValid() === true) && (count($result) == 1))
+	{
             $person_id = $result[0]->person_id;
              $this->_data["zugangscode"] = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
 
-            if ($this->Kontakt_model->getKontakt($person_id)) {
+            if ($this->Kontakt_model->getKontakt($person_id)) 
+	    {
                 $this->_data["email"] = $this->Kontakt_model->result->retval[0]->kontakt;
                 $person = new stdClass();
                 $person->person_id = $person_id;
 		$result = $this->_getPerson($person_id);
-                //$this->PersonModel->getPersonen($person_id);
-                if (($this->PersonModel->isResultValid() === true) && (count($result) == 1)) {
+
+                if (($this->PersonModel->isResultValid() === true) && (count($result) == 1))
+		{
                     $person = $result;
                     //check if timestamp code is not older than now
-                    if (strtotime(date('Y-m-d H:i:s')) < strtotime($person->zugangscode_timestamp)) {
+                    if (strtotime(date('Y-m-d H:i:s')) < strtotime($person->zugangscode_timestamp))
+		    {
                         $person->zugangscode =  $this->_data["zugangscode"];
                         $this->PersonModel->updatePerson($person);
                         $this->load->view('templates/header');
                         $this->load->view('login/confirm_login',  $this->_data);
                         $this->load->view('templates/footer');
-                    } else {
+                    }
+		    else
+		    {
                          $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
                         $this->load->view('templates/header');
                         $this->load->view('login/confirm_error',  $this->_data);
@@ -189,11 +173,12 @@ class Registration extends MY_Controller {
                 }
 		else
 		{
-		    //TODO person not found
-		    echo $this->PersonModel->getErrorMessage();
+		    //error msg already set
 		}
             }
-        } elseif (empty($this->PersonModel->result->data)) {
+        }
+	elseif (empty($this->PersonModel->result->data))
+	{
             $this->_data["zugangscode"] = "";
             $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
             $this->_data["email"] = "";
@@ -224,8 +209,7 @@ class Registration extends MY_Controller {
         if ($this->PersonModel->isResultValid() === true) {
             if (count($bewerbung) > 0) {
                 $data["message"] = '<p class="alert alert-danger" id="danger-alert">' . sprintf($this->lang->line('aufnahme/mailadresseBereitsGenutzt'), $data["email"]) . '</p>'
-                        . '<a href="' . base_url("index.dist.php/Registration/resendCode") . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button>'
-                        . '<button type="submit" class="btn btn-primary" value="Nein" onclick="document.RegistrationLoginForm.email.value=\'\'; document.getElementById(\'RegistrationLoginForm\').submit();">' . $this->lang->line('global/abbrechen') . '</button>';
+                        . '<a href="' . base_url("index.dist.php/Registration/resendCode") . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button></a>';
                 $this->load->view('templates/header');
                 $this->load->view('registration', $data);
                 $this->load->view('templates/footer');
@@ -235,7 +219,8 @@ class Registration extends MY_Controller {
 		$person_id = $this->_savePerson($person);
                 //$this->PersonModel->savePerson($person);
                 //TODO error handling
-                if ($this->PersonModel->isResultValid() === true) {
+                if ($this->PersonModel->isResultValid() === true)
+		{
                     $kontakt = new stdClass();
                     $kontakt->person_id = $person_id;
                     $kontakt->kontakttyp = "email";
@@ -245,7 +230,8 @@ class Registration extends MY_Controller {
                     $this->Kontakt_model->saveKontakt($kontakt);
 
                     //TODO error handling
-                    if ($this->Kontakt_model->isResultValid() === true) {
+                    if ($this->Kontakt_model->isResultValid() === true)
+		    {
                         $message = $this->sendMail($zugangscode, $data["email"], $person_id, $data["studiengang_kz"]);
 			$this->_data["person"] = $this->_getPerson($person_id);
 			
@@ -260,27 +246,23 @@ class Registration extends MY_Controller {
 			}
 			else
 			{
-			    //TODO could not load data
-			    var_dump($this->PersonModel->getErrorMessage());
+			    //error message already setn
 			}
                     }
                     else
                     {
-                        //TODO could not save kontakt
-			echo $this->Kontakt_model->getErrorMessage();
+			$this->_setError(true, $this->Kontakt_model->getErrorMessage());
                     }
                 }
                 else
                 {
-		    echo $this->PersonModel->getErrorMessage();
-                    //TODO could not save person
+		    //error message already setn
                 }
             }
         }
 	else
 	{
-	    echo $this->PersonModel->getErrorMessage();
-	    //TODO could not check bewerbung
+	    //error message already setn
 	}
     }
     
@@ -387,52 +369,52 @@ class Registration extends MY_Controller {
     private function _getPerson($person_id)
     {
 	$this->PersonModel->getPersonen($person_id);
-	if($this->PersonModel->isResultValid() == true)
+	if($this->PersonModel->isResultValid() === true)
 	{
 	    return $this->PersonModel->result->retval[0];
 	}
 	else
 	{
-	    var_dump($this->PersonModel->getErrorMessage());
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
     
     private function _savePerson($person)
     {
 	$this->PersonModel->savePerson($person);
-	if($this->PersonModel->isResultValid() == true)
+	if($this->PersonModel->isResultValid() === true)
 	{
 	    return $this->PersonModel->result->retval;
 	}
 	else
 	{
-	    var_dump($this->PersonModel->getErrorMessage());
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
     
     private function _checkBewerbung($email)
     {
 	$this->PersonModel->checkBewerbung(array("email" => $email));
-	if($this->PersonModel->isResultValid() == true)
+	if($this->PersonModel->isResultValid() === true)
 	{
 	    return $this->PersonModel->result->retval;
 	}
 	else
 	{
-	    var_dump($this->PersonModel->getErrorMessage());
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
     
     private function _checkZugangscodePerson($code)
     {
 	$this->PersonModel->checkZugangscodePerson(array("code" => $code));
-	if($this->PersonModel->isResultValid() == true)
+	if($this->PersonModel->isResultValid() === true)
 	{
 	    return $this->PersonModel->result->retval;
 	}
 	else
 	{
-	    var_dump($this->PersonModel->getErrorMessage());
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
 }

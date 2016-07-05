@@ -3,8 +3,10 @@ $this->load->view('templates/header');
 $this->lang->load(array('aufnahme', 'person'), $language);
 // This is an example to show that you can load stuff from inside the template file
 echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
-?>
 
+if (isset($error) && ($error->error === true))
+    echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
+?>
 <div class="container">
     <?php foreach($studiengaenge as $studiengang){ 
         $data["studiengang"] = $studiengang;

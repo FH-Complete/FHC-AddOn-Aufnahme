@@ -34,13 +34,13 @@ class Bewerbung extends MY_Controller {
         $this->session->set_userdata("studiensemester_kurzbz", $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz);
         
         //load person data
-        $this->_loadPerson();
+        $this->_data["person"] = $this->_loadPerson();
 
         //load kontakt data
         $this->_loadKontakt();
         
         //load preinteressent data
-        $this->_loadPrestudent();
+        $this->_data["prestudent"] = $this->_loadPrestudent();
         
         $this->_data["studiengaenge"] = array();
         foreach($this->_data["prestudent"] as $prestudent)
@@ -310,10 +310,10 @@ class Bewerbung extends MY_Controller {
         $this->session->set_userdata("studiensemester_kurzbz", $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz);
         
         //load person data
-        $this->_loadPerson();
+        $this->_data["person"] = $this->_loadPerson();
 
         //load preinteressent data
-        $this->_loadPrestudent();
+        $this->_data["prestudent"] = $this->_loadPrestudent();
         
         //load Studienplan
         $this->_data["studienplan"] = $this->_loadStudienplan($studienplan_id); 
@@ -333,7 +333,7 @@ class Bewerbung extends MY_Controller {
         if((!$exists) && ($this->PrestudentModel->result->error == 0))
         {
             $prestudent = $this->_savePrestudent($studiengang_kz);
-            $this->_loadPrestudent();
+            $this->_data["prestudent"] = $this->_loadPrestudent();
             $this->_savePrestudentStatus($prestudent);
         }
 	else
@@ -393,37 +393,41 @@ class Bewerbung extends MY_Controller {
     
     private function _loadPerson()
     {
-        if($this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"])))
+	$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
+        if($this->PersonModel->isResultValid() === true)
         {
-            if(($this->PersonModel->result->error == 0) && (count($this->PersonModel->result->retval) == 1))
+            if(count($this->PersonModel->result->retval) == 1)
             {
-                $this->_data["person"] = $this->PersonModel->result->retval[0];
+                return $this->PersonModel->result->retval[0];
             }
 	    else
 	    {
-		var_dump($this->PersonModel->result);
+		return $this->PersonModel->result->retval;
 	    }
         }
+	else
+	{
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
+	}
     }
     
     private function _loadPrestudent()
     {
-        if($this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"])))
+	$this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"]));
+        if($this->PrestudentModel->isResultValid() === true)
         {
-            if($this->PrestudentModel->result->error == 0)
-            {
-                $this->_data["prestudent"] = $this->PrestudentModel->result->retval;        
-            }
-	    else
-	    {
-		var_dump($this->PrestudentModel->result);
-	    }
+	    return $this->PrestudentModel->result->retval;        
         }
+	else
+	{
+	    $this->_setError(true, $this->PrestudentModel->getErrorMessage());
+	}
     }
     
     private function _loadPrestudentStatus($prestudent_id)
     {
-        if($this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent")))
+	$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
+        if($this->PrestudentStatusModel->isResultValid() === true)
         {
             if(($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
             {
@@ -431,89 +435,85 @@ class Bewerbung extends MY_Controller {
             }
 	    else
 	    {
-		var_dump($this->PrestudentStatusModel->result);
+		return $this->PrestudentStatusModel->result->retval;
 	    }
         }
+	else
+	{
+	    $this->_setError(true, $this->PrestudentModel->getErrorMessage());
+	}
     }
 
     private function _loadKontakt()
     {
-        if($this->KontaktModel->getKontakt($this->session->userdata()["person_id"]))
+	$this->KontaktModel->getKontakt($this->session->userdata()["person_id"]);
+        if($this->KontaktModel->isResultValid() === true)
         {
-            if(($this->KontaktModel->result->error == 0))
-            {   
-                foreach($this->KontaktModel->result->retval as $value)
-                {
-                    $this->_data["kontakt"][$value->kontakttyp] = $value;
-                }
-            }
-	    else
+	    foreach($this->KontaktModel->result->retval as $value)
 	    {
-		var_dump($this->KontaktModel->result);
+		$this->_data["kontakt"][$value->kontakttyp] = $value;
 	    }
         }
+	else
+	{
+	    $this->_setError(true, $this->KontaktModel->getErrorMessage());
+	}
     }
     
     private function _loadAdresse()
     {
-        if($this->AdresseModel->getAdresse($this->session->userdata()["person_id"]))
+	$this->AdresseModel->getAdresse($this->session->userdata()["person_id"]);
+        if($this->AdresseModel->isResultValid() === true)
         {
-            if(($this->AdresseModel->result->error == 0))
-            {   
-                foreach($this->AdresseModel->result->retval as $adresse)
-                {
-                    if($adresse->heimatadresse == "t")
-                    {
-                        $this->_data["adresse"] = $adresse;
-                    }
-		    else if(($adresse->heimatadresse == "f") && ($adresse->zustelladresse == "t"))
-                    {
-                        $this->_data["zustell_adresse"] = $adresse;
-                    }
-                }
-            }
-	    else
+	    foreach($this->AdresseModel->result->retval as $adresse)
 	    {
-		var_dump($this->AdresseModel->result);
+		if($adresse->heimatadresse == "t")
+		{
+		    $this->_data["adresse"] = $adresse;
+		}
+		else if(($adresse->heimatadresse == "f") && ($adresse->zustelladresse == "t"))
+		{
+		    $this->_data["zustell_adresse"] = $adresse;
+		}
 	    }
         }
+	else
+	{
+	    $this->_setError(true, $this->AdresseModel->getErrorMessage());
+	}
     }
     
     private function _loadNationen()
     {
-        if($this->nation_model->getNationen())
+	$this->nation_model->getNationen();
+        if($this->nation_model->isResultValid() === true)
         {
-            if($this->nation_model->result->error == 0)
-            {
-                foreach($this->nation_model->result->retval as $n)
-                {
-                    $this->_data["nationen"][$n->nation_code] = $n->kurztext;
-                }
-            }
-	    else
+	    foreach($this->nation_model->result->retval as $n)
 	    {
-		var_dump($this->nation_model->result);
+		$this->_data["nationen"][$n->nation_code] = $n->kurztext;
 	    }
         }
+	else
+	{
+	    $this->_setError(true, $this->nation_model->getErrorMessage());
+	}
     }
     
     private function _loadBundeslaender()
     {
-        if($this->bundesland_model->getBundeslaender())
+	$this->bundesland_model->getBundeslaender();
+        if($this->bundesland_model->isResultValid() === true)
         {
-            if($this->bundesland_model->result->error == 0)
-            {
-		$this->_data["bundesland"] = $this->bundesland_model->result->retval;
-                foreach($this->bundesland_model->result->retval as $b)
-                {
-                    $this->_data["bundeslaender"][$b->bundesland_code] = $b->bezeichnung;
-                }
-            }
-	    else
+	    $this->_data["bundesland"] = $this->bundesland_model->result->retval;
+	    foreach($this->bundesland_model->result->retval as $b)
 	    {
-		var_dump($this->bundesland_model->result);
+		$this->_data["bundeslaender"][$b->bundesland_code] = $b->bezeichnung;
 	    }
         }
+	else
+	{
+	    $this->_setError(true, $this->bundesland_model->getErrorMessage());
+	}
     }
     
     private function _loadStudiengang($stgkz = null)
@@ -522,50 +522,56 @@ class Bewerbung extends MY_Controller {
         {
             $stgkz = $this->_data["prestudent"][0]->studiengang_kz;
         }
-        if($this->StudiengangModel->getStudiengang($stgkz))
+	
+	$this->StudiengangModel->getStudiengang($stgkz);
+        if($this->StudiengangModel->isResultValid() === true)
         {
-            if(($this->StudiengangModel->result->error == 0) && (count($this->StudiengangModel->result->retval) == 1))
+            if(count($this->StudiengangModel->result->retval) == 1)
             {
                 return $this->StudiengangModel->result->retval[0];
             }
             else
             {
-                //TODO Daten konnten nicht geladen werden
-		var_dump($this->StudiengangModel->result);
+                return $this->StudiengangModel->result->retval;
             }
         }
+	else
+	{
+	    $this->_setError(true, $this->StudiengangModel->getErrorMessage());
+	}
     }
     
     private function _loadStudienplan($studienplan_id)
     {
-        if($this->StudienplanModel->getStudienplan($studienplan_id))
+	$this->StudienplanModel->getStudienplan($studienplan_id);
+        if($this->StudienplanModel->isResultValid() === true)
         {
-            if(($this->StudienplanModel->result->error == 0) && (count($this->StudienplanModel->result->retval) == 1))
+            if(count($this->StudienplanModel->result->retval) == 1)
             {
                 return $this->StudienplanModel->result->retval[0];
             }
             else
             {
-                //TODO Daten konnten nicht geladen werden
-		var_dump($this->StudienplanModel->result);
+               return $this->StudienplanModel->result->retval;
             }
         }
+	else
+	{
+	    $this->_setError(true, $this->StudienplanModel->getErrorMessage());
+	}
     }
 
     private function _savePerson($person)
     {
-        if($this->PersonModel->savePerson($person))
+	$this->PersonModel->savePerson($person);
+        if($this->StudienplanModel->isResultValid() === true)
         {
-            if($this->PersonModel->result->error == 0)
-            {
-                //TODO Daten erfolgreich gespeichert
-            }
-            else
-            {
-		var_dump($this->PersonModel->result);
-                //TODO Daten konnten nicht gespeichert werden
-            }
+	    //TODO Daten erfolgreich gespeichert
         }
+	else
+	{
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
+	}
     }
     
     private function _savePrestudent($studiengang_kz)
@@ -575,19 +581,17 @@ class Bewerbung extends MY_Controller {
         $prestudent->studiengang_kz = $studiengang_kz;
         //TODO welches Studiensemester soll gewählt werden
         $prestudent->aufmerksamdurch_kurzbz = 'k.A.';
-        if($this->PrestudentModel->savePrestudent($prestudent))
+	$this->PrestudentModel->savePrestudent($prestudent);
+        if($this->PrestudentModel->isResultValid() === true)
         {
-            if($this->PrestudentModel->result->error == 0)
-            {
-                //TODO Daten erfolgreich gespeichert
-                $prestudent->prestudent_id = $this->PrestudentModel->result->retval;
-                return $prestudent;
-            }
-            else
-            {
-                //TODO Daten konnten nicht gespeichert werden
-            }
+	    //TODO Daten erfolgreich gespeichert
+	    $prestudent->prestudent_id = $this->PrestudentModel->result->retval;
+	    return $prestudent;
         }
+	else
+	{
+	    $this->_setError(true, $this->PrestudentModel->getErrorMessage());
+	}
     }
     
     private function _savePrestudentStatus($prestudent)
@@ -606,62 +610,54 @@ class Bewerbung extends MY_Controller {
             $prestudentStatus->studienplan_id = $this->_data["studienplan"]->studienplan_id;
             $prestudentStatus->datum = date("Y-m-d");
 
-            if($this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus))
+	    $this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
+            if($this->PrestudentStatusModel->isResultValid() === true)
             {
-                if($this->PrestudentStatusModel->result->error == 0)
-                {
-                    //TODO Daten erfolgreich gespeichert
-                    foreach($this->_data["prestudent"] as $key=>$value)
-                    {
-                        if($value->prestudent_id == $prestudent->prestudent_id)
-                        {
-                            $this->_data["prestudent"][$key]->prestudentstatus = $prestudentStatus;
-                        }
-                    }
-                }
-                else
-                {
-                    //TODO Daten konnten nicht gespeichert werden
-                }
+		//TODO Daten erfolgreich gespeichert
+		foreach($this->_data["prestudent"] as $key=>$value)
+		{
+		    if($value->prestudent_id == $prestudent->prestudent_id)
+		    {
+			$this->_data["prestudent"][$key]->prestudentstatus = $prestudentStatus;
+		    }
+		}
             }
+	    else
+	    {
+		$this->_setError(true, $this->PrestudentStatusModel->getErrorMessage());
+	    }
         }
         else
         {
             //TODO studiensemester not found
-	    var_dump($this->StudiensemesterModel->result);
+	    $this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
         }
     }
     
     private function _saveKontakt($kontakt)
     {
-        if($this->KontaktModel->saveKontakt($kontakt))
+	$this->KontaktModel->saveKontakt($kontakt);
+        if($this->KontaktModel->isResultValid() === true)
         {
-            if($this->KontaktModel->result->error == 0)
-            {
-                //TODO Daten erfolgreich gespeichert
-            }
-            else
-            {
-                //TODO Daten konnten nicht gespeichert werden
-		var_dump($this->KontaktModel->result);
-            }
+	    //TODO Daten erfolgreich gespeichert
         }
+	else
+	{
+	    $this->_setError(true, $this->KontaktModel->getErrorMessage());
+	}
     }
     
     private function _saveAdresse($adresse)
     {
-        if($this->AdresseModel->saveAdresse($adresse))
-        {
-            if($this->AdresseModel->result->error == 0)
-            {
-                //TODO Daten erfolgreich gespeichert
-            }
-            else
-            {
-                //TODO Daten konnten nicht gespeichert werden
-		var_dump($this->AdresseModel->result);
-            }
-        }
+	$this->AdresseModel->saveAdresse($adresse);
+	if($this->AdresseModel->isResultValid() === true)
+	{
+	    //TODO Daten erfolgreich gespeichert
+	}
+	else
+	{
+	    $this->_setError(true, $this->AdresseModel->getErrorMessage());
+	}
     }
     
     private function _loadDokumente($person_id, $dokumenttyp_kurzbz=null)
@@ -669,7 +665,7 @@ class Bewerbung extends MY_Controller {
         $this->_data["dokumente"] = array();
         $this->AkteModel->getAkten($person_id, $dokumenttyp_kurzbz);
         
-        if($this->AkteModel->result->error == 0)
+        if($this->AkteModel->isResultValid() === true)
         {
             foreach($this->AkteModel->result->retval as $akte)
             {
@@ -678,15 +674,14 @@ class Bewerbung extends MY_Controller {
         }
 	else
 	{
-	    //TODO handle error
-	    var_dump($this->AkteModel->result);
+	    $this->_setError(true, $this->AkteModel->getErrorMessage());
 	}
     }
     
     private function _loadDms($dms_id)
     {
         $this->DmsModel->loadDms($dms_id);
-        if($this->DmsModel->result->error == 0)
+        if($this->DmsModel->isResultValid() === true)
         {
             if(count($this->DmsModel->result->retval) == 1)
 	    {
@@ -694,13 +689,12 @@ class Bewerbung extends MY_Controller {
 	    }
 	    else
 	    {
-		return false;
+		$this->_setError(true, "Dokument konnte nicht gefunden werden.");
 	    }
         }
 	else
 	{
-	    //TODO handle error
-	    var_dump($this->DmsModel->result);
+	    $this->_setError(true, $this->DmsModel->getErrorMessage());
 	}
     }
     
@@ -713,8 +707,7 @@ class Bewerbung extends MY_Controller {
 	}
 	else
 	{
-	    //TODO show error
-	    var_dump($this->GemeindeModel->getErrorMessage());
+	    $this->_setError(true, $this->GemeindeModel->getErrorMessage());
 	}
     }
 }

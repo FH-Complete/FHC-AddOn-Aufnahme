@@ -72,7 +72,9 @@
     <?php echo form_close(); 
     //wirtes message if email adress exists
 	echo (isset($message))? $message:"";
-    ?>
+	if (isset($error) && ($error->error === true))
+	    echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
+    ?>	
 	
 </div>
 
