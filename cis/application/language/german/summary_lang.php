@@ -24,4 +24,7 @@ $lang['summary_geschlecht'] = 'Geschlecht';
 $lang['summary_geschlecht_m'] = 'männlich';
 $lang['summary_geschlecht_w'] = 'weiblich';
 $lang['summary_unvollstaendig'] = 'unvollständig';
-
+$lang['summary_pass'] = 'Reisepass';
+$lang['summary_lebenslauf'] = 'Lebenslauf';
+$lang['summary_dokumentVorhanden'] = 'Dokument vorhanden';
+$lang['summary_Abschlusszeugnis'] = 'Abschlusszeugnis';

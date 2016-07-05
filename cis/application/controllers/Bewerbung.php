@@ -701,7 +701,7 @@ class Bewerbung extends MY_Controller {
     private function _getGemeinde()
     {
 	$this->GemeindeModel->getGemeinde();
-	if($this->GemeindeModel->isResultValid() == true)
+	if($this->GemeindeModel->isResultValid() === true)
 	{
 	    return $this->GemeindeModel->result->retval;
 	}

@@ -163,7 +163,7 @@ class Messages extends MY_Controller {
 	}
 
 	$this->MessageModel->sendMessage($message);
-	if($this->MessageModel->isResultValid() == true)
+	if($this->MessageModel->isResultValid() === true)
 	{
 	    return $this->MessageModel->result->retval;
 	}
@@ -176,7 +176,7 @@ class Messages extends MY_Controller {
     private function _getMessages($person_id)
     {
 	$this->MessageModel->getMessagesByPersonId($person_id);
-	if($this->MessageModel->isResultValid() == true)
+	if($this->MessageModel->isResultValid() === true)
 	{
 	    return $this->MessageModel->result->retval;
 	}
@@ -189,7 +189,7 @@ class Messages extends MY_Controller {
     private function _loadPrestudent($person_id)
     {
 	$this->PrestudentModel->getPrestudent(array("person_id"=>$person_id));
-	if($this->PrestudentModel->isResultValid() == true)
+	if($this->PrestudentModel->isResultValid() === true)
 	{
 	    return $this->PrestudentModel->result->retval;
 	}
@@ -202,7 +202,7 @@ class Messages extends MY_Controller {
     private function _loadStudiengnag($studiengang_kz)
     {
 	$this->StudiengangModel->getStudiengang($studiengang_kz);
-	if($this->StudiengangModel->isResultValid() == true)
+	if($this->StudiengangModel->isResultValid() === true)
 	{
 	    return $this->StudiengangModel->result->retval[0];
 	}
@@ -215,7 +215,7 @@ class Messages extends MY_Controller {
     private function _loadOrganisationseinheit($oe_kurzbz)
     {
 	$this->OeModel->getOrganisationseinheit($oe_kurzbz);
-	if($this->OeModel->isResultValid() == true)
+	if($this->OeModel->isResultValid() === true)
 	{
 	    return $this->OeModel->result->retval[0];
 	}
@@ -228,7 +228,7 @@ class Messages extends MY_Controller {
     private function _changeMessageStatus($person_id, $msg)
     {
 	$this->MessageModel->changeMessageStatus($person_id, $msg->message_id, MSG_STATUS_READ);
-	if($this->MessageModel->isResultValid() == true)
+	if($this->MessageModel->isResultValid() === true)
 	{
 	    return $this->MessageModel->result->retval;
 	}

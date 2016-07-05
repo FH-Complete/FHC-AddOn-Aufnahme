@@ -92,7 +92,7 @@ class Send extends MY_Controller {
     private function _loadStudiengang($studiengang_kz)
     {
 	$this->StudiengangModel->getStudiengang($studiengang_kz);
-	if($this->StudiengangModel->isResultValid() == true)
+	if($this->StudiengangModel->isResultValid() === true)
 	{
 	    return $this->StudiengangModel->result->retval[0];
 	}
@@ -105,7 +105,7 @@ class Send extends MY_Controller {
     private function _loadStudienplan($studienplan_id)
     {	
 	$this->StudienplanModel->getStudienplan($studienplan_id);
-	if($this->StudienplanModel->isResultValid() == true)
+	if($this->StudienplanModel->isResultValid() === true)
 	{
 	    return $this->StudienplanModel->result->retval[0];
 	}
@@ -118,7 +118,7 @@ class Send extends MY_Controller {
     private function _loadPrestudent()
     {
 	$this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"]));
-	if($this->PrestudentModel->isResultValid() == true)
+	if($this->PrestudentModel->isResultValid() === true)
 	{
 	    return $this->PrestudentModel->result->retval;
 	}
@@ -131,7 +131,7 @@ class Send extends MY_Controller {
     private function _loadPrestudentStatus($prestudent_id)
     {	
 	$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
-	if($this->PrestudentStatusModel->isResultValid() == true)
+	if($this->PrestudentStatusModel->isResultValid() === true)
 	{
 	    return $this->PrestudentStatusModel->result->retval[0];
 	}
@@ -144,7 +144,7 @@ class Send extends MY_Controller {
     private function _savePrestudentStatus($prestudentStatus)
     {	
 	$this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
-	if($this->PrestudentStatusModel->isResultValid() == true)
+	if($this->PrestudentStatusModel->isResultValid() === true)
 	{
 	    //TODO Daten erfolgreich gespeichert
 	}

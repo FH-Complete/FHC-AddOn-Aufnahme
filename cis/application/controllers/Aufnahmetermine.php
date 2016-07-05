@@ -64,7 +64,10 @@ class Aufnahmetermine extends MY_Controller {
 		$this->_data["reihungstests"][$prestudent->studiengang_kz] = array();
 		foreach($reihungstests as $rt)
 		{
-		    $this->_data["reihungstests"][$prestudent->studiengang_kz][$rt->stufe][] = $rt;
+		    if($rt->stufe <= $prestudent->prestudentStatus->rt_stufe)
+		    {
+			$this->_data["reihungstests"][$prestudent->studiengang_kz][$rt->stufe][] = $rt;
+		    }
 		}
 	    }
         }
@@ -79,12 +82,29 @@ class Aufnahmetermine extends MY_Controller {
 	$this->_data["sprache"] = $this->get_language();
 	
 	var_dump($this->input->post());
+	
+	$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"]);
+	$this->load->view('aufnahmetermine', $this->_data);
+    }
+    
+    private function _registerToReihungstest($person_id, $reihungstest_id)
+    {
+	$this->PrestudentModel->registerToReihungstest($person_id, $reihungstest_id);
+	var_dump($this->PrestudentModel->result);
+	if($this->PrestudentModel->isResultValid() === true)
+	{
+	    
+	}
+	else
+	{
+	    $this->_setError(true, $this->PrestudentModel->getErrorMessage());
+	}
     }
     
     private function _loadNextStudiensemester()
     {
 	$this->StudiensemesterModel->getNextStudiensemester("WS");
-	if($this->StudiensemesterModel->isResultValid() == true)
+	if($this->StudiensemesterModel->isResultValid() === true)
 	{
 	    return $this->StudiensemesterModel->result->retval[0];
 	}
@@ -97,7 +117,7 @@ class Aufnahmetermine extends MY_Controller {
     private function _loadReihungstests($studiengang_kz, $studiensemester_kurzbz=null)
     {
 	$this->ReihungstestModel->getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz);
-	if($this->ReihungstestModel->isResultValid() == true)
+	if($this->ReihungstestModel->isResultValid() === true)
 	{
 	    return $this->ReihungstestModel->result->retval;
 	}

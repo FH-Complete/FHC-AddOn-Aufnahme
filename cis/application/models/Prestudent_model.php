@@ -43,4 +43,22 @@ class Prestudent_model extends MY_Model
 	    return false;
 	}
     }
+    
+    public function registerToReihungstest($person_id, $rt_id)
+    {
+        $data = new stdClass();
+	$data->new = true;
+	$data->person_id = $person_id;
+	$data->rt_id = $rt_id;
+	$data->anmeldedatum = date('Y-m-d');
+	if ($restquery = $this->rest->post('crm/prestudent/addReihungstest', $data))
+	{
+	    $this->result = $restquery;
+	    return true;
+	}
+	else
+	{
+	    return false;
+	}
+    }
 }

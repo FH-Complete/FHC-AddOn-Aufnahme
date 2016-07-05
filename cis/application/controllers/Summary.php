@@ -14,6 +14,8 @@ class Summary extends MY_Controller {
         $this->load->model('kontakt_model', "KontaktModel");
         $this->load->model('prestudentStatus_model', "PrestudentStatusModel");
         $this->load->model('studienplan_model', "StudienplanModel");
+	$this->load->model('dms_model', "DmsModel");
+        $this->load->model('akte_model', "AkteModel");
     }
 
     public function index() {
@@ -51,6 +53,18 @@ class Summary extends MY_Controller {
                 $this->_data["studiengang"]->studienplan = $studienplan;
             }
         }
+	
+	//load dokumente
+        $this->_loadDokumente($this->session->userdata()["person_id"]);
+	
+	foreach($this->_data["dokumente"] as $akte)
+	{
+	    if($akte->dms_id != null)
+	    {
+		$dms = $this->_loadDms($akte->dms_id);
+		$akte->dokument = $dms;
+	    }
+	}
         
         $this->load->view('summary', $this->_data);
     }
@@ -235,4 +249,42 @@ class Summary extends MY_Controller {
 	    $this->_setError(true, $this->StudienplanModel->getErrorMessage());
 	}
     }
+    private function _loadDokumente($person_id, $dokumenttyp_kurzbz=null)
+    {
+        $this->_data["dokumente"] = array();
+        $this->AkteModel->getAkten($person_id, $dokumenttyp_kurzbz);
+        
+        if($this->AkteModel->isResultValid() === true)
+        {
+            foreach($this->AkteModel->result->retval as $akte)
+            {
+                $this->_data["dokumente"][$akte->dokument_kurzbz] = $akte;
+            }
+        }
+	else
+	{
+	    $this->_setError(true, $this->AkteModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadDms($dms_id)
+    {
+        $this->DmsModel->loadDms($dms_id);
+        if($this->DmsModel->isResultValid() === true)
+        {
+            if(count($this->DmsModel->result->retval) == 1)
+	    {
+		return $this->DmsModel->result->retval[0];
+	    }
+	    else
+	    {
+		$this->_setError(true, "Dokument konnte nicht gefunden werden.");
+	    }
+        }
+	else
+	{
+	    $this->_setError(true, $this->DmsModel->getErrorMessage());
+	}
+    }
+    
 }

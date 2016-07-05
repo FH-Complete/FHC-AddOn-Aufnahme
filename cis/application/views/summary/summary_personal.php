@@ -106,11 +106,50 @@
             {
                 echo $this->lang->line("summary_unvollstaendig");
             }
-
-
             ?>
         </div>
     </div>
     <div class="col-sm-6"></div>
+</div>
+
+<div class="personal_documents">
+    <div class="row">
+	<div class="col-sm-6">
+	    <div class="col-sm-6">
+		<?php echo $this->lang->line("summary_pass"); ?>
+	    </div>
+	    <div class="col-sm-5">
+		<div class="form-group">
+		    <?php if(!isset($dokumente["pass"])){
+			echo $this->lang->line('summary_unvollstaendig');
+		     }
+		     else
+		     {
+			 echo $this->lang->line('summary_dokumentVorhanden');
+		     }
+		     ?>
+		</div>
+	    </div>
+	</div>
+    </div>
+    <div class="row">
+	<div class="col-sm-6">
+	    <div class="col-sm-6">
+		<?php echo $this->lang->line("summary_lebenslauf"); ?>
+	    </div>
+	    <div class="col-sm-5">
+		<div class="form-group">
+		    <?php if(!isset($dokumente["Lebenslf"])) {
+			echo $this->lang->line('summary_unvollstaendig');
+		     }
+		     else
+		     {
+			 echo $this->lang->line('summary_dokumentVorhanden');
+		     }
+		     ?>
+		</div>
+	    </div>
+	</div>
+    </div>
 </div>
 </br>
