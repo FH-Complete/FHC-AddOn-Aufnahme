@@ -42,7 +42,7 @@ class MY_Model extends CI_Model {
 	{
 	    if(isset($this->result->error))
 	    {
-		if($this->result->error == 0)
+		if($this->result->error === 0)
 		{
 		    return true;
 		}
@@ -69,11 +69,20 @@ class MY_Model extends CI_Model {
 	    if(isset($this->result->error))
 	    {
 		$msg = "";
-		if(is_string($this->result->retval))
+		if(isset($this->result->retval))
 		{
-		    $msg = $this->result->retval;
+		    if(is_string($this->result->retval))
+		    {
+			$msg = $this->result->retval;
+			return "Error Code: ".$this->result->error."; ".$msg."; ".$this->result->msg;
+		    }
 		}
-		return "Error Code: ".$this->result->error."; ".$msg."; ".$this->result->msg;
+		else
+		{
+		    $msg = $this->result->error;
+		    return "Error: ".$msg;
+		}
+		
 	    }
 	}
 	else

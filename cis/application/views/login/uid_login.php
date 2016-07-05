@@ -22,5 +22,9 @@
 		<button class="btn btn-primary btn-lg" type="submit" name="submit_btn">Login</button>
 	    </span>
 	</div>
+	<?php
+	    if (isset($uid_error_msg))
+		echo '<div class="alert alert-danger" role="alert">'.$uid_error_msg.'</div>';
+	    ?>
     </div>
 </div>

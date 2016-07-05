@@ -15,6 +15,10 @@
 	    <form method="POST" id="lp" class="form-horizontal">
 		<img class="center-block img-responsive" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/logo.png'); ?>" />
 		<h1 class="text-center page-header"><?php echo $this->getPhrase("Home/Greetings", $sprache); ?></h1>
+		<?php
+		    if (isset($error) && ($error->error === true))
+			echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
+		    ?>
 		<div class="panel panel-info">
 		    <div class="panel-heading text-center">
 			<h3 class="panel-title"><?php echo $this->getPhrase("Home/NoAccountOrAccessCode", $sprache); ?></h3>

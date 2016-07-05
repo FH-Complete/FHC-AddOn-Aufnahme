@@ -118,4 +118,11 @@ class MY_Controller extends CI_Controller {
 	    return "please load phrases first";
 	}
     }
+    
+    protected function _setError($bool, $msg)
+    {
+	$this->_data["error"] = new stdClass();
+	$this->_data["error"]->error = $bool;
+	$this->_data["error"]->msg = $msg;
+    }
 }

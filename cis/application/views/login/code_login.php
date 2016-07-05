@@ -14,8 +14,8 @@
 		<p class="text-center"><input class="form-control" type="text" placeholder="Accesscode/Passphrase" name="code" autofocus="autofocus" value="<?php echo $code; ?>"></p>
 	    </div>
 	    <?php
-	    if (isset($wrong_code) && $wrong_code)
-		echo $this->lang->line('login_WrongCode');
+	    if (isset($code_error_msg))
+		echo '<div class="alert alert-danger" role="alert">'.$code_error_msg.'</div>';
 	    ?>
 	    <br>
 	</div>
