@@ -8,6 +8,8 @@ $this->lang->load(array('aufnahme', 'messages'), $language);
 <div class="container">
     <?php
     echo $this->template->widget("menu", array('aktiv' => 'Overview'));
+    if (isset($error) && ($error->error === true))
+	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
     ?>
 
 

@@ -169,7 +169,7 @@ class Messages extends MY_Controller {
 	}
 	else
 	{
-	    var_dump($this->MessageModel->getErrorMessage());
+	    $this->_setError(true, $this->MessageModel->getErrorMessage());
 	}
     }
 
@@ -182,7 +182,7 @@ class Messages extends MY_Controller {
 	}
 	else
 	{
-	    var_dump($this->MessageModel->getErrorMessage());
+	    $this->_setError(true, $this->MessageModel->getErrorMessage());
 	}
     }
     
@@ -195,7 +195,7 @@ class Messages extends MY_Controller {
 	}
 	else
 	{
-	    var_dump($this->PrestudentModel->getErrorMessage());
+	    $this->_setError(true, $this->PrestudentModel->getErrorMessage());
 	}
     }
     
@@ -208,7 +208,7 @@ class Messages extends MY_Controller {
 	}
 	else
 	{
-	    var_dump($this->StudiengangModel->getErrorMessage());
+	    $this->_setError(true, $this->StudiengangModel->getErrorMessage());
 	}
     }
     
@@ -221,7 +221,7 @@ class Messages extends MY_Controller {
 	}
 	else
 	{
-	    var_dump($this->OeModel->getErrorMessage());
+	    $this->_setError(true, $this->OeModel->getErrorMessage());
 	}
     }
     
@@ -234,7 +234,7 @@ class Messages extends MY_Controller {
 	}
 	else
 	{
-	    var_dump($this->MessageModel->getErrorMessage());
+	    $this->_setError(true, $this->MessageModel->getErrorMessage());
 	}
     }
 }

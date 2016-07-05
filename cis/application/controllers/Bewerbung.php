@@ -440,7 +440,7 @@ class Bewerbung extends MY_Controller {
         }
 	else
 	{
-	    $this->_setError(true, $this->PrestudentModel->getErrorMessage());
+	    $this->_setError(true, $this->PrestudentStatusModel->getErrorMessage());
 	}
     }
 

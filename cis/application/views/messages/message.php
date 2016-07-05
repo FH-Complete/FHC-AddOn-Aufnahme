@@ -8,8 +8,6 @@
     </div>
     <div style="width: 100%; height: 400px; border: 1px solid black;">
 	<?php echo $msg->body;
-	
-	var_dump($msg);
 	?>
     </div>
 </div>

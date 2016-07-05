@@ -40,15 +40,12 @@ class Aufnahmetermine extends MY_Controller {
         
         //load studiensemester
         $this->_data["studiensemester"] = $this->_loadNextStudiensemester();
-        
-        //load studiengaenge
-        //$this->_loadStudiengaenge();
 	
 	//load person data
-        $this->_loadPerson();
+        $this->_data["person"] = $this->_loadPerson();
 	
 	//load preinteressent data
-        $this->_loadPrestudent();
+        $this->_data["prestudent"] = $this->_loadPrestudent();
 	
 	$this->_data["studiengaenge"] = array();
 	$this->_data["reihungstests"] = array();
@@ -93,7 +90,7 @@ class Aufnahmetermine extends MY_Controller {
 	}
 	else
 	{
-	    var_dump($this->StudiensemesterModel->getErrorMessage());
+	    $this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
 	}
     }
     
@@ -106,43 +103,47 @@ class Aufnahmetermine extends MY_Controller {
 	}
 	else
 	{
-	    var_dump($this->ReihungstestModel->getErrorMessage());
+	    $this->_setError(true, $this->ReihungstestModel->getErrorMessage());
 	}
     }
     
     private function _loadPerson()
     {
-        if($this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"])))
+	$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
+        if($this->PersonModel->isResultValid() === true)
         {
-            if(($this->PersonModel->result->error == 0) && (count($this->PersonModel->result->retval) == 1))
+            if(count($this->PersonModel->result->retval) == 1)
             {
-                $this->_data["person"] = $this->PersonModel->result->retval[0];
+                return $this->PersonModel->result->retval[0];
             }
 	    else
 	    {
-		var_dump($this->PersonModel->result);
+		return $this->PersonModel->result->retval;
 	    }
         }
+	else
+	{
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
+	}
     }
     
     private function _loadPrestudent()
     {
-        if($this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"])))
+	$this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"]));
+        if($this->PrestudentModel->isResultValid() === true)
         {
-            if($this->PrestudentModel->result->error == 0)
-            {
-                $this->_data["prestudent"] = $this->PrestudentModel->result->retval;        
-            }
-	    else
-	    {
-		var_dump($this->PrestudentModel->result);
-	    }
+	    return $this->PrestudentModel->result->retval;        
         }
+	else
+	{
+	    $this->_setError(true, $this->PrestudentModel->getErrorMessage());
+	}
     }
     
     private function _loadPrestudentStatus($prestudent_id)
     {
-        if($this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent")))
+	$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
+        if($this->PrestudentStatusModel->isResultValid() === true)
         {
             if(($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
             {
@@ -150,9 +151,13 @@ class Aufnahmetermine extends MY_Controller {
             }
 	    else
 	    {
-		var_dump($this->PrestudentStatusModel->result);
+		return $this->PrestudentStatusModel->result->retval;
 	    }
         }
+	else
+	{
+	    $this->_setError(true, $this->PrestudentStatusModel->getErrorMessage());
+	}
     }
     
     private function _loadStudiengang($stgkz = null)
@@ -161,33 +166,42 @@ class Aufnahmetermine extends MY_Controller {
         {
             $stgkz = $this->_data["prestudent"][0]->studiengang_kz;
         }
-        if($this->StudiengangModel->getStudiengang($stgkz))
+	
+	$this->StudiengangModel->getStudiengang($stgkz);
+        if($this->StudiengangModel->isResultValid() === true)
         {
-            if(($this->StudiengangModel->result->error == 0) && (count($this->StudiengangModel->result->retval) == 1))
+            if(count($this->StudiengangModel->result->retval) == 1)
             {
                 return $this->StudiengangModel->result->retval[0];
             }
             else
             {
-                //TODO Daten konnten nicht geladen werden
-		var_dump($this->StudiengangModel->result);
+                return $this->StudiengangModel->result->retval;
             }
         }
+	else
+	{
+	    $this->_setError(true, $this->StudiengangModel->getErrorMessage());
+	}
     }
     
     private function _loadStudienplan($studienplan_id)
     {
-        if($this->StudienplanModel->getStudienplan($studienplan_id))
+	$this->StudienplanModel->getStudienplan($studienplan_id);
+        if($this->StudienplanModel->isResultValid() === true)
         {
-            if(($this->StudienplanModel->result->error == 0) && (count($this->StudienplanModel->result->retval) == 1))
+            if(count($this->StudienplanModel->result->retval) == 1)
             {
                 return $this->StudienplanModel->result->retval[0];
             }
             else
             {
-                //TODO Daten konnten nicht geladen werden
-		var_dump($this->StudienplanModel->result);
+               return $this->StudienplanModel->result->retval;
             }
         }
+	else
+	{
+	    $this->_setError(true, $this->StudienplanModel->getErrorMessage());
+	}
     }
 }
