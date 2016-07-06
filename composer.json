@@ -25,6 +25,7 @@
   "require": 
   {
     "php": ">=5.4.0",
+	"codeigniter/framework":"3.*",    
     "components/bootstrap":"*",
     "components/jquery": "*",
     "components/font-awesome": "*",
