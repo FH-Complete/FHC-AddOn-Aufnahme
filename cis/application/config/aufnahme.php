@@ -23,6 +23,16 @@ $config['theme'] = 'fhstp';
 
 /*
 |--------------------------------------------------------------------------
+| Phrases
+|--------------------------------------------------------------------------
+|
+| If set to true, phrases will be fetched on login and stored in session.
+|
+*/
+$config['store_phrases_in_session'] = false;
+
+/*
+|--------------------------------------------------------------------------
 | FHC-Models
 |--------------------------------------------------------------------------
 |
@@ -36,7 +46,7 @@ $config['fhc_models'] = '../../../../../application/models/';
 | FHC-Core API
 |--------------------------------------------------------------------------
 |
-| URL to the FHC-Core API 
+| URL to the FHC-Core API
 |
 */
 $config['fhc_api'] = array(

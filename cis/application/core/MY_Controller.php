@@ -13,7 +13,7 @@ class MY_Controller extends CI_Controller {
         $this->load->config('aufnahme');
         $this->load->helper('url');
         $this->load->library('session');
-	$this->load->model("phrase_model", "PhraseModel");
+        $this->load->model("phrase_model", "PhraseModel");
         //$this->load->spark('restclient/2.1.0');
         $this->_data['language'] = $this->get_language();
     }
@@ -30,7 +30,7 @@ class MY_Controller extends CI_Controller {
             return $this->input->get('language');
         }
     }
-    
+
     public function checkLogin()
     {
         if(is_null($this->session->person_id))
@@ -41,12 +41,12 @@ class MY_Controller extends CI_Controller {
 
     protected function _loadLanguage($sprache)
     {
-	if((is_null($this->session->phrasen)) || (empty($this->session->phrasen)))
+	if(((is_null($this->session->phrasen)) || (empty($this->session->phrasen))) || (!$this->config->item('store_phrases_in_session')))
         {
             $this->_getPhrasen($sprache);
         }
     }
-    
+
     private function _getPhrasen($language)
     {
 	$this->PhraseModel->getPhrasen(ucfirst($language));
@@ -62,7 +62,7 @@ class MY_Controller extends CI_Controller {
 	    var_dump($this->PhraseModel->getErrorMessage());
 	}
     }
-    
+
     protected function getPhrase($phrase, $sprache, $oe_kurzbz="", $orgform_kurzbz="")
     {
 	if(isset($this->session->userdata()["phrasen"]))
@@ -82,7 +82,7 @@ class MY_Controller extends CI_Controller {
 		    }
 		}
 	    }
-	    
+
 	    foreach($phrasen as $p)
 	    {
 		if(($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz))
@@ -97,7 +97,7 @@ class MY_Controller extends CI_Controller {
 		    }
 		}
 	    }
-	    
+
 	    foreach($phrasen as $p)
 	    {
 		if(($p->phrase == $phrase))
@@ -118,7 +118,7 @@ class MY_Controller extends CI_Controller {
 	    return "please load phrases first";
 	}
     }
-    
+
     protected function _setError($bool, $msg)
     {
 	$this->_data["error"] = new stdClass();
