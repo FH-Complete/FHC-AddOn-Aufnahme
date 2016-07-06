@@ -30,8 +30,8 @@ class Bewerbung extends MY_Controller {
         
         $this->_data['title'] = 'Personendaten';
         
-        $this->StudiensemesterModel->getNextStudiensemester("WS");
-        $this->session->set_userdata("studiensemester_kurzbz", $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz);
+        //$this->StudiensemesterModel->getNextStudiensemester("WS");
+        $this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
         
         //load person data
         $this->_data["person"] = $this->_loadPerson();
@@ -47,10 +47,16 @@ class Bewerbung extends MY_Controller {
         {
             //load studiengaenge der prestudenten
             $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+	    
             $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-            $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-            $studiengang->studienplan = $studienplan;
-            array_push($this->_data["studiengaenge"], $studiengang);
+	    //TODO check if empty array
+	    
+	    if(!empty($prestudent->prestudentStatus))
+	    {
+		$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+		$studiengang->studienplan = $studienplan;
+		array_push($this->_data["studiengaenge"], $studiengang);
+	    }
         }
         
         if(count($this->_data["studiengaenge"]) == 0)
@@ -306,8 +312,8 @@ class Bewerbung extends MY_Controller {
         
         $this->session->set_userdata("studiengang_kz", $studiengang_kz);
         
-        $this->StudiensemesterModel->getNextStudiensemester("WS");
-        $this->session->set_userdata("studiensemester_kurzbz", $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz);
+        //$this->StudiensemesterModel->getNextStudiensemester("WS");
+        $this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
         
         //load person data
         $this->_data["person"] = $this->_loadPerson();
@@ -708,6 +714,19 @@ class Bewerbung extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->GemeindeModel->getErrorMessage());
+	}
+    }
+    
+    private function _getNextStudiensemester($art)
+    {
+	$this->StudiensemesterModel->getNextStudiensemester($art);
+	if($this->StudiensemesterModel->isResultValid() === true)
+	{
+	    return $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz;
+	}
+	else
+	{
+	    $this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
 	}
     }
 }

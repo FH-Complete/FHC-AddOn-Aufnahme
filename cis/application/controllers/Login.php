@@ -67,8 +67,8 @@ class Login extends MY_Controller {
 
     private function code_login($code, &$data, $email = null)
     {
-        $this->StudiensemesterModel->getNextStudiensemester("WS");
-        $this->session->set_userdata("studiensemester_kurzbz", $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz);   
+        //$this->StudiensemesterModel->getNextStudiensemester("WS");
+	$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
         
         $this->person_model->getPersonFromCode($code, $email);
         if(($this->person_model->result->error == 0) && (count($this->person_model->result->retval) == 1))
@@ -87,9 +87,13 @@ class Login extends MY_Controller {
 			//load studiengaenge der prestudenten
 			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
 			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-			$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-			$studiengang->studienplan = $studienplan;
-			array_push($this->_data["studiengaenge"], $studiengang);
+
+			if(!empty($prestudent->prestudentStatus))
+			{
+			    $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+			    $studiengang->studienplan = $studienplan;
+			    array_push($this->_data["studiengaenge"], $studiengang);
+			}
 		    }
 
 		    if(isset($this->_data["studiengang_kz"]))
@@ -133,8 +137,8 @@ class Login extends MY_Controller {
 	    $this->BenutzerModel->getBenutzer($username);
 	    if($this->BenutzerModel->result->error == 0)
 	    {
-		$this->StudiensemesterModel->getNextStudiensemester("WS");
-		$this->session->set_userdata("studiensemester_kurzbz", $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz);
+		//$this->StudiensemesterModel->getNextStudiensemester("WS");
+		$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
 		
 		$this->person_model->getPersonen($this->BenutzerModel->result->retval[0]->person_id);
 		if(($this->person_model->result->error == 0) && (count($this->person_model->result->retval) == 1))
@@ -155,9 +159,13 @@ class Login extends MY_Controller {
 				//load studiengaenge der prestudenten
 				$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
 				$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-				$studiengang->studienplan = $studienplan;
-				array_push($this->_data["studiengaenge"], $studiengang);
+			
+				if(!empty($prestudent->prestudentStatus))
+				{
+				    $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+				    $studiengang->studienplan = $studienplan;
+				    array_push($this->_data["studiengaenge"], $studiengang);
+				}
 			    }
 
 			    if(isset($this->_data["studiengang_kz"]))
@@ -279,6 +287,19 @@ class Login extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->StudienplanModel->getErrorMessage());
+	}
+    }
+    
+    private function _getNextStudiensemester($art)
+    {
+	$this->StudiensemesterModel->getNextStudiensemester($art);
+	if($this->StudiensemesterModel->isResultValid() === true)
+	{
+	    return $this->StudiensemesterModel->result->retval[0]->studiensemester_kurzbz;
+	}
+	else
+	{
+	    $this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
 	}
     }
 }

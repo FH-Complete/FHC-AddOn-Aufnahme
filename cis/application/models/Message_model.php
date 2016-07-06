@@ -30,7 +30,7 @@ class Message_model extends MY_Model
 	    return false;
     }
     
-    public function sendMessageVorlage($sender_id, $receiver_id, $vorlage_kurzbz, $oe_kurzbz, $data, $orgform_kurzbz=null)
+    public function sendMessageVorlage($sender_id, $receiver_id, $vorlage_kurzbz, $oe_kurzbz, $data, $orgform_kurzbz = null)
     {
 	$message = array(
 	    "sender_id" => $sender_id,
@@ -38,8 +38,10 @@ class Message_model extends MY_Model
 	    "vorlage_kurzbz" => $vorlage_kurzbz,
 	    "oe_kurzbz" => $oe_kurzbz,
 	    "data" => $data,
-	    "orgform_kurzbz" => (is_null($orgform_kurzbz)) ? "" : $orgform_kurzbz
+	    "orgform_kurzbz" => $orgform_kurzbz,
+	    "relationmessage_id" => null
 	);
+	
 	if ($restquery = $this->rest->post('system/message/messageVorlage', $message))
 	{
 	    $this->result = $restquery;
