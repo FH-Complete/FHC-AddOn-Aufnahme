@@ -2,6 +2,7 @@
 $this->load->view('templates/header');
 //$this->load->view('menu', 'person');
 $this->lang->load(array('aufnahme', 'messages'), $language);
+$this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
 ?>
 
 

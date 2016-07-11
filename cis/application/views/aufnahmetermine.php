@@ -1,6 +1,7 @@
 <?php
 $this->load->view('templates/header');
 $this->lang->load(array('aufnahme', 'termine'), $language);
+$this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
 // This is an example to show that you can load stuff from inside the template file
 echo $this->template->widget("menu", array('aktiv' => 'Aufnahmetermine'));
 

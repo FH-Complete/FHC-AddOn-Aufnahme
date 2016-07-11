@@ -1,6 +1,7 @@
 <?php
 $this->load->view('templates/header');
 $this->lang->load(array('aufnahme', 'studiengaenge'), $language);
+$this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
 ?>
 
 <div class="container">

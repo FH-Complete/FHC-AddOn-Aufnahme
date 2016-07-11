@@ -8,12 +8,16 @@ class Studiengaenge extends MY_Controller {
         $this->load->model('studienplan_model', "StudienplanModel");
         $this->load->model('studiensemester_model', 'StudiensemesterModel');
         $this->load->model('organisationsform_model', 'OrgformModel');
+	$this->load->model('person_model', 'PersonModel');
         $this->lang->load('studiengaenge', $this->get_language());
     }
 
     public function index() 
     {
         $this->checkLogin();
+	
+	//load person data
+        $this->_data["person"] = $this->_loadPerson();
         
         if(isset($this->input->get()["studiengang_kz"]))
         {
@@ -68,4 +72,25 @@ class Studiengaenge extends MY_Controller {
             //TODO studiensemester not found
         }
     }
+    
+    private function _loadPerson()
+    {
+	$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
+        if($this->PersonModel->isResultValid() === true)
+        {
+            if(count($this->PersonModel->result->retval) == 1)
+            {
+                return $this->PersonModel->result->retval[0];
+            }
+	    else
+	    {
+		return $this->PersonModel->result->retval;
+	    }
+        }
+	else
+	{
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
+	}
+    }
+    
 }
