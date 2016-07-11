@@ -268,6 +268,13 @@
 		 }
                  ?>
             </div>
+	    <div class="checkbox">
+		<label>
+		    <?php echo form_checkbox(array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente["pass"]) && ($dokumente["pass"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id));
+			echo $this->lang->line('person_formNachgereicht')
+		    ?>			
+		</label>
+	    </div>
         </div>
         <div class="col-sm-">
             <div class="form-group">
@@ -291,6 +298,13 @@
 		 }
                  ?>
             </div>
+	    <div class="checkbox">
+		<label>
+		    <?php echo form_checkbox(array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente["Lebenslf"]) && ($dokumente["pass"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id));
+			echo $this->lang->line('person_formNachgereicht')
+		    ?>			
+		</label>
+	    </div>
         </div>
         <div class="col-sm-5">
             <div class="form-group">

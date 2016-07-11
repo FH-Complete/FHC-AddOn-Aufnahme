@@ -85,7 +85,7 @@ class Messages extends MY_Controller {
 	else
 	{
 	    $relationMessage_id = null;
-	    if(isset($this->input->post()["msg_relationMessage_id"]))
+	    if(isset($this->input->post()["msg_relationMessage_id"]) && ($this->input->post()["msg_relationMessage_id"] !== ""))
 	    {
 		$relationMessage_id = $this->input->post()["msg_relationMessage_id"];
 	    }
@@ -103,6 +103,9 @@ class Messages extends MY_Controller {
     
     public function viewMessage($messageId)
     {
+	$this->checkLogin();
+	$this->_loadData();
+	
 	//TODO set status to read
 	$this->_data["messages"] = $this->_getMessages($this->session->userdata()["person_id"]);
 	
@@ -120,9 +123,6 @@ class Messages extends MY_Controller {
 	    $this->_data["view"] = "message";
 	    $this->load->view('messages', $this->_data);
 	}
-	
-	
-	
     }
     
     private function _loadData()

@@ -125,6 +125,8 @@ class Bewerbung extends MY_Controller {
                     if(is_uploaded_file($file["tmp_name"]))
                     {
                         $obj = new stdClass();
+			$akte = new stdClass();
+			
                         $obj->version = 0;
                         $obj->mimetype = $file["type"];
                         $obj->name = $file["name"];
@@ -134,9 +136,17 @@ class Bewerbung extends MY_Controller {
                         {
                             case "reisepass":
                                 $obj->dokument_kurzbz = "pass";
+				if(isset($post["reisepass_nachgereicht"]))
+				{
+				    $akte->nachgereicht = true;
+				}
                                 break;                        
                             case "lebenslauf":
                                 $obj->dokument_kurzbz = "Lebenslf";
+				if(isset($post["lebenslauf_nachgereicht"]))
+				{
+				    $akte->nachgereicht = true;
+				}
                                 break;
                             default:
                                 $obj->dokument_kurzbz = "Sonst";
@@ -162,7 +172,7 @@ class Bewerbung extends MY_Controller {
 
                         if($this->DmsModel->result->error == 0)
                         {
-                            $akte = new stdClass();
+                            
                             $akte->dms_id = $this->DmsModel->result->retval;
                             $akte->person_id = $this->_data["person"]->person_id;
                             $akte->mimetype = $file["type"];

@@ -2,13 +2,15 @@
 $this->load->view('templates/header');
 $this->lang->load(array('aufnahme', 'person'), $language);
 $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
-echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
 
 if (isset($error) && ($error->error === true))
     echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
 ?>
 <div class="container">
-    <?php foreach($studiengaenge as $studiengang){ 
+    <?php
+    echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
+    
+    foreach($studiengaenge as $studiengang){ 
         $data["studiengang"] = $studiengang;
         
         ?>
