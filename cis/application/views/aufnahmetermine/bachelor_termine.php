@@ -5,7 +5,7 @@ foreach ($studiengaenge as $stg)
         {
         
         ?>
-<a data-toggle='collapse' data-target='#<?php echo $stg->studiengang_kz; ?>'><h3>Bachelor / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplan->orgform_kurzbz; ?>)</h3></a>
+<a class="collapsed" data-toggle='collapse' data-target='#<?php echo $stg->studiengang_kz; ?>'><h3>Bachelor / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplan->orgform_kurzbz; ?>)</h3></a>
         <div id="<?php echo $stg->studiengang_kz; ?>" class='collapse'>
             <div class="row">
                 <div class="col-sm-12">
@@ -20,7 +20,7 @@ foreach ($studiengaenge as $stg)
 		    if(!empty($reihungstests[$stg->studiengang_kz][1]))
 		    {
 		    ?>
-                    <select name="rtTermin">
+                    <select class="rtTermin" name="rtTermin">
 			<?php
 			
 			foreach($reihungstests[$stg->studiengang_kz][1] as $rt) 
@@ -60,7 +60,7 @@ foreach ($studiengaenge as $stg)
 		    if(!empty($reihungstests[$stg->studiengang_kz][2]))
 		    {
 		    ?>
-                    <select name="rtTermin">
+                    <select  class="rtTermin" name="rtTermin">
 			<?php
 			
 			foreach($reihungstests[$stg->studiengang_kz][2] as $rt) 

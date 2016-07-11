@@ -1,5 +1,5 @@
 <div role="tabpanel" class="tab-pane" id="send">
-    <h1><?php echo $this->lang->line("send_header"); ?></h1>
+    <h1 id="sendHeader"><?php echo $this->lang->line("send_header"); ?></h1>
     <!--<fieldset><?php echo $this->lang->line("send_einleitung").'!'; ?></fieldset>-->
     <fieldset><?php echo $this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);?></fieldset>
     <?php echo $studiengang->bezeichnung; ?></br>

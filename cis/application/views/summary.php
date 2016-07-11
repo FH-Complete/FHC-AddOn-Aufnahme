@@ -32,7 +32,7 @@ if (isset($error) && ($error->error === true))
         </div>
         <div class="col-sm-8">
             <div role="tabpanel" class="tab-pane" id="summary">
-                <h1><?php echo $this->lang->line("summary_header"); ?></h1>
+                <h1 id="summaryHeader"><?php echo $this->lang->line("summary_header"); ?></h1>
                 <?php $this->load_views('view_summary'); ?>
             </div>
         </div>

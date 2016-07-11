@@ -1,4 +1,4 @@
-<h2><?php echo $this->lang->line('studiengaenge/bachelor'); ?></h2>
+<h2 class="bachelor_header"><?php echo $this->lang->line('studiengaenge/bachelor'); ?></h2>
 
 <?php
 foreach ($studiengaenge as $stg) 
@@ -9,7 +9,7 @@ foreach ($studiengaenge as $stg)
         foreach($stg->studienplaene as $studienplan)
         {
         ?>
-        <a data-toggle='collapse' data-target='#<?php echo $stg->studiengang_kz; ?>'><?php echo $stg->studiengangbezeichnung ?> (<?php echo $studienplan->orgform_kurzbz; ?>)</a></br>
+        <a class="collapsed" data-toggle='collapse' data-target='#<?php echo $stg->studiengang_kz; ?>'><?php echo $stg->studiengangbezeichnung ?> (<?php echo $studienplan->orgform_kurzbz; ?>)</a></br>
         <div id="<?php echo $stg->studiengang_kz; ?>" class='collapse'>
             <div class="row">
                 <div class="col-sm-3 col-sm-offset-2"><?php echo $this->lang->line('studiengaenge/abschluss') ?>: </div><div class="col-sm-6">Bachelor of Science in Engineering (BSc)</div>
