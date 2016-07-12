@@ -255,6 +255,7 @@ class Bewerbung extends MY_Controller {
 	    $person->staatsbuergerschaft = $post["staatsbuergerschaft"];
 	    $person->svnr = $post["svnr"];
 	    $person->titelpre = $post["titelpre"];
+	    $person->titelpost = $post["titelpost"];
 	    
 	    $adresse = new stdClass();
 	    if($post["adresse_nation"] === "A")

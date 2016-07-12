@@ -202,6 +202,7 @@ class Registration extends MY_Controller {
         $person->vornamen = "";
 	$person->aktiv = "t";
 	$person->geschlecht = "u";
+	$person->sprache = ucfirst($this->_data["sprache"]);
 
 	$bewerbung = $this->_checkBewerbung($this->_data["email"]);
 
@@ -365,7 +366,9 @@ class Registration extends MY_Controller {
     else
         $oe = 'fhstp';
 
-	$this->MessageModel->sendMessageVorlage(1, $person->person_id, "MailRegistration", $oe, $data, $orgform_kurzbz=null);
+	(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
+	
+	$this->MessageModel->sendMessageVorlage(1, $person->person_id, "MailRegistration", $oe, $data, $sprache, $orgform_kurzbz=null);
 
 	if($this->MessageModel->isResultValid() === true)
 	{

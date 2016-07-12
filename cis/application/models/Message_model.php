@@ -30,7 +30,7 @@ class Message_model extends MY_Model
 	    return false;
     }
     
-    public function sendMessageVorlage($sender_id, $receiver_id, $vorlage_kurzbz, $oe_kurzbz, $data, $orgform_kurzbz = null)
+    public function sendMessageVorlage($sender_id, $receiver_id, $vorlage_kurzbz, $oe_kurzbz, $data, $sprache, $orgform_kurzbz = null)
     {
 	$message = array(
 	    "sender_id" => $sender_id,
@@ -38,6 +38,7 @@ class Message_model extends MY_Model
 	    "vorlage_kurzbz" => $vorlage_kurzbz,
 	    "oe_kurzbz" => $oe_kurzbz,
 	    "data" => $data,
+	    "sprache" => ucfirst($sprache),
 	    "orgform_kurzbz" => $orgform_kurzbz,
 	    "relationmessage_id" => null
 	);
