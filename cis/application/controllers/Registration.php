@@ -374,7 +374,7 @@ class Registration extends MY_Controller {
 
 	(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
 	
-	$this->MessageModel->sendMessageVorlage(1, $person->person_id, "MailRegistration", $oe, $data, $sprache, $orgform_kurzbz=null);
+	$this->MessageModel->sendMessageVorlage(1, $person->person_id, "MailRegistrationConfirmation", $oe, $data, $sprache, $orgform_kurzbz=null);
 
 	if($this->MessageModel->isResultValid() === true)
 	{
