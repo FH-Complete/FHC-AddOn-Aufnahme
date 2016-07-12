@@ -26,8 +26,9 @@ class Studiengaenge extends MY_Controller {
         
         $this->_data['title'] = 'Overview';
         $this->_data['sprache'] = $this->get_language();
-        
-        $this->StudiensemesterModel->getNextStudiensemester("WS");
+	
+	
+	
         $this->OrgformModel->getAll();
         
         if($this->OrgformModel->result->error == 0)
@@ -39,9 +40,11 @@ class Studiengaenge extends MY_Controller {
             //TODO error while loading orgform
         }
         
+	$studiensemester = $this->_getNextStudiensemester("WS");
+	
         if(($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
         {
-            $this->_data["studiensemester"] = $this->StudiensemesterModel->result->retval[0];
+            $this->_data["studiensemester"] = $studiensemester;
             $this->studiengang_model->getAll();
         
             if($this->studiengang_model->result->error == 0)
@@ -94,6 +97,19 @@ class Studiengaenge extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->PersonModel->getErrorMessage());
+	}
+    }
+    
+    private function _getNextStudiensemester($art)
+    {
+	$this->StudiensemesterModel->getNextStudiensemester($art);
+	if($this->StudiensemesterModel->isResultValid() === true)
+	{
+	    return $this->StudiensemesterModel->result->retval[0];
+	}
+	else
+	{
+	    $this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
 	}
     }
     
