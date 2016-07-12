@@ -58,6 +58,10 @@ class Studiengaenge extends MY_Controller {
                     {
                         $studiengang->studienplaene = $this->StudienplanModel->result->retval;
                     }
+		    else
+		    {
+			$this->_setError(true, $this->StudienplanModel->getErrorMessage());
+		    }
                 }
                 $this->_data["studiengaenge"] = $this->studiengang_model->result->retval;
             }

@@ -19,14 +19,23 @@ class MY_Controller extends CI_Controller {
     }
 
     public function get_language() {
-        if (is_null($this->input->get('language'))) {
-            if (is_null($this->session->sprache)) {
+        if (is_null($this->input->get('language')))
+	{
+            if (is_null($this->session->sprache))
+	    {
+		$this->_getPhrasen(ucfirst($this->config->item('default_language')));
                 return $this->config->item('default_language');
-            } else
+            }
+	    else
+	    {
+		$this->_getPhrasen(ucfirst($this->session->language));
                 return $this->session->language;
+	    }
         }
-        else {
+        else
+	{
             $this->session->language = $this->input->get('language');
+	    $this->_getPhrasen(ucfirst($this->session->language));
             return $this->input->get('language');
         }
     }

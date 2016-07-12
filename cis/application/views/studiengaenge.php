@@ -7,7 +7,8 @@ $this->lang->load(array('aufnahme', 'studiengaenge'), $language);
     <?php
     $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
     echo $this->template->widget("menu", array('aktiv' => 'Studiengänge'));
-//    $this->load->view('language');
+    if (isset($error) && ($error->error === true))
+	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
     ?>
 
     <?php $this->load_views('view_studiengaenge'); ?>

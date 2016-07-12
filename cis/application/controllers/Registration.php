@@ -43,6 +43,12 @@ class Registration extends MY_Controller {
             "zugangscode" => $this->input->post("zugangscode")
         );
 
+	if(isset($this->input->get()["language"]))
+	{
+	    $this->lang->load('aufnahme', $this->_data["sprache"]);
+	    $this->_data["sprache"] = $this->get_language();
+	}
+	
         //form validation rules
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
         $this->form_validation->set_rules("vorname", "Vorname", "required|max_length[32]");
