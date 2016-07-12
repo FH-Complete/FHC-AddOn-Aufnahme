@@ -5,7 +5,7 @@ foreach ($studiengaenge as $stg)
         {
         
         ?>
-<a data-toggle='collapse' data-target='#<?php echo $stg->studiengang_kz; ?>'><h3>Master / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplan->orgform_kurzbz; ?>)</h3></a>
+<a class="collapsed" data-toggle='collapse' data-target='#<?php echo $stg->studiengang_kz; ?>'><h3>Master / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplan->orgform_kurzbz; ?>)</h3></a>
         <div id="<?php echo $stg->studiengang_kz; ?>" class='collapse'>
             <div class="row">
                 <div class="col-sm-12">

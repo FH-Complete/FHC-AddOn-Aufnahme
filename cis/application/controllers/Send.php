@@ -9,7 +9,7 @@ class Send extends MY_Controller {
         $this->load->model('studienplan_model', "StudienplanModel");
         $this->load->model('prestudent_model', "PrestudentModel");
         $this->load->model('prestudentStatus_model', "PrestudentStatusModel");
-        
+        $this->load->model('person_model', 'PersonModel');
         $this->load->helper("form");
         $this->load->library("form_validation");
     }
@@ -20,7 +20,10 @@ class Send extends MY_Controller {
 	$this->_loadLanguage($this->_data["sprache"]);
         
         if(isset($this->input->get()["studiengang_kz"]))
-        {           
+        {   
+	    //load person data
+	    $this->_data["person"] = $this->_loadPerson();
+	    
             //load studiengang
             $this->_data["studiengang"] = $this->_loadStudiengang($this->input->get()["studiengang_kz"]);
 	    
@@ -53,6 +56,9 @@ class Send extends MY_Controller {
     {
         $this->checkLogin();
         $this->_data['sprache'] = $this->get_language();
+	
+	//load person data
+        $this->_data["person"] = $this->_loadPerson();
         
         //load studiengang
         $this->_data["studiengang"] = $this->_loadStudiengang($studiengang_kz);
@@ -151,6 +157,26 @@ class Send extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->PrestudentStatusModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadPerson()
+    {
+	$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
+        if($this->PersonModel->isResultValid() === true)
+        {
+            if(count($this->PersonModel->result->retval) == 1)
+            {
+                return $this->PersonModel->result->retval[0];
+            }
+	    else
+	    {
+		return $this->PersonModel->result->retval;
+	    }
+        }
+	else
+	{
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
 }

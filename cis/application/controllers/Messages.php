@@ -8,6 +8,7 @@ class Messages extends MY_Controller {
 	$this->load->model('prestudent_model', "PrestudentModel");
 	$this->load->model('studiengang_model', "StudiengangModel");
 	$this->load->model('oe_model', 'OeModel');
+	$this->load->model('person_model', 'PersonModel');
 	$this->load->helper("form");
 	$this->load->library("form_validation");
 	$this->config->load('message');
@@ -84,7 +85,7 @@ class Messages extends MY_Controller {
 	else
 	{
 	    $relationMessage_id = null;
-	    if(isset($this->input->post()["msg_relationMessage_id"]))
+	    if(isset($this->input->post()["msg_relationMessage_id"]) && ($this->input->post()["msg_relationMessage_id"] !== ""))
 	    {
 		$relationMessage_id = $this->input->post()["msg_relationMessage_id"];
 	    }
@@ -102,6 +103,9 @@ class Messages extends MY_Controller {
     
     public function viewMessage($messageId)
     {
+	$this->checkLogin();
+	$this->_loadData();
+	
 	//TODO set status to read
 	$this->_data["messages"] = $this->_getMessages($this->session->userdata()["person_id"]);
 	
@@ -119,13 +123,13 @@ class Messages extends MY_Controller {
 	    $this->_data["view"] = "message";
 	    $this->load->view('messages', $this->_data);
 	}
-	
-	
-	
     }
     
     private function _loadData()
     {
+	//load person data
+        $this->_data["person"] = $this->_loadPerson();
+	
 	$this->_data["prestudent"] = $this->_loadPrestudent($this->session->userdata()["person_id"]);
 	
 	$this->_data["studiengaenge"] = array();
@@ -237,4 +241,25 @@ class Messages extends MY_Controller {
 	    $this->_setError(true, $this->MessageModel->getErrorMessage());
 	}
     }
+    
+    private function _loadPerson()
+    {
+	$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
+        if($this->PersonModel->isResultValid() === true)
+        {
+            if(count($this->PersonModel->result->retval) == 1)
+            {
+                return $this->PersonModel->result->retval[0];
+            }
+	    else
+	    {
+		return $this->PersonModel->result->retval;
+	    }
+        }
+	else
+	{
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
+	}
+    }
+    
 }

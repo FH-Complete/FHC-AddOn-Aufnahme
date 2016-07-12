@@ -1,5 +1,5 @@
 <div>
-    <h1><?php echo $title; ?></h1>
+    <h1 class="message_title"><?php echo $title; ?></h1>
     <a href="<?php echo base_url($this->config->config["index_page"].'/Messages/newMessage'); ?>">
 	<a href="<?php echo base_url($this->config->config["index_page"]."/Messages/newMessage"); ?>">
 	    <button class="answer">

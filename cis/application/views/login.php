@@ -14,7 +14,7 @@
 	<div class="col-sm-8 col-sm-offset-2">
 	    <form method="POST" id="lp" class="form-horizontal">
 		<img class="center-block img-responsive" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/logo.png'); ?>" />
-		<h1 class="text-center page-header"><?php echo $this->getPhrase("Home/Greetings", $sprache); ?></h1>
+		<h1 id="login_header" class="text-center page-header"><?php echo $this->getPhrase("Home/Greetings", $sprache); ?></h1>
 		<?php
 		    if (isset($error) && ($error->error === true))
 			echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';

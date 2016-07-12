@@ -42,7 +42,7 @@ class Registration extends MY_Controller {
             "captcha_code" => $this->input->post("captcha_code"),
             "zugangscode" => $this->input->post("zugangscode")
         );
-        
+
         //form validation rules
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
         $this->form_validation->set_rules("vorname", "Vorname", "required|max_length[32]");
@@ -50,7 +50,7 @@ class Registration extends MY_Controller {
         $this->form_validation->set_rules("geb_datum", "Geburtsdatum", "required");
         $this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
         $this->form_validation->set_rules("email2", "E-Mail", "required|valid_email|callback_check_email");
-        //TODO		
+        //TODO
         //$this->form_validation->set_rules("captcha_code", "Captcha", "required|max_length[6]|callback_check_captcha");
 
 
@@ -128,11 +128,11 @@ class Registration extends MY_Controller {
     }
 
     public function confirm()
-    {    
+    {
          $this->_data = array(
             "sprache" => $this->get_language()
         );
-         
+
          if(isset($this->input->get()["studiengang_kz"]))
          {
              $this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
@@ -144,7 +144,7 @@ class Registration extends MY_Controller {
             $person_id = $result[0]->person_id;
              $this->_data["zugangscode"] = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
 
-            if ($this->Kontakt_model->getKontakt($person_id)) 
+            if ($this->Kontakt_model->getKontakt($person_id))
 	    {
                 $this->_data["email"] = $this->Kontakt_model->result->retval[0]->kontakt;
                 $person = new stdClass();
@@ -234,11 +234,11 @@ class Registration extends MY_Controller {
 		    {
                         //$message = $this->sendMail($zugangscode, $data["email"], $person_id, $data["studiengang_kz"]);
 			$this->_data["person"] = $this->_getPerson($person_id);
-			
+
 			if($this->PersonModel->isResultValid() === true)
 			{
 			    $this->_sendMessageVorlage($this->_data["person"], $zugangscode, base_url($this->config->config["index_page"]."/Registration/confirm?code=".$zugangscode."&studiengang_kz=".$data['studiengang_kz']), $data["email"]);
-			
+
 			    //$data["message"] = $message;
 			    $this->load->view('templates/header');
 			    $this->load->view('registration', $this->_data);
@@ -265,7 +265,7 @@ class Registration extends MY_Controller {
 	    //error message already setn
 	}
     }
-    
+
     public function code_login()
     {
         $studiengang_kz = $this->input->get()["studiengang_kz"];
@@ -315,7 +315,7 @@ class Registration extends MY_Controller {
         $text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, $studiengang_kz);
         $this->mail->setHTMLContent($text);
         if (!$this->mail->send())
-	    	
+
             $msg = '<span class="error">' . $this->getPhrase('Registration/EmailAddressTaken', $this->_data['sprache']) . '</span><br /><a href=' . $_SERVER['PHP_SELF'] . '?method=registration>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
         else
             $msg = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache']), $email) . "<br><br><a href=" . base_url("index.dist.php/Login") . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
@@ -360,13 +360,18 @@ class Registration extends MY_Controller {
 	    "link" => $link
 	);
 	//TODO set system person id, oe_kurzbz
-	$this->MessageModel->sendMessageVorlage(1, $person->person_id, "MailRegistration", "etw", $data, $orgform_kurzbz=null);
-	
+    if ($this->config->item('root_oe'))
+        $oe = $this->config->item('root_oe');
+    else
+        $oe = 'fhstp';
+
+	$this->MessageModel->sendMessageVorlage(1, $person->person_id, "MailRegistration", $oe, $data, $orgform_kurzbz=null);
+
 	if($this->MessageModel->isResultValid() === true)
 	{
 	    if($this->MessageModel->result->msg === "Success")
 	    {
-		$this->_data["message"] = sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . "<br><br><a href=" . $_SERVER['PHP_SELF'] . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";   
+		$this->_data["message"] = sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . "<br><br><a href=" . $_SERVER['PHP_SELF'] . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
 	    }
 	    else
 	    {
@@ -379,7 +384,7 @@ class Registration extends MY_Controller {
 	    $this->_setError(true, $this->MessageModel->getErrorMessage());
 	}
     }
-    
+
     private function _getPerson($person_id)
     {
 	$this->PersonModel->getPersonen($person_id);
@@ -392,7 +397,7 @@ class Registration extends MY_Controller {
 	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
-    
+
     private function _savePerson($person)
     {
 	$this->PersonModel->savePerson($person);
@@ -405,7 +410,7 @@ class Registration extends MY_Controller {
 	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
-    
+
     private function _checkBewerbung($email)
     {
 	$this->PersonModel->checkBewerbung(array("email" => $email));
@@ -418,7 +423,7 @@ class Registration extends MY_Controller {
 	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
-    
+
     private function _checkZugangscodePerson($code)
     {
 	$this->PersonModel->checkZugangscodePerson(array("code" => $code));
