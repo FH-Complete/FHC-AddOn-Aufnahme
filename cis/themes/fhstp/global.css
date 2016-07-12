@@ -4,7 +4,7 @@
 @font-face {
   font-family: 'icomoon';
   src: url("../fonts/icomoon.eot?8jtjnw");
-  src: url("../fonts/icomoon.eot?8jtjnw#iefix") format("embedded-opentype"), url("../fonts/icomoon.ttf?8jtjnw") format("truetype"), url("../fonts/icomoon.woff?8jtjnw") format("woff"), url("../fonts/icomoon.svg?8jtjnw#icomoon") format("svg");
+  src: url("../fonts/icomoon.eot?8jtjnw#iefix") format("embedded-opentype"), url("./fonts/icomoon.ttf?8jtjnw") format("truetype"), url("./fonts/icomoon.woff?8jtjnw") format("woff"), url("./fonts/icomoon.svg?8jtjnw#icomoon") format("svg");
   font-weight: normal;
   font-style: normal; }
 [class^="icon-"], [class*=" icon-"] {
