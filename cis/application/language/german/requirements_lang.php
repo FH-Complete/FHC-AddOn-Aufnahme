@@ -15,6 +15,6 @@ $lang['requirements_abschlusszeugnis_header'] = 'Bitte laden Sie Ihr Abschlussze
 $lang['requirements_abschlusszeugnis'] = 'Abschlusszeugnis';
 $lang["requirements_keinDokHochgeladen"] = "Kein Dokument hochgeladen";
 $lang["requirements_DokHochgeladen"] = "Dokument bereits vorhanden";
-
+$lang["requirements_formNachgereicht"] = "wird nachgereicht";
 
 

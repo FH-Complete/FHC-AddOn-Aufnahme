@@ -259,7 +259,8 @@
         <div class="col-sm-5">
             <?php echo form_label($this->lang->line('person_formDokumentupload_reisepass'), "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
             <div class="form-group">
-                <?php if(!isset($dokumente["pass"])){
+                <?php
+		if((!isset($dokumente["pass"])) || ($dokumente["pass"]->nachgereicht === "t")) {
                     echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
                  }
 		 else
@@ -270,7 +271,11 @@
             </div>
 	    <div class="checkbox">
 		<label>
-		    <?php echo form_checkbox(array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente["pass"]) && ($dokumente["pass"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id));
+		    <?php
+		    $data = array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente["pass"]) && ($dokumente["pass"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+		    (isset($dokumente["pass"]) && ($dokumente["pass"]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
+		    
+		    echo form_checkbox($data);
 			echo $this->lang->line('person_formNachgereicht')
 		    ?>			
 		</label>
@@ -289,7 +294,8 @@
         <div class="col-sm-5">
             <?php echo form_label($this->lang->line('person_formDokumentupload_lebenslauf'), "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?>
             <div class="form-group">
-                <?php if(!isset($dokumente["Lebenslf"])) {
+                <?php
+		if((!isset($dokumente["Lebenslf"])) || ($dokumente["Lebenslf"]->nachgereicht === "t")) {
                     echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
                  }
 		 else
@@ -300,7 +306,11 @@
             </div>
 	    <div class="checkbox">
 		<label>
-		    <?php echo form_checkbox(array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente["Lebenslf"]) && ($dokumente["pass"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id));
+		    <?php
+		    $data = array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente["Lebenslf"]) && ($dokumente["Lebenslf"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+		    (isset($dokumente["Lebenslf"]) && ($dokumente["Lebenslf"]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
+		    
+		    echo form_checkbox($data);
 			echo $this->lang->line('person_formNachgereicht')
 		    ?>			
 		</label>

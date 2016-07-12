@@ -24,7 +24,8 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
         <div class="col-sm-5">
             <?php echo form_label($this->lang->line('requirements_abschlusszeugnis'), "maturazeugnis", array("name" => "maturazeugnis", "for" => "maturazeugnis", "class" => "control-label")) ?>
             <div class="form-group">
-                <?php if(!isset($dokumente["Maturaze"])) {
+                <?php
+		if((!isset($dokumente["Maturaze"])) || ($dokumente["Maturaze"]->nachgereicht === "t")) {
                     echo $this->lang->line('requirements_keinDokHochgeladen');
                  }
 		 else
@@ -33,6 +34,17 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
 		 }
                  ?>
             </div>
+	    <div class="checkbox">
+		<label>
+		    <?php
+		    $data = array('id' => 'zeugnis_nachgereicht', 'name' => 'zeugnis_nachgereicht', "checked" => (isset($dokumente["Maturaze"]) && ($dokumente["Maturaze"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+		    (isset($dokumente["Maturaze"]) && ($dokumente["Maturaze"]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
+		    
+		    echo form_checkbox($data);
+			echo $this->lang->line('requirements_formNachgereicht')
+		    ?>			
+		</label>
+	    </div>
         </div>
         <div class="col-sm-">
             <div class="form-group">

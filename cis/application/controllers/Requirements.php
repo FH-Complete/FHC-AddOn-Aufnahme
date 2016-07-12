@@ -45,6 +45,7 @@ class Requirements extends MY_Controller {
             } 
         }
 	
+	$post = $this->input->post();
 	$files = $_FILES;
 	if(count($files) > 0)
 	{
@@ -67,13 +68,24 @@ class Requirements extends MY_Controller {
 			    $obj->dokument_kurzbz = "Sonst";
 			    break;
 		    }
+		    
+		    $akte = new stdClass();
 
-		    foreach($this->_data["dokumente"] as $akte)
+		    foreach($this->_data["dokumente"] as $akte_temp)
 		    {
-			if(($akte->dokument_kurzbz == $obj->dokument_kurzbz) && ($akte->dms_id != null) && ($obj->dokument_kurzbz != "Sonst"))
+			if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
 			{
-			    $dms = $this->_loadDms($akte->dms_id);
-			    $obj->version = $dms->version+1;
+			    if($akte_temp->dms_id != null)
+			    {
+				$dms = $this->_loadDms($akte_temp->dms_id);
+				$obj->version = $dms->version+1;
+			    }
+			    else
+			    {
+				$akte = $akte_temp;
+				$akte->updateamum = date("Y-m-d H:i:s");
+				$akte->updatevon = "online";
+			    }
 			}
 		    }
 
@@ -83,12 +95,11 @@ class Requirements extends MY_Controller {
 		    $data = file_get_contents($file["tmp_name"]);
 		    $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
-		    $this->DmsModel->saveDms($obj);
+		    $this->_saveDms($obj);
 
 		    if($this->DmsModel->result->error == 0)
 		    {
-			$akte = new stdClass();
-			$akte->dms_id = $this->DmsModel->result->retval;
+			$akte->dms_id = $this->DmsModel->result->retval->dms_id;
 			$akte->person_id = $this->_data["person"]->person_id;
 			$akte->mimetype = $file["type"];
 
@@ -96,13 +107,33 @@ class Requirements extends MY_Controller {
 			$akte->dokument_kurzbz = $obj->dokument_kurzbz;
 			$akte->titel = $key;
 			$akte->insertvon = 'online';
+			$akte->nachgereicht = 'f';
+			
+			unset($akte->uid);
+			unset($akte->inhalt_vorhanden);
 
-			$this->AkteModel->saveAkte($akte);
+			$this->_saveAkte($akte);
 		    }
 
 		    if(unlink($file["tmp_name"]))
 		    {
 			//removing tmp file successful
+		    }
+		}
+		else
+		{
+		    if(isset($post["zeugnis_nachgereicht"]))
+		    {
+			$akte = new stdClass();
+			$akte->person_id = $this->_data["person"]->person_id;
+
+			$akte->bezeichnung = $file["name"];
+			$akte->dokument_kurzbz = "Maturaze";
+			$akte->insertvon = 'online';
+			$akte->nachgereicht = true;
+
+			$this->_saveAkte($akte);
+			//$this->AkteModel->saveAkte($akte);
 		    }
 		}
 	    }
@@ -223,6 +254,52 @@ class Requirements extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->PersonModel->getErrorMessage());
+	}
+    }
+    
+    private function _saveDms($dms)
+    {
+	$this->DmsModel->saveDms($dms);
+	if($this->DmsModel->isResultValid() === true)
+	{
+	    //TODO saved successfully
+	}
+	else
+	{
+	    $this->_setError(true, $this->DmsModel->getErrorMessage());
+	}
+    }
+    
+    private function _saveAkte($akte)
+    {
+	$this->AkteModel->saveAkte($akte);
+	if($this->AkteModel->isResultValid() === true)
+	{
+	    //TODO saved successfully
+	}
+	else
+	{
+	    $this->_setError(true, $this->AkteModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadDms($dms_id)
+    {
+        $this->DmsModel->loadDms($dms_id);
+        if($this->DmsModel->isResultValid() === true)
+        {
+            if(count($this->DmsModel->result->retval) == 1)
+	    {
+		return $this->DmsModel->result->retval[0];
+	    }
+	    else
+	    {
+		$this->_setError(true, "Dokument konnte nicht gefunden werden.");
+	    }
+        }
+	else
+	{
+	    $this->_setError(true, $this->DmsModel->getErrorMessage());
 	}
     }
     

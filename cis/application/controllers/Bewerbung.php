@@ -136,29 +136,33 @@ class Bewerbung extends MY_Controller {
                         {
                             case "reisepass":
                                 $obj->dokument_kurzbz = "pass";
-				if(isset($post["reisepass_nachgereicht"]))
-				{
-				    $akte->nachgereicht = true;
-				}
                                 break;                        
                             case "lebenslauf":
                                 $obj->dokument_kurzbz = "Lebenslf";
-				if(isset($post["lebenslauf_nachgereicht"]))
-				{
-				    $akte->nachgereicht = true;
-				}
                                 break;
                             default:
                                 $obj->dokument_kurzbz = "Sonst";
                                 break;
                         }
 			
-			foreach($this->_data["dokumente"] as $akte)
+			foreach($this->_data["dokumente"] as $akte_temp)
 			{
-			    if(($akte->dokument_kurzbz == $obj->dokument_kurzbz) && ($akte->dms_id != null) && ($obj->dokument_kurzbz != "Sonst"))
+			    if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
 			    {
-				$dms = $this->_loadDms($akte->dms_id);
+				$dms = $this->_loadDms($akte_temp->dms_id);
 				$obj->version = $dms->version+1;
+				
+				if($akte_temp->dms_id != null)
+				{
+				    $dms = $this->_loadDms($akte_temp->dms_id);
+				    $obj->version = $dms->version+1;
+				}
+				else
+				{
+				    $akte = $akte_temp;
+				    $akte->updateamum = date("Y-m-d H:i:s");
+				    $akte->updatevon = "online";
+				}
 			    }
 			}
 
@@ -168,12 +172,11 @@ class Bewerbung extends MY_Controller {
                         $data = file_get_contents($file["tmp_name"]);
                         $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
 			
-                        $this->DmsModel->saveDms($obj);
+			$this->_saveDms($obj);
 
                         if($this->DmsModel->result->error == 0)
                         {
-                            
-                            $akte->dms_id = $this->DmsModel->result->retval;
+                            $akte->dms_id = $this->DmsModel->result->retval->dms_id;
                             $akte->person_id = $this->_data["person"]->person_id;
                             $akte->mimetype = $file["type"];
 
@@ -181,8 +184,12 @@ class Bewerbung extends MY_Controller {
                             $akte->dokument_kurzbz = $obj->dokument_kurzbz;
                             $akte->titel = $key;
                             $akte->insertvon = 'online';
-
-                            $this->AkteModel->saveAkte($akte);
+			    $akte->nachgereicht = 'f';
+			    
+			    unset($akte->uid);
+			    unset($akte->inhalt_vorhanden);
+			    
+			    $this->_saveAkte($akte);
                         }
 			else
 			{
@@ -195,6 +202,46 @@ class Bewerbung extends MY_Controller {
                             //removing tmp file successful
                         }
                     }
+		    else
+		    {
+			if(isset($post["reisepass_nachgereicht"]))
+			{
+			    $akte = new stdClass();
+			    $akte->person_id = $this->_data["person"]->person_id;
+
+			    $akte->bezeichnung = $file["name"];
+			    $akte->dokument_kurzbz = "pass";
+			    $akte->insertvon = 'online';
+			    $akte->nachgereicht = true;
+
+			    $this->_saveAkte($akte);
+			}
+			
+			if(isset($post["lebenslauf_nachgereicht"]))
+			{
+			    $akte = new stdClass();
+			    $akte->person_id = $this->_data["person"]->person_id;
+
+			    $akte->bezeichnung = $file["name"];
+			    $akte->dokument_kurzbz = "Lebenslf";
+			    $akte->insertvon = 'online';
+			    $akte->nachgereicht = true;
+
+			    $this->_saveAkte($akte);
+			}
+		    }
+		    
+		    //load dokumente
+		    $this->_loadDokumente($this->session->userdata()["person_id"]);
+
+		    foreach($this->_data["dokumente"] as $akte)
+		    {
+			if($akte->dms_id != null)
+			{
+			    $dms = $this->_loadDms($akte->dms_id);
+			    $akte->dokument = $dms;
+			}
+		    }
                 }
             }
 
@@ -204,7 +251,7 @@ class Bewerbung extends MY_Controller {
 	    $person->gebdatum = $post["gebdatum"];
 	    $person->gebort = $post["geburtsort"];
 	    $person->geburtsnation = $post["nation"];
-	    $person->geschlecht = $post["geschlecht"];
+	    $person->geschlecht = isset($post["geschlecht"]) ? $post["geschlecht"] : "u";
 	    $person->staatsbuergerschaft = $post["staatsbuergerschaft"];
 	    $person->svnr = $post["svnr"];
 	    $person->titelpre = $post["titelpre"];
@@ -737,6 +784,32 @@ class Bewerbung extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
+	}
+    }
+    
+    private function _saveDms($dms)
+    {
+	$this->DmsModel->saveDms($dms);
+	if($this->DmsModel->isResultValid() === true)
+	{
+	    //TODO saved successfully
+	}
+	else
+	{
+	    $this->_setError(true, $this->DmsModel->getErrorMessage());
+	}
+    }
+    
+    private function _saveAkte($akte)
+    {
+	$this->AkteModel->saveAkte($akte);
+	if($this->AkteModel->isResultValid() === true)
+	{
+	    //TODO saved successfully
+	}
+	else
+	{
+	    $this->_setError(true, $this->AkteModel->getErrorMessage());
 	}
     }
 }

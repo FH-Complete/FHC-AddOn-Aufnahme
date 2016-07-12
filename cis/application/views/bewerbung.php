@@ -1,13 +1,13 @@
 <?php
 $this->load->view('templates/header');
 $this->lang->load(array('aufnahme', 'person'), $language);
-$this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
 
 if (isset($error) && ($error->error === true))
     echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
 ?>
 <div class="container">
     <?php
+    $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
     echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
     
     foreach($studiengaenge as $studiengang){ 
@@ -21,12 +21,12 @@ if (isset($error) && ($error->error === true))
         </div>
         <div class="row">
             <div id="<?php echo $studiengang->studiengang_kz; ?>" class='collapse'>
-                <div class="col-sm-3">
+                <div class="col-sm-3 navigation">
                     <?php echo 
                         $this->template->widget(
                             "person_nav",
                             array(
-                                'aktiv' => 'Person',
+                                'aktiv' => 'personalData',
                                 "href"=>array(
                                     "send"=>site_url("/Send?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id),
                                     "summary"=>site_url("/Summary?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id),
