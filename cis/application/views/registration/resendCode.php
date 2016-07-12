@@ -7,7 +7,7 @@
 	<li class="active">Registration</li>
     </ol>
     <?php echo form_open("Registration/resendCode", array("id" => "ResendCodeForm", "name" => "ResendCodeForm", "class" => "form-horizontal")); ?>
-    <img style="width:150px;" class="center-block img-responsive" src="<?php echo APP_ROOT . 'skin/styles/' . $this->config->item('theme'); ?>/logo.png">
+    <img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">
 
     <div class="form-group <?php echo (form_error("email") != "") ? 'has-error' : '' ?>">
 	<?php echo form_label("E-Mail Adresse", "email", array("name" => "email", "for" => "email", "class" => "col-sm-3 control-label")) ?>
