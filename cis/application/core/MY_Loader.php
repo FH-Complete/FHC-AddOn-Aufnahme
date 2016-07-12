@@ -17,39 +17,31 @@ class MY_Loader extends CI_Loader
 	}
     }
     
-    function getPhrase($phrase, $sprache, $oe_kurzbz="", $orgform_kurzbz="")
+    function getPhrase($phrase, $sprache, $oe_kurzbz = '', $orgform_kurzbz = '')
     {
-	if(isset($this->session->userdata()["phrasen"]))
-	{
-	    $phrasen = $this->session->userdata()["phrasen"];
-	    foreach($phrasen as $p)
-	    {
-		if(($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz))
+		if(isset($this->session->userdata()["phrasen"]))
 		{
-		    if ($this->config->item('display_phrase_name'))
-		    {
-			return $p->phrase;
-		    }
-		    else
-		    {
-			return $p->text;
-		    }
-		}
-	    }
-	    
-	    foreach($phrasen as $p)
-	    {
-		if(($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz))
-		{
-		    if ($this->config->item('display_phrase_name'))
-		    {
-			return $p->phrase;
-		    }
-		    else
-		    {
-			return $p->text;
-		    }
-		}
+			$phrasen = $this->session->userdata()["phrasen"];
+			foreach($phrasen as $p)
+			{
+				if(($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz))
+				{
+					if ($this->config->item('display_phrase_name'))
+						return $p->text." <i>[$p->phrase]</i>";
+					else
+						return $p->text;
+				}
+			}
+			
+			foreach($phrasen as $p)
+			{
+			if(($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz))
+			{
+				if ($this->config->item('display_phrase_name'))
+					return $p->text." <i>[$p->phrase]</i>";
+				else
+					return $p->text;
+			}
 	    }
 	    
 	    foreach($phrasen as $p)
@@ -57,13 +49,9 @@ class MY_Loader extends CI_Loader
 		if(($p->phrase == $phrase))
 		{
 		    if ($this->config->item('display_phrase_name'))
-		    {
-			return $p->phrase;
-		    }
+				return $p->text." <i>[$p->phrase]</i>";
 		    else
-		    {
-			return $p->text;
-		    }
+				return $p->text;
 		}
 	    }
 	}

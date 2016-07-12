@@ -58,6 +58,9 @@ if (!isset($_GET['start']))
 
 echo '<h2>Aktualisierung der Datenbank</h2>';
 
+// Check ob App in system.tbl_app angelegt ist.
+// ToDo: 
+
 // Textphrasen holen
 require_once('textphrasen.php');
 
