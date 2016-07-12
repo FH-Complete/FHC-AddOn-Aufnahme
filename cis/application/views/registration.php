@@ -73,7 +73,7 @@
 		    <div class="col-sm-3">
 			<img id="captcha" src="<?=site_url('/Registration/securimage')?>" alt='captcha' class="center-block img-responsive" />
 			<!-- TODO set link -->
-			<a href="#" onclick="document.getElementById('captcha').src = 'https://cis.technikum-wien.at/include/securimage/securimage_show.php?' + Math.random();return false">
+			<a onclick="document.getElementById('captcha').src = '<?php echo base_url($this->config->config["index_page"].'/Registration/securimage'); ?>/'+Math.random();">
 			    Andere Grafik
 			</a>
 		    </div>

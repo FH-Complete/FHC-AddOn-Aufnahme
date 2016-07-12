@@ -69,7 +69,7 @@ class Registration extends MY_Controller {
         }
     }
 
-    public function securimage() {
+    public function securimage($random=null) {
         $this->load->library('securimage');
         $img = new Securimage();
         $img->show(); // alternate use: $img->show('/path/to/background.jpg');
