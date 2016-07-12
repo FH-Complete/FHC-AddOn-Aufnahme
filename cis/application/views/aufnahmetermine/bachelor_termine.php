@@ -5,8 +5,8 @@ foreach ($studiengaenge as $stg)
         {
         
         ?>
-<a class="collapsed" data-toggle='collapse' data-target='#<?php echo $stg->studiengang_kz; ?>'><h3>Bachelor / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplan->orgform_kurzbz; ?>)</h3></a>
-        <div id="<?php echo $stg->studiengang_kz; ?>" class='collapse'>
+	<h3>Bachelor / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplan->orgform_kurzbz; ?>)</h3>
+        <div id="<?php echo $stg->studiengang_kz; ?>">
             <div class="row">
                 <div class="col-sm-12">
                     Ihre Bewerbung ist eingelangt, bitte wählen Sie einen Termin für das erste Aufnahmeverfahren aus:
