@@ -232,16 +232,16 @@ class Registration extends MY_Controller {
                     //TODO error handling
                     if ($this->Kontakt_model->isResultValid() === true)
 		    {
-                        $message = $this->sendMail($zugangscode, $data["email"], $person_id, $data["studiengang_kz"]);
+                        //$message = $this->sendMail($zugangscode, $data["email"], $person_id, $data["studiengang_kz"]);
 			$this->_data["person"] = $this->_getPerson($person_id);
 			
 			if($this->PersonModel->isResultValid() === true)
 			{
-			    //$this->_sendMessageVorlage($this->_data["person"], $zugangscode, base_url($this->config->config["index_page"]."/Registration/confirm?code=".$zugangscode."&studiengang_kz=".$data['studiengang_kz']));
+			    $this->_sendMessageVorlage($this->_data["person"], $zugangscode, base_url($this->config->config["index_page"]."/Registration/confirm?code=".$zugangscode."&studiengang_kz=".$data['studiengang_kz']), $data["email"]);
 			
-			    $data["message"] = $message;
+			    //$data["message"] = $message;
 			    $this->load->view('templates/header');
-			    $this->load->view('registration', $data);
+			    $this->load->view('registration', $this->_data);
 			    $this->load->view('templates/footer');
 			}
 			else
@@ -290,8 +290,7 @@ class Registration extends MY_Controller {
                 $data['wrong_code'] = true;
         }
         else {
-            //TODO view error
-	    echo $this->PersonModel->getErrorMessage();
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
         }
     }
 
@@ -351,7 +350,7 @@ class Registration extends MY_Controller {
         return $msg;
     }
 
-    private function _sendMessageVorlage($person, $code, $link)
+    private function _sendMessageVorlage($person, $code, $link, $email)
     {
 	$data = array(
 	    "anrede" => (is_null($person->anrede)) ? "" : $person->anrede,
@@ -362,8 +361,23 @@ class Registration extends MY_Controller {
 	);
 	//TODO set system person id, oe_kurzbz
 	$this->MessageModel->sendMessageVorlage(1, $person->person_id, "MailRegistration", "etw", $data, $orgform_kurzbz=null);
-	echo $this->MessageModel->result;
-	var_dump($this->MessageModel->result);
+	
+	if($this->MessageModel->isResultValid() === true)
+	{
+	    if($this->MessageModel->result->msg === "Success")
+	    {
+		$this->_data["message"] = sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . "<br><br><a href=" . $_SERVER['PHP_SELF'] . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";   
+	    }
+	    else
+	    {
+		$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . $_SERVER['PHP_SELF'] . '?method=registration>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+	    }
+	}
+	else
+	{
+	    $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . $_SERVER['PHP_SELF'] . '?method=registration>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+	    $this->_setError(true, $this->MessageModel->getErrorMessage());
+	}
     }
     
     private function _getPerson($person_id)
