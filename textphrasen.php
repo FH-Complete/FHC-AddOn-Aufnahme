@@ -342,7 +342,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'description' => 'Your new password'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Registration/EmailAddressTaken',
 		'phrasentext' => array
@@ -360,6 +360,46 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'sprache' => 'English',
 			'text' => '',
 			'description' => 'The e-mail address is already taken'
+		)
+	),
+	array
+	(
+		'phrase' => 'Test/Bewerbungsfrist',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Bewerbungsfrist bis',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Test/Bewerbungsfrist',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'deadline',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Test/FristAbgelaufen',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Bewerbungsfrist ist bereits abgelaufen. Anmeldung nicht mehr möglich.',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Test/FristAbgelaufen',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Deadline expired. Registration not possible.',
+			'description' => ''
 		)
 	)
 );

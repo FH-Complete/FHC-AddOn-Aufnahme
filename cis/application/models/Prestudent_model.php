@@ -61,4 +61,20 @@ class Prestudent_model extends MY_Model
 	    return false;
 	}
     }
+    
+    public function deleteRegistrationToReihungstest($person_id, $rt_id)
+    {
+        $data = new stdClass();
+	$data->person_id = $person_id;
+	$data->rt_id = $rt_id;
+	if ($restquery = $this->rest->post('crm/prestudent/delReihungstest', $data))
+	{
+	    $this->result = $restquery;
+	    return true;
+	}
+	else
+	{
+	    return false;
+	}
+    }
 }

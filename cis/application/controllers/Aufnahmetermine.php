@@ -43,15 +43,42 @@ class Aufnahmetermine extends MY_Controller {
         $this->load->view('aufnahmetermine', $this->_data);
     }
     
-    public function register()
+    public function register($studiengang_kz)
     {
 	$this->checkLogin();
 	
 	$this->_data["sprache"] = $this->get_language();
 	
+	$reihungstest = $this->_loadReihungstest($this->input->post()["rtTermin"]);
+	
 	$this->_loadData();
 	
-	$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"]);
+	if(date("Y-m-d", strtotime($reihungstest->anmeldefrist)) > date("Y-m-d"))
+	{
+	    //check if new registration or change
+	    if(!empty($this->_data["anmeldungen"]))
+	    {
+		foreach($this->_data["anmeldungen"] as $anmeldung)
+		{
+		    if(($anmeldung->studiengang_kz === $studiengang_kz) && ($anmeldung->reihungstest_id !== $this->input->post()["rtTermin"]))
+		    {
+			$this->_deleteRegistrationToReihungstest($this->session->userdata()["person_id"], $anmeldung->reihungstest_id);
+			$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"]);
+		    }
+		}
+	    }
+	    else
+	    {
+		$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"]);
+	    }
+
+	    $this->_loadData();
+	}
+	else
+	{
+	    $this->_data["anmeldeMessage"] = $this->getPhrase("Test/FristAbgelaufen", $this->_data["sprache"]);
+	}
+	
 	$this->load->view('aufnahmetermine', $this->_data);
     }
     
@@ -65,7 +92,11 @@ class Aufnahmetermine extends MY_Controller {
 	
 	$this->_data["anmeldungen"] = $this->_loadReihungstestsByPersonId($this->_data["person"]->person_id);
 	
-	//var_dump($this->_data["anmeldungen"]);
+	$this->_data["rt_person"] = array();
+	foreach($this->_data["anmeldungen"] as $anmeldung)
+	{
+	    $this->_data["rt_person"][$anmeldung->studiengang_kz] = $anmeldung->reihungstest_id;
+	}
 	
 	//load preinteressent data
         $this->_data["prestudent"] = $this->_loadPrestudent();
@@ -89,7 +120,7 @@ class Aufnahmetermine extends MY_Controller {
 		{
 		    if(isset($rt->stufe) && ($rt->stufe <= $prestudent->prestudentStatus->rt_stufe))
 		    {
-			$this->_data["reihungstests"][$prestudent->studiengang_kz][$rt->stufe][] = $rt;
+			$this->_data["reihungstests"][$prestudent->studiengang_kz][$rt->stufe][$rt->reihungstest_id] = date("d.m.Y", strtotime($rt->datum))." // ".$this->getPhrase("Test/Bewerbungsfrist", $this->_data["sprache"])." ".date("d.m.Y", strtotime($rt->anmeldefrist));
 		    }
 		}
 	    }
@@ -138,7 +169,6 @@ class Aufnahmetermine extends MY_Controller {
     private function _loadReihungstestsByPersonId($person_id)
     {
 	$this->ReihungstestModel->getReihungstestByPersonID($person_id);
-	//var_dump($this->ReihungstestModel->result);
 	if($this->ReihungstestModel->isResultValid() === true)
 	{
 	    return $this->ReihungstestModel->result->retval;
@@ -149,7 +179,18 @@ class Aufnahmetermine extends MY_Controller {
 	}
     }
     
-    
+    private function _loadReihungstest($reihungstest_id)
+    {
+	$this->ReihungstestModel->getReihungstest($reihungstest_id);
+	if($this->ReihungstestModel->isResultValid() === true)
+	{
+	    return $this->ReihungstestModel->result->retval[0];
+	}
+	else
+	{
+	    $this->_setError(true, $this->ReihungstestModel->getErrorMessage());
+	}
+    }
     
     private function _loadPerson()
     {
@@ -246,6 +287,19 @@ class Aufnahmetermine extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->StudienplanModel->getErrorMessage());
+	}
+    }
+    
+    private function _deleteRegistrationToReihungstest($person_id, $reihungstest_id)
+    {
+	$this->PrestudentModel->deleteRegistrationToReihungstest($person_id, $reihungstest_id);
+	if($this->PrestudentModel->isResultValid() === true)
+	{
+	    
+	}
+	else
+	{
+	    $this->_setError(true, $this->PrestudentModel->getErrorMessage());
 	}
     }
 }

@@ -664,6 +664,7 @@ class Bewerbung extends MY_Controller {
         $prestudentStatus->new = true;
         $prestudentStatus->prestudent_id = $prestudent->prestudent_id;
         $prestudentStatus->status_kurzbz = "Interessent";
+	$prestudentStatus->rt_stufe = 1;
         
         if(($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
         {
