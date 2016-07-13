@@ -35,8 +35,10 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
         <div class="col-sm-">
             <div class="form-group">
                 <div class="form-group <?php echo (form_error("maturazeugnis") != "") ? 'has-error' : '' ?>">
-                    <?php echo form_input(array('id' => 'maturazeugnis', 'name' => 'maturazeugnis', "type" => "file")); ?>
-                    <?php echo form_error("maturazeugnis"); ?>
+		    <div class="upload">
+			<?php echo form_input(array('id' => 'maturazeugnis', 'name' => 'maturazeugnis', "type" => "file")); ?>
+			<?php echo form_error("maturazeugnis"); ?>
+		    </div>
                 </div>
             </div>
         </div>

@@ -2,21 +2,21 @@
     <legend><?php echo $this->getPhrase("Personal/Information", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></legend>
     <?php echo form_open_multipart("Bewerbung", array("id" => "PersonForm", "name" => "PersonForm")); ?>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="form-group <?php echo (form_error("anrede") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formAnrede'), "anrede", array("name" => "anrede", "for" => "anrede", "class" => "control-label")) ?>
                 <?php echo form_dropdown("anrede", array("Herr" => "Herr", "Frau" => "Frau"), isset($person->anrede) ? $person->anrede : "Herr", array('id' => 'anrede', 'name' => 'anrede', "class" => "form-control")); ?>
                 <?php echo form_error("anrede"); ?>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="form-group <?php echo (form_error("titelpre") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formPrenomen'), "titelpre", array("name" => "titelpre", "for" => "titelpre", "class" => "control-label")) ?>
                 <?php echo form_input(array('id' => 'titelpre', 'name' => 'titelpre', 'maxlength' => 64, "type" => "text", "value" => set_value("titelpre", isset($person->titelpre) ? $person->titelpre : ""), "class" => "form-control")); ?>
                 <?php echo form_error("titelpre"); ?>
             </div>
         </div>
-	<div class="col-sm-2">
+	<div class="col-sm-3">
             <div class="form-group <?php echo (form_error("titelpost") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formPostnomen'), "titelpost", array("name" => "titelpost", "for" => "titelpost", "class" => "control-label")) ?>
                 <?php echo form_input(array('id' => 'titelpost', 'name' => 'titelpost', 'maxlength' => 64, "type" => "text", "value" => set_value("titelpost", isset($person->titelpost) ? $person->titelpost : ""), "class" => "form-control")); ?>
@@ -25,14 +25,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("vorname") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_vorname'), "vorname", array("name" => "vorname", "for" => "vorname", "class" => "control-label")) ?>
                 <?php echo form_input(array('id' => 'vorname', 'name' => 'vorname', 'maxlength' => 32, "type" => "text", "value" => set_value("vorname", isset($person->vorname) ? $person->vorname : ""), "class" => "form-control")); ?>
                 <?php echo form_error("vorname"); ?>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("nachname") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_nachname'), "nachname", array("name" => "nachname", "for" => "nachname", "class" => "control-label")) ?>
                 <?php echo form_input(array('id' => 'nachname', 'name' => 'nachname', 'maxlength' => 64, "type" => "text", "value" => set_value("nachname", isset($person->nachname) ? $person->nachname : ""), "class" => "form-control")); ?>
@@ -41,10 +41,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("gebdatum") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_geburtsdatum'), "gebdatum", array("name" => "gebdatum", "for" => "gebdatum", "class" => "control-label")) ?>
-                <?php echo form_input(array('id' => 'gebdatum', 'name' => 'gebdatum', 'maxlength' => 64, "type" => "text", "value" => set_value("gebdatum", isset($person->gebdatum) ? $person->gebdatum : ""), "class" => "form-control")); ?>
+                <?php echo form_input(array('id' => 'gebdatum', 'name' => 'gebdatum', 'maxlength' => 64, "type" => "date", "value" => set_value("gebdatum", isset($person->gebdatum) ? $person->gebdatum : ""), "class" => "form-control")); ?>
                 <?php echo form_error("gebdatum"); ?>
             </div>
             <!--<div class="form-group <?php echo (form_error("geburtsdatum") != "") ? 'has-error' : '' ?>">
@@ -78,7 +78,7 @@
                 <?php echo form_error("geburtsdatum"); ?>
             </div>-->
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("geburtsort") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_geburtsort'), "geburtsort", array("name" => "geburtsort", "for" => "geburtsort", "class" => "control-label")) ?>
                 <?php echo form_input(array('id' => 'geburtsort', 'name' => 'geburtsort', "type" => "text", "value" => set_value("geburtsort", (isset($person->gebort) ? $person->gebort : "")), "class" => "form-control")); ?>
@@ -87,14 +87,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("staatsbuergerschaft") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_staatsbuergerschaft'), "staatsbuergerschaft", array("name" => "staatsbuergerschaft", "for" => "staatsbuergerschaft", "class" => "control-label")) ?>
                 <?php echo form_dropdown("staatsbuergerschaft", $nationen, (isset($person->staatsbuergerschaft) ? $person->staatsbuergerschaft : "A"), array('id' => 'staatsbuergerschaft', 'name' => 'staatsbuergerschaft', "class" => "form-control")); ?>
                 <?php echo form_error("staatsbuergerschaft"); ?>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("nation") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formGeburtsnation'), "nation", array("name" => "nation", "for" => "nation", "class" => "control-label")) ?>
                 <?php echo form_dropdown("nation", $nationen, (isset($person->geburtsnation) ? $person->geburtsnation : "A"), array('id' => 'nation', 'name' => 'nation', "value" => set_value("nation"), "class" => "form-control")); ?>
@@ -103,14 +103,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("svnr") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formSvn'), "svnr", array("name" => "svnr", "for" => "svnr", "class" => "control-label")) ?>
                 <?php echo form_input(array('id' => 'svnr', 'name' => 'svnr', "type" => "text", "value" => set_value("svnr", (isset($person->svnr) ? $person->svnr : "")), "class" => "form-control")); ?>
                 <?php echo form_error("svnr"); ?>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("geschlecht") != "") ? 'has-error' : '' ?>">
                 <fieldset><?php echo $this->lang->line('person_geschlecht'); ?></fieldset>
                 <?php echo form_radio(array("id" => "geschlecht_m", "name" => "geschlecht"), "m" , (isset($person->geschlecht) && $person->geschlecht=="m") ? true : false); ?>
@@ -135,7 +135,7 @@
         </div>
     </div>-->
     <div class="row">
-	<div class="col-sm-4">
+	<div class="col-sm-6">
             <div class="form-group <?php echo (form_error("adresse_nation") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formAdresseNation'), "adresse_nation", array("name" => "adresse_nation", "for" => "adresse_nation", "class" => "control-label")) ?>
                 <?php echo form_dropdown("adresse_nation", $nationen, (isset($adresse->nation) ? $adresse->nation : "A"), array('id' => 'adresse_nation', 'name' => 'adresse_nation', "value" => set_value("adresse_nation"), "class" => "form-control")); ?>
@@ -144,7 +144,7 @@
         </div>
     </div>
     <div class="row">
-	<div class="col-sm-4">
+	<div class="col-sm-6">
             <div class="form-group <?php echo (form_error("plzOrt") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formPlzOrt'), "plzOrt", array("name" => "plzOrt", "for" => "plzOrt", "class" => "control-label")) ?>
                 <?php echo form_dropdown("plzOrt", $plz, (isset($gemeinde_id) ? $gemeinde_id : null), array('id' => 'plzOrt', 'name' => 'plzOrt', "value" => set_value("plzOrt"), "class" => "form-control")); ?>
@@ -162,7 +162,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="form-group <?php echo (form_error("plz") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formPlz'), "plz", array("name" => "plz", "for" => "plz", "class" => "control-label")) ?>
                 <?php echo form_input(array('id' => 'plz', 'name' => 'plz', "type" => "text", "value" => set_value("plz", (isset($adresse->plz) ? $adresse->plz : NULL)), "class" => "form-control")); ?>
@@ -178,7 +178,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("bundesland") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formBundesland'), "bundesland", array("name" => "bundesland", "for" => "bundesland", "class" => "control-label")) ?>
                 <?php echo form_dropdown("bundesland", $bundeslaender, (isset($person->bundesland_code) ? $person->bundesland_code : NULL), array('id' => 'bundesland', 'name' => 'bundesland', "class" => "form-control")); ?>
@@ -192,7 +192,7 @@
 		<div class="checkbox">
 		    <label>
 			<?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => FALSE, "class"=>"zustelladresse", "studienplan_id"=>$studiengang->studienplan->studienplan_id));
-			    echo $this->getPhrase("Personal/DifferentAddress", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz).".";
+			    echo $this->getPhrase("Personal/DifferentAddress", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
 			?>			
 		    </label>
 		</div>
@@ -203,7 +203,7 @@
     <div id="zustelladresse_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="display: none;">
 	<legend class=""><?php echo $this->lang->line("person_formZustelladresse"); ?></legend>
 	<div class="row">
-	    <div class="col-sm-6">
+	    <div class="col-sm-8">
 		<div class="form-group <?php echo (form_error("zustell_strasse") != "") ? 'has-error' : '' ?>">
 		    <?php echo form_label($this->lang->line('person_strasse'), "zustell_strasse", array("name" => "zustell_strasse", "for" => "zustell_strasse", "class" => "control-label")) ?>
 		    <?php echo form_input(array('id' => 'zustell_strasse', 'name' => 'zustell_strasse', "type" => "text", "value" => set_value("zustell_strasse", (isset($zustell_adresse->strasse) ? $zustell_adresse->strasse : NULL)), "class" => "form-control")); ?>
@@ -212,7 +212,7 @@
 	    </div>
 	</div>
 	<div class="row">
-	    <div class="col-sm-2">
+	    <div class="col-sm-3">
 		<div class="form-group <?php echo (form_error("zustell_plz") != "") ? 'has-error' : '' ?>">
 		    <?php echo form_label($this->lang->line('person_formPlz'), "zustell_plz", array("name" => "zustell_plz", "for" => "zustell_plz", "class" => "control-label")) ?>
 		    <?php echo form_input(array('id' => 'zustell_plz', 'name' => 'zustell_plz', "type" => "text", "value" => set_value("zustell_plz", (isset($zustell_adresse->plz) ? $zustell_adresse->plz : NULL)), "class" => "form-control")); ?>
@@ -230,14 +230,14 @@
     </div>
     <legend class=""><?php echo $this->lang->line("person_formKontakt"); ?></legend>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("telefon") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_telefon'), "telefon", array("name" => "telefon", "for" => "telefon", "class" => "control-label")) ?>
                 <?php echo form_input(array('id' => 'telefon', 'name' => 'telefon', "type" => "text", "value" => set_value("telefon", isset($kontakt["telefon"]) ? $kontakt["telefon"]->kontakt : "" ), "class" => "form-control")); ?>
                 <?php echo form_error("telefon"); ?>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("fax") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_fax'), "fax", array("name" => "fax", "for" => "fax", "class" => "control-label")) ?>
                 <?php echo form_input(array('id' => 'fax', 'name' => 'fax', "type" => "text", "value" => set_value("fax", isset($kontakt["fax"]) ? $kontakt["fax"]->kontakt : ""), "class" => "form-control")); ?>
@@ -246,10 +246,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("email") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_emailAdresse'), "email", array("name" => "email", "for" => "email", "class" => "control-label")) ?>
-                <?php echo form_input(array('id' => 'email', 'name' => 'email', "type" => "text", "value" => set_value("email", isset($kontakt["email"]) ? $kontakt["email"]->kontakt : "" ), "class" => "form-control")); ?>
+                <?php echo form_input(array('id' => 'email', 'name' => 'email', "type" => "email", "value" => set_value("email", isset($kontakt["email"]) ? $kontakt["email"]->kontakt : "" ), "class" => "form-control")); ?>
                 <?php echo form_error("email"); ?>
             </div>
         </div>
@@ -288,11 +288,13 @@
 		</label>
 	    </div>
         </div>
-        <div class="col-sm-">
+        <div class="col-sm-5">
             <div class="form-group">
                 <div class="form-group <?php echo (form_error("reisepass") != "") ? 'has-error' : '' ?>">
-                    <?php echo form_input(array('id' => 'reisepass', 'name' => 'reisepass', "type" => "file")); ?>
-                    <?php echo form_error("reisepass"); ?>
+		    <div class="upload">
+			<?php echo form_input(array('id' => 'reisepass', 'name' => 'reisepass', "type" => "file")); ?>
+			<?php echo form_error("reisepass"); ?>
+		    </div>
                 </div>
             </div>
         </div>
@@ -326,8 +328,10 @@
         <div class="col-sm-5">
             <div class="form-group">
                 <div class="form-group <?php echo (form_error("lebenslauf") != "") ? 'has-error' : '' ?>">
-                    <?php echo form_input(array('id' => 'lebenslauf', 'name' => 'lebenslauf', "type" => "file")); ?>
-                    <?php echo form_error("lebenslauf"); ?>
+		    <div class="upload">
+			<?php echo form_input(array('id' => 'lebenslauf', 'name' => 'lebenslauf', "type" => "file")); ?>
+			<?php echo form_error("lebenslauf"); ?>
+		    </div>
                 </div>
             </div>
         </div>
