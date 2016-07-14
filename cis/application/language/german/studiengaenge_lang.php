@@ -12,4 +12,5 @@ $lang['studiengaenge/bewerbungsfrist'] = 'Bewerbungsfrist';
 $lang['studiengaenge/aufnahmetermine'] = 'Aufnahmetermine';
 $lang['studiengaenge/studienbeginn'] = 'Studienbeginn';
 $lang['studiengaenge/weiterführend'] = 'Weiterführend';
+$lang['studiengaenge/buttonText'] = 'Jetzt bewerben!';
 

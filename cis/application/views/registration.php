@@ -90,7 +90,7 @@
 	    <div class="col-lg-6">
 		<div class="form-group">
 		    <div class="col-sm-6 col-sm-offset-3">
-			<?php echo form_submit(array("value"=>$this->lang->line("aufnahme/abschicken"), "name"=>"submit_btn", "class"=>"btn btn-primary")); ?>
+			<?php echo form_submit(array("value"=>$this->lang->line("aufnahme/abschicken"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden")); ?>
 		    </div>
 		</div>
 	    </div>

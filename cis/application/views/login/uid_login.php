@@ -19,7 +19,7 @@
 	</div>
 	<div class="form-group">
 	    <span class="col-sm-4 col-sm-offset-4">
-		<button class="btn btn-primary btn-lg" type="submit" name="submit_btn">Login</button>
+		<button class="btn btn-primary btn-lg icon-absenden" type="submit" name="submit_btn"><?php echo $this->lang->line('login_LoginButton'); ?></button>
 	    </span>
 	</div>
 	<?php

@@ -36,7 +36,7 @@ foreach ($studiengaenge as $stg)
 		
                 <div class="col-sm-6">
 		    <div class="form-group">
-			<?php echo form_submit(array("value"=>"Absenden", "name"=>"submit_btn", "class"=>"btn btn-primary")); ?>
+			<?php echo form_submit(array("value"=>"Absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden")); ?>
 		    </div>
 		</div>
 		<?php
@@ -70,7 +70,7 @@ foreach ($studiengaenge as $stg)
                 </div>
                 <div class="col-sm-6">
 		    <div class="form-group">
-			<?php echo form_submit(array("value"=>"Absenden", "name"=>"submit_btn", "class"=>"btn btn-primary")); ?>
+			<?php echo form_submit(array("value"=>"Absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden")); ?>
 		    </div>
 		</div>
 		<?php

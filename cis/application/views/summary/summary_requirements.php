@@ -4,7 +4,7 @@
 	<div class="col-sm-6">
 	    <?php echo $this->lang->line("summary_Abschlusszeugnis"); ?>
 	</div>
-	<div class="col-sm-5">
+	<div class="col-sm-5 <?php echo (!isset($dokumente["Maturaze"])) ? "incomplete" : ""; ?>">
 	    <div class="form-group">
 		<?php if(!isset($dokumente["Maturaze"])) {
 		    echo $this->lang->line('summary_unvollstaendig');

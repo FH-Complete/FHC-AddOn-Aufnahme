@@ -27,6 +27,6 @@
 		</div>
 	    </div>
 	</div>
-	<?php echo form_submit(array("value"=>$this->lang->line('msg_send'), "name"=>"submit_btn", "class"=>"btn btn-primary")); ?>
+	<?php echo form_submit(array("value"=>$this->lang->line('msg_send'), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden")); ?>
     <?php echo form_close(); ?>
 </div>
