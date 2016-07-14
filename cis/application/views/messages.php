@@ -12,8 +12,6 @@ $this->lang->load(array('aufnahme', 'messages'), $language);
 	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
     ?>
 
-
-
     <?php 
     switch($view)
     {
@@ -25,6 +23,7 @@ $this->lang->load(array('aufnahme', 'messages'), $language);
 	    break;
 	default:
 	    $this->load->view('messages/inbox');
+	    //$this->load->view('messages/outbox');
 	    break;
     }
     
