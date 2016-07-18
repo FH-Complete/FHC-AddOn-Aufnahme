@@ -14,7 +14,7 @@
 		
                 <?php
 		foreach ($items as $item): ?>
-                    <li class="<?php if (isset($data['aktiv']) && $data["aktiv"] === $item["name"]) echo 'active'; ?>">
+                    <li class="<?php if (isset($data['aktiv']) && $data["aktiv"] === $item["id"]) echo 'active'; ?>">
                         <a href="<?php echo $item['href']; ?>">
                             <?php echo $item['name']; ?>
                         </a>

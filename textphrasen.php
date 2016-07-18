@@ -401,5 +401,25 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'Deadline expired. Registration not possible.',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'Registration/Datenschutz',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Ich habe die Datenschutzbestimmungen gelesen, verstanden und akzeptiert.',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Registration/Datenschutz',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'I accept ...',
+			'description' => ''
+		)
 	)
 );

@@ -60,6 +60,18 @@
 	</div>
     </div>
     <div class="row">
+	<div class="form-group <?php echo (form_error("datenschutz") != "") ? 'has-error' : '' ?>">
+	    <div class="checkbox">
+		<label>
+		    <?php echo form_checkbox(array('id' => 'datenschutz', 'name' => 'datenschutz', "checked" => FALSE, "class"=>"datenschutz"));
+			echo $this->getPhrase("Registration/Datenschutz", $sprache);
+		    ?>			
+		</label>
+	    </div>
+	    <?php echo form_error("datenschutz"); ?>
+	</div>
+    </div>
+    <div class="row">
 	<div class="col-lg-6">
 	    <div class="form-group">
 		<div class="col-sm-3">

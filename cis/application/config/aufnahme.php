@@ -78,12 +78,11 @@ $config['fhc_api'] = array(
 | ordered list of Main Menu Entries
 |
 */
-$config['menu'][] = array('href' => site_url('Studiengaenge'), 'name' => 'Studiengänge');
-$config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => 'Bewerbung', 'glyphicon' => 'glyphicon-ok');
-$config['menu'][] = array('href' => site_url('Aufnahmetermine'), 'name' => 'Aufnahmetermine');
-$config['menu'][] = array('href' => site_url('Messages'), 'name' => 'Nachrichten');
-$config['menu'][] = array('href' => site_url('Documents'), 'name' => 'Downloads');
-//$config['menu'][] = array('href' => site_url('Logout'), 'name' => 'Logout', 'glyphicon' => 'glyphicon-log-out');
+$config['menu'][] = array('href' => site_url('Studiengaenge'), 'name' => 'Studiengänge', 'id' => 'Studiengänge');
+$config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => 'meine Bewerbung', 'id' => 'Bewerbung');
+$config['menu'][] = array('href' => site_url('Aufnahmetermine'), 'name' => 'Aufnahmetermine', 'id' => 'Aufnahmetermine');
+$config['menu'][] = array('href' => site_url('Messages'), 'name' => 'Nachrichten', 'id' => 'Nachrichten');
+$config['menu'][] = array('href' => site_url('Documents'), 'name' => 'Downloads', 'id' => 'Downloads');
 
 /*
 |--------------------------------------------------------------------------

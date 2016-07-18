@@ -58,6 +58,7 @@ class Registration extends MY_Controller {
         $this->form_validation->set_rules("geb_datum", "Geburtsdatum", "required");
         $this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
         $this->form_validation->set_rules("email2", "E-Mail", "required|valid_email|callback_check_email");
+	$this->form_validation->set_rules("datenschutz", "Datenschutz", "callback_check_terms");
         //TODO
         //$this->form_validation->set_rules("captcha_code", "Captcha", "required|max_length[6]|callback_check_captcha");
 
@@ -77,7 +78,8 @@ class Registration extends MY_Controller {
         $img->show(); // alternate use: $img->show('/path/to/background.jpg');
     }
 
-    public function check_captcha() {
+    public function check_captcha()
+    {
         $securimage = new Securimage();
         if (!$securimage->check($this->input->post("captcha_code"))) {
             $this->form_validation->set_message("check_captcha", "Code does not match.");
@@ -86,9 +88,19 @@ class Registration extends MY_Controller {
         return true;
     }
 
-    public function check_email() {
+    public function check_email()
+    {
         if (!($this->input->post("email") == $this->input->post("email2"))) {
             $this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
+            return false;
+        }
+        return true;
+    }
+    
+    public function check_terms()
+    {
+	if (!($this->input->post("datenschutz"))) {
+            $this->form_validation->set_message("check_terms", "Sie müssen die Datenschutzbedingungen aktzeptieren.");
             return false;
         }
         return true;
