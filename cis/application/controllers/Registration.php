@@ -28,6 +28,7 @@ class Registration extends MY_Controller {
         $this->load->model("Kontakt_model");
 	$this->load->model("Message_model", "MessageModel");
         $this->lang->load('aufnahme', $this->get_language());
+	$this->lang->load('login', $this->get_language());
     }
 
     public function index()
@@ -46,6 +47,7 @@ class Registration extends MY_Controller {
 	if(isset($this->input->get()["language"]))
 	{
 	    $this->lang->load('aufnahme', $this->_data["sprache"]);
+	    $this->lang->load('login', $this->_data["sprache"]);
 	    $this->_data["sprache"] = $this->get_language();
 	}
 	

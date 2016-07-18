@@ -1,0 +1,37 @@
+<div id="login">
+    <div class="panel panel-info">
+	<div class="panel-heading text-center">
+	    <h3 class="panel-title"><?php echo $this->getPhrase("Home/AccessCodeAvailable", $sprache); ?></h3>
+	</div>
+	<div class="panel-body text-center">
+	    <p><?php echo $this->getPhrase("Home/Login", $sprache); ?></p>
+	    <form action="<?php echo base_url($this->config->config["index_page"] . '/Login'); ?>" method="POST">
+		<div class="form-group">
+		    <label><?php echo $this->lang->line('aufnahme/emailAdresse'); ?></label>
+		    <div class="input-group col-sm-6 col-sm-offset-3">
+			<p class="text-center"><input class="form-control" type="text" name="email" autofocus="autofocus" value=""></p>
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label><?php echo $this->lang->line('aufnahme/password'); ?></label>
+		    <div class="input-group col-sm-6 col-sm-offset-3">
+			<p class="text-center"><input class="form-control" type="text" name="code" autofocus="autofocus" value=""></p>
+		    </div>
+		    <?php
+		    if (isset($code_error_msg))
+			echo '<div class="alert alert-danger" role="alert">' . $code_error_msg . '</div>';
+		    ?>
+		    <br>
+		</div>
+		<div class="form-group">
+		    <div class="col-sm-4 col-sm-offset-4">
+			<button class="btn btn-primary icon-absenden" type="submit" name="submit_btn"><?php echo $this->lang->line('login_LoginButton'); ?></button>
+		    </div>
+		    <div class="col-sm-4 col-sm-offset-4">
+			<a href="<?php echo base_url($this->config->config["index_page"] . "/Registration/resendCode") ?>">Zugangscode vergessen?</a>
+		    </div>
+		</div>
+	    </form>
+	</div>
+    </div>
+</div>

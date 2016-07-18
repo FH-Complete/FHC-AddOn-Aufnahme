@@ -212,4 +212,5 @@ $lang["aufnahme/vorname"] = "Vorname";
 $lang["aufnahme/nachname"] = "Nachname";
 $lang["aufnahme/geburtsdatum"] = "Geburtsdatum";
 $lang["aufnahme/emailAdresse"] = "E-Mail";
+$lang['aufnahme/password']='Passwort';
 ?>

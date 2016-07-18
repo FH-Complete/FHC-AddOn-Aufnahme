@@ -123,6 +123,9 @@ $config['view_aufnahmetermine'][] = 'aufnahmetermine/master_termine';
 
 $config['view_messages'][] = 'messages/messages';
 
+$config['view_registration'][] = 'registration/registration';
+$config['view_registration'][] = 'login/hybrid_login';
+
 
 /*
 |--------------------------------------------------------------------------
@@ -138,3 +141,15 @@ $config['view_messages'][] = 'messages/messages';
 //$config['aufnahme_tabs'][] = array("label"=>"aufnahme/downloads", "id"=>"downloads");
 
 $config['display_phrase_name'] = false;
+
+/*
+|--------------------------------------------------------------------------
+| Enable/Disalbe Hybrid Login
+| first try is username/code
+| second try is email/password
+|--------------------------------------------------------------------------
+|
+| OE to get Email template for registration mail.
+|
+*/
+$config['hybrid_login'] = true;
