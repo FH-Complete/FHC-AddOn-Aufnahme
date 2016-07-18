@@ -54,9 +54,12 @@ class Login extends MY_Controller {
 
 	if ($this->config->item('hybrid_login'))
 	{
-	    $this->_cisLogin($this->_data['email'], $this->_data["code"]);
-	    $this->code_login($this->_data['code'], $this->_data, $this->_data["email"]);
-	    $this->load->view('registration', $this->_data);
+	    if ($this->_data['email'] && $this->_data["code"])
+	    {
+		$this->_cisLogin($this->_data['email'], $this->_data["code"]);
+		$this->code_login($this->_data['code'], $this->_data, $this->_data["email"]);
+		$this->load->view('registration', $this->_data);
+	    }
 	}
 	else
 	{
