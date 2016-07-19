@@ -82,7 +82,7 @@ $config['menu'][] = array('href' => site_url('Studiengaenge'), 'name' => 'Studie
 $config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => 'meine Bewerbung', 'id' => 'Bewerbung');
 $config['menu'][] = array('href' => site_url('Aufnahmetermine'), 'name' => 'Aufnahmetermine', 'id' => 'Aufnahmetermine');
 $config['menu'][] = array('href' => site_url('Messages'), 'name' => 'Nachrichten', 'id' => 'Nachrichten');
-$config['menu'][] = array('href' => site_url('Documents'), 'name' => 'Downloads', 'id' => 'Downloads');
+$config['menu'][] = array('href' => site_url('Downloads'), 'name' => 'Downloads', 'id' => 'Downloads');
 
 /*
 |--------------------------------------------------------------------------

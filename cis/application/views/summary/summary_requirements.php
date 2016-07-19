@@ -1,6 +1,6 @@
 <legend><?php echo $this->lang->line("summary_requirements_header"); ?></legend>
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-12">
 	<div class="col-sm-6">
 	    <?php echo $this->lang->line("summary_Abschlusszeugnis"); ?>
 	</div>
