@@ -80,13 +80,25 @@ class Bewerbung extends MY_Controller {
 	    $this->_data["gemeinde"] = $this->_data["adresse"]->plz." ".$this->_data["adresse"]->gemeinde.", ".$this->_data["adresse"]->ort;
 	}
 	
+	if(isset($this->_data["zustell_adresse"]))
+	{
+	    $this->_data["zustell_gemeinde"] = $this->_data["zustell_adresse"]->plz." ".$this->_data["zustell_adresse"]->gemeinde.", ".$this->_data["zustell_adresse"]->ort;
+	}
+	
 	$this->_data["plz"] = array();
+	$this->_data["zustell_plz"] = array();
 	foreach($this->_data["gemeinden"] as $gemeinde)
 	{
 	    $this->_data["plz"][$gemeinde->gemeinde_id] = $gemeinde->plz." ".$gemeinde->name.", ".$gemeinde->ortschaftsname;
 	    if(isset($this->_data["gemeinde"]) && $this->_data["plz"][$gemeinde->gemeinde_id] === $this->_data["gemeinde"])
 	    {
 		$this->_data["gemeinde_id"] = $gemeinde->gemeinde_id;
+	    }
+	    
+	    $this->_data["zustell_plz"][$gemeinde->gemeinde_id] = $gemeinde->plz." ".$gemeinde->name.", ".$gemeinde->ortschaftsname;
+	    if(isset($this->_data["zustell_gemeinde"]) && $this->_data["zustell_plz"][$gemeinde->gemeinde_id] === $this->_data["zustell_gemeinde"])
+	    {
+		$this->_data["zustell_gemeinde_id"] = $gemeinde->gemeinde_id;
 	    }
 	}
         
@@ -247,7 +259,7 @@ class Bewerbung extends MY_Controller {
 
 	    $person = $this->_data["person"];
 	    $person->anrede = $post["anrede"];
-	    $person->bundesland_code = $post["bundesland"];
+	    //$person->bundesland_code = $post["bundesland"];
 	    $person->gebdatum = $post["gebdatum"];
 	    $person->gebort = $post["geburtsort"];
 	    $person->geburtsnation = $post["nation"];
@@ -258,6 +270,7 @@ class Bewerbung extends MY_Controller {
 	    $person->titelpost = $post["titelpost"];
 	    
 	    $adresse = new stdClass();
+	    $zustell_adresse = new stdClass();
 	    if($post["adresse_nation"] === "A")
 	    {
 		foreach($this->_data["gemeinden"] as $gemeinde)
@@ -279,6 +292,26 @@ class Bewerbung extends MY_Controller {
 		}
 	    }
 	    
+	    if($post["zustelladresse_nation"] === "A")
+	    {
+		foreach($this->_data["gemeinden"] as $gemeinde)
+		{
+		    if($gemeinde->gemeinde_id === $post["zustell_plzOrt"])
+		    {
+			$zustell_adresse->plz = $gemeinde->plz;
+			$zustell_adresse->ort = $gemeinde->ortschaftsname;
+			$zustell_adresse->gemeinde = $gemeinde->name;
+		    }
+		}
+
+		foreach($this->_data["bundesland"] as $bundesland)
+		{
+		    if($bundesland->bundesland_code === $gemeinde->bulacode)
+		    {
+			$person->bundesland_code = $bundesland->bundesland_code;
+		    }
+		}
+	    }
 	    
             $this->_savePerson($person);
 
@@ -294,7 +327,7 @@ class Bewerbung extends MY_Controller {
 		    $adresse->heimatadresse = true;
 		}
 		
-		if(($post["zustell_strasse"] != "") && ($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))
+		if(($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != "")) || ($post["zustell_plzOrt"] != "")))
 		{
 		    $adresse->zustelladresse = "f";
 		}
@@ -316,22 +349,26 @@ class Bewerbung extends MY_Controller {
 		$this->_saveAdresse($adresse);
 	    }
 	    
-	    if(($post["zustell_strasse"] != "") && ($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))
+	    if(($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != "")) || ($post["zustell_plzOrt"] != "")))
 	    {
-		$zustell_adresse = new stdClass();
 		if(isset($this->_data["zustell_adresse"]))
 		{
 		    $zustell_adresse = $this->_data["zustell_adresse"];
 		}
 		else
 		{
-		    $zustell_adresse->heimatadresse = false;
-		    $zustell_adresse->zustelladresse = true;
+		    $zustell_adresse->heimatadresse = "f";
+		    $zustell_adresse->zustelladresse = "t";
 		}
 		$zustell_adresse->person_id = $this->_data["person"]->person_id;
 		$zustell_adresse->strasse = $post["zustell_strasse"];
-		$zustell_adresse->plz = $post["zustell_plz"];
-		$zustell_adresse->ort = $post["zustell_ort"];
+		
+		if($post["zustelladresse_nation"] !== "A")
+		{
+		    $zustell_adresse->plz = $post["zustell_plz"];
+		    $zustell_adresse->ort = $post["zustell_ort"];
+		    $zustell_adresse->nation = $post["zustelladresse_nation"];
+		}
 
 		$this->_saveAdresse($zustell_adresse);
 	    }

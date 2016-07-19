@@ -51,6 +51,21 @@ $this->load->view('templates/footer');
 
 <script type="text/javascript">
     $(document).ready(function(){
+	
+	$(".zustelladresse").each(function(i,v){
+	   if($(v).prop("checked"))
+	   {
+	       var id = $(v).attr("studienplan_id");
+	       $("#zustelladresse_"+id).show();
+	   }
+	});
+	
+	
+	if($(".zustelladresse").prop("checked"))
+	{
+	    console.log($(".zustelladresse"));
+	}
+	
 	$(".zustelladresse").click(function(event)
 	{
 	    var id = $(event.currentTarget).attr("studienplan_id");
@@ -68,7 +83,12 @@ $this->load->view('templates/footer');
 	   toggleAdresse();
 	});
 	
+	$("#zustelladresse_nation").on("change", function(event){
+	   toggleZustellAdresse();
+	});
+	
 	toggleAdresse();
+	toggleZustellAdresse();
     });
     
     function toggleAdresse()
@@ -80,7 +100,6 @@ $this->load->view('templates/footer');
 	    hideElement($("#ort").closest(".row"));
 	    hideElement($("#bundesland").closest(".row"));
 	    showElement($("#plzOrt").closest(".row"));
-	    //TODO exchange form inputs
 	}
 	else
 	{
@@ -88,6 +107,25 @@ $this->load->view('templates/footer');
 	    showElement($("#plz").closest(".row"));
 	    showElement($("#ort").closest(".row"));
 	    showElement($("#bundesland").closest(".row"));
+	}
+    }
+    
+    function toggleZustellAdresse()
+    {
+	var code = $("#zustelladresse_nation option:selected").val();
+	if(code === "A")
+	{
+	    hideElement($("#zustell_plz").closest(".row"));
+	    hideElement($("#zustell_ort").closest(".row"));
+	    hideElement($("#zustell_bundesland").closest(".row"));
+	    showElement($("#zustell_plzOrt").closest(".row"));
+	}
+	else
+	{
+	    hideElement($("#zustell_plzOrt").closest(".row"));
+	    showElement($("#zustell_plz").closest(".row"));
+	    showElement($("#zustell_ort").closest(".row"));
+	    showElement($("#zustell_bundesland").closest(".row"));
 	}
     }
     

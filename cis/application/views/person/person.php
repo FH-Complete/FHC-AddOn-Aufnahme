@@ -177,7 +177,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <!--<div class="row">
         <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("bundesland") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formBundesland'), "bundesland", array("name" => "bundesland", "for" => "bundesland", "class" => "control-label")) ?>
@@ -185,13 +185,13 @@
                 <?php echo form_error("bundesland"); ?>
             </div>
         </div>
-    </div>
+    </div>-->
     <div class="row">
 	<div class="col-sm-12">
 	    <div class="form-group <?php echo (form_error("zustelladresse") != "") ? 'has-error' : '' ?>">
 		<div class="checkbox">
 		    <label>
-			<?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => FALSE, "class"=>"zustelladresse", "studienplan_id"=>$studiengang->studienplan->studienplan_id));
+			<?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => isset($zustell_adresse) ? TRUE : FALSE, "class"=>"zustelladresse", "studienplan_id"=>$studiengang->studienplan->studienplan_id));
 			    echo $this->getPhrase("Personal/DifferentAddress", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
 			?>			
 		    </label>
@@ -202,6 +202,24 @@
     </div>
     <div id="zustelladresse_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="display: none;">
 	<legend class=""><?php echo $this->lang->line("person_formZustelladresse"); ?></legend>
+	<div class="row">
+	    <div class="col-sm-6">
+		<div class="form-group <?php echo (form_error("zustelladresse_nation") != "") ? 'has-error' : '' ?>">
+		    <?php echo form_label($this->lang->line('person_formAdresseNation'), "zustelladresse_nation", array("name" => "zustelladresse_nation", "for" => "zustelladresse_nation", "class" => "control-label")) ?>
+		    <?php echo form_dropdown("zustelladresse_nation", $nationen, (isset($zustell_adresse->nation) ? $zustell_adresse->nation : "A"), array('id' => 'zustelladresse_nation', 'name' => 'zustelladresse_nation', "value" => set_value("zustelladresse_nation"), "class" => "form-control")); ?>
+		    <?php echo form_error("zustelladresse_nation"); ?>
+		</div>
+	    </div>
+	</div>
+	<div class="row">
+	    <div class="col-sm-6">
+		<div class="form-group <?php echo (form_error("zustell_plzOrt") != "") ? 'has-error' : '' ?>">
+		    <?php echo form_label($this->lang->line('person_formPlzOrt'), "zustell_plzOrt", array("name" => "zustell_plzOrt", "for" => "zustell_plzOrt", "class" => "control-label")) ?>
+		    <?php echo form_dropdown("zustell_plzOrt", $plz, (isset($zustell_gemeinde_id) ? $zustell_gemeinde_id : null), array('id' => 'zustell_plzOrt', 'name' => 'zustell_plzOrt', "value" => set_value("zustell_plzOrt"), "class" => "form-control")); ?>
+		    <?php echo form_error("zustell_plzOrt"); ?>
+		</div>
+	    </div>
+	</div>
 	<div class="row">
 	    <div class="col-sm-8">
 		<div class="form-group <?php echo (form_error("zustell_strasse") != "") ? 'has-error' : '' ?>">

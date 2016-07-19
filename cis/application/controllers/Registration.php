@@ -64,9 +64,9 @@ class Registration extends MY_Controller {
 
 
         if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header');
+            //$this->load->view('templates/header');
             $this->load->view('registration',  $this->_data);
-            $this->load->view('templates/footer');
+            //$this->load->view('templates/footer');
         } else {
             $this->saveRegistration($this->_data);
         }
@@ -231,9 +231,9 @@ class Registration extends MY_Controller {
             if (count($bewerbung) > 0) {
                 $data["message"] = '<p class="alert alert-danger" id="danger-alert">' . sprintf($this->lang->line('aufnahme/mailadresseBereitsGenutzt'), $data["email"]) . '</p>'
                         . '<a href="' . base_url("index.dist.php/Registration/resendCode") . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button></a>';
-                $this->load->view('templates/header');
+//                $this->load->view('templates/header');
                 $this->load->view('registration', $data);
-                $this->load->view('templates/footer');
+//                $this->load->view('templates/footer');
             }
 	    else
 	    {
@@ -261,9 +261,9 @@ class Registration extends MY_Controller {
 			    $this->_sendMessageVorlage($this->_data["person"], $zugangscode, base_url($this->config->config["index_page"]."/Registration/confirm?code=".$zugangscode."&studiengang_kz=".$data['studiengang_kz']), $data["email"]);
 
 			    //$data["message"] = $message;
-			    $this->load->view('templates/header');
+//			    $this->load->view('templates/header');
 			    $this->load->view('registration', $this->_data);
-			    $this->load->view('templates/footer');
+//			    $this->load->view('templates/footer');
 			}
 			else
 			{
