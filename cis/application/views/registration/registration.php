@@ -1,12 +1,12 @@
 <div id="registration">
     <?php echo form_open("Registration?studiengang_kz=".$studiengang_kz,array("id"=>"RegistrationLoginForm", "name"=>"RegistrationLoginForm", "class"=>"form-horizontal")); ?>
-    <img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">	
+    <!--<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">	-->
     <h2 class="text-center"><?php echo $this->lang->line('aufnahme/login_greeting_text'); ?></h2>		
     <p class="infotext">
 	    <?php echo $this->getPhrase("Registration/RegistrationForm", $sprache); ?>
     </p>
     <div class="row">
-	<div class="col-sm-6">
+	<div class="col-lg-6 col-sm-6">
 	    <div class="form-group <?php echo (form_error("vorname")!="")? 'has-error': '' ?>">
 		<?php echo form_label($this->lang->line('aufnahme/vorname'), "vorname", array("name"=>"vorname","for"=>"vorname", "class"=>"col-sm-11 control-label")) ?>
 		<div class="col-sm-11">
@@ -15,7 +15,7 @@
 		</div>
 	    </div>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-lg-6 col-sm-6">
 	    <div class="form-group <?php echo (form_error("nachname")!="")? 'has-error': '' ?>">
 		<?php echo form_label($this->lang->line('aufnahme/nachname'), "nachname", array("name"=>"nachname","for"=>"nachname", "class"=>"col-sm-11 control-label")) ?>
 		<div class="col-sm-11">
@@ -26,7 +26,7 @@
 	</div>
     </div>
     <div class="row">
-	<div class="col-sm-6">
+	<div class="col-lg-6 col-sm-6">
 	    <div class="form-group <?php echo (form_error("geb_datum")!="")? 'has-error': '' ?>">
 		<?php echo form_label($this->lang->line('aufnahme/geburtsdatum'), "geb_datum", array("name"=>"geb_datum","for"=>"geb_datum", "class"=>"col-sm-11 control-label")) ?>
 		<div class="col-sm-11">
@@ -35,12 +35,12 @@
 		</div>
 	    </div>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-lg-6 col-sm-6">
 
 	</div>
     </div>
     <div class="row">
-	<div class="col-sm-6">
+	<div class="col-lg-6 col-sm-6">
 	    <div class="form-group <?php echo (form_error("email")!="")? 'has-error': '' ?>">
 		<?php echo form_label($this->lang->line('aufnahme/emailAdresse'), "email", array("name"=>"email","for"=>"email", "class"=>"col-sm-11 control-label")) ?>
 		<div class="col-sm-11">
@@ -49,7 +49,7 @@
 		</div>
 	    </div>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-lg-6 col-sm-6">
 	    <div class="form-group <?php echo (form_error("email2")!="")? 'has-error': '' ?>">
 		<?php echo form_label($this->lang->line('aufnahme/wiederholungEmail'), "email2", array("name"=>"email2","for"=>"email2", "class"=>"col-sm-11 control-label")) ?>
 		<div class="col-sm-11">
@@ -60,19 +60,23 @@
 	</div>
     </div>
     <div class="row">
-	<div class="form-group <?php echo (form_error("datenschutz") != "") ? 'has-error' : '' ?>">
-	    <div class="checkbox">
-		<label>
-		    <?php echo form_checkbox(array('id' => 'datenschutz', 'name' => 'datenschutz', "checked" => FALSE, "class"=>"datenschutz"));
-			echo $this->getPhrase("Registration/Datenschutz", $sprache);
-		    ?>			
-		</label>
+	<div class="col-lg-11 col-sm-11">
+	    <div class="form-group <?php echo (form_error("datenschutz") != "") ? 'has-error' : '' ?>">
+		<div class="col-lg-11 col-sm-11">
+		    <div class="checkbox">
+			<label>
+			    <?php echo form_checkbox(array('id' => 'datenschutz', 'name' => 'datenschutz', "checked" => FALSE, "class"=>"datenschutz"));
+				echo $this->getPhrase("Registration/Datenschutz", $sprache);
+			    ?>			
+			</label>
+		    </div>
+		    <?php echo form_error("datenschutz"); ?>
+		</div>
 	    </div>
-	    <?php echo form_error("datenschutz"); ?>
 	</div>
     </div>
     <div class="row">
-	<div class="col-sm-11">
+	<div class="col-lg-11 col-sm-11">
 	    <div class="form-group">
 		<div class="col-sm-3">
 		    <img id="captcha" src="<?=site_url('/Registration/securimage')?>" alt='captcha' class="center-block img-responsive" />
@@ -91,10 +95,10 @@
 	</div>
     </div>
     <div class="row">
-	<div class="col-sm-6">
+	<div class="col-lg-6 col-sm-6">
 	    <div class="form-group">
-		<div class="col-sm-6 col-sm-offset-3">
-		    <?php echo form_submit(array("value"=>$this->lang->line("aufnahme/abschicken"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden")); ?>
+		<div class="col-lg-6 col-sm-6">
+		    <?php echo form_button(array("content"=>$this->lang->line("aufnahme/abschicken"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
 		</div>
 	    </div>
 	</div>

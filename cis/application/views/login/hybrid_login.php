@@ -15,7 +15,7 @@
 		<div class="form-group">
 		    <label><?php echo $this->lang->line('aufnahme/password'); ?></label>
 		    <div class="input-group col-sm-12">
-			<input class="form-control" type="text" name="code" autofocus="autofocus" value="">
+			<input class="form-control" type="password" name="code" autofocus="autofocus" value="">
 		    </div>
 		    <?php
 		    if (isset($code_error_msg))

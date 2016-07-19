@@ -4,11 +4,7 @@
 ?>
 
 <div class="container">
-    <?php $this->load->view('language'); ?>
-
-    <ol class="breadcrumb">
-	<li class="active">Login</li>
-    </ol>
+    <?php $this->load->view('templates/iconHeader'); ?>
     <div class="row">
 	<?php $this->load_views('view_registration'); ?>
     </div>
