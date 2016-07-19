@@ -3,6 +3,22 @@
 echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id, array("id" => "RequirementsForm", "name" => "RequirementsForm")); ?>
 <div class="row">
     <div class="col-sm-12">
+	<div class="radio">
+	    <label><input type="radio" name="doktype" value="" />Allgmeine Hochschule (AHS/BHS)</label>
+	</div>
+	<div class="radio">
+	    <label><input type="radio" name="doktype" value="" />Berufsreifeprüfung oder Studienberechtigungsprüfung</label>
+	</div>
+	<div class="radio">
+	    <label><input type="radio" name="doktype" value="" />Ausländische Unireife</label>
+	</div>
+	<div class="radio">
+	    <label><input type="radio" name="doktype" value="" />facheinschlägige berufliche Qualifikation</label>
+	</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
         <?php echo $this->getPhrase("ZGV/UploadDiploma", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
     </div>
 </div>

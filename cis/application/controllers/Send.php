@@ -90,7 +90,8 @@ class Send extends MY_Controller {
                 }
 		$this->_data["prestudentStatus"] = $prestudentStatus;
 
-                $this->load->view('send', $this->_data);
+                //$this->load->view('send', $this->_data);
+		redirect("/Aufnahmetermine");
             } 
         }
     }
