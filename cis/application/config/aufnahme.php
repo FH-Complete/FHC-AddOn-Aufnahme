@@ -81,6 +81,7 @@ $config['fhc_api'] = array(
 $config['menu'][] = array('href' => site_url('Studiengaenge'), 'name' => 'Studiengänge', 'id' => 'Studiengänge');
 $config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => 'meine Bewerbung', 'id' => 'Bewerbung');
 $config['menu'][] = array('href' => site_url('Aufnahmetermine'), 'name' => 'Aufnahmetermine', 'id' => 'Aufnahmetermine');
+$config['menu'][] = array('href' => site_url('Dokumente'), 'name' => 'Dokumente', 'id' => 'Dokumente');
 $config['menu'][] = array('href' => site_url('Messages'), 'name' => 'Nachrichten', 'id' => 'Nachrichten');
 $config['menu'][] = array('href' => site_url('Downloads'), 'name' => 'Downloads', 'id' => 'Downloads');
 
@@ -124,6 +125,8 @@ $config['view_messages'][] = 'messages/messages';
 
 $config['view_registration'][] = 'registration/registration';
 $config['view_registration'][] = 'login/hybrid_login';
+
+$config['view_dokumente'][] = 'dokumente/dokumente_bachelor';
 
 
 /*

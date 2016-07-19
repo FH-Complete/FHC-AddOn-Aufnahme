@@ -303,5 +303,4 @@ class Summary extends MY_Controller {
 	    $this->_setError(true, $this->DokumentStudiengangModel->getErrorMessage());
 	}
     }
-    
 }
