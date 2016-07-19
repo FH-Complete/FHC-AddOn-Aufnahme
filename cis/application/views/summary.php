@@ -35,6 +35,7 @@ if (isset($error) && ($error->error === true))
             <div role="tabpanel" class="tab-pane" id="summary">
                 <h1 id="summaryHeader"><?php echo $this->lang->line("summary_header"); ?></h1>
                 <?php $this->load_views('view_summary'); ?>
+		<a href="<?php echo base_url($this->config->config["index_page"]."/Send?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id); ?>"><button class="btn btn-primary icon-next"><?php echo $this->lang->line("summary_next"); ?></button></a>
             </div>
         </div>
     </div>
