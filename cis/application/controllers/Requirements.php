@@ -14,6 +14,7 @@ class Requirements extends MY_Controller {
 	$this->load->model('dms_model', "DmsModel");
         $this->load->model('akte_model', "AkteModel");
 	$this->load->model('person_model', "PersonModel");
+	$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
     }
 
     public function index()
@@ -26,6 +27,9 @@ class Requirements extends MY_Controller {
         
         //load studiengang
         $this->_data["studiengang"] = $this->_loadStudiengang($this->input->get()["studiengang_kz"]);
+	
+	//load Dokumente from Studiengang
+	$this->_data["dokumenteStudiengang"] = $this->_loadDokumentByStudiengang($this->input->get()["studiengang_kz"]);
         
         //load preinteressent data
         $this->_data["prestudent"] = $this->_loadPrestudent();
@@ -58,16 +62,7 @@ class Requirements extends MY_Controller {
 		    $obj->mimetype = $file["type"];
 		    $obj->name = $file["name"];
 		    $obj->oe_kurzbz = null;
-
-		    switch($key)
-		    {
-			case "maturazeugnis":
-			    $obj->dokument_kurzbz = "Maturaze";
-			    break;                        
-			default:
-			    $obj->dokument_kurzbz = "Sonst";
-			    break;
-		    }
+		    $obj->dokument_kurzbz = $key;
 		    
 		    $akte = new stdClass();
 
@@ -122,13 +117,13 @@ class Requirements extends MY_Controller {
 		}
 		else
 		{
-		    if(isset($post["zeugnis_nachgereicht"]))
+		    if(isset($post[$key."_nachgereicht"]))
 		    {
 			$akte = new stdClass();
 			$akte->person_id = $this->_data["person"]->person_id;
 
 			$akte->bezeichnung = $file["name"];
-			$akte->dokument_kurzbz = "Maturaze";
+			$akte->dokument_kurzbz = $key;
 			$akte->insertvon = 'online';
 			$akte->nachgereicht = true;
 
@@ -311,6 +306,19 @@ class Requirements extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->DmsModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadDokumentByStudiengang($studiengang_kz)
+    {
+	$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($studiengang_kz, true, true);
+        if($this->DokumentStudiengangModel->isResultValid() === true)
+        {
+	    return $this->DokumentStudiengangModel->result->retval;
+        }
+	else
+	{
+	    $this->_setError(true, $this->DokumentStudiengangModel->getErrorMessage());
 	}
     }
     

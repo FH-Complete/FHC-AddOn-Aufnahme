@@ -7,42 +7,42 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
     </div>
 </div>
 <div class="row">
-        <div class="col-sm-5">
-            <?php echo form_label($this->lang->line('requirements_abschlusszeugnis'), "maturazeugnis", array("name" => "maturazeugnis", "for" => "maturazeugnis", "class" => "control-label")) ?>
-            <div class="form-group">
-                <?php
-		if((!isset($dokumente["Maturaze"])) || ($dokumente["Maturaze"]->nachgereicht === "t")) {
-                    echo $this->lang->line('requirements_keinDokHochgeladen');
-                 }
-		 else
-		 {
-		     echo $this->lang->line('requirements_DokHochgeladen');
-		 }
-                 ?>
-            </div>
-	    <div class="checkbox">
-		<label>
-		    <?php
-		    $data = array('id' => 'zeugnis_nachgereicht', 'name' => 'zeugnis_nachgereicht', "checked" => (isset($dokumente["Maturaze"]) && ($dokumente["Maturaze"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
-		    (isset($dokumente["Maturaze"]) && ($dokumente["Maturaze"]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
-		    
-		    echo form_checkbox($data);
-			echo $this->lang->line('requirements_formNachgereicht')
-		    ?>			
-		</label>
-	    </div>
-        </div>
-        <div class="col-sm-">
-            <div class="form-group">
-                <div class="form-group <?php echo (form_error("maturazeugnis") != "") ? 'has-error' : '' ?>">
-		    <div class="upload">
-			<?php echo form_input(array('id' => 'maturazeugnis', 'name' => 'maturazeugnis', "type" => "file")); ?>
-			<?php echo form_error("maturazeugnis"); ?>
-		    </div>
-                </div>
-            </div>
-        </div>
+    <div class="col-sm-5">
+	<?php echo form_label($this->lang->line('requirements_abschlusszeugnis'), "maturazeugnis", array("name" => "Maturaze", "for" => "Maturaze", "class" => "control-label")) ?>
+	<div class="form-group">
+	    <?php
+	    if((!isset($dokumente["Maturaze"])) || ($dokumente["Maturaze"]->nachgereicht === "t")) {
+		echo $this->lang->line('requirements_keinDokHochgeladen');
+	     }
+	     else
+	     {
+		 echo $this->lang->line('requirements_DokHochgeladen');
+	     }
+	     ?>
+	</div>
+	<div class="checkbox">
+	    <label>
+		<?php
+		$data = array('id' => 'Maturaze_nachgereicht', 'name' => 'Maturaze_nachgereicht', "checked" => (isset($dokumente["Maturaze"]) && ($dokumente["Maturaze"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+		(isset($dokumente["Maturaze"]) && ($dokumente["Maturaze"]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
+
+		echo form_checkbox($data);
+		    echo $this->lang->line('requirements_formNachgereicht')
+		?>			
+	    </label>
+	</div>
     </div>
+    <div class="col-sm-5">
+	<div class="form-group">
+	    <div class="form-group <?php echo (form_error("Maturaze") != "") ? 'has-error' : '' ?>">
+		<div class="upload">
+		    <?php echo form_input(array('id' => 'Maturaze', 'name' => 'Maturaze', "type" => "file")); ?>
+		    <?php echo form_error("Maturaze"); ?>
+		</div>
+	    </div>
+	</div>
+    </div>
+</div>
    
     
     
