@@ -98,7 +98,7 @@
 	<div class="col-lg-6 col-sm-6">
 	    <div class="form-group">
 		<div class="col-lg-6 col-sm-6">
-		    <?php echo form_button(array("content"=>$this->lang->line("aufnahme/abschicken"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
+		    <?php echo form_button(array("id"=>"registration_button", "content"=>$this->lang->line("aufnahme/abschicken"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit", "disabled"=>"disabled")); ?>
 		</div>
 	    </div>
 	</div>
@@ -112,27 +112,18 @@
 </div>	
 
 <script type="text/javascript">
-
-	function changeSprache(sprache)
-	{
-		var method = 'registration';
-
-		window.location.href = "registration.php?sprache=" + sprache + "&method=" + method + "&stg_kz=";
-	}
-
-	function validateEmail(email)
-	{
-		//var email = document.ResendCodeForm.email.value;
-		var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-		if (re.test(email) === false)
-		{
-			alert("Bitte geben Sie eine gültige E-Mail-Adresse ein.");
-			return false;
-		}
-		else
-			return true;
-	}
-
+    $(document).ready(function(){
+	$("#datenschutz").on("change", function(){
+	    if($("#datenschutz").prop("checked"))
+	    {
+		$("#registration_button").prop("disabled", false) 
+	    }
+	    else
+	    {
+		$("#registration_button").prop("disabled", true) 
+	    }
+	});
+    });
 </script>
 
 
