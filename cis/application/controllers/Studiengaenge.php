@@ -9,6 +9,8 @@ class Studiengaenge extends MY_Controller {
         $this->load->model('studiensemester_model', 'StudiensemesterModel');
         $this->load->model('organisationsform_model', 'OrgformModel');
 	$this->load->model('person_model', 'PersonModel');
+	$this->load->model('Bewerbungstermine_model', 'BewerbungstermineModel');
+	$this->load->model('reihungstest_model', "ReihungstestModel");
         $this->lang->load('studiengaenge', $this->get_language());
     }
 
@@ -75,6 +77,17 @@ class Studiengaenge extends MY_Controller {
 	    
 	    $this->_data["studiengaenge"] = $this->_getStudiengaengeStudienplan($this->_data["studiensemester"]->studiensemester_kurzbz, 1);
 	    
+	    foreach($this->_data["studiengaenge"] as $stg)
+	    {
+		
+		if($stg->onlinebewerbung === "t")
+		{
+		    $stg->fristen = $this->_getBewerbungstermine($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
+		    $stg->reihungstests = $this->_loadReihungstests($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
+		    var_dump($stg->fristen);
+		}
+	    }
+	    
             $this->load->view('studiengaenge', $this->_data);
         }
         else
@@ -126,6 +139,32 @@ class Studiengaenge extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->StudiengangModel->getErrorMessage());
+	}
+    }
+    
+    private function _getBewerbungstermine($studiengang_kz, $studiensemester_kurzbz)
+    {
+	$this->BewerbungstermineModel->getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz);
+	if($this->BewerbungstermineModel->isResultValid() === true)
+	{
+	    return $this->BewerbungstermineModel->result->retval;
+	}
+	else
+	{
+	    $this->_setError(true, $this->BewerbungstermineModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadReihungstests($studiengang_kz, $studiensemester_kurzbz=null)
+    {
+	$this->ReihungstestModel->getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz);
+	if($this->ReihungstestModel->isResultValid() === true)
+	{
+	    return $this->ReihungstestModel->result->retval;
+	}
+	else
+	{
+	    $this->_setError(true, $this->ReihungstestModel->getErrorMessage());
 	}
     }
 }

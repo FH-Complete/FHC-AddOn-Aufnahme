@@ -38,10 +38,30 @@ foreach ($studiengaenge as $stg)
                 <div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/studeingebuehr'); ?>: </div><div class="col-sm-6"></div> 
             </div>
             <div class="row">
-                <div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/bewerbungsfrist'); ?>: </div><div class="col-sm-6"></div> 
+                <div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/bewerbungsfrist'); ?>: </div>
+		<div class="col-sm-6">
+		    <?php if(!empty($stg->fristen))
+		    {
+			var_dump($stg->fristen[0]);
+		    }
+		    ?>
+		</div> 
             </div>
             <div class="row">
-                <div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/aufnahmetermine'); ?>: </div><div class="col-sm-6"></div> 
+                <div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/aufnahmetermine'); ?>: </div>
+		<div class="col-sm-6">
+		    <?php if(!empty($stg->reihungstests))
+		    {
+			$dateString = "";
+			foreach($stg->reihungstests as $rt)
+			{
+			    $dateString .= date("d.m.Y", strtotime($rt->datum)).", ";
+			}
+			
+			echo substr($dateString, 0, -2);
+		    }
+		    ?>
+		</div> 
             </div>
             <div class="row">
                 <div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/studienbeginn'); ?>: </div><div class="col-sm-6"><?php echo $studiensemester->start; ?></div> 
