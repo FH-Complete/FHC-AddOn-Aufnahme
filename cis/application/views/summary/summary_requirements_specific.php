@@ -5,7 +5,7 @@
 	<div class="col-sm-6">
 	    <?php echo $this->lang->line("summary_".$dok->dokument_kurzbz); ?>
 	</div>
-	<div class="col-sm-5 <?php echo (!isset($dokumente[$dok->dokument_kurzbz])) ? "incomplete" : ""; ?>">
+	<div class="col-sm-5<?php echo (!isset($dokumente[$dok->dokument_kurzbz])) ? " incomplete" : ""; ?>">
 	    <div class="form-group">
 		<?php if(!isset($dokumente[$dok->dokument_kurzbz])) {
 		    echo $this->lang->line('summary_unvollstaendig');
