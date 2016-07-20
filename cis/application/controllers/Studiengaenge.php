@@ -84,7 +84,7 @@ class Studiengaenge extends MY_Controller {
 		{
 		    $stg->fristen = $this->_getBewerbungstermine($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
 		    $stg->reihungstests = $this->_loadReihungstests($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
-		    var_dump($stg->fristen);
+//		    var_dump($stg->fristen);
 		}
 	    }
 	    

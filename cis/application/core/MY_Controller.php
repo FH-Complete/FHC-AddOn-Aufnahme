@@ -44,7 +44,7 @@ class MY_Controller extends CI_Controller {
     {
         if(is_null($this->session->person_id))
         {
-            redirect("/Login");
+            redirect("/Registration");
         }
     }
 
