@@ -20,5 +20,6 @@ $lang["requirements_Geburtsu"] = "Geburtsurkunde";
 $lang["requirements_Maturaze"] = "Schul- bzw. Lehrabschlusszeugnis";
 $lang["requirements_Staatsbn"] = "Staatsbürgerschaftsnachweis";
 $lang["requirements_Lichtbil"] = "Lichtbild";
+$lang["requirements_nachreichenDatum"] = "Datum";
 
 
