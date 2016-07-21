@@ -30,6 +30,7 @@ class Dokumente extends MY_Controller {
 	$this->load->model('person_model', 'PersonModel');
 	$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
 	$this->load->model('akte_model', "AkteModel");
+	$this->load->model('dms_model', "DmsModel");
 	$this->load->helper("form");
     }
 
@@ -40,7 +41,108 @@ class Dokumente extends MY_Controller {
         
         $this->_loadData();
 	
+	$this->_handleFileUpload();
+	
         $this->load->view('dokumente', $this->_data);
+    }
+    
+    private function _handleFileUpload()
+    {
+	$post = $this->input->post();
+	$files = $_FILES;
+	if(count($files) > 0)
+	{
+	    foreach($files as $key=>$file)
+	    {
+		if(is_uploaded_file($file["tmp_name"]))
+		{
+		    $obj = new stdClass();
+		    $obj->version = 0;
+		    $obj->mimetype = $file["type"];
+		    $obj->name = $file["name"];
+		    $obj->oe_kurzbz = null;
+		    $obj->dokument_kurzbz = $key;
+		    
+		    $akte = new stdClass();
+
+		    foreach($this->_data["dokumente"] as $akte_temp)
+		    {
+			if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
+			{
+			    if($akte_temp->dms_id != null)
+			    {
+				$dms = $this->_loadDms($akte_temp->dms_id);
+				$obj->version = $dms->version+1;
+			    }
+			    else
+			    {
+				$akte = $akte_temp;
+				$akte->updateamum = date("Y-m-d H:i:s");
+				$akte->updatevon = "online";
+			    }
+			}
+		    }
+
+		    $obj->kategorie_kurzbz = "Akte";
+
+		    $type = pathinfo($file["name"], PATHINFO_EXTENSION);
+		    $data = file_get_contents($file["tmp_name"]);
+		    $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
+		    $this->_saveDms($obj);
+
+		    if($this->DmsModel->result->error == 0)
+		    {
+			$akte->dms_id = $this->DmsModel->result->retval->dms_id;
+			$akte->person_id = $this->_data["person"]->person_id;
+			$akte->mimetype = $file["type"];
+
+			$akte->bezeichnung = mb_substr($obj->name, 0, 32);
+			$akte->dokument_kurzbz = $obj->dokument_kurzbz;
+			$akte->titel = $key;
+			$akte->insertvon = 'online';
+			$akte->nachgereicht = 'f';
+			
+			unset($akte->uid);
+			unset($akte->inhalt_vorhanden);
+
+			$this->_saveAkte($akte);
+		    }
+
+		    if(unlink($file["tmp_name"]))
+		    {
+			//removing tmp file successful
+		    }
+		}
+		else
+		{
+		    if(isset($post[$key."_nachgereicht"]) && (!isset($this->_data["dokumente"][$key])))
+		    {
+			$akte = new stdClass();
+			$akte->person_id = $this->_data["person"]->person_id;
+
+			$akte->bezeichnung = $file["name"];
+			$akte->dokument_kurzbz = $key;
+			$akte->insertvon = 'online';
+			$akte->nachgereicht = true;
+
+			$this->_saveAkte($akte);
+			//$this->AkteModel->saveAkte($akte);
+		    }
+		}
+		
+		//load dokumente
+		$this->_loadDokumente($this->session->userdata()["person_id"]);
+		foreach($this->_data["dokumente"] as $akte)
+		{
+		    if($akte->dms_id != null)
+		    {
+			$dms = $this->_loadDms($akte->dms_id);
+			$akte->dokument = $dms;
+		    }
+		}
+	    }
+	}
     }
     
     private function _loadData()
@@ -206,6 +308,52 @@ class Dokumente extends MY_Controller {
                 $this->_data["dokumente"][$akte->dokument_kurzbz] = $akte;
             }
         }
+	else
+	{
+	    $this->_setError(true, $this->AkteModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadDms($dms_id)
+    {
+        $this->DmsModel->loadDms($dms_id);
+        if($this->DmsModel->isResultValid() === true)
+        {
+            if(count($this->DmsModel->result->retval) == 1)
+	    {
+		return $this->DmsModel->result->retval[0];
+	    }
+	    else
+	    {
+		$this->_setError(true, "Dokument konnte nicht gefunden werden.");
+	    }
+        }
+	else
+	{
+	    $this->_setError(true, $this->DmsModel->getErrorMessage());
+	}
+    }
+    
+    private function _saveDms($dms)
+    {
+	$this->DmsModel->saveDms($dms);
+	if($this->DmsModel->isResultValid() === true)
+	{
+	    //TODO saved successfully
+	}
+	else
+	{
+	    $this->_setError(true, $this->DmsModel->getErrorMessage());
+	}
+    }
+    
+    private function _saveAkte($akte)
+    {
+	$this->AkteModel->saveAkte($akte);
+	if($this->AkteModel->isResultValid() === true)
+	{
+	    //TODO saved successfully
+	}
 	else
 	{
 	    $this->_setError(true, $this->AkteModel->getErrorMessage());
