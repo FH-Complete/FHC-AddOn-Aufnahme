@@ -10,9 +10,11 @@ $this->lang->load(array('aufnahme', 'studiengaenge'), $language);
     if (isset($error) && ($error->error === true))
 	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
     ?>
-
-    <?php $this->load_views('view_studiengaenge'); ?>
-
+    <div class="stg_container">
+	<?php $this->load_views('view_studiengaenge'); ?>
+    </div>
     <?php
     $this->load->view('templates/footer');
+    ?>
+</div>
     

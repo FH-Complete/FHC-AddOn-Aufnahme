@@ -30,7 +30,8 @@
     "components/jquery": "*",
     "components/font-awesome": "*",
 	"rogeriopradoj/codeigniter-restclient": "2.*",
-    "components/angular.js": "*"
+    "components/angular.js": "*",
+    "components/jqueryui" : "1.*"
   },
   "require-dev": 
   {

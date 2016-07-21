@@ -61,10 +61,10 @@ $this->load->view('templates/footer');
 	});
 	
 	
-	if($(".zustelladresse").prop("checked"))
-	{
-	    console.log($(".zustelladresse"));
-	}
+//	if($(".zustelladresse").prop("checked"))
+//	{
+//	    console.log($(".zustelladresse"));
+//	}
 	
 	$(".zustelladresse").click(function(event)
 	{

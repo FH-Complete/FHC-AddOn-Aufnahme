@@ -44,7 +44,7 @@
         <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("gebdatum") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_geburtsdatum'), "gebdatum", array("name" => "gebdatum", "for" => "gebdatum", "class" => "control-label")) ?>
-                <?php echo form_input(array('id' => 'gebdatum', 'name' => 'gebdatum', 'maxlength' => 64, "type" => "date", "value" => set_value("gebdatum", isset($person->gebdatum) ? $person->gebdatum : ""), "class" => "form-control")); ?>
+                <?php echo form_input(array('id' => 'gebdatum', 'name' => 'gebdatum', 'maxlength' => 64, "type" => "date", "value" => set_value("gebdatum", isset($person->gebdatum) ? $person->gebdatum : ""), "class" => "form-control datepicker")); ?>
                 <?php echo form_error("gebdatum"); ?>
             </div>
             <!--<div class="form-group <?php echo (form_error("geburtsdatum") != "") ? 'has-error' : '' ?>">
@@ -364,3 +364,12 @@
 </div>
 
 <?php echo form_close(); ?>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+	$(".datepicker").datepicker({
+	    dateFormat: "yy-mm-dd",
+	    maxDate: new Date()
+	});
+    });
+</script>
