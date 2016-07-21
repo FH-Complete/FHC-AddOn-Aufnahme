@@ -27,7 +27,7 @@
     </div>
     <div class="form-group">
 	<div class="col-sm-4 col-sm-offset-3">
-	    <?php echo form_submit(array("value" => "Abschicken", "name" => "submit_btn", "class" => "btn btn-primary")); ?>
+	    <?php echo form_button(array("content"=>"Abschicken", "name"=>"submit_btn", "class"=>"btn btn-primary", "type"=>"submit")); ?>
 	</div>
     </div>
     <?php

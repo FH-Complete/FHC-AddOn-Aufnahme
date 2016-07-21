@@ -357,7 +357,7 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
-		<?php echo form_submit(array("value"=>"Speichern", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden")); ?>
+		<?php echo form_button(array("content"=>"Speichern", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
 	    </div>
 	</div>
     </div>

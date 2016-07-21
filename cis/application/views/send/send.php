@@ -10,11 +10,11 @@
                 <div class="form-group">
 		    <?php if($prestudentStatus->bewerbung_abgeschicktamum != null)
 		    {
-			echo form_submit(array("value"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "disabled"=>"disabled"));
+			echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit", "disabled"=>"disabled"));
 		    }
 		    else
 		    {
-			echo form_submit(array("value"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden"));
+			echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit"));
 		    }
 		    ?>
                 </div>
