@@ -1,7 +1,7 @@
 <div>
     <h1 class="message_title"><?php echo $this->lang->line("msg_inbox"); ?></h1>
     <a href="<?php echo base_url($this->config->config["index_page"].'/Messages/newMessage'); ?>">
-	<button class="answer btn btn-sm">
+	<button class="answer btn btn-sm btn-primary">
 	    <?php echo $this->lang->line('msg_newMessage'); ?>
 	</button>
     </a>
@@ -27,14 +27,14 @@
 		<div style="float: left; width: 10%;"><span class="icon-paperclip"></span></div>
 		<div style="float: left; width: 10%;">
 		    <a href="<?php echo base_url($this->config->config['index_page'].'/Messages/answerMessage/'.$msg->message_id.'/'.$msg->oe_kurzbz); ?>">
-			<button class="answer btn btn-sm" id="answer_<?php echo $msg->message_id; ?>">
+			<button class="answer btn btn-sm btn-primary" id="answer_<?php echo $msg->message_id; ?>">
 			    <?php echo $this->lang->line('msg_answer'); ?>
 			</button>
 		    </a>
 		</div>
 		<div style="float: left; width: 10%;">
 		    <a href="<?php echo base_url($this->config->config['index_page'].'/Messages/deleteMessage/'.$msg->message_id); ?>">
-			<button class="btn btn-sm icon-trash" id="answer_<?php echo $msg->message_id; ?>"></button>
+			<button class="btn btn-sm btn-primary icon-trash" id="answer_<?php echo $msg->message_id; ?>"></button>
 		    </a>
 		</div>
 	    </div>
