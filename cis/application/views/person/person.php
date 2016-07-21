@@ -368,7 +368,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
 	$(".datepicker").datepicker({
-	    dateFormat: "yy-mm-dd",
+	    dateFormat: "dd.mm.yy",
 	    maxDate: new Date()
 	});
     });

@@ -27,6 +27,7 @@ class Registration extends MY_Controller {
         $this->load->model("Person_model", "PersonModel");
         $this->load->model("Kontakt_model");
 	$this->load->model("Message_model", "MessageModel");
+	$this->load->model('adresse_model', "AdresseModel");
         $this->lang->load('aufnahme', $this->get_language());
 	$this->lang->load('login', $this->get_language());
     }
@@ -41,7 +42,8 @@ class Registration extends MY_Controller {
             "geb_datum" => $this->input->post("geb_datum"),
             "email" => $this->input->post("email"),
             "captcha_code" => $this->input->post("captcha_code"),
-            "zugangscode" => $this->input->post("zugangscode")
+            "zugangscode" => $this->input->post("zugangscode"),
+	    "wohnort" =>$this->input->post("wohnort")
         );
 
 	if(isset($this->input->get()["language"]))
@@ -56,6 +58,7 @@ class Registration extends MY_Controller {
         $this->form_validation->set_rules("vorname", "Vorname", "required|max_length[32]");
         $this->form_validation->set_rules("nachname", "Nachname", "required|max_length[64]");
         $this->form_validation->set_rules("geb_datum", "Geburtsdatum", "required");
+	$this->form_validation->set_rules("wohnort", "Wohnort", "required");
         $this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
         $this->form_validation->set_rules("email2", "E-Mail", "required|valid_email|callback_check_email");
 	$this->form_validation->set_rules("datenschutz", "Datenschutz", "callback_check_terms");
@@ -99,7 +102,7 @@ class Registration extends MY_Controller {
     
     public function check_terms()
     {
-	if (!($this->input->post("datenschutz"))) {
+	if (($this->input->post("datenschutz") !== "")) {
             $this->form_validation->set_message("check_terms", "Sie müssen die Datenschutzbedingungen aktzeptieren.");
             return false;
         }
@@ -274,6 +277,14 @@ class Registration extends MY_Controller {
                     {
 			$this->_setError(true, $this->Kontakt_model->getErrorMessage());
                     }
+		    
+		    $adresse = new stdClass();
+		    $adresse->person_id =$person_id;
+		    $adresse->heimatadresse = "t";
+		    $adresse->zustelladresse = "f";
+		    $adresse->ort = $data["wohnort"];
+		    
+		    $this->_saveAdresse($adresse);
                 }
                 else
                 {
@@ -457,6 +468,19 @@ class Registration extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->PersonModel->getErrorMessage());
+	}
+    }
+    
+    private function _saveAdresse($adresse)
+    {
+	$this->AdresseModel->saveAdresse($adresse);
+	if($this->AdresseModel->isResultValid() === true)
+	{
+	    //TODO Daten erfolgreich gespeichert
+	}
+	else
+	{
+	    $this->_setError(true, $this->AdresseModel->getErrorMessage());
 	}
     }
 }

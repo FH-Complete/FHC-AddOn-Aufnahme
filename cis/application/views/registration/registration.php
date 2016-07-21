@@ -30,13 +30,19 @@
 	    <div class="form-group <?php echo (form_error("geb_datum")!="")? 'has-error': '' ?>">
 		<?php echo form_label($this->lang->line('aufnahme/geburtsdatum'), "geb_datum", array("name"=>"geb_datum","for"=>"geb_datum", "class"=>"col-sm-11 control-label")) ?>
 		<div class="col-sm-11">
-		    <?php echo form_input(array('id' => 'vorname', 'name' => 'geb_datum', 'placeholder'=>'tt.mm.jjjj', "type"=>"datetime", "value"=>set_value("geb_datum"), "class"=>"form-control")); ?>
+		    <?php echo form_input(array('id' => 'geb_datum', 'name' => 'geb_datum', 'placeholder'=>'', "type"=>"date", "value"=>set_value("geb_datum"), "class"=>"form-control datepicker")); ?>
 		    <?php echo form_error("geb_datum");?>
 		</div>
 	    </div>
 	</div>
 	<div class="col-lg-6 col-sm-6">
-
+	    <div class="form-group <?php echo (form_error("wohnort")!="")? 'has-error': '' ?>">
+		<?php echo form_label($this->lang->line('aufnahme/wohnort'), "wohnort", array("name"=>"wohnort","for"=>"wohnort", "class"=>"col-sm-11 control-label")) ?>
+		<div class="col-sm-11">
+		    <?php echo form_input(array('id' => 'wohnort', 'name' => 'wohnort', 'placeholder'=>'', "type"=>"text", "value"=>set_value("wohnort"), "class"=>"form-control")); ?>
+		    <?php echo form_error("wohnort");?>
+		</div>
+	    </div>
 	</div>
     </div>
     <div class="row">
@@ -122,6 +128,11 @@
 	    {
 		$("#registration_button").prop("disabled", true) 
 	    }
+	});
+	
+	$(".datepicker").datepicker({
+	    dateFormat: "dd.mm.yy",
+	    maxDate: new Date()
 	});
     });
 </script>
