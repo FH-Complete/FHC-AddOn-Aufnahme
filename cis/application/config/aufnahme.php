@@ -79,7 +79,7 @@ $config['fhc_api'] = array(
 |
 */
 $config['menu'][] = array('href' => site_url('Studiengaenge'), 'name' => 'Studiengänge', 'id' => 'Studiengänge');
-$config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => 'meine Bewerbung', 'id' => 'Bewerbung');
+$config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => 'meine Bewerbungen', 'id' => 'Bewerbung');
 $config['menu'][] = array('href' => site_url('Aufnahmetermine'), 'name' => 'Aufnahmetermine', 'id' => 'Aufnahmetermine');
 $config['menu'][] = array('href' => site_url('Dokumente'), 'name' => 'Dokumente', 'id' => 'Dokumente');
 $config['menu'][] = array('href' => site_url('Messages'), 'name' => 'Nachrichten', 'id' => 'Nachrichten');

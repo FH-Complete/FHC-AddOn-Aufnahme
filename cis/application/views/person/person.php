@@ -319,7 +319,7 @@
     </div>
     <div class="row">
         <div class="col-sm-5">
-            <?php echo form_label($this->lang->line('person_formDokumentupload_lebenslauf'), "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_formDokumentupload_lebenslauf')."&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?><span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="inklusive Foto"></span>
             <div class="form-group">
                 <?php
 		if((!isset($dokumente["Lebenslf"])) || ($dokumente["Lebenslf"]->nachgereicht === "t")) {
@@ -371,5 +371,8 @@
 	    dateFormat: "dd.mm.yy",
 	    maxDate: new Date()
 	});
+	
+	$(".fhc-tooltip").tooltip();
+	
     });
 </script>

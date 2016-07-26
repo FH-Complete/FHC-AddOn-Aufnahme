@@ -155,7 +155,7 @@ class Login extends MY_Controller {
 	if($this->UserAuthModel->result->retval == TRUE)
 	{
 	    $this->BenutzerModel->getBenutzer($username);
-	    if($this->BenutzerModel->result->error == 0)
+	    if(($this->BenutzerModel->result->error == 0) && (!empty($this->BenutzerModel->result->retval)))
 	    {
 		//$this->StudiensemesterModel->getNextStudiensemester("WS");
 		$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));

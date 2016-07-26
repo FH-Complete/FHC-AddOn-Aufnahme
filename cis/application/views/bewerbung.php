@@ -21,7 +21,7 @@ if (isset($error) && ($error->error === true))
         </div>
         <div class="row">
             <div id="<?php echo $studiengang->studiengang_kz; ?>" class='collapse'>
-                <div class="col-sm-3 navigation">
+                <div class="col-sm-4 navigation">
                     <?php echo 
                         $this->template->widget(
                             "person_nav",

@@ -207,11 +207,11 @@ $lang['aufnahme/studiengaenge'] = 'Studiengänge';
 $lang['aufnahme/termine'] = 'Aufnahmetermine';
 $lang['aufnahme/nachrichten'] = 'Nachrichten';
 $lang['aufnahme/downloads'] = 'Downloads';
-$lang["aufnahme/wiederholungEmail"] = "Wiederholung E-Mail";
-$lang["aufnahme/vorname"] = "Vorname";
-$lang["aufnahme/nachname"] = "Nachname";
-$lang["aufnahme/geburtsdatum"] = "Geburtsdatum";
-$lang["aufnahme/emailAdresse"] = "E-Mail";
+$lang["aufnahme/wiederholungEmail"] = "Wiederholung E-Mail*";
+$lang["aufnahme/vorname"] = "Vorname*";
+$lang["aufnahme/nachname"] = "Nachname*";
+$lang["aufnahme/geburtsdatum"] = "Geburtsdatum*";
+$lang["aufnahme/emailAdresse"] = "E-Mail*";
 $lang['aufnahme/password']='Passwort';
-$lang['aufnahme/wohnort']='Wohnort';
+$lang['aufnahme/wohnort']='Wohnort*';
 ?>
