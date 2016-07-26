@@ -40,7 +40,19 @@ foreach ($studiengaenge as $stg)
 		</div>
 		<div class="row">
 		    <div class="col-sm-3 "><?php echo $this->lang->line('studiengaenge/bewerbungsfrist'); ?>: </div>
-		    <div class="col-sm-6 frist"<?php echo (empty($stg->fristen)) ? "studienplan_id='".$studienplan->studienplan_id."'" : ""; ?>>
+		    <?php $bewerbungMoeglich = false;
+			if(!empty($stg->fristen))
+			{
+			    foreach($stg->fristen as $frist)
+			    {
+				if((date("Y-m-d", strtotime($frist->beginn)) < date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) > date("Y-m-d")))
+				{
+				    $bewerbungMoeglich = true;
+				}
+			    }
+			}
+		    ?>
+		    <div class="col-sm-6 frist"<?php echo (!$bewerbungMoeglich) ? "studienplan_id='".$studienplan->studienplan_id."'" : ""; ?>>
 			<?php if(!empty($stg->fristen))
 			{
 			    $dateString = "";
@@ -85,7 +97,7 @@ foreach ($studiengaenge as $stg)
 		    <div class="col-sm-3 "><?php echo $this->lang->line('studiengaenge/weiterführend'); ?>: </div><div class="col-sm-6"></div> 
 		</div>
 		<div class="row">
-		    <div class="col-sm-3 col-md-offset-3"><a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung/studiengang/".$stg->studiengang_kz."/".$studienplan->studienplan_id) ?>"><button type="button" class="btn btn-sm icon-bewerben"><?php echo $this->lang->line('studiengaenge/buttonText'); ?></button></a></div>
+		    <div class="col-sm-3 col-md-offset-3"><a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung/studiengang/".$stg->studiengang_kz."/".$studienplan->studienplan_id) ?>"><button id="button_<?php echo $studienplan->studienplan_id; ?>" type="button" class="btn btn-sm icon-bewerben"><?php echo $this->lang->line('studiengaenge/buttonText'); ?></button></a></div>
 		</div>
 	    </div>
         </div>
@@ -103,6 +115,9 @@ foreach ($studiengaenge as $stg)
 	   {
 	       var id = $(v).attr("studienplan_id");
 	       $("#button_"+id).prop("disabled", true);
+	       
+	       $("#button_"+id).attr("title", "Derzeit keine Bewerbung möglich!");
+	       $("#button_"+id).tooltip();
 	   }
 	});
     });

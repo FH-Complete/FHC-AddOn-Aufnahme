@@ -40,7 +40,19 @@ foreach ($studiengaenge as $stg)
 		</div>
 		<div class="row">
 		    <div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/bewerbungsfrist'); ?>: </div>
-		    <div class="col-sm-6 frist"<?php echo (empty($stg->fristen)) ? "studienplan_id='".$studienplan->studienplan_id."'" : ""; ?>>
+		    <?php $bewerbungMoeglich = false;
+			if(!empty($stg->fristen))
+			{
+			    foreach($stg->fristen as $frist)
+			    {
+				if((date("Y-m-d", strtotime($frist->beginn)) < date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) > date("Y-m-d")))
+				{
+				    $bewerbungMoeglich = true;
+				}
+			    }
+			}
+		    ?>
+		    <div class="col-sm-6 frist"<?php echo (!$bewerbungMoeglich) ? "studienplan_id='".$studienplan->studienplan_id."'" : ""; ?>>
 			<?php if(!empty($stg->fristen))
 			{
 			    $dateString = "";
@@ -102,6 +114,9 @@ foreach ($studiengaenge as $stg)
 	   {
 	       var id = $(v).attr("studienplan_id");
 	       $("#button_"+id).prop("disabled", true);
+	       
+	       $("#button_"+id).attr("title", "Derzeit keine Bewerbung möglich!");
+	       $("#button_"+id).tooltip();
 	   }
 	});
     });
