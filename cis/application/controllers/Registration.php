@@ -47,7 +47,7 @@ class Registration extends MY_Controller {
 	    "geschlecht" => $this->input->post("geschlecht")
         );
 
-	if(isset($this->input->get()["language"]))
+	if(isset($this->input->get()["sprache"]))
 	{
 	    $this->lang->load('aufnahme', $this->_data["sprache"]);
 	    $this->lang->load('login', $this->_data["sprache"]);

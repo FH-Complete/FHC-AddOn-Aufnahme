@@ -34,9 +34,9 @@ class MY_Controller extends CI_Controller {
         }
         else
 	{
-            $this->session->language = $this->input->get('language');
+            $this->session->language = $this->input->get('sprache');
 	    $this->_getPhrasen(ucfirst($this->session->language));
-            return $this->input->get('language');
+            return $this->input->get('sprache');
         }
     }
 
