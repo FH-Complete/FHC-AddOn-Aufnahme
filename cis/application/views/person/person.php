@@ -310,11 +310,12 @@
             <div class="form-group">
                 <div class="form-group <?php echo (form_error("reisepass") != "") ? 'has-error' : '' ?>">
 		    <div class="upload">
-			<?php echo form_input(array('id' => 'reisepass', 'name' => 'reisepass', "type" => "file")); ?>
+			<?php echo form_input(array('id' => 'reisepass_'.$studiengang->studienplan->studienplan_id, 'name' => 'reisepass', "type" => "file")); ?>
 			<?php echo form_error("reisepass"); ?>
 		    </div>
                 </div>
             </div>
+	    <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('reisepass', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button>
         </div>
     </div>
     <div class="row">
@@ -347,11 +348,12 @@
             <div class="form-group">
                 <div class="form-group <?php echo (form_error("lebenslauf") != "") ? 'has-error' : '' ?>">
 		    <div class="upload">
-			<?php echo form_input(array('id' => 'lebenslauf', 'name' => 'lebenslauf', "type" => "file")); ?>
+			<?php echo form_input(array('id' => 'lebenslauf_'.$studiengang->studienplan->studienplan_id, 'name' => 'lebenslauf', "type" => "file")); ?>
 			<?php echo form_error("lebenslauf"); ?>
 		    </div>
                 </div>
             </div>
+	    <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('lebenslauf', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button>
         </div>
     </div>
     <div class="row">
@@ -374,5 +376,58 @@
 	
 	$(".fhc-tooltip").tooltip();
 	
+	$('input[type=file]').on('change', prepareUpload);
+	
     });
+    
+    var files;
+    
+    function prepareUpload(event)
+    {
+	console.log(event.target.files);
+	files = event.target.files;
+    }
+    
+    // Catch the form submit and upload the files
+    function uploadFiles(document_kurzbz, studienplan_id)
+    {
+	// START A LOADING SPINNER HERE
+
+	// Create a formdata object and add the files
+	var data = new FormData();
+	$.each(files, function(key, value)
+	{
+	    data.append(document_kurzbz, value);
+	});
+
+	$.ajax({
+	    url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles"); ?>',
+	    type: 'POST',
+	    data: data,
+	    cache: false,
+	    dataType: 'json',
+	    processData: false, // Don't process the files
+	    contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+	    success: function(data, textStatus, jqXHR)
+	    {
+		if(data.success === true)
+		{
+		    // Success
+		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span>Upload successful.</span>");
+		}
+		else
+		{
+		    // Handle errors here
+		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span>An error occured.</span>");
+		    console.log('ERRORS: ' + data.error);
+		}
+	    },
+	    error: function(jqXHR, textStatus, errorThrown)
+	    {
+		// Handle errors here
+		console.log('ERRORS: ' + textStatus);
+		// STOP LOADING SPINNER
+	    }
+	});
+    }
 </script>

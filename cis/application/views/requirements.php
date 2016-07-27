@@ -52,6 +52,62 @@ if (isset($error) && ($error->error === true))
 	<?php echo form_close(); ?>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+	$('input[type=file]').on('change', prepareUpload);
+    });
+    
+    var files;
+    
+    function prepareUpload(event)
+    {
+	console.log(event.target.files);
+	files = event.target.files;
+    }
+    
+    // Catch the form submit and upload the files
+    function uploadFiles(document_kurzbz, studienplan_id)
+    {
+	// START A LOADING SPINNER HERE
+
+	// Create a formdata object and add the files
+	var data = new FormData();
+	$.each(files, function(key, value)
+	{
+	    data.append(document_kurzbz, value);
+	});
+
+	$.ajax({
+	    url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/uploadFiles"); ?>',
+	    type: 'POST',
+	    data: data,
+	    cache: false,
+	    dataType: 'json',
+	    processData: false, // Don't process the files
+	    contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+	    success: function(data, textStatus, jqXHR)
+	    {
+		if(data.success === true)
+		{
+		    // Success
+		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span>Upload successful.</span>");
+		}
+		else
+		{
+		    // Handle errors here
+		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span>An error occured.</span>");
+		    console.log('ERRORS: ' + data.error);
+		}
+	    },
+	    error: function(jqXHR, textStatus, errorThrown)
+	    {
+		// Handle errors here
+		console.log('ERRORS: ' + textStatus);
+		// STOP LOADING SPINNER
+	    }
+	});
+    }
+</script>
 
 <?php
 $this->load->view('templates/footer');

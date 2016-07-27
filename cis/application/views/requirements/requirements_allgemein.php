@@ -3,6 +3,8 @@
 echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id, array("id" => "RequirementsForm", "name" => "RequirementsForm")); ?>
 <div class="row">
     <div class="col-sm-12">
+	<span><?php echo $this->getPhrase("ZGV/introduction_short", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></span>
+	<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->getPhrase("ZGV/introduction_long", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"></span>
 	<div class="radio">
 	    <label><input type="radio" name="doktype" value="" />Allgmeine Hochschule (AHS/BHS)</label>
 	</div>
@@ -52,13 +54,19 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
 	<div class="form-group">
 	    <div class="form-group <?php echo (form_error("Maturaze") != "") ? 'has-error' : '' ?>">
 		<div class="upload">
-		    <?php echo form_input(array('id' => 'Maturaze', 'name' => 'Maturaze', "type" => "file")); ?>
+		    <?php echo form_input(array('id' => 'Maturaze_'.$studiengang->studienplan->studienplan_id, 'name' => 'Maturaze', "type" => "file")); ?>
 		    <?php echo form_error("Maturaze"); ?>
 		</div>
 	    </div>
+	    <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('Maturaze', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button>
 	</div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {	
+	$(".fhc-tooltip").tooltip();	
+    });
+</script>
    
     
     

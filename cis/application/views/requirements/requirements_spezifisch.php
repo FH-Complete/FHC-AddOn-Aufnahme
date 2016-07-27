@@ -37,10 +37,11 @@
 		<div class="form-group">
 		    <div class="form-group <?php echo (form_error($dok->dokument_kurzbz) != "") ? 'has-error' : '' ?>">
 			<div class="upload">
-			    <?php echo form_input(array('id' => $dok->dokument_kurzbz, 'name' => $dok->dokument_kurzbz, "type" => "file")); ?>
+			    <?php echo form_input(array('id' => $dok->dokument_kurzbz."_".$studiengang->studienplan->studienplan_id, 'name' => $dok->dokument_kurzbz, "type" => "file")); ?>
 			    <?php echo form_error($dok->dokument_kurzbz); ?>
 			</div>
 		    </div>
+		    <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $dok->dokument_kurzbz; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button>
 		</div>
 		<div class="form-group">
 		    <div class="form-group">

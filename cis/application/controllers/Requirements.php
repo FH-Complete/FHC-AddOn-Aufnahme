@@ -49,27 +49,159 @@ class Requirements extends MY_Controller {
             } 
         }
 	
-	$post = $this->input->post();
+	//file upload is done with jQuery
+//	$post = $this->input->post();
+//	$files = $_FILES;
+//	if(count($files) > 0)
+//	{
+//	    foreach($files as $key=>$file)
+//	    {
+//		if(is_uploaded_file($file["tmp_name"]))
+//		{
+//		    $obj = new stdClass();
+//		    $obj->version = 0;
+//		    $obj->mimetype = $file["type"];
+//		    $obj->name = $file["name"];
+//		    $obj->oe_kurzbz = null;
+//		    $obj->dokument_kurzbz = $key;
+//		    
+//		    $akte = new stdClass();
+//
+//		    foreach($this->_data["dokumente"] as $akte_temp)
+//		    {
+//			if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
+//			{
+//			    if($akte_temp->dms_id != null)
+//			    {
+//				$dms = $this->_loadDms($akte_temp->dms_id);
+//				$obj->version = $dms->version+1;
+//			    }
+//			    else
+//			    {
+//				$akte = $akte_temp;
+//				$akte->updateamum = date("Y-m-d H:i:s");
+//				$akte->updatevon = "online";
+//			    }
+//			}
+//		    }
+//
+//		    $obj->kategorie_kurzbz = "Akte";
+//
+//		    $type = pathinfo($file["name"], PATHINFO_EXTENSION);
+//		    $data = file_get_contents($file["tmp_name"]);
+//		    $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
+//
+//		    $this->_saveDms($obj);
+//
+//		    if($this->DmsModel->result->error == 0)
+//		    {
+//			$akte->dms_id = $this->DmsModel->result->retval->dms_id;
+//			$akte->person_id = $this->_data["person"]->person_id;
+//			$akte->mimetype = $file["type"];
+//
+//			$akte->bezeichnung = mb_substr($obj->name, 0, 32);
+//			$akte->dokument_kurzbz = $obj->dokument_kurzbz;
+//			$akte->titel = $key;
+//			$akte->insertvon = 'online';
+//			$akte->nachgereicht = 'f';
+//			
+//			unset($akte->uid);
+//			unset($akte->inhalt_vorhanden);
+//
+//			$this->_saveAkte($akte);
+//		    }
+//
+//		    if(unlink($file["tmp_name"]))
+//		    {
+//			//removing tmp file successful
+//		    }
+//		}
+//		else
+//		{
+//		    if(isset($post[$key."_nachgereicht"]))
+//		    {
+//			$akte = new stdClass();
+//			$akte->person_id = $this->_data["person"]->person_id;
+//
+//			$akte->bezeichnung = $file["name"];
+//			$akte->dokument_kurzbz = $key;
+//			$akte->insertvon = 'online';
+//			$akte->nachgereicht = true;
+//
+//			$this->_saveAkte($akte);
+//			//$this->AkteModel->saveAkte($akte);
+//		    }
+//		}
+//		
+//		//load dokumente
+//		$this->_loadDokumente($this->session->userdata()["person_id"]);
+//		foreach($this->_data["dokumente"] as $akte)
+//		{
+//		    if($akte->dms_id != null)
+//		    {
+//			$dms = $this->_loadDms($akte->dms_id);
+//			$akte->dokument = $dms;
+//		    }
+//		}
+//	    }
+//	}
+        $this->load->view('requirements', $this->_data);
+    }
+    
+    public function uploadFiles()
+    {
 	$files = $_FILES;
+	
 	if(count($files) > 0)
 	{
+	    //load person data
+	    $this->_data["person"] = $this->_loadPerson();
+	    
+	    //load dokumente
+	    $this->_loadDokumente($this->session->userdata()["person_id"]);
+
+	    foreach($this->_data["dokumente"] as $akte)
+	    {
+		if($akte->dms_id != null)
+		{
+		    $dms = $this->_loadDms($akte->dms_id);
+		    $akte->dokument = $dms;
+		}
+	    }
+	    
+	    
 	    foreach($files as $key=>$file)
 	    {
 		if(is_uploaded_file($file["tmp_name"]))
 		{
 		    $obj = new stdClass();
+		    $akte = new stdClass();
+
 		    $obj->version = 0;
 		    $obj->mimetype = $file["type"];
 		    $obj->name = $file["name"];
 		    $obj->oe_kurzbz = null;
-		    $obj->dokument_kurzbz = $key;
-		    
-		    $akte = new stdClass();
+
+		    switch($key)
+		    {
+			case "reisepass":
+			    $obj->dokument_kurzbz = "pass";
+			    break;                        
+			case "lebenslauf":
+			    $obj->dokument_kurzbz = "Lebenslf";
+			    break;
+			default:
+			    $obj->dokument_kurzbz = "Sonst";
+			    break;
+		    }
 
 		    foreach($this->_data["dokumente"] as $akte_temp)
 		    {
 			if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
 			{
+			    $dms = $this->_loadDms($akte_temp->dms_id);
+			    $obj->version = $dms->version+1;
+
 			    if($akte_temp->dms_id != null)
 			    {
 				$dms = $this->_loadDms($akte_temp->dms_id);
@@ -91,7 +223,7 @@ class Requirements extends MY_Controller {
 		    $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
 		    $this->_saveDms($obj);
-
+		    
 		    if($this->DmsModel->result->error == 0)
 		    {
 			$akte->dms_id = $this->DmsModel->result->retval->dms_id;
@@ -103,11 +235,28 @@ class Requirements extends MY_Controller {
 			$akte->titel = $key;
 			$akte->insertvon = 'online';
 			$akte->nachgereicht = 'f';
-			
+
 			unset($akte->uid);
 			unset($akte->inhalt_vorhanden);
 
-			$this->_saveAkte($akte);
+			$result = new stdClass();
+			
+			if($this->_saveAkte($akte))
+			{
+			    $result->success = true;
+			    
+			}
+			else
+			{
+			    $result->success = false;
+			}
+			
+			echo json_encode($result);
+		    }
+		    else
+		    {
+			//TODO handle error
+			var_dump($this->DmsModel->result);
 		    }
 
 		    if(unlink($file["tmp_name"]))
@@ -115,36 +264,8 @@ class Requirements extends MY_Controller {
 			//removing tmp file successful
 		    }
 		}
-		else
-		{
-		    if(isset($post[$key."_nachgereicht"]))
-		    {
-			$akte = new stdClass();
-			$akte->person_id = $this->_data["person"]->person_id;
-
-			$akte->bezeichnung = $file["name"];
-			$akte->dokument_kurzbz = $key;
-			$akte->insertvon = 'online';
-			$akte->nachgereicht = true;
-
-			$this->_saveAkte($akte);
-			//$this->AkteModel->saveAkte($akte);
-		    }
-		}
-		
-		//load dokumente
-		$this->_loadDokumente($this->session->userdata()["person_id"]);
-		foreach($this->_data["dokumente"] as $akte)
-		{
-		    if($akte->dms_id != null)
-		    {
-			$dms = $this->_loadDms($akte->dms_id);
-			$akte->dokument = $dms;
-		    }
-		}
 	    }
 	}
-        $this->load->view('requirements', $this->_data);
     }
     
     private function _loadStudiengang($stgkz = null)
@@ -282,6 +403,7 @@ class Requirements extends MY_Controller {
 	if($this->AkteModel->isResultValid() === true)
 	{
 	    //TODO saved successfully
+	    return true;
 	}
 	else
 	{

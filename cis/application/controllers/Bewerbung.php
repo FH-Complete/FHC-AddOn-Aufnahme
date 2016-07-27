@@ -119,135 +119,136 @@ class Bewerbung extends MY_Controller {
         }
         else
         {
-            $post = $this->input->post();
-            $files = $_FILES;
-            
-            if(count($files) > 0)
-            {
-                foreach($files as $key=>$file)
-                {
-                    if(is_uploaded_file($file["tmp_name"]))
-                    {
-                        $obj = new stdClass();
-			$akte = new stdClass();
-			
-                        $obj->version = 0;
-                        $obj->mimetype = $file["type"];
-                        $obj->name = $file["name"];
-                        $obj->oe_kurzbz = null;
-
-                        switch($key)
-                        {
-                            case "reisepass":
-                                $obj->dokument_kurzbz = "pass";
-                                break;                        
-                            case "lebenslauf":
-                                $obj->dokument_kurzbz = "Lebenslf";
-                                break;
-                            default:
-                                $obj->dokument_kurzbz = "Sonst";
-                                break;
-                        }
-			
-			foreach($this->_data["dokumente"] as $akte_temp)
-			{
-			    if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
-			    {
-				$dms = $this->_loadDms($akte_temp->dms_id);
-				$obj->version = $dms->version+1;
-				
-				if($akte_temp->dms_id != null)
-				{
-				    $dms = $this->_loadDms($akte_temp->dms_id);
-				    $obj->version = $dms->version+1;
-				}
-				else
-				{
-				    $akte = $akte_temp;
-				    $akte->updateamum = date("Y-m-d H:i:s");
-				    $akte->updatevon = "online";
-				}
-			    }
-			}
-
-                        $obj->kategorie_kurzbz = "Akte";
-
-                        $type = pathinfo($file["name"], PATHINFO_EXTENSION);
-                        $data = file_get_contents($file["tmp_name"]);
-                        $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
-			
-			$this->_saveDms($obj);
-
-                        if($this->DmsModel->result->error == 0)
-                        {
-                            $akte->dms_id = $this->DmsModel->result->retval->dms_id;
-                            $akte->person_id = $this->_data["person"]->person_id;
-                            $akte->mimetype = $file["type"];
-
-                            $akte->bezeichnung = mb_substr($obj->name, 0, 32);
-                            $akte->dokument_kurzbz = $obj->dokument_kurzbz;
-                            $akte->titel = $key;
-                            $akte->insertvon = 'online';
-			    $akte->nachgereicht = 'f';
-			    
-			    unset($akte->uid);
-			    unset($akte->inhalt_vorhanden);
-			    
-			    $this->_saveAkte($akte);
-                        }
-			else
-			{
-			    //TODO handle error
-			    var_dump($this->DmsModel->result);
-			}
-
-                        if(unlink($file["tmp_name"]))
-                        {
-                            //removing tmp file successful
-                        }
-                    }
-		    else
-		    {
-			if(isset($post["reisepass_nachgereicht"]))
-			{
-			    $akte = new stdClass();
-			    $akte->person_id = $this->_data["person"]->person_id;
-
-			    $akte->bezeichnung = $file["name"];
-			    $akte->dokument_kurzbz = "pass";
-			    $akte->insertvon = 'online';
-			    $akte->nachgereicht = true;
-
-			    $this->_saveAkte($akte);
-			}
-			
-			if(isset($post["lebenslauf_nachgereicht"]))
-			{
-			    $akte = new stdClass();
-			    $akte->person_id = $this->_data["person"]->person_id;
-
-			    $akte->bezeichnung = $file["name"];
-			    $akte->dokument_kurzbz = "Lebenslf";
-			    $akte->insertvon = 'online';
-			    $akte->nachgereicht = true;
-
-			    $this->_saveAkte($akte);
-			}
-		    }
-		    
-		    //load dokumente
-		    $this->_loadDokumente($this->session->userdata()["person_id"]);
-
-		    foreach($this->_data["dokumente"] as $akte)
-		    {
-			if($akte->dms_id != null)
-			{
-			    $dms = $this->_loadDms($akte->dms_id);
-			    $akte->dokument = $dms;
-			}
-		    }
-                }
-            }
+	    //file upload is done with jQuery
+//            $post = $this->input->post();
+//            $files = $_FILES;
+//            
+//            if(count($files) > 0)
+//            {
+//                foreach($files as $key=>$file)
+//                {
+//                    if(is_uploaded_file($file["tmp_name"]))
+//                    {
+//                        $obj = new stdClass();
+//			$akte = new stdClass();
+//			
+//                        $obj->version = 0;
+//                        $obj->mimetype = $file["type"];
+//                        $obj->name = $file["name"];
+//                        $obj->oe_kurzbz = null;
+//
+//                        switch($key)
+//                        {
+//                            case "reisepass":
+//                                $obj->dokument_kurzbz = "pass";
+//                                break;                        
+//                            case "lebenslauf":
+//                                $obj->dokument_kurzbz = "Lebenslf";
+//                                break;
+//                            default:
+//                                $obj->dokument_kurzbz = "Sonst";
+//                                break;
+//                        }
+//			
+//			foreach($this->_data["dokumente"] as $akte_temp)
+//			{
+//			    if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
+//			    {
+//				$dms = $this->_loadDms($akte_temp->dms_id);
+//				$obj->version = $dms->version+1;
+//				
+//				if($akte_temp->dms_id != null)
+//				{
+//				    $dms = $this->_loadDms($akte_temp->dms_id);
+//				    $obj->version = $dms->version+1;
+//				}
+//				else
+//				{
+//				    $akte = $akte_temp;
+//				    $akte->updateamum = date("Y-m-d H:i:s");
+//				    $akte->updatevon = "online";
+//				}
+//			    }
+//			}
+//
+//                        $obj->kategorie_kurzbz = "Akte";
+//
+//                        $type = pathinfo($file["name"], PATHINFO_EXTENSION);
+//                        $data = file_get_contents($file["tmp_name"]);
+//                        $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
+//			
+//			$this->_saveDms($obj);
+//
+//                        if($this->DmsModel->result->error == 0)
+//                        {
+//                            $akte->dms_id = $this->DmsModel->result->retval->dms_id;
+//                            $akte->person_id = $this->_data["person"]->person_id;
+//                            $akte->mimetype = $file["type"];
+//
+//                            $akte->bezeichnung = mb_substr($obj->name, 0, 32);
+//                            $akte->dokument_kurzbz = $obj->dokument_kurzbz;
+//                            $akte->titel = $key;
+//                            $akte->insertvon = 'online';
+//			    $akte->nachgereicht = 'f';
+//			    
+//			    unset($akte->uid);
+//			    unset($akte->inhalt_vorhanden);
+//			    
+//			    $this->_saveAkte($akte);
+//                        }
+//			else
+//			{
+//			    //TODO handle error
+//			    var_dump($this->DmsModel->result);
+//			}
+//
+//                        if(unlink($file["tmp_name"]))
+//                        {
+//                            //removing tmp file successful
+//                        }
+//                    }
+//		    else
+//		    {
+//			if(isset($post["reisepass_nachgereicht"]))
+//			{
+//			    $akte = new stdClass();
+//			    $akte->person_id = $this->_data["person"]->person_id;
+//
+//			    $akte->bezeichnung = $file["name"];
+//			    $akte->dokument_kurzbz = "pass";
+//			    $akte->insertvon = 'online';
+//			    $akte->nachgereicht = true;
+//
+//			    $this->_saveAkte($akte);
+//			}
+//			
+//			if(isset($post["lebenslauf_nachgereicht"]))
+//			{
+//			    $akte = new stdClass();
+//			    $akte->person_id = $this->_data["person"]->person_id;
+//
+//			    $akte->bezeichnung = $file["name"];
+//			    $akte->dokument_kurzbz = "Lebenslf";
+//			    $akte->insertvon = 'online';
+//			    $akte->nachgereicht = true;
+//
+//			    $this->_saveAkte($akte);
+//			}
+//		    }
+//		    
+//		    //load dokumente
+//		    $this->_loadDokumente($this->session->userdata()["person_id"]);
+//
+//		    foreach($this->_data["dokumente"] as $akte)
+//		    {
+//			if($akte->dms_id != null)
+//			{
+//			    $dms = $this->_loadDms($akte->dms_id);
+//			    $akte->dokument = $dms;
+//			}
+//		    }
+//                }
+//            }
 
 	    $person = $this->_data["person"];
 	    $person->anrede = $post["anrede"];
@@ -497,7 +498,7 @@ class Bewerbung extends MY_Controller {
 	    {
 		$prestudent = $this->_savePrestudent($studiengang_kz);
 		$this->_data["prestudent"] = $this->_loadPrestudent();
-		$this->_savePrestudentStatus($prestudent);
+		$this->_savePrestudentStatus($prestudent, "Interessent");
 	    }
 	    else
 	    {
@@ -557,6 +558,164 @@ class Bewerbung extends MY_Controller {
         }
         
         $this->load->view('bewerbung', $this->_data);
+    }
+    
+    public function storno($studiengang_kz)
+    {
+	$this->checkLogin();
+        
+        $this->session->set_userdata("studiengang_kz", $studiengang_kz);
+        
+        //$this->StudiensemesterModel->getNextStudiensemester("WS");
+        $this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
+        
+        //load person data
+        $this->_data["person"] = $this->_loadPerson();
+
+        //load preinteressent data
+        $this->_data["prestudent"] = $this->_loadPrestudent();
+	
+	$prestudentStatus = null;
+	$ps = null;
+	foreach($this->_data["prestudent"] as $prestudent)
+	{
+	    if($prestudent->studiengang_kz === $studiengang_kz)
+	    {
+		$ps = $prestudent;
+		$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+	    }
+	}
+	
+	if($prestudentStatus !== null)
+	{
+	    
+	    //load Studienplan
+	    $this->_data["studienplan"] = $this->_loadStudienplan($prestudentStatus->studienplan_id); 
+	    $prestudentStatus->status_kurzbz = "Abbrecher";
+	    //TODO noch nicht in DB vorhanden
+	    //$prestudentStatus->grund = "Storno";
+	    $this->_savePrestudentStatus($ps, "Abbrecher");
+	}
+    }
+    
+    public function uploadFiles()
+    {
+	$files = $_FILES;
+	
+	if(count($files) > 0)
+	{
+	    //load person data
+	    $this->_data["person"] = $this->_loadPerson();
+	    
+	    //load dokumente
+	    $this->_loadDokumente($this->session->userdata()["person_id"]);
+
+	    foreach($this->_data["dokumente"] as $akte)
+	    {
+		if($akte->dms_id != null)
+		{
+		    $dms = $this->_loadDms($akte->dms_id);
+		    $akte->dokument = $dms;
+		}
+	    }
+	    
+	    
+	    foreach($files as $key=>$file)
+	    {
+		if(is_uploaded_file($file["tmp_name"]))
+		{
+		    $obj = new stdClass();
+		    $akte = new stdClass();
+
+		    $obj->version = 0;
+		    $obj->mimetype = $file["type"];
+		    $obj->name = $file["name"];
+		    $obj->oe_kurzbz = null;
+
+		    switch($key)
+		    {
+			case "reisepass":
+			    $obj->dokument_kurzbz = "pass";
+			    break;                        
+			case "lebenslauf":
+			    $obj->dokument_kurzbz = "Lebenslf";
+			    break;
+			default:
+			    $obj->dokument_kurzbz = "Sonst";
+			    break;
+		    }
+
+		    foreach($this->_data["dokumente"] as $akte_temp)
+		    {
+			if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
+			{
+			    $dms = $this->_loadDms($akte_temp->dms_id);
+			    $obj->version = $dms->version+1;
+
+			    if($akte_temp->dms_id != null)
+			    {
+				$dms = $this->_loadDms($akte_temp->dms_id);
+				$obj->version = $dms->version+1;
+			    }
+			    else
+			    {
+				$akte = $akte_temp;
+				$akte->updateamum = date("Y-m-d H:i:s");
+				$akte->updatevon = "online";
+			    }
+			}
+		    }
+
+		    $obj->kategorie_kurzbz = "Akte";
+
+		    $type = pathinfo($file["name"], PATHINFO_EXTENSION);
+		    $data = file_get_contents($file["tmp_name"]);
+		    $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
+		    $this->_saveDms($obj);
+		    
+		    if($this->DmsModel->result->error == 0)
+		    {
+			$akte->dms_id = $this->DmsModel->result->retval->dms_id;
+			$akte->person_id = $this->_data["person"]->person_id;
+			$akte->mimetype = $file["type"];
+
+			$akte->bezeichnung = mb_substr($obj->name, 0, 32);
+			$akte->dokument_kurzbz = $obj->dokument_kurzbz;
+			$akte->titel = $key;
+			$akte->insertvon = 'online';
+			$akte->nachgereicht = 'f';
+
+			unset($akte->uid);
+			unset($akte->inhalt_vorhanden);
+
+			$result = new stdClass();
+			
+			if($this->_saveAkte($akte))
+			{
+			    $result->success = true;
+			    
+			}
+			else
+			{
+			    $result->success = false;
+			}
+			
+			echo json_encode($result);
+		    }
+		    else
+		    {
+			//TODO handle error
+			var_dump($this->DmsModel->result);
+		    }
+
+		    if(unlink($file["tmp_name"]))
+		    {
+			//removing tmp file successful
+		    }
+		}
+	    }
+	}
     }
     
     private function _loadPerson()
@@ -762,12 +921,12 @@ class Bewerbung extends MY_Controller {
 	}
     }
     
-    private function _savePrestudentStatus($prestudent)
+    private function _savePrestudentStatus($prestudent, $status_kurzbz)
     {
         $prestudentStatus = new stdClass();
         $prestudentStatus->new = true;
         $prestudentStatus->prestudent_id = $prestudent->prestudent_id;
-        $prestudentStatus->status_kurzbz = "Interessent";
+        $prestudentStatus->status_kurzbz = $status_kurzbz;
 	$prestudentStatus->rt_stufe = 1;
         
         if(($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
@@ -912,6 +1071,7 @@ class Bewerbung extends MY_Controller {
 	if($this->AkteModel->isResultValid() === true)
 	{
 	    //TODO saved successfully
+	    return true;
 	}
 	else
 	{
