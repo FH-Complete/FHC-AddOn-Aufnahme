@@ -155,3 +155,21 @@ $config['display_phrase_name'] = false;
 |
 */
 $config['hybrid_login'] = true;
+
+/*
+|--------------------------------------------------------------------------
+| Organisation Data
+|--------------------------------------------------------------------------
+|
+| OE to get Email template for registration mail.
+|
+*/
+$config['organisation'] = array(
+    "bezeichnung" => "Fachhochschule St. Pölten",
+    "strasse" => "Matthias Corvinus-Straße 15",
+    "plz" => "3100",
+    "ort" => "St. Pölten",
+    "telefon" => "+43/2742/313 228 - 200",
+    "fax" => "F: +43/2742/313 228 - 339",
+    "mail" => "csc@fhstp.ac.at"
+);

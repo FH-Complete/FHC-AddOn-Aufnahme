@@ -147,11 +147,7 @@ $this->load->view('templates/footer');
 	//TODO hide Authorization
 	$.ajax({
 	    method: "GET",
-	    url: "<?php echo($this->config->item('fhc_api')['server']);?>person/person/person?person_id=<?php echo $person->person_id; ?>",
-	    headers: {
-		'<?php echo $this->config->item('fhc_api')['api_name']; ?>': '<?php echo $this->config->item('fhc_api')['api_key']; ?>',
-		"Authorization": "Basic " + '<?php echo base64_encode($this->config->item('fhc_api')['http_user'].":".$this->config->item('fhc_api')['http_pass']); ?>'
-	    }
+	    url: "<?php echo($this->config->item('fhc_api')['server']);?>person/person/person?person_id=<?php echo $person->person_id; ?>"
 	}).done(function(data){
 	    if(data.error === 0)
 	    {

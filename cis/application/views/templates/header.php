@@ -18,6 +18,16 @@
 	<script src="<?php echo base_url('../include/js/lodash/lodash.min.js') ?>"></script>
 	<script src="<?php echo base_url('../vendor/components/bootstrap/js/bootstrap.min.js') ?>"></script>
 	<script src="<?php echo base_url('themes/' . $this->config->item('theme') . '/global.js') ?>"></script>
+	<script type="text/javascript">
+	    $(document).ready(function(){
+		$.ajaxSetup({
+		    headers: {
+			'<?php echo $this->config->item('fhc_api')['api_name']; ?>': '<?php echo $this->config->item('fhc_api')['api_key']; ?>',
+			"Authorization": "Basic " + '<?php echo base64_encode($this->config->item('fhc_api')['http_user'].":".$this->config->item('fhc_api')['http_pass']); ?>'
+		    }
+		});
+	    });
+	</script>
     </head>
     <body>
 
