@@ -6,16 +6,16 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
 	<span><?php echo $this->getPhrase("ZGV/introduction_short", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></span>
 	<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->getPhrase("ZGV/introduction_long", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"></span>
 	<div class="radio">
-	    <label><input type="radio" name="doktype" value="" />Allgmeine Hochschule (AHS/BHS)</label>
+	    <label><input type="radio" name="doktype" value="" />österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)</label>&nbsp;<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
 	</div>
 	<div class="radio">
-	    <label><input type="radio" name="doktype" value="" />Berufsreifeprüfung oder Studienberechtigungsprüfung</label>
+	    <label><input type="radio" name="doktype" value="" />Studienberechtigungsprüfung</label>&nbsp;<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
 	</div>
 	<div class="radio">
-	    <label><input type="radio" name="doktype" value="" />Ausländische Unireife</label>
+	    <label><input type="radio" name="doktype" value="" />gleichwertiges ausländisches Zeugnis</label>&nbsp;<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
 	</div>
 	<div class="radio">
-	    <label><input type="radio" name="doktype" value="" />facheinschlägige berufliche Qualifikation</label>
+	    <label><input type="radio" name="doktype" value="" />einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen</label>&nbsp;<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
 	</div>
     </div>
 </div>
@@ -26,7 +26,7 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
 </div>
 <div class="row">
     <div class="col-sm-5">
-	<?php echo form_label($this->lang->line('requirements_abschlusszeugnis'), "maturazeugnis", array("name" => "Maturaze", "for" => "Maturaze", "class" => "control-label")) ?>
+	<!--<?php echo form_label($this->lang->line('requirements_abschlusszeugnis'), "maturazeugnis", array("name" => "Maturaze", "for" => "Maturaze", "class" => "control-label")) ?>-->
 	<div class="form-group">
 	    <?php
 	    if((!isset($dokumente["Maturaze"])) || ($dokumente["Maturaze"]->nachgereicht === "t")) {

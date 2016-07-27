@@ -421,5 +421,45 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'I accept ...',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/introduction_short',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Bitte laden Sie ....',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/introduction_short',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Please upload ....',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/introduction_long',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Bitte laden Sie ....',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/introduction_long',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Please upload ....',
+			'description' => ''
+		)
 	)
 );
