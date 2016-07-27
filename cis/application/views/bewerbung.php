@@ -89,6 +89,9 @@ $this->load->view('templates/footer');
 	
 	toggleAdresse();
 	toggleZustellAdresse();
+	
+	checkDataCompleteness();
+	
     });
     
     function toggleAdresse()
@@ -137,5 +140,78 @@ $this->load->view('templates/footer');
     function showElement(ele)
     {
 	$(ele).show();
+    }
+
+    function checkDataCompleteness()
+    {
+	//TODO hide Authorization
+	$.ajax({
+	    method: "GET",
+	    url: "<?php echo($this->config->item('fhc_api')['server']);?>person/person/person?person_id=<?php echo $person->person_id; ?>",
+	    headers: {
+		'<?php echo $this->config->item('fhc_api')['api_name']; ?>': '<?php echo $this->config->item('fhc_api')['api_key']; ?>',
+		"Authorization": "Basic " + '<?php echo base64_encode($this->config->item('fhc_api')['http_user'].":".$this->config->item('fhc_api')['http_pass']); ?>'
+	    }
+	}).done(function(data){
+	    if(data.error === 0)
+	    {
+		var person = data.retval[0];
+		if(_isPersonDataComplete(person))
+		{
+		    $(".personalData").addClass("complete");
+		}
+		else
+		{
+		    $(".personalData").addClass("incomplete");
+		}
+	    }
+	});
+	
+	console.log('<?php echo base64_encode($this->config->item('fhc_api')['http_user'].":".$this->config->item('fhc_api')['http_pass']); ?>');
+    }
+    
+    function _isPersonDataComplete(person)
+    {
+	if(person.vorname === null)
+	{
+	    return false;
+	}
+
+	if(person.nachname === null)
+	{
+	    return false;
+	}
+
+	if(person.gebdatum === null)
+	{
+	    return false;
+	}
+
+	if(person.gebort === null)
+	{
+	    return false;
+	}
+
+	if(person.staatsbuergerschaft === null)
+	{
+	    return false;
+	}
+
+	if(person.geburtsnation === null)
+	{
+	    return false;
+	}
+
+	if(person.svnr === null)
+	{
+	    return false;
+	}
+
+	if((person.geschlecht !== "m") && (person.geschlecht !== "w"))
+	{
+	    return false;
+	}
+
+	return true;
     }
 </script>

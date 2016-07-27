@@ -21,15 +21,13 @@ class Studiengaenge extends MY_Controller {
 	//load person data
         $this->_data["person"] = $this->_loadPerson();
         
-        if(isset($this->input->get()["studiengang_kz"]))
-        {
-            $this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
-        }
-        
+	if(isset($this->input->get()["studiengang_kz"]))
+	{
+	    $this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
+	}
+	
         $this->_data['title'] = 'Overview';
         $this->_data['sprache'] = $this->get_language();
-	
-	
 	
         $this->OrgformModel->getAll();
         
@@ -47,44 +45,23 @@ class Studiengaenge extends MY_Controller {
         if(($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
         {
             $this->_data["studiensemester"] = $studiensemester;
-//            $this->StudiengangModel->getAll();
-//        
-//            if($this->StudiengangModel->result->error == 0)
-//            {
-//                foreach($this->StudiengangModel->result->retval as $key=>$studiengang)
-//                {
-//                    $this->StudienplanModel->getStudienplaeneFromSem(array(
-//                                "studiengang_kz"=>$studiengang->studiengang_kz,
-//                                "studiensemester_kurzbz"=>$this->_data["studiensemester"]->studiensemester_kurzbz,
-//                                "ausbildungssemester"=>1
-//                        ));
-//                    
-//                    if($this->StudienplanModel->result->error == 0)
-//                    {
-//                        $studiengang->studienplaene = $this->StudienplanModel->result->retval;
-//                    }
-//		    else
-//		    {
-//			$this->_setError(true, $this->StudienplanModel->getErrorMessage());
-//		    }
-//                }
-//                $this->_data["studiengaenge"] = $this->StudiengangModel->result->retval;
-//            }
-//            else
-//            {
-//                //TODO could not load data
-//            }
 	    
 	    $this->_data["studiengaenge"] = $this->_getStudiengaengeStudienplan($this->_data["studiensemester"]->studiensemester_kurzbz, 1);
 	    
 	    foreach($this->_data["studiengaenge"] as $stg)
 	    {
-		
 		if($stg->onlinebewerbung === "t")
 		{
 		    $stg->fristen = $this->_getBewerbungstermine($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
 		    $stg->reihungstests = $this->_loadReihungstests($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
-//		    var_dump($stg->fristen);
+		    
+		    if(isset($this->_data["studiengang_kz"]) && ($stg->studiengang_kz === $this->_data["studiengang_kz"]))
+		    {
+			if(count($stg->studienplaene) === 1)
+			{
+			    redirect("/Bewerbung/studiengang/".$stg->studiengang_kz."/".$stg->studienplaene[0]->studienplan_id);
+			}
+		    }
 		}
 	    }
 	    

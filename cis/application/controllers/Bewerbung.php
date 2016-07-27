@@ -18,6 +18,7 @@ class Bewerbung extends MY_Controller {
         $this->load->model('dms_model', "DmsModel");
         $this->load->model('akte_model', "AkteModel");
 	$this->load->model('gemeinde_model', "GemeindeModel");
+	$this->load->model('Bewerbungstermine_model', 'BewerbungstermineModel');
         $this->load->helper("form");
         $this->load->library("form_validation");
 	$this->_data["sprache"] = $this->get_language();
@@ -113,7 +114,8 @@ class Bewerbung extends MY_Controller {
 
         if ($this->form_validation->run() == FALSE)
         {
-                $this->load->view('bewerbung', $this->_data);
+//	    $this->_checkRequiredFields();
+	    $this->load->view('bewerbung', $this->_data);
         }
         else
         {
@@ -440,6 +442,7 @@ class Bewerbung extends MY_Controller {
 		}
 	    }
 	    
+//	    $this->_checkRequiredFields();
             $this->load->view('bewerbung', $this->_data);
         }
     }
@@ -461,32 +464,53 @@ class Bewerbung extends MY_Controller {
         
         //load Studienplan
         $this->_data["studienplan"] = $this->_loadStudienplan($studienplan_id); 
-        
-        $exists = false;
-        $prestudentStatus = null;
-        foreach($this->_data["prestudent"] as $prestudent)
-        {
-            $prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-            if(($prestudent->studiengang_kz == $studiengang_kz) && (!is_null($prestudentStatus)) && ($prestudentStatus->studienplan_id == $studienplan_id))
-            {
-                $exists = true;
-            }
-            $prestudentStatus = null;
-        }
-        
-        if((!$exists) && ($this->PrestudentModel->result->error == 0))
-        {
-            $prestudent = $this->_savePrestudent($studiengang_kz);
-            $this->_data["prestudent"] = $this->_loadPrestudent();
-            $this->_savePrestudentStatus($prestudent);
-        }
+	
+	$fristen = $this->_getBewerbungstermine($studiengang_kz, $this->session->userdata()["studiensemester_kurzbz"]);
+	
+	$bewerbungMoeglich = false;
+	if(!empty($fristen))
+	{
+	    foreach($fristen as $frist)
+	    {
+		if((date("Y-m-d", strtotime($frist->beginn)) < date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) > date("Y-m-d")))
+		{
+		    $bewerbungMoeglich = true;
+		}
+	    }
+	}
+	
+	if($bewerbungMoeglich)
+	{
+	    $exists = false;
+	    $prestudentStatus = null;
+	    foreach($this->_data["prestudent"] as $prestudent)
+	    {
+		$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+		if(($prestudent->studiengang_kz == $studiengang_kz) && (!is_null($prestudentStatus)) && ($prestudentStatus->studienplan_id == $studienplan_id))
+		{
+		    $exists = true;
+		}
+		$prestudentStatus = null;
+	    }
+
+	    if((!$exists) && ($this->PrestudentModel->result->error == 0))
+	    {
+		$prestudent = $this->_savePrestudent($studiengang_kz);
+		$this->_data["prestudent"] = $this->_loadPrestudent();
+		$this->_savePrestudentStatus($prestudent);
+	    }
+	    else
+	    {
+		//TODO handle error
+		if($this->PrestudentModel->result->error != 0)
+		{
+		    var_dump($this->PrestudentModel->result);
+		}
+	    }
+	}
 	else
 	{
-	    //TODO handle error
-	    if($this->PrestudentModel->result->error != 0)
-	    {
-		var_dump($this->PrestudentModel->result);
-	    }
+	    redirect("/Studiengaenge");
 	}
 	
 	//load adress data
@@ -911,4 +935,175 @@ class Bewerbung extends MY_Controller {
 	    $this->_data["zustell_gemeinde"] = $this->_data["zustell_adresse"]->plz." ".$this->_data["zustell_adresse"]->gemeinde.", ".$this->_data["zustell_adresse"]->ort;
 	}
     }
+    
+    private function _getBewerbungstermine($studiengang_kz, $studiensemester_kurzbz)
+    {
+	$this->BewerbungstermineModel->getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz);
+	if($this->BewerbungstermineModel->isResultValid() === true)
+	{
+	    return $this->BewerbungstermineModel->result->retval;
+	}
+	else
+	{
+	    $this->_setError(true, $this->BewerbungstermineModel->getErrorMessage());
+	}
+    }
+    
+//    private function _checkRequiredFields()
+//    {
+//	if(($this->_isPersonalDataComplete()) && ($this->_isAdressDataComplete()) && ($this->_isKontaktDataComplete()) && ($this->_isDocumentDataComplete()))
+//	{
+//	    $this->_data["completed"] = true;
+//	}
+//	else
+//	{
+//	    $this->_data["completed"] = false;
+//	}
+//    }
+//    
+//    private function _isPersonalDataComplete()
+//    {
+//	$person = $this->_data["person"];
+//	if($person->vorname == null)
+//	{
+//	    return false;
+//	}
+//	
+//	if($person->nachname == null)
+//	{
+//	    return false;
+//	}
+//	
+//	if($person->gebdatum == null)
+//	{
+//	    return false;
+//	}
+//	
+//	if($person->gebort == null)
+//	{
+//	    return false;
+//	}
+//	
+//	if($person->staatsbuergerschaft == null)
+//	{
+//	    return false;
+//	}
+//	
+//	if($person->geburtsnation == null)
+//	{
+//	    return false;
+//	}
+//	
+//	if($person->svnr == null)
+//	{
+//	    return false;
+//	}
+//	
+//	if(($person->geschlecht != "m") && ($person->geschlecht != "w"))
+//	{
+//	    return false;
+//	}
+//	
+//	return true;
+//    }
+//    
+//    private function _isAdressDataComplete()
+//    {
+//	if(isset($this->_data["adresse"]))
+//	{
+//	    $adresse = $this->_data["adresse"];
+//	    if($adresse->strasse == null)
+//	    {
+//		return false;
+//	    }
+//	    
+//	    if($adresse->plz == null)
+//	    {
+//		return false;
+//	    }
+//	    
+//	    if($adresse->ort == null)
+//	    {
+//		return false;
+//	    }
+//	    
+//	    if($adresse->nation == null)
+//	    {
+//		return false;
+//	    }
+//	}
+//	else
+//	{
+//	    return false;
+//	}
+//	
+//	if(isset($this->_data["zustell_adresse"]))
+//	{
+//	    $adresse = $this->_data["zustell_adresse"];
+//	    if($adresse->strasse == null)
+//	    {
+//		return false;
+//	    }
+//	    
+//	    if($adresse->plz == null)
+//	    {
+//		return false;
+//	    }
+//	    
+//	    if($adresse->ort == null)
+//	    {
+//		return false;
+//	    }
+//	    
+//	    if($adresse->nation == null)
+//	    {
+//		return false;
+//	    }
+//	}
+//	else
+//	{
+//	    return false;
+//	}
+//	return true;
+//    }
+//    
+//    private function _isKontaktDataComplete()
+//    {
+//	if(isset($this->_data["kontakt"]["telefon"]))
+//	{
+//	    $kontakt = $this->_data["kontakt"]["telefon"];
+//	    if($kontakt->kontakt == null)
+//	    {
+//		return false;
+//	    }
+//	}
+//	else
+//	{
+//	    return false;
+//	}
+//	return true;
+//    }
+//    
+//    private function _isDocumentDataComplete()
+//    {
+//	if(isset($this->_data["dokumente"]))
+//	{
+//	    $dokumente = $this->_data["dokumente"];
+//	    if(!isset($dokumente["pass"]))
+//	    {
+//		return false;
+//	    }
+//	    
+//	    if(!isset($dokumente["Lebenslf"]))
+//	    {
+//		return false;
+//	    }
+//	}
+//	else
+//	{
+//	    return false;
+//	}
+//	
+//	return true;
+//    }
 }

@@ -214,4 +214,7 @@ $lang["aufnahme/geburtsdatum"] = "Geburtsdatum*";
 $lang["aufnahme/emailAdresse"] = "E-Mail*";
 $lang['aufnahme/password']='Passwort';
 $lang['aufnahme/wohnort']='Wohnort*';
+$lang['aufnahme/Geschlecht']='Geschlecht*';
+$lang['aufnahme/Maennlich']='männlich';
+$lang['aufnahme/Weiblich']='weiblich';
 ?>

@@ -43,7 +43,8 @@ class Registration extends MY_Controller {
             "email" => $this->input->post("email"),
             "captcha_code" => $this->input->post("captcha_code"),
             "zugangscode" => $this->input->post("zugangscode"),
-	    "wohnort" =>$this->input->post("wohnort")
+	    "wohnort" =>$this->input->post("wohnort"),
+	    "geschlecht" => $this->input->post("geschlecht")
         );
 
 	if(isset($this->input->get()["language"]))
@@ -188,7 +189,7 @@ class Registration extends MY_Controller {
                     }
 		    else
 		    {
-                         $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
                         $this->load->view('templates/header');
                         $this->load->view('login/confirm_error',  $this->_data);
                         $this->load->view('templates/footer');
@@ -224,7 +225,7 @@ class Registration extends MY_Controller {
         $person->insertvon = 'online';
         $person->vornamen = "";
 	$person->aktiv = "t";
-	$person->geschlecht = "u";
+	$person->geschlecht = $this->_data["geschlecht"];
 	$person->sprache = ucfirst($this->_data["sprache"]);
 
 	$bewerbung = $this->_checkBewerbung($this->_data["email"]);
@@ -405,7 +406,7 @@ class Registration extends MY_Controller {
 	{
 	    if($this->MessageModel->result->msg === "Success")
 	    {
-		$this->_data["message"] = sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . "<br><br><a href=" . $_SERVER['PHP_SELF'] . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
+		$this->_data["message"] = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache']), $email) . "<br><br><a href=" . $_SERVER['PHP_SELF'] . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
 	    }
 	    else
 	    {
