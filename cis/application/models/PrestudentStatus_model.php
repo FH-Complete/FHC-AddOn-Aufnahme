@@ -31,4 +31,15 @@ class PrestudentStatus_model extends MY_Model
 	    return false;
 	}
     }
+    
+    public function getLastStatus($data)
+    {
+        if ($restquery = $this->rest->get('crm/prestudentstatus/laststatus', $data))
+        {
+            $this->result = $restquery;
+            return true;
+        }
+        
+        return false;
+    }
 }
