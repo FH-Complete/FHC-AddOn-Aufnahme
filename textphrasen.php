@@ -501,5 +501,27 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'Falls dieses Zeugnis noch nicht vorhanden ist',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/letztesZeugnisInfo',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => '',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/letztesZeugnisInfo',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => ''
+		)
 	)
 );
+
+

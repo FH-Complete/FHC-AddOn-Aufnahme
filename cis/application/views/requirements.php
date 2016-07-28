@@ -66,7 +66,7 @@ if (isset($error) && ($error->error === true))
     }
     
     // Catch the form submit and upload the files
-    function uploadFiles(document_kurzbz, studienplan_id)
+    function uploadFiles(document_kurzbz, studienplan_id, submit)
     {
 	// START A LOADING SPINNER HERE
 
@@ -95,6 +95,10 @@ if (isset($error) && ($error->error === true))
 		    $("#"+document_kurzbz+"_nachgereicht").prop("disabled", true);
 		    $("#"+document_kurzbz+"_nachreichenAnmerkung").parent().hide();
 		    $("#"+document_kurzbz+"_nachreichenDatum").parent().hide();
+		    if(submit === true)
+		    {
+			$("#"+document_kurzbz+'_'+studienplan_id).closest("form").submit();
+		    }
 		}
 		else
 		{

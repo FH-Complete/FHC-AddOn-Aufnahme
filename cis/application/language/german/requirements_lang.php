@@ -22,3 +22,4 @@ $lang["requirements_Staatsbn"] = "Staatsbürgerschaftsnachweis";
 $lang["requirements_Lichtbil"] = "Lichtbild";
 $lang["requirements_nachreichenDatum"] = "Datum";
 $lang["requirements_nachreichenAnmerkung"] = "Anmerkung";
+$lang["requirements_letztesZeugnis"] = "letztgültiges Zeugnis";
