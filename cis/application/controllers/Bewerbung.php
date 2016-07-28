@@ -114,142 +114,10 @@ class Bewerbung extends MY_Controller {
 
         if ($this->form_validation->run() == FALSE)
         {
-//	    $this->_checkRequiredFields();
 	    $this->load->view('bewerbung', $this->_data);
         }
         else
         {
-	    //file upload is done with jQuery
-//            $post = $this->input->post();
-//            $files = $_FILES;
-//            
-//            if(count($files) > 0)
-//            {
-//                foreach($files as $key=>$file)
-//                {
-//                    if(is_uploaded_file($file["tmp_name"]))
-//                    {
-//                        $obj = new stdClass();
-//			$akte = new stdClass();
-//			
-//                        $obj->version = 0;
-//                        $obj->mimetype = $file["type"];
-//                        $obj->name = $file["name"];
-//                        $obj->oe_kurzbz = null;
-//
-//                        switch($key)
-//                        {
-//                            case "reisepass":
-//                                $obj->dokument_kurzbz = "pass";
-//                                break;                        
-//                            case "lebenslauf":
-//                                $obj->dokument_kurzbz = "Lebenslf";
-//                                break;
-//                            default:
-//                                $obj->dokument_kurzbz = "Sonst";
-//                                break;
-//                        }
-//			
-//			foreach($this->_data["dokumente"] as $akte_temp)
-//			{
-//			    if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
-//			    {
-//				$dms = $this->_loadDms($akte_temp->dms_id);
-//				$obj->version = $dms->version+1;
-//				
-//				if($akte_temp->dms_id != null)
-//				{
-//				    $dms = $this->_loadDms($akte_temp->dms_id);
-//				    $obj->version = $dms->version+1;
-//				}
-//				else
-//				{
-//				    $akte = $akte_temp;
-//				    $akte->updateamum = date("Y-m-d H:i:s");
-//				    $akte->updatevon = "online";
-//				}
-//			    }
-//			}
-//
-//                        $obj->kategorie_kurzbz = "Akte";
-//
-//                        $type = pathinfo($file["name"], PATHINFO_EXTENSION);
-//                        $data = file_get_contents($file["tmp_name"]);
-//                        $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
-//			
-//			$this->_saveDms($obj);
-//
-//                        if($this->DmsModel->result->error == 0)
-//                        {
-//                            $akte->dms_id = $this->DmsModel->result->retval->dms_id;
-//                            $akte->person_id = $this->_data["person"]->person_id;
-//                            $akte->mimetype = $file["type"];
-//
-//                            $akte->bezeichnung = mb_substr($obj->name, 0, 32);
-//                            $akte->dokument_kurzbz = $obj->dokument_kurzbz;
-//                            $akte->titel = $key;
-//                            $akte->insertvon = 'online';
-//			    $akte->nachgereicht = 'f';
-//			    
-//			    unset($akte->uid);
-//			    unset($akte->inhalt_vorhanden);
-//			    
-//			    $this->_saveAkte($akte);
-//                        }
-//			else
-//			{
-//			    //TODO handle error
-//			    var_dump($this->DmsModel->result);
-//			}
-//
-//                        if(unlink($file["tmp_name"]))
-//                        {
-//                            //removing tmp file successful
-//                        }
-//                    }
-//		    else
-//		    {
-//			if(isset($post["reisepass_nachgereicht"]))
-//			{
-//			    $akte = new stdClass();
-//			    $akte->person_id = $this->_data["person"]->person_id;
-//
-//			    $akte->bezeichnung = $file["name"];
-//			    $akte->dokument_kurzbz = "pass";
-//			    $akte->insertvon = 'online';
-//			    $akte->nachgereicht = true;
-//
-//			    $this->_saveAkte($akte);
-//			}
-//			
-//			if(isset($post["lebenslauf_nachgereicht"]))
-//			{
-//			    $akte = new stdClass();
-//			    $akte->person_id = $this->_data["person"]->person_id;
-//
-//			    $akte->bezeichnung = $file["name"];
-//			    $akte->dokument_kurzbz = "Lebenslf";
-//			    $akte->insertvon = 'online';
-//			    $akte->nachgereicht = true;
-//
-//			    $this->_saveAkte($akte);
-//			}
-//		    }
-//		    
-//		    //load dokumente
-//		    $this->_loadDokumente($this->session->userdata()["person_id"]);
-//
-//		    foreach($this->_data["dokumente"] as $akte)
-//		    {
-//			if($akte->dms_id != null)
-//			{
-//			    $dms = $this->_loadDms($akte->dms_id);
-//			    $akte->dokument = $dms;
-//			}
-//		    }
-//                }
-//            }
-
 	    $person = $this->_data["person"];
 	    $person->anrede = $post["anrede"];
 	    //$person->bundesland_code = $post["bundesland"];
@@ -259,7 +127,19 @@ class Bewerbung extends MY_Controller {
 	    }
 	    $person->gebort = $post["geburtsort"];
 	    $person->geburtsnation = $post["nation"];
-	    $person->geschlecht = isset($post["geschlecht"]) ? $post["geschlecht"] : "u";
+	    if($person->anrede === "Herr")
+	    {
+		$person->geschlecht = "m";
+	    }
+	    elseif($person->anrede === "Frau")
+	    {
+		$person->geschlecht = "w";
+	    }
+	    else
+	    {
+		$person->geschlecht = "u";
+	    }
+	    
 	    $person->staatsbuergerschaft = $post["staatsbuergerschaft"];
 	    $person->svnr = $post["svnr"];
 	    $person->titelpre = $post["titelpre"];
@@ -443,7 +323,6 @@ class Bewerbung extends MY_Controller {
 		}
 	    }
 	    
-//	    $this->_checkRequiredFields();
             $this->load->view('bewerbung', $this->_data);
         }
     }
@@ -1108,162 +987,4 @@ class Bewerbung extends MY_Controller {
 	    $this->_setError(true, $this->BewerbungstermineModel->getErrorMessage());
 	}
     }
-    
-//    private function _checkRequiredFields()
-//    {
-//	if(($this->_isPersonalDataComplete()) && ($this->_isAdressDataComplete()) && ($this->_isKontaktDataComplete()) && ($this->_isDocumentDataComplete()))
-//	{
-//	    $this->_data["completed"] = true;
-//	}
-//	else
-//	{
-//	    $this->_data["completed"] = false;
-//	}
-//    }
-//    
-//    private function _isPersonalDataComplete()
-//    {
-//	$person = $this->_data["person"];
-//	if($person->vorname == null)
-//	{
-//	    return false;
-//	}
-//	
-//	if($person->nachname == null)
-//	{
-//	    return false;
-//	}
-//	
-//	if($person->gebdatum == null)
-//	{
-//	    return false;
-//	}
-//	
-//	if($person->gebort == null)
-//	{
-//	    return false;
-//	}
-//	
-//	if($person->staatsbuergerschaft == null)
-//	{
-//	    return false;
-//	}
-//	
-//	if($person->geburtsnation == null)
-//	{
-//	    return false;
-//	}
-//	
-//	if($person->svnr == null)
-//	{
-//	    return false;
-//	}
-//	
-//	if(($person->geschlecht != "m") && ($person->geschlecht != "w"))
-//	{
-//	    return false;
-//	}
-//	
-//	return true;
-//    }
-//    
-//    private function _isAdressDataComplete()
-//    {
-//	if(isset($this->_data["adresse"]))
-//	{
-//	    $adresse = $this->_data["adresse"];
-//	    if($adresse->strasse == null)
-//	    {
-//		return false;
-//	    }
-//	    
-//	    if($adresse->plz == null)
-//	    {
-//		return false;
-//	    }
-//	    
-//	    if($adresse->ort == null)
-//	    {
-//		return false;
-//	    }
-//	    
-//	    if($adresse->nation == null)
-//	    {
-//		return false;
-//	    }
-//	}
-//	else
-//	{
-//	    return false;
-//	}
-//	
-//	if(isset($this->_data["zustell_adresse"]))
-//	{
-//	    $adresse = $this->_data["zustell_adresse"];
-//	    if($adresse->strasse == null)
-//	    {
-//		return false;
-//	    }
-//	    
-//	    if($adresse->plz == null)
-//	    {
-//		return false;
-//	    }
-//	    
-//	    if($adresse->ort == null)
-//	    {
-//		return false;
-//	    }
-//	    
-//	    if($adresse->nation == null)
-//	    {
-//		return false;
-//	    }
-//	}
-//	else
-//	{
-//	    return false;
-//	}
-//	return true;
-//    }
-//    
-//    private function _isKontaktDataComplete()
-//    {
-//	if(isset($this->_data["kontakt"]["telefon"]))
-//	{
-//	    $kontakt = $this->_data["kontakt"]["telefon"];
-//	    if($kontakt->kontakt == null)
-//	    {
-//		return false;
-//	    }
-//	}
-//	else
-//	{
-//	    return false;
-//	}
-//	return true;
-//    }
-//    
-//    private function _isDocumentDataComplete()
-//    {
-//	if(isset($this->_data["dokumente"]))
-//	{
-//	    $dokumente = $this->_data["dokumente"];
-//	    if(!isset($dokumente["pass"]))
-//	    {
-//		return false;
-//	    }
-//	    
-//	    if(!isset($dokumente["Lebenslf"]))
-//	    {
-//		return false;
-//	    }
-//	}
-//	else
-//	{
-//	    return false;
-//	}
-//	
-//	return true;
-//    }
 }

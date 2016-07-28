@@ -35,7 +35,7 @@
 		</div>
 	    </div>
 	</div>
-	<div class="col-lg-6 col-sm-6">
+	<!--<div class="col-lg-6 col-sm-6">
             <div class="form-group <?php echo (form_error("geschlecht") != "") ? 'has-error' : '' ?>">
                 <label class="col-sm-11 control-label"><?php echo $this->lang->line('aufnahme/Geschlecht'); ?></label>
 		<div class="col-sm-11">
@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row">-->
 	<div class="col-lg-6 col-sm-6">
 	    <div class="form-group <?php echo (form_error("wohnort")!="")? 'has-error': '' ?>">
 		<?php echo form_label($this->lang->line('aufnahme/wohnort'), "wohnort", array("name"=>"wohnort","for"=>"wohnort", "class"=>"col-sm-11 control-label")) ?>

@@ -481,5 +481,25 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'Do really want to revoke your application?',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/letztgueltigesZeugnis',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Falls dieses Zeugnis noch nicht vorhanden ist',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/letztgueltigesZeugnis',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Falls dieses Zeugnis noch nicht vorhanden ist',
+			'description' => ''
+		)
 	)
 );
