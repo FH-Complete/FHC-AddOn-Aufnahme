@@ -49,6 +49,25 @@ class Requirements extends MY_Controller {
             } 
         }
 	
+	foreach($this->_data["dokumenteStudiengang"] as $dok)
+	{
+	    if(($this->input->post($dok->dokument_kurzbz."_nachgereicht") !== null))
+	    {
+		$akte = new stdClass();
+		$akte->person_id = $this->_data["person"]->person_id;
+
+//		$akte->bezeichnung = $file["name"];
+		$akte->dokument_kurzbz = $dok->dokument_kurzbz;
+		$akte->insertvon = 'online';
+		$akte->nachgereicht = true;
+		$akte->anmerkung = $this->input->post($dok->dokument_kurzbz."_nachreichenAnmerkung");
+		$akte->nachgereicht_am = date("Y-m-d", strtotime($this->input->post($dok->dokument_kurzbz."_nachreichenDatum")));
+		
+		$this->_saveAkte($akte);
+		//$this->AkteModel->saveAkte($akte);
+	    }
+	}
+	
 	//file upload is done with jQuery
 //	$post = $this->input->post();
 //	$files = $_FILES;
@@ -145,6 +164,10 @@ class Requirements extends MY_Controller {
 //		}
 //	    }
 //	}
+	
+	//load dokumente
+        $this->_loadDokumente($this->session->userdata()["person_id"]);
+	
         $this->load->view('requirements', $this->_data);
     }
     
@@ -181,19 +204,7 @@ class Requirements extends MY_Controller {
 		    $obj->mimetype = $file["type"];
 		    $obj->name = $file["name"];
 		    $obj->oe_kurzbz = null;
-
-		    switch($key)
-		    {
-			case "reisepass":
-			    $obj->dokument_kurzbz = "pass";
-			    break;                        
-			case "lebenslauf":
-			    $obj->dokument_kurzbz = "Lebenslf";
-			    break;
-			default:
-			    $obj->dokument_kurzbz = "Sonst";
-			    break;
-		    }
+		    $obj->dokument_kurzbz = $key;
 
 		    foreach($this->_data["dokumente"] as $akte_temp)
 		    {

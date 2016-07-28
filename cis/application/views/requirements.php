@@ -91,6 +91,10 @@ if (isset($error) && ($error->error === true))
 		{
 		    // Success
 		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span>Upload successful.</span>");
+		    $("#"+document_kurzbz+"_nachgereicht").prop("checked", false);
+		    $("#"+document_kurzbz+"_nachgereicht").prop("disabled", true);
+		    $("#"+document_kurzbz+"_nachreichenAnmerkung").parent().hide();
+		    $("#"+document_kurzbz+"_nachreichenDatum").parent().hide();
 		}
 		else
 		{

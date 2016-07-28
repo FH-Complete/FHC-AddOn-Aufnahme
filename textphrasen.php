@@ -461,5 +461,25 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'Please upload ....',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'Bewerbung/StornoConfirmation',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Wollen Sie Ihre Bewerbung wirklich zurückziehen?',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Bewerbung/StornoConfirmation',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Do really want to revoke your application?',
+			'description' => ''
+		)
 	)
 );

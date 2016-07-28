@@ -47,7 +47,15 @@
 		    <div class="form-group">
 			<div id="<?php echo $dok->dokument_kurzbz; ?>" class="nachreichenDatum">
 			    <?php echo form_label($this->lang->line('requirements_nachreichenDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
-			    <?php echo form_input(array('id' => 'nachreichenDatum', 'name' => 'nachreichenDatum', 'maxlength' => 64, "type" => "date", "value" => set_value("nachreichenDatum", ""), "class" => "form-control")); ?>
+			    <?php echo form_input(array('id' => $dok->dokument_kurzbz.'_nachreichenDatum', 'name' => $dok->dokument_kurzbz.'_nachreichenDatum', 'maxlength' => 64, "type" => "date", "value" => set_value("nachreichenDatum", isset($dokumente[$dok->dokument_kurzbz]) ? $dokumente[$dok->dokument_kurzbz]->nachgereicht_am : ""), "class" => "form-control datepicker")); ?>
+			</div>
+		    </div>
+		</div>
+		<div class="form-group">
+		    <div class="form-group">
+			<div id="<?php echo $dok->dokument_kurzbz; ?>" class="nachreichenAnmerkung">
+			    <?php echo form_label($this->lang->line('requirements_nachreichenAnmerkung'), "nachreichenAnmerkung", array("name" => "nachreichenAnmerkung", "for" => "nachreichenAnmerkung", "class" => "control-label")) ?>
+			    <?php echo form_input(array('id' => $dok->dokument_kurzbz.'_nachreichenAnmerkung', 'name' => $dok->dokument_kurzbz.'_nachreichenAnmerkung', 'maxlength' => 128, "type" => "text", "value" => set_value("nachreichenAnmerkung", isset($dokumente[$dok->dokument_kurzbz]) ? $dokumente[$dok->dokument_kurzbz]->anmerkung : ""), "class" => "form-control")); ?>
 			</div>
 		    </div>
 		</div>
@@ -66,6 +74,11 @@
 	    toggleDateField();
 	});
 	
+	$(".datepicker").datepicker({
+	    dateFormat: "dd.mm.yy",
+	    minDate: new Date()
+	});
+	
 	toggleDateField();
     });
     
@@ -76,7 +89,20 @@
 	    var id = $(v).attr("id");
 	    if($("#"+id+"_nachgereicht").prop("checked"))
 	    {
-	       $(v).show();
+		$(v).show();
+	    }
+	    else
+	    {
+	       $(v).hide();
+	    }
+	});
+	
+	$(".nachreichenAnmerkung").each(function(i,v)
+	{
+	    var id = $(v).attr("id");
+	    if($("#"+id+"_nachgereicht").prop("checked"))
+	    {
+		$(v).show();
 	    }
 	    else
 	    {
