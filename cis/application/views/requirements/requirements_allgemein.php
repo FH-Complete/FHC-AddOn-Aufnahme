@@ -41,7 +41,7 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
 	<div class="checkbox">
 	    <label>
 		<?php
-		$data = array('id' => 'Maturaze_nachgereicht', 'name' => 'Maturaze_nachgereicht', "checked" => (isset($dokumente["Maturaze"]) && ($dokumente["Maturaze"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+		$data = array('id' => 'Maturaze_nachgereicht_'.$studiengang->studienplan->studienplan_id, 'name' => 'Maturaze_nachgereicht', "checked" => (isset($dokumente["Maturaze"]) && ($dokumente["Maturaze"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
 		(isset($dokumente["Maturaze"]) && ($dokumente["Maturaze"]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 
 		echo form_checkbox($data);
