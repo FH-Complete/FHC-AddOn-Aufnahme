@@ -1,4 +1,4 @@
-<div class="panel-footer footer">
+<div class="container">
     <div class="pull-right">
 	<h1><?php echo $this->config->item("organisation")["bezeichnung"]; ?></h1>
 	<span><?php echo $this->config->item("organisation")["strasse"]; ?></span></br>
