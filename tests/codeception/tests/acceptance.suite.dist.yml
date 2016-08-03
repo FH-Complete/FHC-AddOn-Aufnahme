@@ -8,4 +8,4 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - PhpBrowser:
-            url: 'http://admin:1q2w3@demo.fhcomplete.org/addons/aufnahme/cis/index.dist.php'
+            url: 'http://admin:1q2w3@demo.fhcomplete.org/addons/aufnahme/cis/'

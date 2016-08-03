@@ -12,8 +12,8 @@ setup:
         no_dev: true
     shell:
         - "cd %BUILD_PATH% && chmod u+x installPHPCI.sh && ./installPHPCI.sh" # Install AddOn
-        - "rm -f /var/www/html/build/fhcomplete/addons/aufnahme" # SymLink löschen falls vorhanden
-        - "ln -s %BUILD_PATH% /var/www/html/build/fhcomplete/addons/aufnahme" # SymLink to the actual build
+        - "rm -f /var/www/html/build/aufnahme" # SymLink löschen falls vorhanden
+        - "ln -s %BUILD_PATH% /var/www/html/build/aufnahme" # SymLink to the actual build
         #- "curl 'http://localhost/addons/aufnahme/cis/index.php/Migrate/'" # DB-Migaration
 
 test:
