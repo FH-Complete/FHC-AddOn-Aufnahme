@@ -1,0 +1,27 @@
+actor: Tester
+paths:
+    tests: tests
+    log: _output
+    data: _data
+    helpers: _support
+settings:
+    bootstrap: _bootstrap.php
+    colors: true
+    memory_limit: 1024M
+modules:
+    enabled:
+        - Db:
+            dsn: ''
+            user: ''
+            password: ''
+            dump: _data/dump.sql
+            populate: true
+            cleanup: false
+            reconnect: false
+coverage:
+    enabled: true
+    include:
+        - cis/application/*
+    exclude:
+        - cis/application/cache/*
+        - cis/application/logs/*

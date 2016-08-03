@@ -1,12 +1,11 @@
 # Codeception Test Suite Configuration
-#
-# Suite for acceptance tests.
-# Perform tests in browser using the WebDriver or PhpBrowser.
+
+# suite for acceptance tests.
+# perform tests in browser using the WebDriver or PhpBrowser.
 # If you need both WebDriver and PHPBrowser tests - create a separate suite.
 
 class_name: AcceptanceTester
 modules:
     enabled:
         - PhpBrowser:
-            url: http://fhc.fortyseeds.at/addons/aufnahme/cis/
-        - \Helper\Acceptance
+            url: 'http://admin:1q2w3@demo.fhcomplete.org/addons/aufnahme/cis/index.dist.php'
