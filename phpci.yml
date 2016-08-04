@@ -14,7 +14,6 @@ setup:
         - "cd %BUILD_PATH% && chmod u+x installPHPCI.sh && ./installPHPCI.sh" # Install AddOn
         - "rm -f /var/www/html/build/aufnahme" # SymLink löschen falls vorhanden
         - "ln -s %BUILD_PATH% /var/www/html/build/aufnahme" # SymLink to the actual build
-        - "/home/phpci/bin/phantomjs/bin/phantomjs.sh" # Start phantomjs
         #- "curl 'http://localhost/addons/aufnahme/cis/index.php/Migrate/'" # DB-Migaration
 
 test:

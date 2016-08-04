@@ -35,5 +35,7 @@ cp cis/index.dist.php cis/index.php
 # ln -s "$cwd/vendor" ./web/js/vendor
 chgrp -R www-data *
 
+/home/phpci/bin/phantomjs/bin/phantomjs.sh
+
 echo "Done!"
 exit 0
