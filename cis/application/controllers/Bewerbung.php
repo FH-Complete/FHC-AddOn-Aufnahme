@@ -118,6 +118,7 @@ class Bewerbung extends MY_Controller {
         }
         else
         {
+ $post = $this->input->post();
 	    $person = $this->_data["person"];
 	    $person->anrede = $post["anrede"];
 	    //$person->bundesland_code = $post["bundesland"];
