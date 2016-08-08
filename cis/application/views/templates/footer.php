@@ -9,5 +9,17 @@
 	<span><?php echo ($this->config->item("organisation")["mail"] != "") ?  "E-Mail: ".$this->config->item("organisation")["mail"] : ""; ?></span></br>
     </div>
 </div>
+<div id="meta-footer" class="bar">
+    <div class="container-fluid">
+	<nav role="navigation">
+	    <div>
+		<ul class="nav navbar-nav navbar-right">
+		    <li><?php echo $this->config->item("impressumLink"); ?></li>
+		    <li><?php echo $this->config->item("anfahrtLink"); ?></li>
+		</ul>
+	    </div>
+	</nav>
+    </div>
+</div>
 </body>
 </html>

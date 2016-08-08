@@ -171,5 +171,11 @@ $config['organisation'] = array(
     "ort" => "St. Pölten",
     "telefon" => "+43/2742/313 228 - 200",
     "fax" => "F: +43/2742/313 228 - 339",
-    "mail" => "csc@fhstp.ac.at"
+    "mail" => "<a href='mailto:csc@fhstp.ac.at'>csc@fhstp.ac.at</a>"
 );
+
+
+$config["impressumLink"] = "<a href='https://www.fhstp.ac.at/de/impressum'>Impressum</a>";
+
+$config["anfahrtLink"] = "<a href='https://www.fhstp.ac.at/de/anfahrt'>Anfahrt</a>";
+
