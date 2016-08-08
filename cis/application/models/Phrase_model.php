@@ -10,7 +10,7 @@ class Phrase_model extends MY_Model
 
     public function getPhrasen($sprache, $oe_kurzbz = null, $orgform_kurzbz = null, $phrase= null)
     {
-	if ($restquery = $this->rest->get('system/phrase/phrases', array("app"=>"aufnahme", "sprache"=>$sprache, "phrase"=>$phrase, "orgeinheit_kurzbz"=>$oe_kurzbz, "orgform_kurzbz"=>$orgform_kurzbz)))
+	if ($restquery = $this->rest->get('system/phrase/phrases', array("app"=>"aufnahme", "sprache"=>$sprache, "phrase"=>$phrase, "orgeinheit_kurzbz"=>$oe_kurzbz, "orgform_kurzbz"=>$orgform_kurzbz, "blockTags"=>"no")))
 	{
 	    $this->result = $restquery;
 	    return true;
