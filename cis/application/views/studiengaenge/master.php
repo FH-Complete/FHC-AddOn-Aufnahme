@@ -32,7 +32,7 @@ foreach ($studiengaenge as $stg)
 			} ?>
 		    </div> 
 		</div>
-		<div class="row">
+		<!--<div class="row">
 		    <div class="col-sm-3 "><?php echo $this->lang->line('studiengaenge/studienplaetze'); ?>: </div><div class="col-sm-6"></div> 
 		</div>
 		<div class="row">
@@ -95,7 +95,7 @@ foreach ($studiengaenge as $stg)
 		</div>
 		<div class="row">
 		    <div class="col-sm-3 "><?php echo $this->lang->line('studiengaenge/weiterführend'); ?>: </div><div class="col-sm-6"></div> 
-		</div>
+		</div>-->
 		<div class="row">
 		    <div class="col-sm-3 col-md-offset-3"><a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung/studiengang/".$stg->studiengang_kz."/".$studienplan->studienplan_id) ?>"><button id="button_<?php echo $studienplan->studienplan_id; ?>" type="button" class="btn btn-sm icon-bewerben"><?php echo $this->lang->line('studiengaenge/buttonText'); ?></button></a></div>
 		</div>
