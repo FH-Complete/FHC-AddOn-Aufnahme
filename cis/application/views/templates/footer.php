@@ -1,5 +1,5 @@
 <footer id="portal-footer" class="module shadow-top" role="contentinfo">
-    <div class="container">
+    <div class="container-fluid">
 	<section class="row">
 	    <div class="col-sm-4">
 	    </div>
