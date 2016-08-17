@@ -144,9 +144,9 @@
 	    <div class="col-sm-6">
 		<?php echo $this->lang->line("summary_pass"); ?>
 	    </div>
-	    <div class="col-sm-5 <?php (!isset($dokumente["pass"])) ? "incomplete" : ""; ?>">
+	    <div class="col-sm-5 <?php echo (!isset($dokumente[$this->config->item('dokumentTypen')["reisepass"]])) ? "incomplete" : ""; ?>">
 		<div class="form-group">
-		    <?php if(!isset($dokumente["pass"])){
+		    <?php if(!isset($dokumente[$this->config->item('dokumentTypen')["reisepass"]])){
 			echo $this->lang->line('summary_unvollstaendig');
 		     }
 		     else
@@ -163,9 +163,9 @@
 	    <div class="col-sm-6">
 		<?php echo $this->lang->line("summary_lebenslauf"); ?>
 	    </div>
-	    <div class="col-sm-5 <?php (!isset($dokumente["Lebenslf"])) ? "incomplete" : ""; ?>">
+	    <div class="col-sm-5 <?php echo (!isset($dokumente[$this->config->item('dokumentTypen')["lebenslauf"]])) ? "incomplete" : ""; ?>">
 		<div class="form-group">
-		    <?php if(!isset($dokumente["Lebenslf"])) {
+		    <?php if(!isset($dokumente[$this->config->item('dokumentTypen')["lebenslauf"]])) {
 			echo $this->lang->line('summary_unvollstaendig');
 		     }
 		     else

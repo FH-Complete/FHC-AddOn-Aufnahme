@@ -4,9 +4,9 @@
 	<div class="col-sm-6">
 	    <?php echo $this->lang->line("summary_Abschlusszeugnis"); ?>
 	</div>
-	<div class="col-sm-5 <?php echo (!isset($dokumente["Maturaze"])) ? "incomplete" : ""; ?>">
+	<div class="col-sm-5 <?php echo (!isset($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis"]])) ? "incomplete" : ""; ?>">
 	    <div class="form-group">
-		<?php if(!isset($dokumente["Maturaze"])) {
+		<?php if(!isset($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis"]])) {
 		    echo $this->lang->line('summary_unvollstaendig');
 		 }
 		 else

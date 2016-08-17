@@ -78,12 +78,12 @@ class Bewerbung extends MY_Controller {
 
 	foreach($this->_data["gemeinden"] as $gemeinde)
 	{    
-	    if(($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
+	    if((isset($this->_data["adresse"])) && ($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
 	    {
 		$this->_data["ort_dd"] = $gemeinde->gemeinde_id;
 	    }
 	    
-	    if(($gemeinde->plz == $this->_data["zustell_adresse"]->plz) && ($gemeinde->name == $this->_data["zustell_adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["zustell_adresse"]->ort))
+	    if((isset($this->_data["zustell_adresse"])) && ($gemeinde->plz == $this->_data["zustell_adresse"]->plz) && ($gemeinde->name == $this->_data["zustell_adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["zustell_adresse"]->ort))
 	    {
 		$this->_data["zustell_ort_dd"] = $gemeinde->gemeinde_id;
 	    }
@@ -306,12 +306,12 @@ class Bewerbung extends MY_Controller {
 	    
 	    foreach($this->_data["gemeinden"] as $gemeinde)
 	    {
-		if(($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
+		if((isset($this->_data["adresse"])) && ($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
 		{
 		    $this->_data["ort_dd"] = $gemeinde->gemeinde_id;
 		}
 
-		if(($gemeinde->plz == $this->_data["zustell_adresse"]->plz) && ($gemeinde->name == $this->_data["zustell_adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["zustell_adresse"]->ort))
+		if((isset($this->_data["zustell_adresse"])) && ($gemeinde->plz == $this->_data["zustell_adresse"]->plz) && ($gemeinde->name == $this->_data["zustell_adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["zustell_adresse"]->ort))
 		{
 		    $this->_data["zustell_ort_dd"] = $gemeinde->gemeinde_id;
 		}
@@ -403,9 +403,14 @@ class Bewerbung extends MY_Controller {
 	$this->_data["gemeinden"] = $this->_loadGemeinde();
 	foreach($this->_data["gemeinden"] as $gemeinde)
 	{
-	    if(($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
+	    if((isset($this->_data["adresse"])) && ($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
 	    {
 		$this->_data["ort_dd"] = $gemeinde->gemeinde_id;
+	    }
+	    
+	    if((isset($this->_data["zustell_adresse"])) && ($gemeinde->plz == $this->_data["zustell_adresse"]->plz) && ($gemeinde->name == $this->_data["zustell_adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["zustell_adresse"]->ort))
+	    {
+		$this->_data["zustell_ort_dd"] = $gemeinde->gemeinde_id;
 	    }
 	}
         

@@ -10,6 +10,8 @@ class Send extends MY_Controller {
         $this->load->model('prestudent_model', "PrestudentModel");
         $this->load->model('prestudentStatus_model', "PrestudentStatusModel");
         $this->load->model('person_model', 'PersonModel');
+	$this->load->model('studiengangstyp_model', 'StudiengangstypModel');
+	$this->load->model('message_model', 'MessageModel');
         $this->load->helper("form");
         $this->load->library("form_validation");
     }
@@ -26,6 +28,13 @@ class Send extends MY_Controller {
 	    
             //load studiengang
             $this->_data["studiengang"] = $this->_loadStudiengang($this->input->get()["studiengang_kz"]);
+	    
+	    $this->_data["studiengang"]->studiengangstyp = $this->_loadStudiengangstyp($this->_data["studiengang"]->typ);
+	    
+	    $this->_sendMessageMailApplicationConfirmation($this->_data["person"], $this->_data["studiengang"]);
+	    //TODO vorlage fehlt in DB
+	    $this->_sendMessageMailNewApplicationInfo($this->_data["person"], $this->_data["studiengang"]);
+	    
 	    
             //load preinteressent data
             $this->_data["prestudent"] = $this->_loadPrestudent();
@@ -62,7 +71,7 @@ class Send extends MY_Controller {
         
         //load studiengang
         $this->_data["studiengang"] = $this->_loadStudiengang($studiengang_kz);
-        
+	
         $this->_data["prestudent"] = $this->_loadPrestudent();
         
         //load prestudent data for correct studiengang
@@ -178,6 +187,91 @@ class Send extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->PersonModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadStudiengangstyp($typ)
+    {
+	$this->StudiengangstypModel->get($typ);
+	if($this->StudiengangstypModel->isResultValid() === true)
+	{
+	    return $this->StudiengangstypModel->result->retval[0];
+	}
+	else
+	{
+	    $this->_setError(true, $this->StudiengangstypModel->getErrorMessage());
+	}
+    }
+    
+    private function _sendMessageMailApplicationConfirmation($person, $studiengang)
+    {
+	$data = array(
+	    "anrede" => (is_null($person->anrede)) ? "" : $person->anrede,
+	    "vorname" => $person->vorname,
+	    "nachname" => $person->nachname,
+	    "typ" => $studiengang->studiengangstyp->bezeichnung,
+	    "studiengang" => $studiengang->bezeichnung
+	);
+	
+	$oe = $studiengang->oe_kurzbz;
+	$orgform_kurzbz = $studiengang->orgform_kurzbz;
+
+	(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
+	
+	$this->MessageModel->sendMessageVorlage($this->config->item("systemPersonId"), $person->person_id, "MailApplicationConfirmation", $oe, $data, $sprache, $orgform_kurzbz=null);
+	
+	if($this->MessageModel->isResultValid() === true)
+	{
+	    if($this->MessageModel->result->msg === "Success")
+	    {
+		//success
+	    }
+	    else
+	    {
+		$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />';
+	    }
+	}
+	else
+	{
+	    $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />';
+	    $this->_setError(true, $this->MessageModel->getErrorMessage());
+	}
+    }
+    
+    private function _sendMessageMailNewApplicationInfo($person, $studiengang)
+    {
+	$data = array(
+	    "anrede" => (is_null($person->anrede)) ? "" : $person->anrede,
+	    "vorname" => $person->vorname,
+	    "nachname" => $person->nachname,
+	    "typ" => $studiengang->studiengangstyp->bezeichnung,
+	    "studiengang" => $studiengang->bezeichnung
+	);
+	
+	$oe = $studiengang->oe_kurzbz;
+	$orgform_kurzbz = $studiengang->orgform_kurzbz;
+
+	(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
+	
+	$this->MessageModel->sendMessageVorlage($person->person_id, $this->config->item("systemPersonId"), "MailNewApplicationInfo", $oe, $data, $sprache, $orgform_kurzbz);
+
+//	var_dump($this->MessageModel->result);
+	
+	if($this->MessageModel->isResultValid() === true)
+	{
+	    if($this->MessageModel->result->msg === "Success")
+	    {
+		//success
+	    }
+	    else
+	    {
+		$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />';
+	    }
+	}
+	else
+	{
+	    $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />';
+	    $this->_setError(true, $this->MessageModel->getErrorMessage());
 	}
     }
 }

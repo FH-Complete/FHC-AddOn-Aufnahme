@@ -126,6 +126,7 @@ class Messages extends MY_Controller {
     
     public function deleteMessage($messageId)
     {
+	//TODO delete message
 	$this->checkLogin();
 	$this->_loadData();
     }
