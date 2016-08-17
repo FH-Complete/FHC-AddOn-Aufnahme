@@ -9,8 +9,8 @@ foreach ($studiengaenge as $stg)
         foreach($stg->studienplaene as $studienplan)
         {
         ?>
-        <a class="collapsed collapseLink" data-toggle='collapse' data-target='#<?php echo $stg->studiengang_kz; ?>'><?php echo $stg->bezeichnung ?> (<?php echo $studienplan->orgform_kurzbz; ?>)</a></br>
-        <div id="<?php echo $stg->studiengang_kz; ?>" class='collapse collapsePanel'>
+        <a class="collapsed collapseLink" data-toggle='collapse' data-target='#<?php echo $studienplan->studienplan_id; ?>'><?php echo $stg->bezeichnung ?> (<?php echo $studienplan->orgform_kurzbz; ?>)</a></br>
+        <div id="<?php echo $studienplan->studienplan_id ?>" class='collapse collapsePanel'>
 	    <div class="stgContent">
 		<div class="row">
 		    <div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/abschluss') ?>: </div><div class="col-sm-6">Bachelor of Science in Engineering (BSc)</div>

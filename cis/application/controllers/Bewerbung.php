@@ -75,23 +75,19 @@ class Bewerbung extends MY_Controller {
 	
 	//load gemeinden
 	$this->_getGemeinde();
-	
-	$this->_data["plz"] = array();
-	$this->_data["zustell_plz"] = array();
-//	foreach($this->_data["gemeinden"] as $gemeinde)
-//	{
-//	    $this->_data["plz"][$gemeinde->gemeinde_id] = $gemeinde->plz." ".$gemeinde->name.", ".$gemeinde->ortschaftsname;
-//	    if(isset($this->_data["gemeinde"]) && $this->_data["plz"][$gemeinde->gemeinde_id] === $this->_data["gemeinde"])
-//	    {
-//		$this->_data["gemeinde_id"] = $gemeinde->gemeinde_id;
-//	    }
-//	    
-//	    $this->_data["zustell_plz"][$gemeinde->gemeinde_id] = $gemeinde->plz." ".$gemeinde->name.", ".$gemeinde->ortschaftsname;
-//	    if(isset($this->_data["zustell_gemeinde"]) && $this->_data["zustell_plz"][$gemeinde->gemeinde_id] === $this->_data["zustell_gemeinde"])
-//	    {
-//		$this->_data["zustell_gemeinde_id"] = $gemeinde->gemeinde_id;
-//	    }
-//	}
+
+	foreach($this->_data["gemeinden"] as $gemeinde)
+	{    
+	    if(($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
+	    {
+		$this->_data["ort_dd"] = $gemeinde->gemeinde_id;
+	    }
+	    
+	    if(($gemeinde->plz == $this->_data["zustell_adresse"]->plz) && ($gemeinde->name == $this->_data["zustell_adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["zustell_adresse"]->ort))
+	    {
+		$this->_data["zustell_ort_dd"] = $gemeinde->gemeinde_id;
+	    }
+	}
         
         //load dokumente
         $this->_loadDokumente($this->session->userdata()["person_id"]);
@@ -164,13 +160,14 @@ class Bewerbung extends MY_Controller {
 		$adresse->strasse = $post["strasse"];
 		$adresse->nation = $post["adresse_nation"];
 		$adresse->plz = $post["plz"];
-		$adresse->ort = $post["ort"];
+		
 		
 		foreach($this->_data["gemeinden"] as $gemeinde)
 		{
-		    if($gemeinde->gemeinde_id === $post["ort"])
+		    if($gemeinde->gemeinde_id === $post["ort_dd"])
 		    {
 			$adresse->gemeinde = $gemeinde->name;
+			$adresse->ort = $gemeinde->ortschaftsname;
 		    }
 		}
 
@@ -198,14 +195,14 @@ class Bewerbung extends MY_Controller {
 		
 		$zustell_adresse->strasse = $post["zustell_strasse"];
 		$zustell_adresse->nation = $post["zustelladresse_nation"];
+		$zustell_adresse->plz = $post["zustell_plz"];
 		
 		foreach($this->_data["gemeinden"] as $gemeinde)
 		{
-		    if($gemeinde->gemeinde_id === $post["zustell_plzOrt"])
+		    if($gemeinde->gemeinde_id === $post["zustell_ort_dd"])
 		    {
-			$zustell_adresse->plz = $gemeinde->plz;
-			$zustell_adresse->ort = $gemeinde->ortschaftsname;
 			$zustell_adresse->gemeinde = $gemeinde->name;
+			$zustell_adresse->ort = $gemeinde->ortschaftsname;
 		    }
 		}
 
@@ -217,7 +214,7 @@ class Bewerbung extends MY_Controller {
 		    }
 		}
 		
-		$this->_saveAdresse($adresse);
+		$this->_saveAdresse($zustell_adresse);
 	    }
 
 	    if(($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort"] != ""))
@@ -307,22 +304,18 @@ class Bewerbung extends MY_Controller {
 	    $this->_loadAdresse();
 //	    $this->_getGemeinde();
 	    
-	    $this->_data["plz"] = array();
-	    $this->_data["zustell_plz"] = array();
-//	    foreach($this->_data["gemeinden"] as $gemeinde)
-//	    {
-//		$this->_data["plz"][$gemeinde->gemeinde_id] = $gemeinde->plz." ".$gemeinde->name.", ".$gemeinde->ortschaftsname;
-//		if(isset($this->_data["gemeinde"]) && $this->_data["plz"][$gemeinde->gemeinde_id] === $this->_data["gemeinde"])
-//		{
-//		    $this->_data["gemeinde_id"] = $gemeinde->gemeinde_id;
-//		}
-//
-//		$this->_data["zustell_plz"][$gemeinde->gemeinde_id] = $gemeinde->plz." ".$gemeinde->name.", ".$gemeinde->ortschaftsname;
-//		if(isset($this->_data["zustell_gemeinde"]) && $this->_data["zustell_plz"][$gemeinde->gemeinde_id] === $this->_data["zustell_gemeinde"])
-//		{
-//		    $this->_data["zustell_gemeinde_id"] = $gemeinde->gemeinde_id;
-//		}
-//	    }
+	    foreach($this->_data["gemeinden"] as $gemeinde)
+	    {
+		if(($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
+		{
+		    $this->_data["ort_dd"] = $gemeinde->gemeinde_id;
+		}
+
+		if(($gemeinde->plz == $this->_data["zustell_adresse"]->plz) && ($gemeinde->name == $this->_data["zustell_adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["zustell_adresse"]->ort))
+		{
+		    $this->_data["zustell_ort_dd"] = $gemeinde->gemeinde_id;
+		}
+	    }
 	    
             $this->load->view('bewerbung', $this->_data);
         }
@@ -407,21 +400,14 @@ class Bewerbung extends MY_Controller {
         $this->_loadBundeslaender();
 	
 	//load gemeinden
-//	$this->_data["gemeinden"] = $this->_loadGemeinde();
-//	if(isset($this->_data["adresse"]))
-//	{
-//	    $this->_data["gemeinde"] = $this->_data["adresse"]->plz." ".$this->_data["adresse"]->gemeinde.", ".$this->_data["adresse"]->ort;
-//	}
-//	
-//	$this->_data["plz"] = array();
-//	foreach($this->_data["gemeinden"] as $gemeinde)
-//	{
-//	    $this->_data["plz"][$gemeinde->gemeinde_id] = $gemeinde->plz." ".$gemeinde->name.", ".$gemeinde->ortschaftsname;
-//	    if(isset($this->_data["gemeinde"]) && $this->_data["plz"][$gemeinde->gemeinde_id] === $this->_data["gemeinde"])
-//	    {
-//		$this->_data["gemeinde_id"] = $gemeinde->gemeinde_id;
-//	    }
-//	}
+	$this->_data["gemeinden"] = $this->_loadGemeinde();
+	foreach($this->_data["gemeinden"] as $gemeinde)
+	{
+	    if(($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
+	    {
+		$this->_data["ort_dd"] = $gemeinde->gemeinde_id;
+	    }
+	}
         
         //load studiengang
         $this->_data["studiengang"] = $this->_loadStudiengang($studiengang_kz);
@@ -773,7 +759,6 @@ class Bewerbung extends MY_Controller {
 	$this->PersonModel->savePerson($person);
         if($this->PersonModel->isResultValid() === true)
         {
-	    var_dump($this->PersonModel->result);
 	    //TODO Daten erfolgreich gespeichert
         }
 	else

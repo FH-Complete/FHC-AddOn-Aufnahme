@@ -179,7 +179,7 @@
 	<div id="ort_dropdown" class="col-sm-6" style="display: none;">
             <div class="form-group <?php echo (form_error("ort") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formOrt'), "ort", array("name" => "ort", "for" => "ort", "class" => "control-label")) ?>
-                <?php echo form_dropdown("ort_dd", null, null, array('id' => 'ort', 'name' => 'ort_dd', "value" => set_value("ort"), "class" => "form-control")); ?>
+                <?php echo form_dropdown("ort_dd", null, (isset($ort_dd) ? $ort_dd : NULL), array('id' => 'ort', 'name' => 'ort_dd', "class" => "form-control")); ?>
                 <?php echo form_error("ort"); ?>
             </div>
         </div>
@@ -392,7 +392,93 @@
 	
 	$('input[type=file]').on('change', prepareUpload);
 	
+	$(".zustelladresse").each(function(i,v){
+	   if($(v).prop("checked"))
+	   {
+	       var id = $(v).attr("studienplan_id");
+	       $("#zustelladresse_"+id).show();
+	   }
+	});
+	
+	$(".zustelladresse").click(function(event)
+	{
+	    var id = $(event.currentTarget).attr("studienplan_id");
+	    if($(event.currentTarget).prop("checked"))
+	    {
+		$("#zustelladresse_"+id).show();
+	    }
+	    else
+	    {
+		$("#zustelladresse_"+id).hide();
+	    }
+	});
+
+	$("#adresse_nation").on("change", function(event){
+	   toggleAdresse();
+	});
+	
+	$("#zustelladresse_nation").on("change", function(event){
+	   toggleZustellAdresse();
+	});
+	
+	$("#plz").on("change", function(event){
+	    var plz = $("#plz").val();
+	    loadOrtData(plz, $("#ort_dropdown"));	   
+	});
+	
+	$("#zustell_plz").on("change", function(event){
+	    var plz = $("#zustell_plz").val();
+	    loadOrtData(plz, $("#zustell_ort_dropdown"));	   
+	});
+	
+	toggleAdresse();
+	toggleZustellAdresse();
+	
     });
+    
+    function toggleAdresse()
+    {
+	var code = $("#adresse_nation option:selected").val();
+	if(code === "A")
+	{
+	    hideElement($("#ort_input"));
+	    showElement($("#ort_dropdown"));
+	    var plz = $("#plz").val();
+	    loadOrtData(plz, $("#ort_dropdown"));
+	}
+	else
+	{
+	    showElement($("#ort_input"));
+	    hideElement($("#ort_dropdown"));
+	}
+    }
+    
+    function toggleZustellAdresse()
+    {
+	var code = $("#zustelladresse_nation option:selected").val();
+	if(code === "A")
+	{
+	    hideElement($("#zustell_ort_input"));
+	    showElement($("#zustell_ort_dropdown"));
+	    var plz = $("#zustell_plz").val();
+	    loadOrtData(plz, $("#zustell_ort_dropdown"));
+	}
+	else
+	{
+	    showElement($("#zustell_ort_input"));
+	    hideElement($("#zustell_ort_dropdown"));
+	}
+    }
+    
+    function hideElement(ele)
+    {
+	$(ele).hide();
+    }
+    
+    function showElement(ele)
+    {
+	$(ele).show();
+    }
     
     var files;
     
@@ -441,6 +527,45 @@
 		// Handle errors here
 		console.log('ERRORS: ' + textStatus);
 		// STOP LOADING SPINNER
+	    }
+	});
+    }
+    
+    function loadOrtData(plz, ele)
+    {
+	$.ajax({
+	    method: "GET",
+	    url: "<?php echo($this->config->item('fhc_api')['server']);?>codex/gemeinde/GemeindeByPlz?plz="+plz
+	}).done(function(data){
+	    if(data.error === 0)
+	    {
+		var select = $(ele).find("select");
+		$(select).empty();
+		$.each(data.retval, function(i, v){
+		    if($(select).attr("name") === "ort_dd")
+		    {
+			if(v.gemeinde_id === '<?php echo isset($ort_dd) ? $ort_dd : ""; ?>')
+			{
+			    
+			    $(ele).find("select").append("<option value='"+v.gemeinde_id+"' selected>"+v.ortschaftsname+"</option>");
+			}
+			else
+			{
+			    $(ele).find("select").append("<option value='"+v.gemeinde_id+"'>"+v.ortschaftsname+"</option>");
+			}
+		    }
+		    else
+		    {
+			if(v.gemeinde_id === '<?php echo isset($zustell_ort_dd) ? $zustell_ort_dd : ""; ?>')
+			{
+			    $(ele).find("select").append("<option value='"+v.gemeinde_id+"' selected>"+v.ortschaftsname+"</option>");
+			}
+			else
+			{
+			    $(ele).find("select").append("<option value='"+v.gemeinde_id+"'>"+v.ortschaftsname+"</option>");
+			}
+		    }
+		});
 	    }
 	});
     }
