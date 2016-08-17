@@ -225,7 +225,7 @@ class Registration extends MY_Controller {
         $person->insertvon = 'online';
         $person->vornamen = "";
 	$person->aktiv = "t";
-	$person->geschlecht = $this->_data["geschlecht"];
+	$person->geschlecht = "u";
 	$person->sprache = ucfirst($this->_data["sprache"]);
 
 	$bewerbung = $this->_checkBewerbung($this->_data["email"]);
@@ -289,13 +289,15 @@ class Registration extends MY_Controller {
                 }
                 else
                 {
-		    //error message already setn
+		    //error message already set
+		    $this->_setError(true, $this->PersonModel->getErrorMessage());
                 }
             }
         }
 	else
 	{
-	    //error message already setn
+	    //error message already set
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
 
