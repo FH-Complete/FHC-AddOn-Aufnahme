@@ -136,6 +136,7 @@ class Login extends MY_Controller {
 		else
 		{
 		    $this->_data["code_error_msg"] = "Prestudent nicht gefunden.";
+		    redirect('/Studiengaenge');
 		}
             }
 	    else

@@ -14,7 +14,7 @@ foreach ($studiengaenge as $stg)
             </div>
             <h4>Erstes Aufnahmeverfahren</h4>
             <div class="row">
-		<?php echo form_open("/Aufnahmetermine/register/", array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin")); ?>
+		<?php echo form_open("/Aufnahmetermine/register/".$stg->studiengang_kz."/".$stg->studienplan->studienplan_id, array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin")); ?>
                 <div class="col-sm-4">
 		    <?php 
 		    if(!empty($reihungstests[$stg->studiengang_kz][1]))
@@ -49,7 +49,7 @@ foreach ($studiengaenge as $stg)
 	    ?>
             <h4>Zweites Aufnahmeverfahren</h4>
             <div class="row">
-		<?php echo form_open("/Aufnahmetermine/register/", array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin")); ?>
+		<?php echo form_open("/Aufnahmetermine/register/".$stg->studiengang_kz."/".$stg->studienplan->studienplan_id, array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin")); ?>
                 <div class="col-sm-4">
 		    <?php 
 		    if(!empty($reihungstests[$stg->studiengang_kz][2]))
