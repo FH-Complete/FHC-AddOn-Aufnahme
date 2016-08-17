@@ -39,7 +39,7 @@ $config['store_phrases_in_session'] = false;
 | OE to get Email template for registration mail.
 |
 */
-$config['root_oe'] = 'fhstp';
+$config['root_oe'] = 'etw';
 
 /*
 |--------------------------------------------------------------------------
@@ -200,3 +200,10 @@ $config['dokumentTypen'] = array(
     "letztGueltigesZeugnis" => "Sonst",
     "sonstiges" => "Sonst"
 );
+
+/*
+|--------------------------------------------------------------------------
+| Person ID des Systems zum Versenden von Nachrichten
+|--------------------------------------------------------------------------
+*/
+$config['systemPersonId'] = 1;

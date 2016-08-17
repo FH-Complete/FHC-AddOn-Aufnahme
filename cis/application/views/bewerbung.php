@@ -60,12 +60,6 @@ $this->load->view('templates/footer');
 	   }
 	});
 	
-	
-//	if($(".zustelladresse").prop("checked"))
-//	{
-//	    console.log($(".zustelladresse"));
-//	}
-	
 	$(".zustelladresse").click(function(event)
 	{
 	    var id = $(event.currentTarget).attr("studienplan_id");
@@ -99,17 +93,15 @@ $this->load->view('templates/footer');
 	var code = $("#adresse_nation option:selected").val();
 	if(code === "A")
 	{
-	    hideElement($("#plz").closest(".row"));
-	    hideElement($("#ort").closest(".row"));
-	    hideElement($("#bundesland").closest(".row"));
-	    showElement($("#plzOrt").closest(".row"));
+	    hideElement($("#ort_input"));
+	    showElement($("#ort_dropdown"));
+	    var plz = $("#plz").val();
+	    loadOrtData(plz, $("#ort_dropdown"));
 	}
 	else
 	{
-	    hideElement($("#plzOrt").closest(".row"));
-	    showElement($("#plz").closest(".row"));
-	    showElement($("#ort").closest(".row"));
-	    showElement($("#bundesland").closest(".row"));
+	    showElement($("#ort_input"));
+	    hideElement($("#ort_dropdown"));
 	}
     }
     
@@ -118,17 +110,15 @@ $this->load->view('templates/footer');
 	var code = $("#zustelladresse_nation option:selected").val();
 	if(code === "A")
 	{
-	    hideElement($("#zustell_plz").closest(".row"));
-	    hideElement($("#zustell_ort").closest(".row"));
-	    hideElement($("#zustell_bundesland").closest(".row"));
-	    showElement($("#zustell_plzOrt").closest(".row"));
+	    hideElement($("#zustell_ort_input"));
+	    showElement($("#zustell_ort_dropdown"));
+	    var plz = $("#zustell_plz").val();
+	    loadOrtData(plz, $("#zustell_ort_dropdown"));
 	}
 	else
 	{
-	    hideElement($("#zustell_plzOrt").closest(".row"));
-	    showElement($("#zustell_plz").closest(".row"));
-	    showElement($("#zustell_ort").closest(".row"));
-	    showElement($("#zustell_bundesland").closest(".row"));
+	    showElement($("#zustell_ort_input"));
+	    hideElement($("#zustell_ort_dropdown"));
 	}
     }
     
@@ -217,5 +207,24 @@ $this->load->view('templates/footer');
 	{
 	    window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/$studiengang->studiengang_kz") ?>";
 	}
+    }
+    
+    function loadOrtData(plz, ele)
+    {
+	console.log(ele);
+	$.ajax({
+	    method: "GET",
+	    url: "<?php echo($this->config->item('fhc_api')['server']);?>codex/gemeinde/gemeinde?plz="+plz
+	}).done(function(data){
+	    console.log(data);
+	    console.log($(ele).find("select"));
+	    if(data.error === 0)
+	    {
+		$(ele).find("select").empty();
+		$.each(data.retval, function(i, v){
+		    $(ele).find("select").append("<option value='"+v.gemeinde_id+"'>"+v.ortschaftsname+"</option>");
+		});
+	    }
+	});
     }
 </script>

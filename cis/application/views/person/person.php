@@ -110,7 +110,7 @@
                 <?php echo form_error("svnr"); ?>
             </div>
         </div>
-        <div class="col-sm-6">
+        <!--<div class="col-sm-6">
             <div class="form-group <?php echo (form_error("geschlecht") != "") ? 'has-error' : '' ?>">
                 <fieldset><?php echo $this->lang->line('person_geschlecht'); ?></fieldset>
                 <?php echo form_radio(array("id" => "geschlecht_m", "name" => "geschlecht"), "m" , (isset($person->geschlecht) && $person->geschlecht=="m") ? true : false); ?>
@@ -119,7 +119,7 @@
                 <span><?php echo $this->lang->line("person_formWeiblich"); ?></span>
                 <?php echo form_error("geschlecht"); ?>
             </div>
-        </div>
+        </div>-->
     </div>
     <legend class=""><?php echo $this->lang->line("person_adresse"); ?></legend>
     <!--<div class="row">
@@ -143,7 +143,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <!--<div class="row">
 	<div class="col-sm-6">
             <div class="form-group <?php echo (form_error("plzOrt") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formPlzOrt'), "plzOrt", array("name" => "plzOrt", "for" => "plzOrt", "class" => "control-label")) ?>
@@ -151,7 +151,7 @@
                 <?php echo form_error("plzOrt"); ?>
             </div>
         </div>
-    </div>
+    </div>-->
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("strasse") != "") ? 'has-error' : '' ?>">
@@ -169,10 +169,17 @@
                 <?php echo form_error("plz"); ?>
             </div>
         </div>
-        <div class="col-sm-6">
+        <div id="ort_input" class="col-sm-6" style="display: none;">
             <div class="form-group <?php echo (form_error("ort") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formOrt'), "ort", array("name" => "ort", "for" => "ort", "class" => "control-label")) ?>
                 <?php echo form_input(array('id' => 'ort', 'name' => 'ort', "type" => "text", "value" => set_value("ort", (isset($adresse->ort) ? $adresse->ort : NULL)), "class" => "form-control")); ?>
+                <?php echo form_error("ort"); ?>
+            </div>
+        </div>
+	<div id="ort_dropdown" class="col-sm-6" style="display: none;">
+            <div class="form-group <?php echo (form_error("ort") != "") ? 'has-error' : '' ?>">
+                <?php echo form_label($this->lang->line('person_formOrt'), "ort", array("name" => "ort", "for" => "ort", "class" => "control-label")) ?>
+                <?php echo form_dropdown("ort_dd", null, null, array('id' => 'ort', 'name' => 'ort_dd', "value" => set_value("ort"), "class" => "form-control")); ?>
                 <?php echo form_error("ort"); ?>
             </div>
         </div>
@@ -211,7 +218,7 @@
 		</div>
 	    </div>
 	</div>
-	<div class="row">
+	<!--<div class="row">
 	    <div class="col-sm-6">
 		<div class="form-group <?php echo (form_error("zustell_plzOrt") != "") ? 'has-error' : '' ?>">
 		    <?php echo form_label($this->lang->line('person_formPlzOrt'), "zustell_plzOrt", array("name" => "zustell_plzOrt", "for" => "zustell_plzOrt", "class" => "control-label")) ?>
@@ -219,7 +226,7 @@
 		    <?php echo form_error("zustell_plzOrt"); ?>
 		</div>
 	    </div>
-	</div>
+	</div>-->
 	<div class="row">
 	    <div class="col-sm-8">
 		<div class="form-group <?php echo (form_error("zustell_strasse") != "") ? 'has-error' : '' ?>">
@@ -237,10 +244,17 @@
 		    <?php echo form_error("zustell_plz"); ?>
 		</div>
 	    </div>
-	    <div class="col-sm-6">
+	    <div id="zustell_ort_input" class="col-sm-6" style="display: none;">
 		<div class="form-group <?php echo (form_error("zustell_ort") != "") ? 'has-error' : '' ?>">
 		    <?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("name" => "zustell_ort", "for" => "zustell_ort", "class" => "control-label")) ?>
 		    <?php echo form_input(array('id' => 'zustell_ort', 'name' => 'zustell_ort', "type" => "text", "value" => set_value("zustell_ort", (isset($zustell_adresse->ort) ? $zustell_adresse->ort : NULL)), "class" => "form-control")); ?>
+		    <?php echo form_error("zustell_ort"); ?>
+		</div>
+	    </div>
+	    <div id="zustell_ort_dropdown" class="col-sm-6" style="display: none;">
+		<div class="form-group <?php echo (form_error("zustell_ort") != "") ? 'has-error' : '' ?>">
+		    <?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("name" => "zustell_ort", "for" => "zustell_ort", "class" => "control-label")) ?>
+		    <?php echo form_dropdown("zustell_ort_dd", null, null, array('id' => 'zustell_ort', 'name' => 'zustell_ort_dd', "value" => set_value("zustell_ort"), "class" => "form-control")); ?>
 		    <?php echo form_error("zustell_ort"); ?>
 		</div>
 	    </div>
@@ -285,7 +299,7 @@
             <?php echo form_label($this->lang->line('person_formDokumentupload_reisepass'), "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
             <div class="form-group">
                 <?php
-		if((!isset($dokumente["pass"])) || ($dokumente["pass"]->nachgereicht === "t")) {
+		if((!isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]])) || ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === "t")) {
                     echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
                  }
 		 else
@@ -298,7 +312,7 @@
 		<label>
 		    <?php
 		    $data = array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente["pass"]) && ($dokumente["pass"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
-		    (isset($dokumente["pass"]) && ($dokumente["pass"]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
+		    (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 		    
 		    echo form_checkbox($data);
 			echo $this->lang->line('person_formNachgereicht')
