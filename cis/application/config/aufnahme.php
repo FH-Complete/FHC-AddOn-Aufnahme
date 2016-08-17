@@ -174,8 +174,29 @@ $config['organisation'] = array(
     "mail" => "<a href='mailto:csc@fhstp.ac.at'>csc@fhstp.ac.at</a>"
 );
 
-
+/*
+|--------------------------------------------------------------------------
+| Impressum Link displayed in the footer
+|--------------------------------------------------------------------------
+*/
 $config["impressumLink"] = "<a href='https://www.fhstp.ac.at/de/impressum'>Impressum</a>";
 
+/*
+|--------------------------------------------------------------------------
+| Anfahrt Link displayed in the footer
+|--------------------------------------------------------------------------
+*/
 $config["anfahrtLink"] = "<a href='https://www.fhstp.ac.at/de/anfahrt'>Anfahrt</a>";
 
+/*
+|--------------------------------------------------------------------------
+| Mapping zu den Dokumenttypen in der Datenbank
+|--------------------------------------------------------------------------
+*/
+$config['dokumentTypen'] = array(
+    "reisepass" => "pass",
+    "lebenslauf" => "Lebenslf",
+    "abschlusszeugnis" => "Maturaze",
+    "letztGueltigesZeugnis" => "Sonst",
+    "sonstiges" => "Sonst"
+);

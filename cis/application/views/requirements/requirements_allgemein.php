@@ -29,7 +29,7 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
 	<!--<?php echo form_label($this->lang->line('requirements_abschlusszeugnis'), "maturazeugnis", array("name" => "Maturaze", "for" => "Maturaze", "class" => "control-label")) ?>-->
 	<div class="form-group">
 	    <?php
-	    if((!isset($dokumente["Maturaze"])) || ($dokumente["Maturaze"]->nachgereicht === "t")) {
+	    if((!isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]])) || ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht === "t")) {
 		echo $this->lang->line('requirements_keinDokHochgeladen');
 	     }
 	     else
@@ -41,8 +41,8 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
 	<div class="checkbox">
 	    <label>
 		<?php
-		$data = array('id' => 'Maturaze_nachgereicht_'.$studiengang->studienplan->studienplan_id, 'name' => 'Maturaze_nachgereicht', "checked" => (isset($dokumente["Maturaze"]) && ($dokumente["Maturaze"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id, "class"=>"nachreichen_checkbox_zeugnis");
-		(isset($dokumente["Maturaze"]) && ($dokumente["Maturaze"]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
+		$data = array('id' => 'Maturaze_nachgereicht_'.$studiengang->studienplan->studienplan_id, 'name' => 'Maturaze_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id, "class"=>"nachreichen_checkbox_zeugnis");
+		(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 
 		echo form_checkbox($data);
 		    echo $this->lang->line('requirements_formNachgereicht')
@@ -58,7 +58,7 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
 		    <?php echo form_error("Maturaze"); ?>
 		</div>
 	    </div>
-	    <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('Maturaze', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button>
+	    <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button>
 	</div>
     </div>
 </div>
@@ -72,7 +72,7 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
 	<?php echo form_label($this->lang->line('requirements_letztesZeugnis'), "maturazeugnis", array("name" => "Sonst", "for" => "Sonst", "class" => "control-label")) ?>
 	<div class="form-group">
 	    <?php
-	    if((!isset($dokumente["Sonst"])) || ($dokumente["Sonst"]->nachgereicht === "t")) {
+	    if((!isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]])) || ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->nachgereicht === "t")) {
 		echo $this->lang->line('requirements_keinDokHochgeladen');
 	     }
 	     else
@@ -90,7 +90,7 @@ echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studienga
 		    <?php echo form_error("Sonst"); ?>
 		</div>
 	    </div>
-	    <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('Sonst', <?php echo $studiengang->studienplan->studienplan_id; ?>, true)">Upload</button>
+	    <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>, true)">Upload</button>
 	</div>
     </div>
 </div>

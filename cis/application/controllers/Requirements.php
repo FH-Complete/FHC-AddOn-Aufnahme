@@ -208,7 +208,7 @@ class Requirements extends MY_Controller {
 
 		    foreach($this->_data["dokumente"] as $akte_temp)
 		    {
-			if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
+			if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != $this->config->item('dokumentTypen')["sonstiges"]))
 			{
 			    $dms = $this->_loadDms($akte_temp->dms_id);
 			    $obj->version = $dms->version+1;
