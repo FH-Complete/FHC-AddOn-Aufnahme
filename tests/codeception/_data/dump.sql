@@ -1,1 +1,2 @@
-/* Replace this file with actual dump of your database */
+DELETE FROM public.tbl_person WHERE person_id IN (SELECT person_id FROM public.tbl_kontakt WHERE kontakttyp = 'email' AND kontakt = 'codeception@technikum-wien.at');
+DELETE FROM public.tbl_kontakt WHERE kontakttyp = 'email' AND kontakt = 'codeception@technikum-wien.at';

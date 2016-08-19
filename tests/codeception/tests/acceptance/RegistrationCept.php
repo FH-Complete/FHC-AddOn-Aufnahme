@@ -19,10 +19,10 @@ $I->seeElement("#RegistrationLoginForm #registration_button");
 // Fills elements
 $I->fillField("#RegistrationLoginForm #vorname", "Code");
 $I->fillField("#RegistrationLoginForm #nachname", "Ception");
-$I->fillField("#RegistrationLoginForm #geb_datum", "2012.05.28");
-$I->fillField("#RegistrationLoginForm #wohnort", "Github");
-$I->fillField("#RegistrationLoginForm #email", "codeception@technikum-wien.at");
-$I->fillField("#RegistrationLoginForm #email2", "codeception@technikum-wien.at");
+$I->fillField("#RegistrationLoginForm #geb_datum", "01.01.1981");
+$I->fillField("#RegistrationLoginForm #email", "codeception@fhcomplete.org");
+$I->fillField("#RegistrationLoginForm #email2", "codeception@fhcomplete.org");
+$I->fillField("#RegistrationLoginForm input[id=captcha] ", "123456");
 $I->checkOption("#RegistrationLoginForm #datenschutz");
 
 // Submit registration form
@@ -32,7 +32,7 @@ $I->click("#RegistrationLoginForm #registration_button");
 $zugangscode = $I->grabFromDatabase("public.tbl_person", "zugangscode", array("vorname" => "Code", "nachname" => "Ception"));
 if (!isset($zugangscode) || $zugangscode == "")
 {
-	$I->expect("Zugangscode has been set");
+	$I->expect("Zugangscode to be set, it is NOT!");
 }
 else
 {
@@ -50,7 +50,7 @@ $I->seeElement("#LoginForm input[name=\"code\"]");
 $I->seeElement("#LoginForm button[name=\"submit_btn\"]");
 
 // Fills elements
-$I->fillField("#LoginForm input[name=\"email\"]", "codeception@technikum-wien.at");
+$I->fillField("#LoginForm input[name=\"email\"]", "codeception@fhcomplete.org");
 $I->fillField("#LoginForm input[name=\"code\"]", $zugangscode);
 
 // Submit login form

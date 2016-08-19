@@ -207,3 +207,10 @@ $config['dokumentTypen'] = array(
 |--------------------------------------------------------------------------
 */
 $config['systemPersonId'] = 1;
+
+/*
+|--------------------------------------------------------------------------
+| Email used for testing purposes, if is it used captcha check will be disabled
+|--------------------------------------------------------------------------
+*/
+$config['codeception_email'] = 'codeception@fhcomplete.org';
