@@ -60,7 +60,7 @@ $config['fhc_models'] = '../../../../../application/models/';
 |
 */
 $config['fhc_api'] = array(
-    'server' => APP_ROOT.'index.ci.php/api/v1/',
+    'server' => 'http://localhost/fhcomplete/index.ci.php/api/v1/',
     'api_key'         => 'testapikey@fhcomplete.org',
     'api_name'        => 'FHC-API-KEY',
     'http_user'       => 'admin',
@@ -69,6 +69,17 @@ $config['fhc_api'] = array(
     //'ssl_verify_peer' => TRUE,
     //'ssl_cainfo'      => '/certs/cert.pem'
 );
+
+/*
+|--------------------------------------------------------------------------
+| Profiler
+|--------------------------------------------------------------------------
+|
+| Sets the Profiler in MY_Controller.
+| Default should be false, only for Benchark testing it could be set true.
+|
+*/
+$config['profiler'] = false;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,7 +94,7 @@ $config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => 'Bewerbung'
 $config['menu'][] = array('href' => site_url('Aufnahmetermine'), 'name' => 'Aufnahmetermine');
 $config['menu'][] = array('href' => site_url('Messages'), 'name' => 'Nachrichten');
 $config['menu'][] = array('href' => site_url('Documents'), 'name' => 'Downloads');
-//$config['menu'][] = array('href' => site_url('Logout'), 'name' => 'Logout', 'glyphicon' => 'glyphicon-log-out');
+$config['menu'][] = array('href' => site_url('Logout'), 'name' => 'Logout', 'glyphicon' => 'glyphicon-log-out');
 
 /*
 |--------------------------------------------------------------------------
