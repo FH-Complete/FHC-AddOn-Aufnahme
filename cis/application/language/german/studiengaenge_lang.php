@@ -12,4 +12,7 @@ $lang['studiengaenge/bewerbungsfrist'] = 'Bewerbungsfrist';
 $lang['studiengaenge/aufnahmetermine'] = 'Aufnahmetermine';
 $lang['studiengaenge/studienbeginn'] = 'Studienbeginn';
 $lang['studiengaenge/weiterführend'] = 'Weiterführend';
-
+$lang['studiengaenge/buttonText'] = 'Jetzt bewerben!';
+$lang['studiengaenge/bis'] = 'bis';
+$lang['studiengaenge/keineBewerbungMoeglich'] = 'Zurzeit ist keine Bewerbung möglich.';
+$lang['studiengaenge/keineAufnahmetermineVorhanden'] = 'Keine Aufnahmetermine vorhanden.';

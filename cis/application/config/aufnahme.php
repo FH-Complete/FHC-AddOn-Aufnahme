@@ -39,7 +39,7 @@ $config['store_phrases_in_session'] = false;
 | OE to get Email template for registration mail.
 |
 */
-$config['root_oe'] = 'fhstp';
+$config['root_oe'] = 'etw';
 
 /*
 |--------------------------------------------------------------------------
@@ -89,12 +89,13 @@ $config['profiler'] = false;
 | ordered list of Main Menu Entries
 |
 */
-$config['menu'][] = array('href' => site_url('Studiengaenge'), 'name' => 'Studiengänge');
-$config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => 'Bewerbung', 'glyphicon' => 'glyphicon-ok');
-$config['menu'][] = array('href' => site_url('Aufnahmetermine'), 'name' => 'Aufnahmetermine');
-$config['menu'][] = array('href' => site_url('Messages'), 'name' => 'Nachrichten');
-$config['menu'][] = array('href' => site_url('Documents'), 'name' => 'Downloads');
-$config['menu'][] = array('href' => site_url('Logout'), 'name' => 'Logout', 'glyphicon' => 'glyphicon-log-out');
+
+$config['menu'][] = array('href' => site_url('Studiengaenge'), 'name' => 'Studiengänge', 'id' => 'Studiengänge');
+$config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => 'meine Bewerbungen', 'id' => 'Bewerbung');
+$config['menu'][] = array('href' => site_url('Aufnahmetermine'), 'name' => 'Aufnahmetermine', 'id' => 'Aufnahmetermine');
+$config['menu'][] = array('href' => site_url('Dokumente'), 'name' => 'Dokumente', 'id' => 'Dokumente');
+$config['menu'][] = array('href' => site_url('Messages'), 'name' => 'Nachrichten', 'id' => 'Nachrichten');
+$config['menu'][] = array('href' => site_url('Downloads'), 'name' => 'Downloads', 'id' => 'Downloads');
 
 /*
 |--------------------------------------------------------------------------
@@ -134,6 +135,11 @@ $config['view_aufnahmetermine'][] = 'aufnahmetermine/master_termine';
 
 $config['view_messages'][] = 'messages/messages';
 
+$config['view_registration'][] = 'registration/registration';
+$config['view_registration'][] = 'login/hybrid_login';
+
+$config['view_dokumente'][] = 'dokumente/dokumente_bachelor';
+
 
 /*
 |--------------------------------------------------------------------------
@@ -149,3 +155,74 @@ $config['view_messages'][] = 'messages/messages';
 //$config['aufnahme_tabs'][] = array("label"=>"aufnahme/downloads", "id"=>"downloads");
 
 $config['display_phrase_name'] = false;
+
+/*
+|--------------------------------------------------------------------------
+| Enable/Disalbe Hybrid Login
+| first try is username/code
+| second try is email/password
+|--------------------------------------------------------------------------
+|
+| OE to get Email template for registration mail.
+|
+*/
+$config['hybrid_login'] = true;
+
+/*
+|--------------------------------------------------------------------------
+| Organisation Data
+|--------------------------------------------------------------------------
+|
+| OE to get Email template for registration mail.
+|
+*/
+$config['organisation'] = array(
+    "bezeichnung" => "Fachhochschule St. Pölten",
+    "strasse" => "Matthias Corvinus-Straße 15",
+    "plz" => "3100",
+    "ort" => "St. Pölten",
+    "telefon" => "+43/2742/313 228 - 200",
+    "fax" => "F: +43/2742/313 228 - 339",
+    "mail" => "<a href='mailto:csc@fhstp.ac.at'>csc@fhstp.ac.at</a>"
+);
+
+/*
+|--------------------------------------------------------------------------
+| Impressum Link displayed in the footer
+|--------------------------------------------------------------------------
+*/
+$config["impressumLink"] = "<a href='https://www.fhstp.ac.at/de/impressum'>Impressum</a>";
+
+/*
+|--------------------------------------------------------------------------
+| Anfahrt Link displayed in the footer
+|--------------------------------------------------------------------------
+*/
+$config["anfahrtLink"] = "<a href='https://www.fhstp.ac.at/de/anfahrt'>Anfahrt</a>";
+
+/*
+|--------------------------------------------------------------------------
+| Mapping zu den Dokumenttypen in der Datenbank
+|--------------------------------------------------------------------------
+*/
+$config['dokumentTypen'] = array(
+    "reisepass" => "pass",
+    "lebenslauf" => "Lebenslf",
+    "abschlusszeugnis" => "Maturaze",
+    "letztGueltigesZeugnis" => "Sonst",
+    "sonstiges" => "Sonst"
+);
+
+/*
+|--------------------------------------------------------------------------
+| Person ID des Systems zum Versenden von Nachrichten
+|--------------------------------------------------------------------------
+*/
+$config['systemPersonId'] = 1;
+
+/*
+|--------------------------------------------------------------------------
+| Email used for testing purposes, if is it used captcha check will be disabled
+|--------------------------------------------------------------------------
+*/
+$config['codeception_email'] = 'codeception@fhcomplete.org';

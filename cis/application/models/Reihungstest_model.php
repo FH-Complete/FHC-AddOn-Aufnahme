@@ -7,6 +7,15 @@ class Reihungstest_model extends MY_Model
     {
 	parent::__construct();
     }
+    
+    public function getReihungstest($reihungstest_id)
+    {
+	if ($restquery = $this->rest->get('crm/reihungstest/reihungstest', array("reihungstest_id" => $reihungstest_id,'json')))
+	{
+	    $this->result = $restquery;
+	    return true;
+	}
+    }
 
     public function getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz)
     {

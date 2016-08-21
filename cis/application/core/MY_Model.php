@@ -74,7 +74,7 @@ class MY_Model extends CI_Model {
 		    if(is_string($this->result->retval))
 		    {
 			$msg = $this->result->retval;
-			return "Error Code: ".$this->result->error."; ".$msg."; ".$this->result->msg;
+			return "Error Code: ".$this->result->error."; ".$msg."; ". (isset($this->result->msg) ? $this->result->msg : "");
 		    }
 		}
 		else

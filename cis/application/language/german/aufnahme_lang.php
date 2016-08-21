@@ -7,7 +7,7 @@ $lang['aufnahme/ungueltigerZugriff']='ungültiger Zugriff';
 $lang['aufnahme/welcome']='Willkommen bei der Online Bewerbung';
 $lang['aufnahme/registration']='Zugangscode für Ihre Bewerbung';
 $lang['aufnahme/registrieren']='Anmelden';
-$lang['aufnahme/abschicken']='Abschicken';
+$lang['aufnahme/abschicken']='Registrieren';
 $lang['aufnahme/registrierenOderZugangscode']='<a href="'.$_SERVER['PHP_SELF'].'?method=registration">Hier registrieren</a> oder Zugangscode eingeben';
 $lang['aufnahme/einleitungstext']='Bitte füllen Sie das Formular aus, wählen Sie die gewünschte(n) Studienrichtung(en) und klicken Sie auf "Abschicken".<br>Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse.
 		Mit dem Zugangscode können Sie sich jederzeit einloggen, Ihre Daten vervollständigen, Studienrichtungen hinzufügen und sich unverbindlich bewerben.';
@@ -207,9 +207,14 @@ $lang['aufnahme/studiengaenge'] = 'Studiengänge';
 $lang['aufnahme/termine'] = 'Aufnahmetermine';
 $lang['aufnahme/nachrichten'] = 'Nachrichten';
 $lang['aufnahme/downloads'] = 'Downloads';
-$lang["aufnahme/wiederholungEmail"] = "Wiederholung E-Mail";
-$lang["aufnahme/vorname"] = "Vorname";
-$lang["aufnahme/nachname"] = "Nachname";
-$lang["aufnahme/geburtsdatum"] = "Geburtsdatum";
-$lang["aufnahme/emailAdresse"] = "E-Mail";
+$lang["aufnahme/wiederholungEmail"] = "Wiederholung E-Mail*";
+$lang["aufnahme/vorname"] = "Vorname*";
+$lang["aufnahme/nachname"] = "Nachname*";
+$lang["aufnahme/geburtsdatum"] = "Geburtsdatum*";
+$lang["aufnahme/emailAdresse"] = "E-Mail*";
+$lang['aufnahme/password']='Passwort';
+$lang['aufnahme/wohnort']='Wohnort*';
+$lang['aufnahme/Geschlecht']='Geschlecht*';
+$lang['aufnahme/Maennlich']='männlich';
+$lang['aufnahme/Weiblich']='weiblich';
 ?>

@@ -13,7 +13,6 @@ class Messages extends MY_Controller {
 	$this->load->library("form_validation");
 	$this->config->load('message');
 	
-	$this->_data['title'] = 'Nachrichten';
 	$this->_data["sprache"] = $this->get_language();
 	$this->_data["view"] = "messages";
     }
@@ -39,7 +38,7 @@ class Messages extends MY_Controller {
 	$this->load->view('messages', $this->_data);
     }
     
-    public function answerMessage($message_id, $oe_kurzbz)
+    public function answerMessage($message_id, $oe_kurzbz=null)
     {
 	$this->checkLogin();
 	
@@ -123,6 +122,13 @@ class Messages extends MY_Controller {
 	    $this->_data["view"] = "message";
 	    $this->load->view('messages', $this->_data);
 	}
+    }
+    
+    public function deleteMessage($messageId)
+    {
+	//TODO delete message
+	$this->checkLogin();
+	$this->_loadData();
     }
     
     private function _loadData()

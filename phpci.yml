@@ -3,34 +3,35 @@ build_settings:
     prefer_symlink: false
     ignore:
         - "vendor"
-        - "tests"     
+        - "tests"
 
 setup:
     composer:
         action: "install"
+        prefer_dist: true
+        no_dev: true
     shell:
         - "cd %BUILD_PATH% && chmod u+x installPHPCI.sh && ./installPHPCI.sh" # Install AddOn
-        - "rm -f /home/fhc/FHC-Core/addons/aufnahme" # SymLink löschen falls vorhanden
-        - "ln -s %BUILD_PATH% /home/fhc/FHC-Core/addons/aufnahme" # SymLink to the actual build
-        - "curl 'http://localhost/addons/aufnahme/cis/index.php/Migrate/'" # DB-Migaration
+        - "rm -f /var/www/html/build/aufnahme" # SymLink löschen falls vorhanden
+        - "ln -s %BUILD_PATH% /var/www/html/build/aufnahme" # SymLink to the actual build
+        #- "curl 'http://localhost/addons/aufnahme/cis/index.php/Migrate/'" # DB-Migaration
 
 test:
     lint:
         directories:
         - "cis/application/"
-#        - "backend/install/"
-#        - "backend/web/"
         recursive: true
-    php_unit:
-        directory: "test/phpunit/"
-    php_loc:
-        directory: "cis/application"
-    php_docblock_checker:
-        path: "cis/application/controllers/"
-        allowed_warnings: 100
-        skip_classes: false
     codeception:
-        config: "test/codeception/"
+        config: "tests/codeception/"
+        path: "tests/codeception/_output/"
+#    php_loc:
+#        directory: "cis/application"
+#    php_unit:
+#        directory: "test/phpunit/"
+#    php_docblock_checker:
+#        path: "cis/application/controllers/"
+#        allowed_warnings: 100
+#        skip_classes: false
 #    php_mess_detector:
 #        path: 'cis/application'
 #        ignore:
@@ -44,33 +45,33 @@ test:
 #          - "design"
 #          - "unusedcode"
 #        zero_config: true
-    php_code_sniffer:
-        path: "cis/application/controllers"
+#    php_code_sniffer:
+#        path: "cis/application/controllers"
 #        ignore:
 #            - "cis/application/views"
-        standard: "PSR1"
-        allowed_errors: 200
-        allowed_warnings: 200
+#        standard: "PSR1"
+#        allowed_errors: 200
+#        allowed_warnings: 200
     
 complete:
-    xmpp:
-        username: "fhcomplete"
-        password: "fhcomplete1q2w3blah.im"
-        recipients:
+#    xmpp:
+#        username: "fhcomplete"
+#        password: "fhcomplete1q2w3blah.im"
+#        recipients:
 #            - "fhcomplete@darkness.su"
-            - "tschux@jabber.org"
-            - "tschux@jabber.at"      
-        server: "jabber.blah.im"
-        tls: 1
-        alias: "jabber.blah.im"
-        date_format: "%d.%m.%Y"
+#            - "tschux@jabber.org"
+#            - "tschux@jabber.at"      
+#        server: "jabber.blah.im"
+#        tls: 1
+#        alias: "jabber.blah.im"
+#        date_format: "%d.%m.%Y"
 #    clean_build:
 #        remove:
 #            - cis/application/config/database.php
 #            - cis/application/config/config.php
 #            - cis/application/config/aufnahme.php
-    shell: 
-    - "ln -s %BUILD_PATH%/../aufnahme /home/fhc/FHC-Core/addons/aufnahme" # SymLink back to stable
+#    shell: 
+#    - "ln -s %BUILD_PATH%/../aufnahme /home/fhc/FHC-Core/addons/aufnahme" # SymLink back to stable
 
 success:
 #    shell:
@@ -78,4 +79,3 @@ success:
 #        - "cd %BUILD_PATH%frontend/ && chmod u+x copyFrontend.sh && ./copyFrontend.sh" # Copy Build
 #        - "curl 'http://localhost/backend/Migrate/'" # DB-Installation
 #        - "cd /var/www/html/ && sudo -u wsp doxygen DoxyfileBackend" # Doxygen
-

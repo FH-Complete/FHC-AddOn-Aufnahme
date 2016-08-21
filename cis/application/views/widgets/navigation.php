@@ -2,7 +2,7 @@
     <ul class="nav nav-pills nav-stacked">
 	<?php
 	foreach($items as $item): ?>
-	<li class="<?php if(isset($aktiv) && ($aktiv === $item["id"])) echo "active"; ?>">
+	<li class="<?php if(isset($aktiv) && ($aktiv === $item["id"])) echo "active"; ?> <?php echo $item["id"]?>">
 	    <a href="<?php echo (isset($href[$item["id"]]) ? $href[$item["id"]] :$item["href"]); ?>">
 		<?php echo $item["name"]; ?>
 	    </a>

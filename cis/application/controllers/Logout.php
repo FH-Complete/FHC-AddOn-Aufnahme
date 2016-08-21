@@ -28,7 +28,7 @@ class Logout extends MY_Controller {
         $this->session->sess_destroy();
 //        $data = array("person_id", "studiengang_kz");
 //        $this->session->unset_userdata($data);
-        redirect("/Login");
+        redirect("/Registration");
     }
 
 }

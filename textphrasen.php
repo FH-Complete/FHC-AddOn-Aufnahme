@@ -342,7 +342,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'description' => 'Your new password'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Registration/EmailAddressTaken',
 		'phrasentext' => array
@@ -361,5 +361,167 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => '',
 			'description' => 'The e-mail address is already taken'
 		)
+	),
+	array
+	(
+		'phrase' => 'Test/Bewerbungsfrist',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Bewerbungsfrist bis',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Test/Bewerbungsfrist',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'deadline',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Test/FristAbgelaufen',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Bewerbungsfrist ist bereits abgelaufen. Anmeldung nicht mehr möglich.',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Test/FristAbgelaufen',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Deadline expired. Registration not possible.',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Registration/Datenschutz',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Ich habe die Datenschutzbestimmungen gelesen, verstanden und akzeptiert.',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Registration/Datenschutz',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'I accept ...',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/introduction_short',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Bitte laden Sie ....',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/introduction_short',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Please upload ....',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/introduction_long',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Bitte laden Sie ....',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/introduction_long',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Please upload ....',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Bewerbung/StornoConfirmation',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Wollen Sie Ihre Bewerbung wirklich zurückziehen?',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Bewerbung/StornoConfirmation',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Do really want to revoke your application?',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/letztgueltigesZeugnis',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Falls dieses Zeugnis noch nicht vorhanden ist',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/letztgueltigesZeugnis',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Falls dieses Zeugnis noch nicht vorhanden ist',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/letztesZeugnisInfo',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => '',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/letztesZeugnisInfo',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => ''
+		)
 	)
 );
+
+

@@ -20,7 +20,7 @@ class MY_Controller extends CI_Controller {
     public function get_language() {
         if (is_null($this->input->get('language')))
 	{
-            if (is_null($this->session->sprache))
+            if (is_null($this->session->language))
 	    {
 		$this->_getPhrasen(ucfirst($this->config->item('default_language')));
                 return $this->config->item('default_language');
@@ -43,7 +43,7 @@ class MY_Controller extends CI_Controller {
     {
         if(is_null($this->session->person_id))
         {
-            redirect("/Login");
+            redirect("/Registration");
         }
     }
 
@@ -73,56 +73,52 @@ class MY_Controller extends CI_Controller {
 
     protected function getPhrase($phrase, $sprache, $oe_kurzbz="", $orgform_kurzbz="")
     {
-	if(isset($this->session->userdata()["phrasen"]))
-	{
+	if (isset($this->session->userdata()["phrasen"])) {
 	    $phrasen = $this->session->userdata()["phrasen"];
-	    foreach($phrasen as $p)
+	    if(is_array($phrasen))
 	    {
-		if(($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz))
-		{
-		    if ($this->config->item('display_phrase_name'))
-		    {
-			return $p->phrase;
+		foreach ($phrasen as $p) {
+		    if (($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz) && ($p->sprache == $sprache)) {
+			if ($this->config->item('display_phrase_name'))
+			    return $p->text . " <i>[$p->phrase]</i>";
+			else
+			    return $p->text;
 		    }
-		    else
-		    {
-			return $p->text;
+		}
+
+		foreach ($phrasen as $p) {
+		    if (($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->sprache == $sprache)) {
+			if ($this->config->item('display_phrase_name'))
+			    return $p->text . " <i>[$p->phrase]</i>";
+			else
+			    return $p->text;
+		    }
+		}
+
+		foreach ($phrasen as $p) {
+		    if (($p->phrase == $phrase) && ($p->sprache == $sprache)) {
+			if ($this->config->item('display_phrase_name'))
+			    return $p->text . " <i>[$p->phrase]</i>";
+			else
+			    return $p->text;
+		    }
+		}
+
+		foreach ($phrasen as $p) {
+		    if (($p->phrase == $phrase)) {
+			if ($this->config->item('display_phrase_name'))
+			    return $p->text . " <i>[$p->phrase]</i>";
+			else
+			    return $p->text;
 		    }
 		}
 	    }
-
-	    foreach($phrasen as $p)
+	    else
 	    {
-		if(($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz))
-		{
-		    if ($this->config->item('display_phrase_name'))
-		    {
-			return $p->phrase;
-		    }
-		    else
-		    {
-			return $p->text;
-		    }
-		}
-	    }
-
-	    foreach($phrasen as $p)
-	    {
-		if(($p->phrase == $phrase))
-		{
-		    if ($this->config->item('display_phrase_name'))
-		    {
-			return $p->phrase;
-		    }
-		    else
-		    {
-			return $p->text;
-		    }
-		}
+		return $phrasen;
 	    }
 	}
-	else
-	{
+	else {
 	    return "please load phrases first";
 	}
     }

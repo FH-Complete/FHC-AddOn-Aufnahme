@@ -29,7 +29,8 @@ class Aufnahmetermine extends MY_Controller {
 	$this->load->model('prestudent_model', "PrestudentModel");
         $this->load->model('prestudentStatus_model', "PrestudentStatusModel");
 	$this->load->model('person_model', 'PersonModel');
-	$this->load->model('studienplan_model', "StudienplanModel");
+	$this->load->model('studiengangstyp_model', 'StudiengangstypModel');
+	$this->load->model('message_model', 'MessageModel');
 	$this->load->helper("form");
     }
 
@@ -43,15 +44,53 @@ class Aufnahmetermine extends MY_Controller {
         $this->load->view('aufnahmetermine', $this->_data);
     }
     
-    public function register()
+    public function register($studiengang_kz, $studienplan_id)
     {
 	$this->checkLogin();
 	
 	$this->_data["sprache"] = $this->get_language();
 	
+	$reihungstest = $this->_loadReihungstest($this->input->post()["rtTermin"]);
+	
 	$this->_loadData();
 	
-	$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"]);
+	if(date("Y-m-d", strtotime($reihungstest->anmeldefrist)) > date("Y-m-d"))
+	{
+	    //check if new registration or change
+	    if(!empty($this->_data["anmeldungen"]))
+	    {
+		foreach($this->_data["anmeldungen"] as $anmeldung)
+		{
+		    if(($anmeldung->studiengang_kz === $studiengang_kz) && ($anmeldung->reihungstest_id !== $this->input->post()["rtTermin"]))
+		    {
+			$this->_deleteRegistrationToReihungstest($anmeldung);
+			$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"], $studienplan_id);
+			
+			foreach($this->_data["studiengaenge"] as $studiengang)
+			{
+			    if($studiengang->studiengang_kz === $studiengang_kz)
+			    {
+				$studiengang->studiengangstyp = $this->_loadStudiengangstyp($studiengang->typ);
+				//TODO send message; vorlage wird nicht korrekt geladen
+				//$this->_sendMessageMailAppointmentConfirmation($this->_data["person"], $studiengang, $anmeldung);
+			    }
+			}
+			
+		    }
+		}
+	    }
+	    else
+	    {
+		$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"], $studienplan_id);
+	    }
+
+	    $this->_loadData();
+	}
+	else
+	{
+	    $this->_data["anmeldeMessage"] = $this->getPhrase("Test/FristAbgelaufen", $this->_data["sprache"]);
+	}
+	
 	$this->load->view('aufnahmetermine', $this->_data);
     }
     
@@ -65,7 +104,11 @@ class Aufnahmetermine extends MY_Controller {
 	
 	$this->_data["anmeldungen"] = $this->_loadReihungstestsByPersonId($this->_data["person"]->person_id);
 	
-	//var_dump($this->_data["anmeldungen"]);
+	$this->_data["rt_person"] = array();
+	foreach($this->_data["anmeldungen"] as $anmeldung)
+	{
+	    $this->_data["rt_person"][$anmeldung->studiengang_kz] = $anmeldung->reihungstest_id;
+	}
 	
 	//load preinteressent data
         $this->_data["prestudent"] = $this->_loadPrestudent();
@@ -89,16 +132,16 @@ class Aufnahmetermine extends MY_Controller {
 		{
 		    if(isset($rt->stufe) && ($rt->stufe <= $prestudent->prestudentStatus->rt_stufe))
 		    {
-			$this->_data["reihungstests"][$prestudent->studiengang_kz][$rt->stufe][] = $rt;
+			$this->_data["reihungstests"][$prestudent->studiengang_kz][$rt->stufe][$rt->reihungstest_id] = date("d.m.Y", strtotime($rt->datum))." // ".$this->getPhrase("Test/Bewerbungsfrist", $this->_data["sprache"])." ".date("d.m.Y", strtotime($rt->anmeldefrist));
 		    }
 		}
 	    }
         }
     }
     
-    private function _registerToReihungstest($person_id, $reihungstest_id)
+    private function _registerToReihungstest($person_id, $reihungstest_id, $studienplan_id)
     {
-	$this->PrestudentModel->registerToReihungstest($person_id, $reihungstest_id);
+	$this->PrestudentModel->registerToReihungstest($person_id, $reihungstest_id, $studienplan_id);
 	if($this->PrestudentModel->isResultValid() === true)
 	{
 	    
@@ -138,7 +181,6 @@ class Aufnahmetermine extends MY_Controller {
     private function _loadReihungstestsByPersonId($person_id)
     {
 	$this->ReihungstestModel->getReihungstestByPersonID($person_id);
-	//var_dump($this->ReihungstestModel->result);
 	if($this->ReihungstestModel->isResultValid() === true)
 	{
 	    return $this->ReihungstestModel->result->retval;
@@ -149,7 +191,18 @@ class Aufnahmetermine extends MY_Controller {
 	}
     }
     
-    
+    private function _loadReihungstest($reihungstest_id)
+    {
+	$this->ReihungstestModel->getReihungstest($reihungstest_id);
+	if($this->ReihungstestModel->isResultValid() === true)
+	{
+	    return $this->ReihungstestModel->result->retval[0];
+	}
+	else
+	{
+	    $this->_setError(true, $this->ReihungstestModel->getErrorMessage());
+	}
+    }
     
     private function _loadPerson()
     {
@@ -246,6 +299,73 @@ class Aufnahmetermine extends MY_Controller {
 	else
 	{
 	    $this->_setError(true, $this->StudienplanModel->getErrorMessage());
+	}
+    }
+    
+    private function _deleteRegistrationToReihungstest($anmeldung)
+    {
+	$reihungstest = new stdClass();
+	$reihungstest->person_id = $anmeldung->person_id;
+	$reihungstest->rt_person_id = $anmeldung->rt_person_id;
+	$reihungstest->rt_id = $anmeldung->rt_id;
+	
+	$this->PrestudentModel->deleteRegistrationToReihungstest($reihungstest);
+	if($this->PrestudentModel->isResultValid() === true)
+	{
+	    
+	}
+	else
+	{
+	    $this->_setError(true, $this->PrestudentModel->getErrorMessage());
+	}
+    }
+    
+    private function _sendMessageMailAppointmentConfirmation($person, $studiengang, $termin)
+    {	
+	$data = array(
+	    "typ" => $studiengang->studiengangstyp->bezeichnung,
+	    "studiengang" => $studiengang->bezeichnung,
+	    "orgform" => $studiengang->orgform_kurzbz,
+	    "termin" => date("d.m.Y", strtotime($termin->datum))." ".date("H:i", strtotime($termin->uhrzeit))
+	);
+	
+	$oe = $studiengang->oe_kurzbz;
+	$orgform_kurzbz = $studiengang->orgform_kurzbz;
+
+	(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
+	
+	$this->MessageModel->sendMessageVorlage($this->config->item("systemPersonId"), $person->person_id, "MailAppointmentConfirmation", "etw", $data, $sprache, $orgform_kurzbz=null);
+
+//	var_dump($this->MessageModel->result);
+	
+	if($this->MessageModel->isResultValid() === true)
+	{
+	    if($this->MessageModel->result->msg === "Success")
+	    {
+		//success
+	    }
+	    else
+	    {
+		$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />';
+	    }
+	}
+	else
+	{
+	    $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />';
+	    $this->_setError(true, $this->MessageModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadStudiengangstyp($typ)
+    {
+	$this->StudiengangstypModel->get($typ);
+	if($this->StudiengangstypModel->isResultValid() === true)
+	{
+	    return $this->StudiengangstypModel->result->retval[0];
+	}
+	else
+	{
+	    $this->_setError(true, $this->StudiengangstypModel->getErrorMessage());
 	}
     }
 }

@@ -16,6 +16,7 @@ class Summary extends MY_Controller {
         $this->load->model('studienplan_model', "StudienplanModel");
 	$this->load->model('dms_model', "DmsModel");
         $this->load->model('akte_model', "AkteModel");
+	$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
     }
 
     public function index() {
@@ -24,6 +25,9 @@ class Summary extends MY_Controller {
         
         //load studiengang
         $this->_loadStudiengang($this->input->get()["studiengang_kz"]);
+	
+	//load Dokumente from Studiengang
+	$this->_data["dokumenteStudiengang"] = $this->_loadDokumentByStudiengang($this->input->get()["studiengang_kz"]);
         
         //load nationen
         $this->_loadNationen();
@@ -287,4 +291,16 @@ class Summary extends MY_Controller {
 	}
     }
     
+    private function _loadDokumentByStudiengang($studiengang_kz)
+    {
+	$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($studiengang_kz, true, true);
+        if($this->DokumentStudiengangModel->isResultValid() === true)
+        {
+	    return $this->DokumentStudiengangModel->result->retval;
+        }
+	else
+	{
+	    $this->_setError(true, $this->DokumentStudiengangModel->getErrorMessage());
+	}
+    }
 }

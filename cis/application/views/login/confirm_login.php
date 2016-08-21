@@ -7,7 +7,7 @@
 	<li class="active">Registration</li>
     </ol>
     <?php echo form_open("Registration/code_login?studiengang_kz=".((isset($studiengang_kz)) ? $studiengang_kz : ""), array("id" => "ChangePasswordForm", "name" => "ChangePasswordForm", "class" => "form-horizontal")); ?>
-    <img style="width:150px;" class="center-block img-responsive" src="<?php echo APP_ROOT . 'skin/styles/' . $this->config->item('theme'); ?>/logo.png">
+    <img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/logo.png'); ?>">
     <p class="infotext">
 	<?php echo sprintf($this->getPhrase('Home/NewPassword', $sprache), $zugangscode);?>
     </p>
@@ -27,7 +27,7 @@
     </div>
     <div class="form-group">
 	<div class="col-sm-4 col-sm-offset-3">
-	    <?php echo form_submit(array("value" => "Abschicken", "name" => "submit_btn", "class" => "btn btn-primary")); ?>
+	    <?php echo form_button(array("content"=>"Abschicken", "name"=>"submit_btn", "class"=>"btn btn-primary", "type"=>"submit")); ?>
 	</div>
     </div>
     <?php

@@ -16,5 +16,10 @@ $lang['requirements_abschlusszeugnis'] = 'Abschlusszeugnis';
 $lang["requirements_keinDokHochgeladen"] = "Kein Dokument hochgeladen";
 $lang["requirements_DokHochgeladen"] = "Dokument bereits vorhanden";
 $lang["requirements_formNachgereicht"] = "wird nachgereicht";
-
-
+$lang["requirements_Geburtsu"] = "Geburtsurkunde";
+$lang["requirements_Maturaze"] = "Schul- bzw. Lehrabschlusszeugnis";
+$lang["requirements_Staatsbn"] = "Staatsbürgerschaftsnachweis";
+$lang["requirements_Lichtbil"] = "Lichtbild";
+$lang["requirements_nachreichenDatum"] = "Datum";
+$lang["requirements_nachreichenAnmerkung"] = "Anmerkung";
+$lang["requirements_letztesZeugnis"] = "letztgültiges Zeugnis";

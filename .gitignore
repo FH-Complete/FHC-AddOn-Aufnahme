@@ -8,8 +8,11 @@ bin
 vendor
 cis/application/config/development
 cis/index.php
-test/codeception/tests/acceptance.suite.yml
-test/codeception/tests/functional.suite.yml
-test/codeception/tests/unit.suite.yml
 cis/application/config/development/
 /cis/application/logs/
+tests/codeception/_output/*
+!/tests/codeception/_output/.placeholder
+tests/codeception/codeception.yml
+tests/codeception/tests/api.suite.yml
+tests/codeception/tests/functional.suite.yml
+tests/codeception/tests/acceptance.suite.yml

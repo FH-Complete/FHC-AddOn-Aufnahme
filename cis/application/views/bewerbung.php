@@ -21,7 +21,7 @@ if (isset($error) && ($error->error === true))
         </div>
         <div class="row">
             <div id="<?php echo $studiengang->studiengang_kz; ?>" class='collapse'>
-                <div class="col-sm-3 navigation">
+                <div class="col-sm-4 navigation">
                     <?php echo 
                         $this->template->widget(
                             "person_nav",
@@ -51,53 +51,84 @@ $this->load->view('templates/footer');
 
 <script type="text/javascript">
     $(document).ready(function(){
-	$(".zustelladresse").click(function(event)
-	{
-	    var id = $(event.currentTarget).attr("studienplan_id");
-	    if($(event.currentTarget).prop("checked"))
-	    {
-		$("#zustelladresse_"+id).show();
-	    }
-	    else
-	    {
-		$("#zustelladresse_"+id).hide();
-	    }
-	});
-
-	$("#adresse_nation").on("change", function(event){
-	   toggleAdresse();
-	});
 	
-	toggleAdresse();
+	
+	checkDataCompleteness();
+	
     });
-    
-    function toggleAdresse()
+
+    function checkDataCompleteness()
     {
-	var code = $("#adresse_nation option:selected").val();
-	if(code === "A")
-	{
-	    hideElement($("#plz").closest(".row"));
-	    hideElement($("#ort").closest(".row"));
-	    hideElement($("#bundesland").closest(".row"));
-	    showElement($("#plzOrt").closest(".row"));
-	    //TODO exchange form inputs
-	}
-	else
-	{
-	    hideElement($("#plzOrt").closest(".row"));
-	    showElement($("#plz").closest(".row"));
-	    showElement($("#ort").closest(".row"));
-	    showElement($("#bundesland").closest(".row"));
-	}
+	//TODO hide Authorization
+	$.ajax({
+	    method: "GET",
+	    url: "<?php echo($this->config->item('fhc_api')['server']);?>person/person/person?person_id=<?php echo $person->person_id; ?>"
+	}).done(function(data){
+	    if(data.error === 0)
+	    {
+		var person = data.retval[0];
+		if(_isPersonDataComplete(person))
+		{
+		    $(".personalData").addClass("complete");
+		}
+		else
+		{
+		    $(".personalData").addClass("incomplete");
+		}
+	    }
+	});
     }
     
-    function hideElement(ele)
+    function _isPersonDataComplete(person)
     {
-	$(ele).hide();
+	if(person.vorname === null)
+	{
+	    return false;
+	}
+
+	if(person.nachname === null)
+	{
+	    return false;
+	}
+
+	if(person.gebdatum === null)
+	{
+	    return false;
+	}
+
+	if(person.gebort === null)
+	{
+	    return false;
+	}
+
+	if(person.staatsbuergerschaft === null)
+	{
+	    return false;
+	}
+
+	if(person.geburtsnation === null)
+	{
+	    return false;
+	}
+
+	if(person.svnr === null)
+	{
+	    return false;
+	}
+
+	if((person.geschlecht !== "m") && (person.geschlecht !== "w"))
+	{
+	    return false;
+	}
+
+	return true;
     }
     
-    function showElement(ele)
+    function confirmStorno()
     {
-	$(ele).show();
+	if(confirm("<?php echo $this->getPhrase("Bewerbung/StornoConfirmation", $sprache); ?>"))
+	{
+	    window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/$studiengang->studiengang_kz") ?>";
+	}
     }
 </script>

@@ -29,6 +29,7 @@ class Login extends MY_Controller {
         $this->load->model('studienplan_model', "StudienplanModel");
 	$this->load->model('userAuth_model', "UserAuthModel");
 	$this->load->model('benutzer_model', "BenutzerModel");
+	$this->load->library("form_validation");
     }
 
     public function index()
@@ -51,18 +52,40 @@ class Login extends MY_Controller {
         // First _POST then _GET
         $this->_data['code'] = $this->input->post('code') ? $this->input->post('code') : $this->input->get('code');
 
-        if ($this->_data['code'])
+	if ($this->config->item('hybrid_login'))
 	{
-            $this->code_login($this->_data['code'], $this->_data, $this->_data["email"]);
+	    if ($this->_data['email'] && $this->_data["code"])
+	    {
+		$this->_cisLogin($this->_data['email'], $this->_data["code"]);
+		$this->code_login($this->_data['code'], $this->_data, $this->_data["email"]);
+		$this->load->view('registration', $this->_data);
+	    }
 	}
-        elseif ($this->_data['username'] && $this->_data["password"])
+	else
 	{
-	    $this->_cisLogin($this->_data['username'], $this->_data["password"]);
-        } else {
-            // $this->load->view('templates/header');
-            $this->load->view('login', $this->_data);
-            // $this->load->view('templates/footer');
-        }
+	    if ($this->_data['code'])
+	    {
+		$this->code_login($this->_data['code'], $this->_data, $this->_data["email"]);
+		if(isset($this->_data["error_msg"]))
+		{
+		    $this->load->view('registration', $this->_data);
+		}
+	    }
+	    elseif ($this->_data['username'] && $this->_data["password"])
+	    {
+		$this->_cisLogin($this->_data['username'], $this->_data["password"]);
+		if(isset($this->_data["error_msg"]))
+		{
+		    $this->load->view('registration', $this->_data);
+		}
+	    }
+	    else
+		{
+		// $this->load->view('templates/header');
+		$this->load->view('login', $this->_data);
+		// $this->load->view('templates/footer');
+	    }
+	}
     }
 
     private function code_login($code, &$data, $email = null)
@@ -113,19 +136,17 @@ class Login extends MY_Controller {
 		else
 		{
 		    $this->_data["code_error_msg"] = "Prestudent nicht gefunden.";
-		    $this->load->view('login', $this->_data);
+		    redirect('/Studiengaenge');
 		}
             }
 	    else
 	    {
                 $this->_data["code_error_msg"] = "Person existiert nicht.";
-		$this->load->view('login', $this->_data);
             }
         }
 	else
 	{
 	    $this->_data["code_error_msg"] = "E-Mail Adresse und/oder Passwort ist falsch.";
-	    $this->load->view('login', $this->_data);
 	}
     }
     
@@ -135,7 +156,7 @@ class Login extends MY_Controller {
 	if($this->UserAuthModel->result->retval == TRUE)
 	{
 	    $this->BenutzerModel->getBenutzer($username);
-	    if($this->BenutzerModel->result->error == 0)
+	    if(($this->BenutzerModel->result->error == 0) && (!empty($this->BenutzerModel->result->retval)))
 	    {
 		//$this->StudiensemesterModel->getNextStudiensemester("WS");
 		$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
@@ -185,7 +206,6 @@ class Login extends MY_Controller {
 			else
 			{
 			    $this->_data["uid_error_msg"] = "Prestudent nicht gefunden.";
-			    $this->load->view('login', $this->_data);
 			}
 		    }
 		    else
@@ -196,19 +216,16 @@ class Login extends MY_Controller {
 		else
 		{
 		    $this->_data["uid_error_msg"] = "Person konnte nicht gefunden werden.";
-		    $this->load->view('login', $this->_data);
 		}
 	    }
 	    else
 	    {
 		$this->_data["uid_error_msg"] = "Benutzer existiert nicht.";
-		$this->load->view('login', $this->_data);
 	    }
 	}
 	else
 	{
 	    $this->_data["uid_error_msg"] = "Authentifizierung fehlgeschlagen.";
-	    $this->load->view('login', $this->_data);
 	}
     }
     

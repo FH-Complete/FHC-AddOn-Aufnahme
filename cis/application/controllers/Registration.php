@@ -27,7 +27,9 @@ class Registration extends MY_Controller {
         $this->load->model("Person_model", "PersonModel");
         $this->load->model("Kontakt_model");
 	$this->load->model("Message_model", "MessageModel");
+	$this->load->model('adresse_model', "AdresseModel");
         $this->lang->load('aufnahme', $this->get_language());
+	$this->lang->load('login', $this->get_language());
     }
 
     public function index()
@@ -40,12 +42,15 @@ class Registration extends MY_Controller {
             "geb_datum" => $this->input->post("geb_datum"),
             "email" => $this->input->post("email"),
             "captcha_code" => $this->input->post("captcha_code"),
-            "zugangscode" => $this->input->post("zugangscode")
+            "zugangscode" => $this->input->post("zugangscode"),
+//	    "wohnort" =>$this->input->post("wohnort"),
+	    "geschlecht" => $this->input->post("geschlecht")
         );
 
-	if(isset($this->input->get()["language"]))
+	if(isset($this->input->get()["sprache"]))
 	{
 	    $this->lang->load('aufnahme', $this->_data["sprache"]);
+	    $this->lang->load('login', $this->_data["sprache"]);
 	    $this->_data["sprache"] = $this->get_language();
 	}
 	
@@ -54,16 +59,18 @@ class Registration extends MY_Controller {
         $this->form_validation->set_rules("vorname", "Vorname", "required|max_length[32]");
         $this->form_validation->set_rules("nachname", "Nachname", "required|max_length[64]");
         $this->form_validation->set_rules("geb_datum", "Geburtsdatum", "required");
+//	$this->form_validation->set_rules("wohnort", "Wohnort", "required");
         $this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
         $this->form_validation->set_rules("email2", "E-Mail", "required|valid_email|callback_check_email");
+	$this->form_validation->set_rules("datenschutz", "Datenschutz", "callback_check_terms");
         //TODO
-        //$this->form_validation->set_rules("captcha_code", "Captcha", "required|max_length[6]|callback_check_captcha");
+        $this->form_validation->set_rules("captcha_code", "Captcha", "required|max_length[6]|callback_check_captcha");
 
 
         if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header');
+            //$this->load->view('templates/header');
             $this->load->view('registration',  $this->_data);
-            $this->load->view('templates/footer');
+            //$this->load->view('templates/footer');
         } else {
             $this->saveRegistration($this->_data);
         }
@@ -75,18 +82,32 @@ class Registration extends MY_Controller {
         $img->show(); // alternate use: $img->show('/path/to/background.jpg');
     }
 
-    public function check_captcha() {
-        $securimage = new Securimage();
-        if (!$securimage->check($this->input->post("captcha_code"))) {
-            $this->form_validation->set_message("check_captcha", "Code does not match.");
+    public function check_captcha()
+    {
+		if ($this->input->post("email") != $this->config->config["codeception_email"])
+		{
+			$securimage = new Securimage();
+			if (!$securimage->check($this->input->post("captcha_code"))) {
+				$this->form_validation->set_message("check_captcha", "Code does not match.");
+				return false;
+			}
+		}
+        return true;
+    }
+
+    public function check_email()
+    {
+        if (!($this->input->post("email") == $this->input->post("email2"))) {
+            $this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
             return false;
         }
         return true;
     }
-
-    public function check_email() {
-        if (!($this->input->post("email") == $this->input->post("email2"))) {
-            $this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
+    
+    public function check_terms()
+    {
+	if (($this->input->post("datenschutz") !== "")) {
+            $this->form_validation->set_message("check_terms", "Sie müssen die Datenschutzbedingungen aktzeptieren.");
             return false;
         }
         return true;
@@ -171,7 +192,7 @@ class Registration extends MY_Controller {
                     }
 		    else
 		    {
-                         $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
                         $this->load->view('templates/header');
                         $this->load->view('login/confirm_error',  $this->_data);
                         $this->load->view('templates/footer');
@@ -217,9 +238,9 @@ class Registration extends MY_Controller {
             if (count($bewerbung) > 0) {
                 $data["message"] = '<p class="alert alert-danger" id="danger-alert">' . sprintf($this->lang->line('aufnahme/mailadresseBereitsGenutzt'), $data["email"]) . '</p>'
                         . '<a href="' . base_url("index.dist.php/Registration/resendCode") . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button></a>';
-                $this->load->view('templates/header');
+//                $this->load->view('templates/header');
                 $this->load->view('registration', $data);
-                $this->load->view('templates/footer');
+//                $this->load->view('templates/footer');
             }
 	    else
 	    {
@@ -247,9 +268,9 @@ class Registration extends MY_Controller {
 			    $this->_sendMessageVorlage($this->_data["person"], $zugangscode, base_url($this->config->config["index_page"]."/Registration/confirm?code=".$zugangscode."&studiengang_kz=".$data['studiengang_kz']), $data["email"]);
 
 			    //$data["message"] = $message;
-			    $this->load->view('templates/header');
+//			    $this->load->view('templates/header');
 			    $this->load->view('registration', $this->_data);
-			    $this->load->view('templates/footer');
+//			    $this->load->view('templates/footer');
 			}
 			else
 			{
@@ -260,16 +281,26 @@ class Registration extends MY_Controller {
                     {
 			$this->_setError(true, $this->Kontakt_model->getErrorMessage());
                     }
+		    
+//		    $adresse = new stdClass();
+//		    $adresse->person_id =$person_id;
+//		    $adresse->heimatadresse = "t";
+//		    $adresse->zustelladresse = "f";
+////		    $adresse->ort = $data["wohnort"];
+//		    
+//		    $this->_saveAdresse($adresse);
                 }
                 else
                 {
-		    //error message already setn
+		    //error message already set
+		    $this->_setError(true, $this->PersonModel->getErrorMessage());
                 }
             }
         }
 	else
 	{
-	    //error message already setn
+	    //error message already set
+	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
 
@@ -366,21 +397,21 @@ class Registration extends MY_Controller {
 	    "code" => $code,
 	    "link" => $link
 	);
-	//TODO set system person id, oe_kurzbz
-    if ($this->config->item('root_oe'))
-        $oe = $this->config->item('root_oe');
-    else
-        $oe = 'fhstp';
+
+	if ($this->config->item('root_oe'))
+	    $oe = $this->config->item('root_oe');
+	else
+	    $oe = 'fhstp';
 
 	(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
 	
-	$this->MessageModel->sendMessageVorlage(1, $person->person_id, "MailRegistrationConfirmation", $oe, $data, $sprache, $orgform_kurzbz=null);
+	$this->MessageModel->sendMessageVorlage($this->config->item("systemPersonId"), $person->person_id, "MailRegistrationConfirmation", $oe, $data, $sprache, $orgform_kurzbz=null);
 
 	if($this->MessageModel->isResultValid() === true)
 	{
 	    if($this->MessageModel->result->msg === "Success")
 	    {
-		$this->_data["message"] = sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . "<br><br><a href=" . $_SERVER['PHP_SELF'] . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
+		$this->_data["message"] = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache']), $email) . "<br><br><a href=" . $_SERVER['PHP_SELF'] . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
 	    }
 	    else
 	    {
@@ -445,4 +476,17 @@ class Registration extends MY_Controller {
 	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
+    
+//    private function _saveAdresse($adresse)
+//    {
+//	$this->AdresseModel->saveAdresse($adresse);
+//	if($this->AdresseModel->isResultValid() === true)
+//	{
+//	    //TODO Daten erfolgreich gespeichert
+//	}
+//	else
+//	{
+//	    $this->_setError(true, $this->AdresseModel->getErrorMessage());
+//	}
+//    }
 }

@@ -1,3 +1,4 @@
+<!-- TODO check if all data is provided -->
 <div role="tabpanel" class="tab-pane" id="send">
     <h1 id="sendHeader"><?php echo $this->lang->line("send_header"); ?></h1>
     <!--<fieldset><?php echo $this->lang->line("send_einleitung").'!'; ?></fieldset>-->
@@ -9,11 +10,11 @@
                 <div class="form-group">
 		    <?php if($prestudentStatus->bewerbung_abgeschicktamum != null)
 		    {
-			echo form_submit(array("value"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary", "disabled"=>"disabled"));
+			echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit", "disabled"=>"disabled"));
 		    }
 		    else
 		    {
-			echo form_submit(array("value"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary"));
+			echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit"));
 		    }
 		    ?>
                 </div>

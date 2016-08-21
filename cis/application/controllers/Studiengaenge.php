@@ -4,11 +4,13 @@ class Studiengaenge extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('studiengang_model');
+        $this->load->model('studiengang_model', "StudiengangModel");
         $this->load->model('studienplan_model', "StudienplanModel");
         $this->load->model('studiensemester_model', 'StudiensemesterModel');
         $this->load->model('organisationsform_model', 'OrgformModel');
 	$this->load->model('person_model', 'PersonModel');
+	$this->load->model('Bewerbungstermine_model', 'BewerbungstermineModel');
+	$this->load->model('reihungstest_model', "ReihungstestModel");
         $this->lang->load('studiengaenge', $this->get_language());
     }
 
@@ -19,15 +21,13 @@ class Studiengaenge extends MY_Controller {
 	//load person data
         $this->_data["person"] = $this->_loadPerson();
         
-        if(isset($this->input->get()["studiengang_kz"]))
-        {
-            $this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
-        }
-        
+	if(isset($this->input->get()["studiengang_kz"]))
+	{
+	    $this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
+	}
+	
         $this->_data['title'] = 'Overview';
         $this->_data['sprache'] = $this->get_language();
-	
-	
 	
         $this->OrgformModel->getAll();
         
@@ -45,33 +45,26 @@ class Studiengaenge extends MY_Controller {
         if(($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
         {
             $this->_data["studiensemester"] = $studiensemester;
-            $this->studiengang_model->getAll();
-        
-            if($this->studiengang_model->result->error == 0)
-            {
-                foreach($this->studiengang_model->result->retval as $key=>$studiengang)
-                {
-                    $this->StudienplanModel->getStudienplaeneFromSem(array(
-                                "studiengang_kz"=>$studiengang->studiengang_kz,
-                                "studiensemester_kurzbz"=>$this->_data["studiensemester"]->studiensemester_kurzbz,
-                                "ausbildungssemester"=>1
-                        ));
-                    
-                    if($this->StudienplanModel->result->error == 0)
-                    {
-                        $studiengang->studienplaene = $this->StudienplanModel->result->retval;
-                    }
-		    else
+	    
+	    $this->_data["studiengaenge"] = $this->_getStudiengaengeStudienplan($this->_data["studiensemester"]->studiensemester_kurzbz, 1);
+	    
+	    foreach($this->_data["studiengaenge"] as $stg)
+	    {
+		if($stg->onlinebewerbung === "t")
+		{
+		    $stg->fristen = $this->_getBewerbungstermine($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
+		    $stg->reihungstests = $this->_loadReihungstests($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
+		    
+		    if(isset($this->_data["studiengang_kz"]) && ($stg->studiengang_kz === $this->_data["studiengang_kz"]))
 		    {
-			$this->_setError(true, $this->StudienplanModel->getErrorMessage());
+			if(count($stg->studienplaene) === 1)
+			{
+			    redirect("/Bewerbung/studiengang/".$stg->studiengang_kz."/".$stg->studienplaene[0]->studienplan_id);
+			}
 		    }
-                }
-                $this->_data["studiengaenge"] = $this->studiengang_model->result->retval;
-            }
-            else
-            {
-                //TODO could not load data
-            }
+		}
+	    }
+	    
             $this->load->view('studiengaenge', $this->_data);
         }
         else
@@ -113,4 +106,42 @@ class Studiengaenge extends MY_Controller {
 	}
     }
     
+    private function _getStudiengaengeStudienplan($studiensemester_kurzbz, $ausbildungssemester)
+    {
+	$this->StudiengangModel->getStudiengangStudienplan($studiensemester_kurzbz, $ausbildungssemester);
+	if($this->StudiengangModel->isResultValid() === true)
+	{
+	    return $this->StudiengangModel->result->retval;
+	}
+	else
+	{
+	    $this->_setError(true, $this->StudiengangModel->getErrorMessage());
+	}
+    }
+    
+    private function _getBewerbungstermine($studiengang_kz, $studiensemester_kurzbz)
+    {
+	$this->BewerbungstermineModel->getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz);
+	if($this->BewerbungstermineModel->isResultValid() === true)
+	{
+	    return $this->BewerbungstermineModel->result->retval;
+	}
+	else
+	{
+	    $this->_setError(true, $this->BewerbungstermineModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadReihungstests($studiengang_kz, $studiensemester_kurzbz=null)
+    {
+	$this->ReihungstestModel->getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz);
+	if($this->ReihungstestModel->isResultValid() === true)
+	{
+	    return $this->ReihungstestModel->result->retval;
+	}
+	else
+	{
+	    $this->_setError(true, $this->ReihungstestModel->getErrorMessage());
+	}
+    }
 }
