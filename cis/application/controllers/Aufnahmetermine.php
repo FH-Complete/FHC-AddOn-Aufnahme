@@ -117,22 +117,26 @@ class Aufnahmetermine extends MY_Controller {
 	$this->_data["reihungstests"] = array();
         foreach($this->_data["prestudent"] as $prestudent)
         {
-            //load studiengaenge der prestudenten
-            $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-            $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-            $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-            $studiengang->studienplan = $studienplan;
-	    array_push($this->_data["studiengaenge"], $studiengang);
+	    $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
 	    
-	    $reihungstests = $this->_loadReihungstests($prestudent->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
-	    if(!empty($reihungstests))
+	    if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
 	    {
-		$this->_data["reihungstests"][$prestudent->studiengang_kz] = array();
-		foreach($reihungstests as $rt)
+		//load studiengaenge der prestudenten
+		$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+		$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+		$studiengang->studienplan = $studienplan;
+		array_push($this->_data["studiengaenge"], $studiengang);
+	    
+		$reihungstests = $this->_loadReihungstests($prestudent->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
+		if(!empty($reihungstests))
 		{
-		    if(isset($rt->stufe) && ($rt->stufe <= $prestudent->prestudentStatus->rt_stufe))
+		    $this->_data["reihungstests"][$prestudent->studiengang_kz] = array();
+		    foreach($reihungstests as $rt)
 		    {
-			$this->_data["reihungstests"][$prestudent->studiengang_kz][$rt->stufe][$rt->reihungstest_id] = date("d.m.Y", strtotime($rt->datum))." // ".$this->getPhrase("Test/Bewerbungsfrist", $this->_data["sprache"])." ".date("d.m.Y", strtotime($rt->anmeldefrist));
+			if(isset($rt->stufe) && ($rt->stufe <= $prestudent->prestudentStatus->rt_stufe))
+			{
+			    $this->_data["reihungstests"][$prestudent->studiengang_kz][$rt->stufe][$rt->reihungstest_id] = date("d.m.Y", strtotime($rt->datum))." // ".$this->getPhrase("Test/Bewerbungsfrist", $this->_data["sprache"])." ".date("d.m.Y", strtotime($rt->anmeldefrist));
+			}
 		    }
 		}
 	    }
