@@ -2,7 +2,8 @@
 
 class Studiengaenge extends MY_Controller {
 
-    public function __construct() {
+    public function __construct() 
+	{
         parent::__construct();
         $this->load->model('studiengang_model', "StudiengangModel");
         $this->load->model('studienplan_model', "StudienplanModel");
@@ -16,15 +17,16 @@ class Studiengaenge extends MY_Controller {
 
     public function index() 
     {
-        $this->checkLogin();
-	
-	//load person data
+		$this->benchmark->mark('code_start');
+		$this->checkLogin();
+
+		//load person data
         $this->_data["person"] = $this->_loadPerson();
-        
-	if(isset($this->input->get()["studiengang_kz"]))
-	{
-	    $this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
-	}
+
+		if(isset($this->input->get()["studiengang_kz"]))
+		{
+			$this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
+		}
 	
         $this->_data['title'] = 'Overview';
         $this->_data['sprache'] = $this->get_language();
@@ -40,37 +42,43 @@ class Studiengaenge extends MY_Controller {
             //TODO error while loading orgform
         }
         
-	$studiensemester = $this->_getNextStudiensemester("WS");
+		$studiensemester = $this->_getNextStudiensemester("WS");
 	
         if(($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
         {
-            $this->_data["studiensemester"] = $studiensemester;
-	    
-	    $this->_data["studiengaenge"] = $this->_getStudiengaengeStudienplan($this->_data["studiensemester"]->studiensemester_kurzbz, 1);
-	    
-	    foreach($this->_data["studiengaenge"] as $stg)
-	    {
-		if($stg->onlinebewerbung === "t")
-		{
-		    $stg->fristen = $this->_getBewerbungstermine($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
-		    $stg->reihungstests = $this->_loadReihungstests($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
-		    
-		    if(isset($this->_data["studiengang_kz"]) && ($stg->studiengang_kz === $this->_data["studiengang_kz"]))
-		    {
-			if(count($stg->studienplaene) === 1)
+			$this->benchmark->mark('codepart_start');
+			$this->_data["studiensemester"] = $studiensemester;
+			$this->_data["studiengaenge"] = $this->_getStudiengaengeStudienplan($this->_data["studiensemester"]->studiensemester_kurzbz, 1);
+			$this->benchmark->mark('codepart_end');
+			log_message('debug', 'Time elapsed for Studiengaenge/index->getStudienplan: '.$this->benchmark->elapsed_time('codepart_start', 'codepart_end').'ms');
+
+			$this->benchmark->mark('foreach_start');
+			foreach($this->_data["studiengaenge"] as $stg)
 			{
-			    redirect("/Bewerbung/studiengang/".$stg->studiengang_kz."/".$stg->studienplaene[0]->studienplan_id);
+				if($stg->onlinebewerbung === "t")
+				{
+					$this->benchmark->mark('codepart_start');
+					$stg->fristen = $this->_getBewerbungstermine($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
+					$stg->reihungstests = $this->_loadReihungstests($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
+					$this->benchmark->mark('codepart_end');
+					log_message('debug', 'Time elapsed for Studiengaenge/index->Reihunstest/Termin: '.$this->benchmark->elapsed_time('codepart_start', 'codepart_end').'ms');
+				
+					if(isset($this->_data["studiengang_kz"]) && ($stg->studiengang_kz === $this->_data["studiengang_kz"]))
+						if(count($stg->studienplaene) === 1)
+							redirect("/Bewerbung/studiengang/".$stg->studiengang_kz."/".$stg->studienplaene[0]->studienplan_id);
+				}
 			}
-		    }
-		}
-	    }
-	    
-            $this->load->view('studiengaenge', $this->_data);
+			$this->benchmark->mark('foreach_end');
+			log_message('debug', 'Time elapsed for Studiengaenge/index->foreach: '.$this->benchmark->elapsed_time('foreach_start', 'foreach_end').'ms');
+
+			$this->load->view('studiengaenge', $this->_data);
         }
         else
         {
             //TODO studiensemester not found
         }
+		$this->benchmark->mark('code_end');
+		log_message('debug', 'Time elapsed for Studiengaenge/index(): '.$this->benchmark->elapsed_time('code_start', 'code_end').'ms');
     }
     
     private function _loadPerson()

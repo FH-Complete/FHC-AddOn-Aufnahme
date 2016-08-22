@@ -2,6 +2,23 @@
 
 class CheckSystem extends MY_Controller
 {
+	private $__time;
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->benchmark->mark('code_start');
+		$this->load->model('studiengang_model', "StudiengangModel");
+		$this->load->model('studienplan_model', "StudienplanModel");
+		$this->load->model('studiensemester_model', 'StudiensemesterModel');
+        $this->load->model('organisationsform_model', 'OrgformModel');
+		$this->load->model('person_model', 'PersonModel');
+		$this->load->model('Bewerbungstermine_model', 'BewerbungstermineModel');
+		$this->load->model('reihungstest_model', "ReihungstestModel");
+        $this->lang->load('studiengaenge', $this->get_language());
+		$this->benchmark->mark('code_end');
+		$this->__time = $this->benchmark->elapsed_time('code_start', 'code_end');
+    }
 
 	private function __isJson($string)
 	{
@@ -12,6 +29,8 @@ class CheckSystem extends MY_Controller
     public function index()
     {
 		//$this->output->enable_profiler(TRUE);
+		$data['constructorTime'] = $this->__time;
+
 		// ========= API-Test =================
 		$this->benchmark->mark('code_start');
 		$apitest = $this->rest->get('person/person/person', array("person_id" => 1, 'json'));
@@ -49,8 +68,17 @@ class CheckSystem extends MY_Controller
 		$this->benchmark->mark('code_end');
 		$data['apitest']->time = $this->benchmark->elapsed_time('code_start', 'code_end');
 
-		// =============== View Performance Test =====================0
+		// =============== Performance Tests =====================
+		// ToDo
 
+		// == View header ==
+		$this->benchmark->mark('code_start');
+		$data['perfViewHeader'] = new stdClass();
+		$this->load->view('templates/header','',false);
+		$this->benchmark->mark('code_end');
+		$data['perfViewHeader']->time = $this->benchmark->elapsed_time('code_start', 'code_end');
+
+		// ================ Output ===============================
 		$this->load->view('checksystem',$data);
     }
 
