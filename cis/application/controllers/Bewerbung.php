@@ -115,6 +115,7 @@ class Bewerbung extends MY_Controller {
         else
         {
 	    $post = $this->input->post();
+	    var_dump($post);
 	    $person = $this->_data["person"];
 	    $person->anrede = $post["anrede"];
 	    //$person->bundesland_code = $post["bundesland"];
@@ -141,137 +142,146 @@ class Bewerbung extends MY_Controller {
 	    $person->svnr = $post["svnr"];
 	    $person->titelpre = $post["titelpre"];
 	    $person->titelpost = $post["titelpost"];
-
+	    
 	    $this->_savePerson($person);
 
 	    $adresse = new stdClass();
 	    $zustell_adresse = new stdClass();
+	    
 	    if($post["adresse_nation"] === "A")
 	    {
-		if(isset($this->_data["adresse"]))
+		if(($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort"] != ""))
 		{
-		    $adresse = $this->_data["adresse"];
-		}
-		else
-		{
-		    $adresse->person_id = $this->_data["person"]->person_id;
-		}
-
-		$adresse->strasse = $post["strasse"];
-		$adresse->nation = $post["adresse_nation"];
-		$adresse->plz = $post["plz"];
-
-
-		foreach($this->_data["gemeinden"] as $gemeinde)
-		{
-		    if($gemeinde->gemeinde_id === $post["ort_dd"])
+		    if(isset($this->_data["adresse"]))
 		    {
-			$adresse->gemeinde = $gemeinde->name;
-			$adresse->ort = $gemeinde->ortschaftsname;
+			$adresse = $this->_data["adresse"];
 		    }
-		}
-
-		foreach($this->_data["bundesland"] as $bundesland)
-		{
-		    if($bundesland->bundesland_code === $gemeinde->bulacode)
+		    else
 		    {
-			$person->bundesland_code = $bundesland->bundesland_code;
+			$adresse->person_id = $this->_data["person"]->person_id;
+			$adresse->heimatadresse = true;
 		    }
-		}
+		    
+		    if(($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
+		    {
+			$adresse->zustelladresse = "f";
+		    }
+		    else
+		    {
+			$adresse->zustelladresse = true;
+		    }
 
-		$this->_saveAdresse($adresse);
+		    $adresse->strasse = $post["strasse"];
+		    $adresse->nation = $post["adresse_nation"];
+		    $adresse->plz = $post["plz"];
+
+		    foreach($this->_data["gemeinden"] as $gemeinde)
+		    {
+			if($gemeinde->gemeinde_id === $post["ort_dd"])
+			{
+			    $adresse->gemeinde = $gemeinde->name;
+			    $adresse->ort = $gemeinde->ortschaftsname;
+			    $person->bundesland_code = $gemeinde->bulacode;
+			}
+		    }
+		    
+		    $this->_savePerson($person);
+		    $this->_saveAdresse($adresse);
+		}
+	    }
+	    else
+	    {
+		if(($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort"] != ""))
+		{
+		    if(isset($this->_data["adresse"]))
+		    {
+			$adresse = $this->_data["adresse"];
+		    }
+		    else
+		    {
+			$adresse->person_id = $this->_data["person"]->person_id;
+			$adresse->heimatadresse = true;
+		    }
+
+		    if(($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
+		    {
+			$adresse->zustelladresse = "f";
+		    }
+		    else
+		    {
+			$adresse->zustelladresse = true;
+		    }
+
+		    $adresse->strasse = $post["strasse"];
+		    $adresse->plz = $post["plz"];
+		    $adresse->ort = $post["ort"];
+		    $adresse->nation = $post["adresse_nation"];
+
+		    $this->_saveAdresse($adresse);
+		}
 	    }
 
 	    if($post["zustelladresse_nation"] === "A")
 	    {
-		if(isset($this->_data["zustell_adresse"]))
+		if(($post["zustell_strasse"] != "") && (($post["zustell_plz"] != "") && ($post["zustell_ort"] != "")))
 		{
-		    $zustell_adresse = $this->_data["zustell_adresse"];
-		}
-		else
-		{
-		    $zustell_adresse->person_id = $this->_data["person"]->person_id;
-		}
-
-		$zustell_adresse->strasse = $post["zustell_strasse"];
-		$zustell_adresse->nation = $post["zustelladresse_nation"];
-		$zustell_adresse->plz = $post["zustell_plz"];
-
-		foreach($this->_data["gemeinden"] as $gemeinde)
-		{
-		    if($gemeinde->gemeinde_id === $post["zustell_ort_dd"])
+		    if(isset($this->_data["zustell_adresse"]))
 		    {
-			$zustell_adresse->gemeinde = $gemeinde->name;
-			$zustell_adresse->ort = $gemeinde->ortschaftsname;
+			$zustell_adresse = $this->_data["zustell_adresse"];
 		    }
-		}
-
-		foreach($this->_data["bundesland"] as $bundesland)
-		{
-		    if($bundesland->bundesland_code === $gemeinde->bulacode)
+		    else
 		    {
-			$person->bundesland_code = $bundesland->bundesland_code;
+			$zustell_adresse->person_id = $this->_data["person"]->person_id;
+			$zustell_adresse->heimatadresse = "f";
+			$zustell_adresse->zustelladresse = "t";
 		    }
-		}
 
-		$this->_saveAdresse($zustell_adresse);
+		    $zustell_adresse->strasse = $post["zustell_strasse"];
+		    $zustell_adresse->nation = $post["zustelladresse_nation"];
+		    $zustell_adresse->plz = $post["zustell_plz"];
+
+		    foreach($this->_data["gemeinden"] as $gemeinde)
+		    {
+			if($gemeinde->gemeinde_id === $post["zustell_ort_dd"])
+			{
+			    $zustell_adresse->gemeinde = $gemeinde->name;
+			    $zustell_adresse->ort = $gemeinde->ortschaftsname;
+			}
+		    }
+
+		    foreach($this->_data["bundesland"] as $bundesland)
+		    {
+			if($bundesland->bundesland_code === $gemeinde->bulacode)
+			{
+			    $person->bundesland_code = $bundesland->bundesland_code;
+			}
+		    }
+
+		    $this->_saveAdresse($zustell_adresse);
+		}
 	    }
-
-	    if(($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort"] != ""))
+	    else
 	    {
-		if(isset($this->_data["adresse"]))
-		{
-		    $adresse = $this->_data["adresse"];
-		}
-		else
-		{
-		    $adresse->heimatadresse = true;
-		}
-
 		if(($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
 		{
-		    $adresse->zustelladresse = "f";
-		}
-		else
-		{
-		    $adresse->zustelladresse = true;
-		}
-
-		$adresse->person_id = $this->_data["person"]->person_id;
-		$adresse->strasse = $post["strasse"];
-
-		if($post["adresse_nation"] !== "A")
-		{
-		    $adresse->plz = $post["plz"];
-		    $adresse->ort = $post["ort"];
-		    $adresse->nation = $post["adresse_nation"];
-		}
-
-		$this->_saveAdresse($adresse);
-	    }
-
-	    if(($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
-	    {
-		if(isset($this->_data["zustell_adresse"]))
-		{
-		    $zustell_adresse = $this->_data["zustell_adresse"];
-		}
-		else
-		{
-		    $zustell_adresse->heimatadresse = "f";
-		    $zustell_adresse->zustelladresse = "t";
-		}
-		$zustell_adresse->person_id = $this->_data["person"]->person_id;
-		$zustell_adresse->strasse = $post["zustell_strasse"];
-
-		if($post["zustelladresse_nation"] !== "A")
-		{
+		    if(isset($this->_data["zustell_adresse"]))
+		    {
+			$zustell_adresse = $this->_data["zustell_adresse"];
+		    }
+		    else
+		    {
+			$zustell_adresse->person_id = $this->_data["person"]->person_id;
+			$zustell_adresse->heimatadresse = "f";
+			$zustell_adresse->zustelladresse = "t";
+		    }
+		    
+		    $zustell_adresse->strasse = $post["zustell_strasse"];
 		    $zustell_adresse->plz = $post["zustell_plz"];
 		    $zustell_adresse->ort = $post["zustell_ort"];
 		    $zustell_adresse->nation = $post["zustelladresse_nation"];
-		}
 
-		$this->_saveAdresse($zustell_adresse);
+		    $this->_saveAdresse($zustell_adresse);
+		}
 	    }
 
             //TODO save new contact
