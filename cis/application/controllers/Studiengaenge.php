@@ -17,6 +17,7 @@ class Studiengaenge extends MY_Controller {
 
     public function index() 
     {
+		//$this->benchmark->mark('code_start');
 		$this->checkLogin();
 
 		//load person data
@@ -60,8 +61,10 @@ class Studiengaenge extends MY_Controller {
 							redirect("/Bewerbung/studiengang/".$stg->studiengang_kz."/".$stg->studienplaene[0]->studienplan_id);
 				}
 			}
-			
-            $this->load->view('studiengaenge', $this->_data);
+			//$this->benchmark->mark('code_end');
+			//log_message('debug', 'Time elapsed for Studiengaenge/index: '.$this->benchmark->elapsed_time('code_start', 'code_end').'ms');
+            
+			$this->load->view('studiengaenge', $this->_data);
         }
         else
         {
