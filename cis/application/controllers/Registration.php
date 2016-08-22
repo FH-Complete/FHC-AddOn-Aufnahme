@@ -192,7 +192,7 @@ class Registration extends MY_Controller {
                     }
 		    else
 		    {
-			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
                         $this->load->view('templates/header');
                         $this->load->view('login/confirm_error',  $this->_data);
                         $this->load->view('templates/footer');
@@ -207,7 +207,7 @@ class Registration extends MY_Controller {
 	elseif (empty($this->PersonModel->result->data))
 	{
             $this->_data["zugangscode"] = "";
-            $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php/Login") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+            $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
             $this->_data["email"] = "";
             $this->load->view('templates/header');
             $this->load->view('login/confirm_login',  $this->_data);
@@ -341,7 +341,7 @@ class Registration extends MY_Controller {
                 $nachname = $person->nachname;
                 $geschlecht = $person->geschlecht;
             } else {
-                return $msg = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . $_SERVER['PHP_SELF'] . '?method=registration>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+                return $msg = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
             }
         }
         if ($geschlecht == 'm')
@@ -354,9 +354,9 @@ class Registration extends MY_Controller {
         $this->mail->setHTMLContent($text);
         if (!$this->mail->send())
 
-            $msg = '<span class="error">' . $this->getPhrase('Registration/EmailAddressTaken', $this->_data['sprache']) . '</span><br /><a href=' . $_SERVER['PHP_SELF'] . '?method=registration>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+            $msg = '<span class="error">' . $this->getPhrase('Registration/EmailAddressTaken', $this->_data['sprache']) . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
         else
-            $msg = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache']), $email) . "<br><br><a href=" . base_url("index.dist.php/Login") . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
+            $msg = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache']), $email) . "<br><br><a href=" . base_url("index.dist.php") . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
 
         return $msg;
     }
@@ -381,9 +381,9 @@ class Registration extends MY_Controller {
         $text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, NULL);
         $this->mail->setHTMLContent($text);
         if (!$this->mail->send())
-            $msg = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . $_SERVER['PHP_SELF'] . '?method=registration>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+            $msg = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
         else
-            $msg = sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . "<br><br><a href=" . $_SERVER['PHP_SELF'] . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
+            $msg = sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . '<br><br><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 
         return $msg;
     }
@@ -411,16 +411,16 @@ class Registration extends MY_Controller {
 	{
 	    if($this->MessageModel->result->msg === "Success")
 	    {
-		$this->_data["message"] = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache']), $email) . "<br><br><a href=" . $_SERVER['PHP_SELF'] . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
+		$this->_data["message"] = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache']), $email) . '<br><br><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 	    }
 	    else
 	    {
-		$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . $_SERVER['PHP_SELF'] . '?method=registration>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+		$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 	    }
 	}
 	else
 	{
-	    $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . $_SERVER['PHP_SELF'] . '?method=registration>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+	    $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 	    $this->_setError(true, $this->MessageModel->getErrorMessage());
 	}
     }
