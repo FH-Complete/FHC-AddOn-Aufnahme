@@ -521,6 +521,26 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => '',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'Submission/ApplicationNotReadyForSubmitting',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Ihre Daten sind unvollständig - Bitte ergänzen Sie die fehlenden Daten!',
+			'description' => 'Daten unvollständig.'
+		)
+	),
+	array
+	(
+		'phrase' => 'Submission/ApplicationNotReadyForSubmitting',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => 'The data for application is incomplete.'
+		)
 	)
 );
 

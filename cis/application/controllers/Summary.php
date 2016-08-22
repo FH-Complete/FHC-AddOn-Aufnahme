@@ -253,6 +253,7 @@ class Summary extends MY_Controller {
 	    $this->_setError(true, $this->StudienplanModel->getErrorMessage());
 	}
     }
+    
     private function _loadDokumente($person_id, $dokumenttyp_kurzbz=null)
     {
         $this->_data["dokumente"] = array();

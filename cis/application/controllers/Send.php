@@ -12,6 +12,11 @@ class Send extends MY_Controller {
         $this->load->model('person_model', 'PersonModel');
 	$this->load->model('studiengangstyp_model', 'StudiengangstypModel');
 	$this->load->model('message_model', 'MessageModel');
+	$this->load->model('adresse_model', "AdresseModel");
+	$this->load->model('kontakt_model', 'KontaktModel');
+	$this->load->model('dms_model', "DmsModel");
+        $this->load->model('akte_model', "AkteModel");
+	$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
         $this->load->helper("form");
         $this->load->library("form_validation");
     }
@@ -30,7 +35,17 @@ class Send extends MY_Controller {
             $this->_data["studiengang"] = $this->_loadStudiengang($this->input->get()["studiengang_kz"]);
 
 	    $this->_data["studiengang"]->studiengangstyp = $this->_loadStudiengangstyp($this->_data["studiengang"]->typ);
-
+	    
+	    $this->_loadAdresse();
+	    
+	    //load kontakt data
+	    $this->_loadKontakt();
+	    
+	    //load Dokumente from Studiengang
+	    $this->_data["dokumenteStudiengang"] = $this->_loadDokumentByStudiengang($this->input->get()["studiengang_kz"]);
+	    
+	    //load dokumente
+	    $this->_loadDokumente($this->session->userdata()["person_id"]);
 
             //load preinteressent data
             $this->_data["prestudent"] = $this->_loadPrestudent();
@@ -47,6 +62,8 @@ class Send extends MY_Controller {
 		    $this->_data["prestudentStatus"] = $prestudent->prestudentStatus;
                 }
             }
+	    
+	    $this->_data["completenessError"] = $this->_checkDataCompleteness();
 
             $this->load->view('send', $this->_data);
         }
@@ -67,6 +84,21 @@ class Send extends MY_Controller {
 
         //load studiengang
         $this->_data["studiengang"] = $this->_loadStudiengang($studiengang_kz);
+	
+	$this->_data["studiengang"]->studiengangstyp = $this->_loadStudiengangstyp($this->_data["studiengang"]->typ);
+	
+	$this->_loadAdresse();
+	    
+	//load kontakt data
+	$this->_loadKontakt();
+
+	//load Dokumente from Studiengang
+	$this->_data["dokumenteStudiengang"] = $this->_loadDokumentByStudiengang($studiengang_kz);
+
+	//load dokumente
+	$this->_loadDokumente($this->session->userdata()["person_id"]);
+	
+	$this->_data["completenessError"] = $this->_checkDataCompleteness();
 
         $this->_data["prestudent"] = $this->_loadPrestudent();
 
@@ -79,28 +111,38 @@ class Send extends MY_Controller {
                 $prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
                 $studienplan = $this->_loadStudienplan($prestudentStatus->studienplan_id);
                 $this->_data["studiengang"]->studienplan = $studienplan;
-
-                //TODO check if status exists
-                if(is_null($prestudentStatus->bewerbung_abgeschicktamum))
-                {
-                    $prestudentStatus->bewerbung_abgeschicktamum=date('Y-m-d H:i:s');
-                    $this->_savePrestudentStatus($prestudentStatus);
-
-
-                    //TODO send mails
-					$this->_sendMessageMailApplicationConfirmation($this->_data["person"], $this->_data["studiengang"]);
-				    //TODO vorlage fehlt in DB
-				    //$this->_sendMessageMailNewApplicationInfo($this->_data["person"], $this->_data["studiengang"]);
-
-                }
-                else
-                {
-                    //TODO bewerbung bereits abgeschickt;
-                }
 		$this->_data["prestudentStatus"] = $prestudentStatus;
+		
+		if(!empty($this->_data["completenessError"]))
+		{
+		    $this->_setError(true, $this->lang->line("send_datenUnvollstaendig"));
+		    $this->load->view('send', $this->_data);
+		}
+		else
+		{
+
+		    //TODO check if status exists
+		    if(is_null($prestudentStatus->bewerbung_abgeschicktamum))
+		    {
+			$prestudentStatus->bewerbung_abgeschicktamum=date('Y-m-d H:i:s');
+			$this->_savePrestudentStatus($prestudentStatus);
+
+
+			//TODO send mails
+			    $this->_sendMessageMailApplicationConfirmation($this->_data["person"], $this->_data["studiengang"]);
+			//TODO vorlage fehlt in DB
+			//$this->_sendMessageMailNewApplicationInfo($this->_data["person"], $this->_data["studiengang"]);
+
+		    }
+		    else
+		    {
+			//TODO bewerbung bereits abgeschickt;
+		    }
+		}
+		
 
                 //$this->load->view('send', $this->_data);
-		redirect("/Aufnahmetermine");
+//		redirect("/Aufnahmetermine");
             }
         }
     }
@@ -273,5 +315,175 @@ class Send extends MY_Controller {
 	    $this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />';
 	    $this->_setError(true, $this->MessageModel->getErrorMessage());
 	}
+    }
+    
+    private function _loadAdresse()
+    {
+	$this->AdresseModel->getAdresse($this->session->userdata()["person_id"]);
+        if($this->AdresseModel->isResultValid() === true)
+        {
+	    foreach($this->AdresseModel->result->retval as $adresse)
+	    {
+		if($adresse->heimatadresse == "t")
+		{
+		    $this->_data["adresse"] = $adresse;
+		}
+		else if(($adresse->heimatadresse == "f") && ($adresse->zustelladresse == "t"))
+		{
+		    $this->_data["zustell_adresse"] = $adresse;
+		}
+	    }
+        }
+	else
+	{
+	    $this->_setError(true, $this->AdresseModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadKontakt()
+    {
+	$this->KontaktModel->getKontakt($this->session->userdata()["person_id"]);
+        if($this->KontaktModel->isResultValid() === true)
+        {
+	    foreach($this->KontaktModel->result->retval as $value)
+	    {
+		$this->_data["kontakt"][$value->kontakttyp] = $value;
+	    }
+        }
+	else
+	{
+	    $this->_setError(true, $this->KontaktModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadDokumentByStudiengang($studiengang_kz)
+    {
+	$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($studiengang_kz, true, true);
+        if($this->DokumentStudiengangModel->isResultValid() === true)
+        {
+	    return $this->DokumentStudiengangModel->result->retval;
+        }
+	else
+	{
+	    $this->_setError(true, $this->DokumentStudiengangModel->getErrorMessage());
+	}
+    }
+    
+    private function _loadDokumente($person_id, $dokumenttyp_kurzbz=null)
+    {
+        $this->_data["dokumente"] = array();
+        $this->AkteModel->getAkten($person_id, $dokumenttyp_kurzbz);
+        
+        if($this->AkteModel->isResultValid() === true)
+        {
+            foreach($this->AkteModel->result->retval as $akte)
+            {
+                $this->_data["dokumente"][$akte->dokument_kurzbz] = $akte;
+            }
+        }
+	else
+	{
+	    $this->_setError(true, $this->AkteModel->getErrorMessage());
+	}
+    }
+    
+    private function _checkDataCompleteness()
+    {
+	$error = array();
+	
+	//check personal data
+	$person = $this->_data["person"];
+	
+	if($person->vorname == "")
+	{
+	    $error["vorname"] = true;
+	}
+	
+	if($person->nachname == "")
+	{
+	    $error["nachname"] = true;
+	}
+	
+	if($person->gebdatum == null)
+	{
+	    $error["geburtsdatum"] = true;
+	}
+	
+	if(($person->gebort == null) || ($person->gebort== ""))
+	{
+	    $error["geburtsort"] = true;
+	}
+	
+	if(($person->geburtsnation == null) || ($person->geburtsnation== ""))
+	{
+	    $error["geburtsnation"] = true;
+	}
+	
+	if(($person->staatsbuergerschaft == null) || ($person->staatsbuergerschaft== ""))
+	{
+	    $error["staatsbuergerschaft"] = true;
+	}
+	
+	if(($person->svnr == null) || ($person->svnr== ""))
+	{
+	    $error["svnr"] = true;
+	}
+	
+	if(($person->geschlecht == null) || ($person->geschlecht == ""))
+	{
+	    $error["geschlecht"] = true;
+	}
+	
+	//check adress data
+	$adresse = $this->_data["adresse"];
+	
+	if(($adresse->strasse == null) || ($adresse->strasse == ""))
+	{
+	    $error["strasse"] = true;
+	}
+	
+	if(($adresse->plz == null) || ($adresse->plz == ""))
+	{
+	    $error["plz"] = true;
+	}
+	
+	if(($adresse->ort == null) || ($adresse->ort == ""))
+	{
+	    $error["ort"] = true;
+	}
+	
+	//check contact data
+	$kontakt = $this->_data["kontakt"];
+	
+	if((!isset($kontakt["telefon"])) || ($kontakt["telefon"]->kontakt == ""))
+	{
+	    $error["telefon"] = true;
+	}
+	
+	if((!isset($kontakt["email"])) || ($kontakt["email"]->kontakt == ""))
+	{
+	    $error["email"] = true;
+	}
+	
+	//check documents
+	foreach($this->_data["dokumenteStudiengang"] as $dokType)
+	{
+	    if(!isset($this->_data["dokumente"][$dokType->dokument_kurzbz]))
+	    {
+		$error["dokumente"][$dokType->bezeichnung] = true;
+	    }
+	}
+	
+	if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
+	{
+	    $error["lebenslauf"] = true;
+	}
+	
+	if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
+	{
+	    $error["reisepass"] = true;
+	}
+	
+	return $error;
     }
 }

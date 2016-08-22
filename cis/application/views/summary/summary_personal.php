@@ -34,12 +34,14 @@
 	    <?php echo ($person->vorname != null) ? $person->vorname : $this->lang->line("summary_unvollstaendig"); ?>
 	</div>
     </div>
+    <?php if($adresse->nation == "A") { ?>
     <div class="col-sm-6">
         <div class="col-sm-6"><?php echo $this->lang->line("summary_bundesland"); ?></div>
         <div class="col-sm-6 <?php echo ($person->bundesland_code != null) ? "" : "incomplete"; ?>">
 	    <?php echo ($person->bundesland_code != null) ? $person->bundesland_bezeichnung : $this->lang->line("summary_unvollstaendig"); ?>
 	</div>
     </div>
+    <?php } ?>
 </div>
 <div class="row">
     <div class="col-sm-6">
