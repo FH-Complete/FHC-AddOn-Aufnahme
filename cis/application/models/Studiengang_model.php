@@ -42,6 +42,17 @@ class Studiengang_model extends MY_Model
 	else
 	    return false;
     }
+    
+    function getCompleteStudiengang($studiensemester_kurzbz, $ausbildungssemester)
+    {
+        if ($restquery = $this->rest->get('organisation/studiengang/completeStudiengang', array("studiensemester_kurzbz"=>$studiensemester_kurzbz, "ausbildungssemester"=>$ausbildungssemester)))
+	{
+	    $this->result = $restquery;
+	    return true;
+	}
+	else
+	    return false;
+    }
 }
 
 /* End of file Studiengang_model.php */

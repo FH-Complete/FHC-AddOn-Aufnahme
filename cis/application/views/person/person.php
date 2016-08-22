@@ -297,7 +297,7 @@
     <div class="row">
         <div class="col-sm-5">
             <?php echo form_label($this->lang->line('person_formDokumentupload_reisepass'), "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
-            <div class="form-group">
+            <div class="form-group" id="reisepass_hochgeladen">
                 <?php
 		if((!isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]])) || ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === "t")) {
                     echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
@@ -335,7 +335,7 @@
     <div class="row">
         <div class="col-sm-5">
             <?php echo form_label($this->lang->line('person_formDokumentupload_lebenslauf')."&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?><span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="inklusive Foto"></span>
-            <div class="form-group">
+            <div class="form-group" id="lebenslauf_hochgeladen">
                 <?php
 		if((!isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) || ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === "t")) {
                     echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
@@ -513,12 +513,14 @@
 		if(data.success === true)
 		{
 		    // Success
-		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span>Upload successful.</span>");
+		    console.log(document_kurzbz);
+		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span><?php echo $this->lang->line('person_UploadErfolgreich');?></span>");
+		    $("#"+document_kurzbz+'_hochgeladen').html("<span><?php echo $this->lang->line('person_formDokumentupload_DokHochgeladen'); ?></span>");
 		}
 		else
 		{
 		    // Handle errors here
-		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span>An error occured.</span>");
+		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span><?php echo $this->lang->line('person_UploadError');?></span>");
 		    console.log('ERRORS: ' + data.error);
 		}
 	    },

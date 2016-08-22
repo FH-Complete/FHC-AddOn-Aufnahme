@@ -35,3 +35,5 @@ $lang["person_formZustelladresse"] = "Zustelladresse";
 $lang["person_formAdresseNation"] = "Nation*";
 $lang["person_formPlzOrt"] = "PLZ/Ort*";
 $lang["person_formNachgereicht"] = "wird nachgereicht";
+$lang["person_UploadErfolgreich"] = "Upload erfolgreich";
+$lang["person_UploadError"] = "Fehler beim hochladen";
