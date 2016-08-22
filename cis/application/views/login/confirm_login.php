@@ -35,3 +35,4 @@
 //wirtes message if email adress exists
     echo (isset($message)) ? $message : "";
     ?>
+</div>

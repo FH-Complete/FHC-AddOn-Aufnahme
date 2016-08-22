@@ -28,3 +28,4 @@
     if (isset($error) && ($error->error === true))
 	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
     ?>
+</div>
