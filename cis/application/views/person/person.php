@@ -337,7 +337,7 @@
             <?php echo form_label($this->lang->line('person_formDokumentupload_lebenslauf')."&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?><span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="inklusive Foto"></span>
             <div class="form-group">
                 <?php
-		if((!isset($dokumente["Lebenslf"])) || ($dokumente["Lebenslf"]->nachgereicht === "t")) {
+		if((!isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) || ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === "t")) {
                     echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
                  }
 		 else
@@ -349,8 +349,8 @@
 	    <!--<div class="checkbox">
 		<label>
 		    <?php
-		    $data = array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente["Lebenslf"]) && ($dokumente["Lebenslf"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
-		    (isset($dokumente["Lebenslf"]) && ($dokumente["Lebenslf"]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
+		    $data = array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+		    (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 		    
 		    echo form_checkbox($data);
 			echo $this->lang->line('person_formNachgereicht')
