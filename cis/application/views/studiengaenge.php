@@ -13,8 +13,8 @@ $this->lang->load(array('aufnahme', 'studiengaenge'), $language);
     
     <?php $this->load_views('view_studiengaenge'); ?>
     
-    <?php
-    $this->load->view('templates/footer');
-    ?>
-</div>
     
+</div>
+<?php
+    $this->load->view('templates/footer');
+?>

@@ -1,5 +1,5 @@
 <footer id="portal-footer" class="module shadow-top" role="contentinfo">
-    <div class="container-fluid">
+    <div class="container-fluid container">
 	<section class="row">
 	    <div class="col-sm-4">
 	    </div>
@@ -18,7 +18,7 @@
     </div>
 </footer>
 <footer id="meta-footer" class="bar">
-    <div class="container-fluid">
+    <div class="container-fluid container">
 	<nav role="navigation">
 	    <div>
 		<ul class="nav navbar-nav navbar-right">
