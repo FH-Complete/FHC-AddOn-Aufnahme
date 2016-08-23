@@ -185,7 +185,6 @@ class Messages extends MY_Controller {
 
     private function _getMessages($person_id)
     {
-	var_dump($person_id);
 	$this->MessageModel->getMessagesByPersonId($person_id);
 	if($this->MessageModel->isResultValid() === true)
 	{
