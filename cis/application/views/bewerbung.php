@@ -59,7 +59,6 @@ $this->load->view('templates/footer');
 
     function checkDataCompleteness()
     {
-	//TODO hide Authorization
 	$.ajax({
 	    method: "GET",
 	    url: "<?php echo($this->config->item('fhc_api')['server']);?>person/person/person?person_id=<?php echo $person->person_id; ?>"

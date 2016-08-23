@@ -65,24 +65,33 @@ class Aufnahmetermine extends MY_Controller {
 		    {
 			$this->_deleteRegistrationToReihungstest($anmeldung);
 			$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"], $studienplan_id);
-			
 			foreach($this->_data["studiengaenge"] as $studiengang)
 			{
 			    if($studiengang->studiengang_kz === $studiengang_kz)
 			    {
 				$studiengang->studiengangstyp = $this->_loadStudiengangstyp($studiengang->typ);
 				//TODO send message; vorlage wird nicht korrekt geladen
-				//$this->_sendMessageMailAppointmentConfirmation($this->_data["person"], $studiengang, $anmeldung);
+				$this->_sendMessageMailAppointmentConfirmation($this->_data["person"], $studiengang, $reihungstest);
 			    }
 			}
-			
 		    }
 		}
 	    }
 	    else
 	    {
 		$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"], $studienplan_id);
+		foreach($this->_data["studiengaenge"] as $studiengang)
+		{
+		    if($studiengang->studiengang_kz === $studiengang_kz)
+		    {
+			$studiengang->studiengangstyp = $this->_loadStudiengangstyp($studiengang->typ);
+			//TODO send message; vorlage wird nicht korrekt geladen
+			$this->_sendMessageMailAppointmentConfirmation($this->_data["person"], $studiengang, $reihungstest);
+		    }
 	    }
+	    }
+	    
+	    
 
 	    $this->_loadData();
 	}
@@ -339,8 +348,8 @@ class Aufnahmetermine extends MY_Controller {
 	(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
 	
 	$this->MessageModel->sendMessageVorlage($this->config->item("systemPersonId"), $person->person_id, "MailAppointmentConfirmation", "etw", $data, $sprache, $orgform_kurzbz=null);
-
-//	var_dump($this->MessageModel->result);
+	
+	var_dump($this->MessageModel->result);
 	
 	if($this->MessageModel->isResultValid() === true)
 	{

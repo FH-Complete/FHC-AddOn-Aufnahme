@@ -47,36 +47,6 @@
                 <?php echo form_input(array('id' => 'gebdatum', 'name' => 'gebdatum', 'maxlength' => 64, "type" => "date", "value" => set_value("gebdatum", isset($person->gebdatum) ? $person->gebdatum : ""), "class" => "form-control datepicker")); ?>
                 <?php echo form_error("gebdatum"); ?>
             </div>
-            <!--<div class="form-group <?php echo (form_error("geburtsdatum") != "") ? 'has-error' : '' ?>">
-                <?php
-                //TODO generate data
-                $days = array("1" => "01", "2" => "02");
-                $months = array("1" => "01", "2" => "02");
-                $years = array("1989" => "1989", "1990" => "1990", "1991" => "1991", "1992" => "1992");
-                ?>
-
-                <?php echo form_label($this->lang->line('person_geburtsdatum'), "geburtsdatum", array("name" => "geburtsdatum", "for" => "geburtsdatum", "class" => "control-label")) ?>
-                <div class="col-sm-12">
-                    <div class="row">
-                        <?php /*
-                        var_dump(explode("-", $person->gebdatum));
-                        
-                        $geburtsdatum = explode("-", $person->gebdatum);
-                        ?>
-                        <div class="col-sm-3 nopadding">
-                            <?php echo form_dropdown("geburtsdatum_tag", $days, isset($geburtsdatum[2]) ? $geburtsdatum[2] : "01", array('id' => 'geburtsdatum_tag', 'name' => 'geburtsdatum_tag', "class" => "form-control")); ?>
-                        </div>
-                        <div class="col-sm-3 nopadding">
-                            <?php echo form_dropdown("geburtsdatum_monat", $months, "01", array('id' => 'geburtsdatum_monat', 'name' => 'geburtsdatum_monat', "class" => "form-control")); ?>
-                        </div>
-                        <div class="col-sm-6 nopadding">
-                            <?php echo form_dropdown("geburtsdatum_jahr", $years, (isset($geburtsdatum[0]) ? $geburtsdatum[0] : "01"), array('id' => 'geburtsdatum_jahr', 'name' => 'geburtsdatum_jahr', "class" => "form-control")); ?>
-                        </div>
-                        <?php */?>
-                    </div>
-                </div>
-                <?php echo form_error("geburtsdatum"); ?>
-            </div>-->
         </div>
         <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("geburtsort") != "") ? 'has-error' : '' ?>">

@@ -69,8 +69,7 @@ class Send extends MY_Controller {
         }
         else
         {
-            //TODO error studiengang_kz fehlt
-            echo "studiengang_kz fehlt";
+	    $this->_setError(true, $this->lang->line("send_studiengangkzFehlt"));
         }
     }
 
@@ -120,29 +119,17 @@ class Send extends MY_Controller {
 		}
 		else
 		{
-
 		    //TODO check if status exists
 		    if(is_null($prestudentStatus->bewerbung_abgeschicktamum))
 		    {
 			$prestudentStatus->bewerbung_abgeschicktamum=date('Y-m-d H:i:s');
 			$this->_savePrestudentStatus($prestudentStatus);
-
-
-			//TODO send mails
-			    $this->_sendMessageMailApplicationConfirmation($this->_data["person"], $this->_data["studiengang"]);
+			$this->_sendMessageMailApplicationConfirmation($this->_data["person"], $this->_data["studiengang"]);
 			//TODO vorlage fehlt in DB
-			//$this->_sendMessageMailNewApplicationInfo($this->_data["person"], $this->_data["studiengang"]);
-
+			$this->_sendMessageMailNewApplicationInfo($this->_data["person"], $this->_data["studiengang"]);
+			redirect("/Aufnahmetermine");
 		    }
-		    else
-		    {
-			//TODO bewerbung bereits abgeschickt;
-		    }
-		}
-		
-
-                //$this->load->view('send', $this->_data);
-//		redirect("/Aufnahmetermine");
+		}		
             }
         }
     }
@@ -261,7 +248,7 @@ class Send extends MY_Controller {
 	(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
 
 	$this->MessageModel->sendMessageVorlage($this->config->item("systemPersonId"), $person->person_id, "MailApplicationConfirmation", $oe, $data, $sprache, $orgform_kurzbz=null);
-
+	
 	if($this->MessageModel->isResultValid() === true)
 	{
 	    if($this->MessageModel->result->msg === "Success")
@@ -296,8 +283,6 @@ class Send extends MY_Controller {
 	(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
 
 	$this->MessageModel->sendMessageVorlage($person->person_id, $this->config->item("systemPersonId"), "MailNewApplicationInfo", $oe, $data, $sprache, $orgform_kurzbz);
-
-//	var_dump($this->MessageModel->result);
 
 	if($this->MessageModel->isResultValid() === true)
 	{

@@ -9,10 +9,10 @@ foreach ($studiengaenge as $stg)
         <div id="<?php echo $stg->studiengang_kz; ?>">
             <div class="row">
                 <div class="col-sm-12">
-                    Ihre Bewerbung ist eingelangt, bitte wählen Sie einen Termin für das erste Aufnahmeverfahren aus:
+                    <?php echo $this->getPhrase("Termine/BewerbungIstEingelangt", $sprache); ?>
                 </div>
             </div>
-            <h4>Erstes Aufnahmeverfahren</h4>
+            <h4><?php echo $this->lang->line("termine/erstesAufnahmeverfahren"); ?></h4>
             <div class="row">
 		<?php echo form_open("/Aufnahmetermine/register/".$stg->studiengang_kz."/".$stg->studienplan->studienplan_id, array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin")); ?>
                 <div class="col-sm-4">
@@ -28,8 +28,7 @@ foreach ($studiengaenge as $stg)
 		    }
 		    else
 		    {
-			//TODO
-			echo "keine Termine vorhanden";
+			echo $this->lang->line("termine/keineTermineVorhanden");
 		    }
 		    ?>
                 </div>
@@ -47,7 +46,7 @@ foreach ($studiengaenge as $stg)
 	    if(!empty($reihungstests[$stg->studiengang_kz][2]))
 	    {
 	    ?>
-            <h4>Zweites Aufnahmeverfahren</h4>
+            <h4><?php echo $this->lang->line("termine/zweitesAufnahmeverfahren"); ?></h4>
             <div class="row">
 		<?php echo form_open("/Aufnahmetermine/register/".$stg->studiengang_kz."/".$stg->studienplan->studienplan_id, array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin")); ?>
                 <div class="col-sm-4">
@@ -63,8 +62,7 @@ foreach ($studiengaenge as $stg)
 		    }
 		    else
 		    {
-			//TODO
-			echo "keine Termine vorhanden";
+			echo $this->lang->line("termine/keineTermineVorhanden");
 		    }
 		    ?>
                 </div>
