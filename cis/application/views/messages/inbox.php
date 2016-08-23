@@ -34,7 +34,7 @@
 		</div>
 		<div class="col-sm-1">
 		    <a href="<?php echo base_url($this->config->config['index_page'].'/Messages/deleteMessage/'.$msg->message_id); ?>">
-			<button class="btn btn-sm btn-primary icon-trash" id="answer_<?php echo $msg->message_id; ?>"></button>
+			<button class="btn btn-sm btn-primary icon-trash" id="answer_<?php echo $msg->message_id; ?>"><?php echo $this->lang->line('msg_delete'); ?></button>
 		    </a>
 		</div>
 	    </div>
