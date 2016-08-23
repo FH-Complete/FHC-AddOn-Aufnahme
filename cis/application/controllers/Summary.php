@@ -88,7 +88,7 @@ class Summary extends MY_Controller {
             }
             else
             {
-                //TODO Daten konnten nicht geladen werden
+                $this->_setError(true, $this->StudiengangModel->getErrorMessage());
             }
         }
     }

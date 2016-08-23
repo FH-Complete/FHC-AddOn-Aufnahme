@@ -541,6 +541,26 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => '',
 			'description' => 'The data for application is incomplete.'
 		)
+	),
+	array
+	(
+		'phrase' => 'Termine/BewerbungIstEingelangt',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Ihre Bewerbung ist eingelangt, bitte wählen Sie einen Termin für das erste Aufnahmeverfahren aus:',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Termine/BewerbungIstEingelangt',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Ihre Bewerbung ist eingelangt, bitte wählen Sie einen Termin für das erste Aufnahmeverfahren aus:',
+			'description' => ''
+		)
 	)
 );
 

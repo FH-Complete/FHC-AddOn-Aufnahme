@@ -96,9 +96,36 @@ foreach ($studiengaenge as $stg)
 		<div class="row">
 		    <div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/weiterführend'); ?>: </div><div class="col-sm-6"></div> 
 		</div>-->
-		<div class="row">
-		    <div class="col-sm-3 col-md-offset-3"><a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung/studiengang/".$stg->studiengang_kz."/".$studienplan->studienplan_id) ?>"><button id="button_<?php echo $studienplan->studienplan_id; ?>" type="button" class="btn btn-sm icon-bewerben"><?php echo $this->lang->line('studiengaenge/buttonText'); ?></button></a></div>
-		</div>
+		
+		<?php $bewerbungMoeglich = false;
+		    if(!empty($stg->fristen))
+		    {
+			foreach($stg->fristen as $frist)
+			{
+			    if((date("Y-m-d", strtotime($frist->beginn)) < date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) > date("Y-m-d")))
+			    {
+				$bewerbungMoeglich = true;
+			    }
+			}
+		    }
+		    
+		    if($bewerbungMoeglich)
+		    {
+		    ?>
+		    <div class="row">
+			<div class="col-sm-3 col-md-offset-3"><a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung/studiengang/".$stg->studiengang_kz."/".$studienplan->studienplan_id) ?>"><button id="button_<?php echo $studienplan->studienplan_id; ?>" type="button" class="btn btn-sm icon-bewerben"><?php echo $this->lang->line('studiengaenge/buttonText'); ?></button></a></div>
+		    </div>
+		    <?php
+		    }
+		    else
+		    {
+			?>
+		    <div class="row">
+			<div class="col-sm-3 col-md-offset-3"><a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung/studiengang/".$stg->studiengang_kz."/".$studienplan->studienplan_id) ?>"><button id="button_<?php echo $studienplan->studienplan_id; ?>" type="button" class="btn btn-sm icon-bewerben" disabled title="<?php echo $this->lang->line("studiengaenge/BewerbungNichtMoeglich"); ?>"><?php echo $this->lang->line('studiengaenge/buttonText'); ?></button></a></div>
+		    </div>
+		<?php
+		    }
+		    ?>
 	    </div>
         </div>
         <?php
@@ -107,17 +134,3 @@ foreach ($studiengaenge as $stg)
 }
 ?>
 
-<script type="text/javascript">
-    $(document).ready(function(){
-	$(".frist").each(function(i,v){
-	   if($(v).attr("studienplan_id"))
-	   {
-	       var id = $(v).attr("studienplan_id");
-	       $("#button_"+id).prop("disabled", true);
-	       
-	       $("#button_"+id).attr("title", "Derzeit keine Bewerbung möglich!");
-	       $("#button_"+id).tooltip();
-	   }
-	});
-    });
-</script>

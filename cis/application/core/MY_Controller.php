@@ -60,14 +60,11 @@ class MY_Controller extends CI_Controller {
 	$this->PhraseModel->getPhrasen(ucfirst($language));
 	if($this->PhraseModel->isResultValid() == true)
 	{
-	    //TODO Phrasen loaded
 	    $this->session->phrasen = $this->PhraseModel->result->retval;
 	}
 	else
 	{
-	    //TODO
-	    echo $this->PhraseModel->getErrorMessage();
-	    var_dump($this->PhraseModel->getErrorMessage());
+	    $this->_setError(true, $this->PhraseModel->getErrorMessage());
 	}
     }
 

@@ -18,3 +18,19 @@ $this->lang->load(array('aufnahme', 'studiengaenge'), $language);
 <?php
     $this->load->view('templates/footer');
 ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+//	$(".frist").each(function(i,v){
+//	   if($(v).attr("studienplan_id"))
+//	   {
+//	       var id = $(v).attr("studienplan_id");
+//	       $("#button_"+id).prop("disabled", true);
+//	       
+//	       $("#button_"+id).attr("title", "Derzeit keine Bewerbung möglich!");
+//	       $("#button_"+id).tooltip();
+//	   }
+//	});
+//	
+	$(".icon-bewerben").tooltip();
+    });
+</script>

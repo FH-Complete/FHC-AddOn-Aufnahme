@@ -26,3 +26,5 @@ $lang['send_Geburtsurkunde'] = "Geburtsurkunde";
 $lang['send_Staatsbürgerschaftsnachweis'] = "Staatsbürgerschaftsnachweis";
 $lang['send_Lichtbild'] = "Lichtbild";
 $lang['send_datenUnvollstaendig'] = "Bewerbung kann nicht abgesendet werden. Daten sind noch unvollständig.";
+$lang['send_studiengangkzFehlt'] = "Der Parameter Studiengangkennzahl fehlt.";
+
