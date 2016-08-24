@@ -67,11 +67,12 @@ class Registration extends MY_Controller {
         $this->form_validation->set_rules("captcha_code", "Captcha", "required|max_length[6]|callback_check_captcha");
 
 
-        if ($this->form_validation->run() == FALSE) {
-            //$this->load->view('templates/header');
+        if ($this->form_validation->run() == FALSE)
+	{
             $this->load->view('registration',  $this->_data);
-            //$this->load->view('templates/footer');
-        } else {
+        }
+	else 
+	{
             $this->saveRegistration($this->_data);
         }
     }
@@ -84,14 +85,14 @@ class Registration extends MY_Controller {
 
     public function check_captcha()
     {
-		if ($this->input->post("email") != $this->config->config["codeception_email"])
-		{
-			$securimage = new Securimage();
-			if (!$securimage->check($this->input->post("captcha_code"))) {
-				$this->form_validation->set_message("check_captcha", "Code does not match.");
-				return false;
-			}
-		}
+	if ($this->input->post("email") != $this->config->config["codeception_email"])
+	{
+	    $securimage = new Securimage();
+	    if (!$securimage->check($this->input->post("captcha_code"))) {
+		$this->form_validation->set_message("check_captcha", "Code does not match.");
+		return false;
+	    }
+	}
         return true;
     }
 
@@ -238,14 +239,11 @@ class Registration extends MY_Controller {
             if (count($bewerbung) > 0) {
                 $data["message"] = '<p class="alert alert-danger" id="danger-alert">' . sprintf($this->lang->line('aufnahme/mailadresseBereitsGenutzt'), $data["email"]) . '</p>'
                         . '<a href="' . base_url("index.dist.php/Registration/resendCode") . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button></a>';
-//                $this->load->view('templates/header');
                 $this->load->view('registration', $data);
-//                $this->load->view('templates/footer');
             }
 	    else
 	    {
 		$person_id = $this->_savePerson($person);
-                //$this->PersonModel->savePerson($person);
                 //TODO error handling
                 if ($this->PersonModel->isResultValid() === true)
 		{

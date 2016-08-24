@@ -11,12 +11,21 @@ class Studiensemester_model extends MY_Model
 
     public function getNextStudiensemester($art = null)
     {
-	if ($restquery = $this->rest->get('organisation/studiensemester/nextstudiensemester', $art))
+	if(isset($this->session->userdata()["studiensemester"]))
 	{
-	    $this->result = $restquery;
+	    $this->result = $this->session->userdata()["studiensemester"];
 	    return true;
 	}
 	else
-	    return false;
+	{
+	    if ($restquery = $this->rest->get('organisation/studiensemester/nextstudiensemester', $art))
+	    {
+		$this->result = $restquery;
+		$this->session->set_userdata("studiensemester", $this->result);
+		return true;
+	    }
+	    else
+		return false;
+	}
     }
 }
