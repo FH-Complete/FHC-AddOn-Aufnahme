@@ -12,9 +12,17 @@ $lang['requirements_abschluss_matura'] = 'Matura/Abitur';
 $lang['requirements_abschluss_studienberechtigung'] = 'Studienberechtigungsprüfung';
 $lang['requirements_abschluss_berufsreife'] = 'Berufsreifeprüfung';
 $lang['requirements_abschlusszeugnis_header'] = 'Bitte laden Sie Ihr Abschlusszeugnis im Format .pdf, .doc oder .jpg hoch';
-$lang['requirements_abschlusszeugnis'] = 'Maturazeugnis';
+$lang['requirements_abschlusszeugnis'] = 'Abschlusszeugnis';
 $lang["requirements_keinDokHochgeladen"] = "Kein Dokument hochgeladen";
 $lang["requirements_DokHochgeladen"] = "Dokument bereits vorhanden";
+$lang["requirements_formNachgereicht"] = "wird nachgereicht";
+$lang["requirements_Geburtsu"] = "Geburtsurkunde";
+$lang["requirements_Maturaze"] = "Schul- bzw. Lehrabschlusszeugnis";
+$lang["requirements_Staatsbn"] = "Staatsbürgerschaftsnachweis";
+$lang["requirements_Lichtbil"] = "Lichtbild";
+$lang["requirements_nachreichenDatum"] = "Datum";
+$lang["requirements_nachreichenAnmerkung"] = "Anmerkung";
+$lang["requirements_letztesZeugnis"] = "letztgültiges Zeugnis";
 
 
 
