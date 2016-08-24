@@ -63,7 +63,6 @@ class Registration extends MY_Controller {
         $this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
         $this->form_validation->set_rules("email2", "E-Mail", "required|valid_email|callback_check_email");
 	$this->form_validation->set_rules("datenschutz", "Datenschutz", "callback_check_terms");
-        //TODO
         $this->form_validation->set_rules("captcha_code", "Captcha", "required|max_length[6]|callback_check_captcha");
 
 
@@ -130,9 +129,7 @@ class Registration extends MY_Controller {
 		$person = $bewerbung[0];
 		$person = $this->_getPerson($person->person_id);
 
-		//$person = $this->PersonModel->result->retval[0];
-		//TODO define timespan until invalidation of timestamp in config
-		$person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +1 hour"));
+		$person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +".$this->config->item('invalidateResendTimestampAfter')." hour"));
 		$person->zugangscode = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
 		$this->_savePerson($person);
 		//$this->PersonModel->savePerson($person);
@@ -224,8 +221,7 @@ class Registration extends MY_Controller {
         $person->gebdatum = date('Y-m-d', strtotime($data["geb_datum"]));
         $person->zugangscode = $zugangscode;
 	//set timestamp which is indicated how long the code is valid
-	//TODO define timespan until invalidation of timestamp in config
-        $person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +24 hours"));
+        $person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +".$this->config->item('invalidateRegistrationTimestampAfter')." hours"));
         $person->insertvon = 'online';
         $person->vornamen = "";
 	$person->aktiv = "t";

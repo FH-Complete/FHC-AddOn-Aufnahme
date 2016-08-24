@@ -226,3 +226,19 @@ $config['systemPersonId'] = 1;
 |--------------------------------------------------------------------------
 */
 $config['codeception_email'] = 'codeception@fhcomplete.org';
+
+/*
+|--------------------------------------------------------------------------
+| Defines how many hours registration link is valid after the first registration
+| (in hours)
+|--------------------------------------------------------------------------
+*/
+$config['invalidateRegistrationTimestampAfter']  = 24;
+
+/*
+|--------------------------------------------------------------------------
+| Defines how many hours registration link is valid when the user
+| requested the link again (in hours)
+|--------------------------------------------------------------------------
+*/
+$config['invalidateResendTimestampAfter']  = 1;

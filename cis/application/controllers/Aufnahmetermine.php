@@ -70,7 +70,6 @@ class Aufnahmetermine extends MY_Controller {
 			    if($studiengang->studiengang_kz === $studiengang_kz)
 			    {
 				$studiengang->studiengangstyp = $this->_loadStudiengangstyp($studiengang->typ);
-				//TODO send message; vorlage wird nicht korrekt geladen
 				$this->_sendMessageMailAppointmentConfirmation($this->_data["person"], $studiengang, $reihungstest);
 			    }
 			}
@@ -85,7 +84,6 @@ class Aufnahmetermine extends MY_Controller {
 		    if($studiengang->studiengang_kz === $studiengang_kz)
 		    {
 			$studiengang->studiengangstyp = $this->_loadStudiengangstyp($studiengang->typ);
-			//TODO send message; vorlage wird nicht korrekt geladen
 			$this->_sendMessageMailAppointmentConfirmation($this->_data["person"], $studiengang, $reihungstest);
 		    }
 		}
