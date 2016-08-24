@@ -87,8 +87,10 @@
 			<label>
 			    <?php echo form_checkbox(array('id' => 'datenschutz', 'name' => 'datenschutz', "checked" => FALSE, "class"=>"datenschutz"));
 				echo $this->getPhrase("Registration/Datenschutz", $sprache);
+				
 			    ?>			
 			</label>
+			<a href="<?php echo ($this->config->item('LinkDatenschutz') ? $this->config->item('LinkDatenschutz') : ''); ?>" target="_blank">Link</a>
 		    </div>
 		    <?php echo form_error("datenschutz"); ?>
 		</div>
@@ -150,5 +152,3 @@
 	});
     });
 </script>
-
-

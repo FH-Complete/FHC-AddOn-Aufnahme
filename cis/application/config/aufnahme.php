@@ -242,3 +242,11 @@ $config['invalidateRegistrationTimestampAfter']  = 24;
 |--------------------------------------------------------------------------
 */
 $config['invalidateResendTimestampAfter']  = 1;
+
+/*
+|--------------------------------------------------------------------------
+| Link zur Datenschutzerklärung
+| wird nicht angezeigt, wenn Leerstring
+|--------------------------------------------------------------------------
+*/
+$config['LinkDatenschutz'] = "https://www.fhstp.ac.at/de/anmeldung/datenschutz";
