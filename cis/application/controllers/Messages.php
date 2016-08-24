@@ -7,7 +7,7 @@ class Messages extends MY_Controller {
 	$this->load->model('message_model', "MessageModel");
 	$this->load->model('prestudent_model', "PrestudentModel");
 	$this->load->model('studiengang_model', "StudiengangModel");
-	$this->load->model('oe_model', 'OeModel');
+//	$this->load->model('oe_model', 'OeModel');
 	$this->load->model('person_model', 'PersonModel');
 	$this->load->helper("form");
 	$this->load->library("form_validation");
@@ -139,6 +139,7 @@ class Messages extends MY_Controller {
 	$this->_data["prestudent"] = $this->_loadPrestudent($this->session->userdata()["person_id"]);
 	
 	$this->_data["studiengaenge"] = array();
+	//TODO optimize
 	foreach($this->_data["prestudent"] as $prestudent)
 	{
 	    if($prestudent->studiengang_kz != null)
@@ -149,13 +150,6 @@ class Messages extends MY_Controller {
 	}
 	
 	$this->_data["messages"] = $this->_getMessages($this->session->userdata()["person_id"]);
-	
-//	foreach($this->_data["messages"] as $msg)
-//	{
-//	    $oe = $this->_loadOrganisationseinheit($msg->oe_kurzbz);
-//	    $msg->oe = $oe;
-//	}
-	
     }
 
     private function _sendMessage($person_id, $subject, $body, $oe_kurzbz, $relationMessage_id = null)
@@ -222,18 +216,18 @@ class Messages extends MY_Controller {
 	}
     }
     
-    private function _loadOrganisationseinheit($oe_kurzbz)
-    {
-	$this->OeModel->getOrganisationseinheit($oe_kurzbz);
-	if($this->OeModel->isResultValid() === true)
-	{
-	    return $this->OeModel->result->retval[0];
-	}
-	else
-	{
-	    $this->_setError(true, $this->OeModel->getErrorMessage());
-	}
-    }
+//    private function _loadOrganisationseinheit($oe_kurzbz)
+//    {
+//	$this->OeModel->getOrganisationseinheit($oe_kurzbz);
+//	if($this->OeModel->isResultValid() === true)
+//	{
+//	    return $this->OeModel->result->retval[0];
+//	}
+//	else
+//	{
+//	    $this->_setError(true, $this->OeModel->getErrorMessage());
+//	}
+//    }
     
     private function _changeMessageStatus($person_id, $msg)
     {

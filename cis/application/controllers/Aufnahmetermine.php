@@ -88,11 +88,8 @@ class Aufnahmetermine extends MY_Controller {
 			//TODO send message; vorlage wird nicht korrekt geladen
 			$this->_sendMessageMailAppointmentConfirmation($this->_data["person"], $studiengang, $reihungstest);
 		    }
+		}
 	    }
-	    }
-	    
-	    
-
 	    $this->_loadData();
 	}
 	else

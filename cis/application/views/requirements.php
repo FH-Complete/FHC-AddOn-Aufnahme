@@ -61,7 +61,6 @@ if (isset($error) && ($error->error === true))
     
     function prepareUpload(event)
     {
-	console.log(event.target.files);
 	files = event.target.files;
     }
     
