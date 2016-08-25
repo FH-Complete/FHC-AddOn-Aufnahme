@@ -49,6 +49,7 @@ class Studiengaenge extends MY_Controller {
 //	    $this->benchmark->mark('codepart_start');
 	    $this->_data["studiensemester"] = $studiensemester;
 	    $this->_data["studiengaenge"] = $this->_getStudiengaengeStudienplan($this->_data["studiensemester"]->studiensemester_kurzbz, 1);
+	    
 //	    $this->benchmark->mark('codepart_end');
 //	    log_message('debug', 'Time elapsed for Studiengaenge/index->getStudienplan: '.$this->benchmark->elapsed_time('codepart_start', 'codepart_end').'ms');
 

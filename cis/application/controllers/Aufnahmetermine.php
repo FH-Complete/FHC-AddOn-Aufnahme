@@ -344,7 +344,7 @@ class Aufnahmetermine extends MY_Controller {
 	
 	$this->MessageModel->sendMessageVorlage($this->config->item("systemPersonId"), $person->person_id, "MailAppointmentConfirmation", "etw", $data, $sprache, $orgform_kurzbz=null);
 	
-	var_dump($this->MessageModel->result);
+//	var_dump($this->MessageModel->result);
 	
 	if($this->MessageModel->isResultValid() === true)
 	{

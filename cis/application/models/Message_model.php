@@ -10,7 +10,7 @@ class Message_model extends MY_Model
 
     public function getMessagesByPersonId($person_id)
     {
-	if ($restquery = $this->rest->get('system/message/MessagesByPersonId', array("person_id"=>$person_id, "all"=>true)))
+	if ($restquery = $this->rest->get('system/message/MessagesByPersonId', array("person_id"=>$person_id)))
 	{
 	    $this->result = $restquery;
 	    return true;

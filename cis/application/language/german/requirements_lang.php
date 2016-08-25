@@ -23,3 +23,5 @@ $lang["requirements_Lichtbil"] = "Lichtbild";
 $lang["requirements_nachreichenDatum"] = "Datum";
 $lang["requirements_nachreichenAnmerkung"] = "Anmerkung";
 $lang["requirements_letztesZeugnis"] = "letztgültiges Zeugnis";
+$lang["requirements_UploadErfolgreich"] = "Upload erfolgreich";
+$lang["requirements_UploadError"] = "Fehler beim hochladen";

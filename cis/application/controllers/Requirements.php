@@ -56,7 +56,6 @@ class Requirements extends MY_Controller {
 		$akte = new stdClass();
 		$akte->person_id = $this->_data["person"]->person_id;
 
-//		$akte->bezeichnung = $file["name"];
 		$akte->dokument_kurzbz = $dok->dokument_kurzbz;
 		$akte->insertvon = 'online';
 		$akte->nachgereicht = true;
@@ -64,106 +63,8 @@ class Requirements extends MY_Controller {
 		$akte->nachgereicht_am = date("Y-m-d", strtotime($this->input->post($dok->dokument_kurzbz."_nachreichenDatum")));
 
 		$this->_saveAkte($akte);
-		//$this->AkteModel->saveAkte($akte);
 	    }
 	}
-
-	//file upload is done with jQuery
-//	$post = $this->input->post();
-//	$files = $_FILES;
-//	if(count($files) > 0)
-//	{
-//	    foreach($files as $key=>$file)
-//	    {
-//		if(is_uploaded_file($file["tmp_name"]))
-//		{
-//		    $obj = new stdClass();
-//		    $obj->version = 0;
-//		    $obj->mimetype = $file["type"];
-//		    $obj->name = $file["name"];
-//		    $obj->oe_kurzbz = null;
-//		    $obj->dokument_kurzbz = $key;
-//
-//		    $akte = new stdClass();
-//
-//		    foreach($this->_data["dokumente"] as $akte_temp)
-//		    {
-//			if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
-//			{
-//			    if($akte_temp->dms_id != null)
-//			    {
-//				$dms = $this->_loadDms($akte_temp->dms_id);
-//				$obj->version = $dms->version+1;
-//			    }
-//			    else
-//			    {
-//				$akte = $akte_temp;
-//				$akte->updateamum = date("Y-m-d H:i:s");
-//				$akte->updatevon = "online";
-//			    }
-//			}
-//		    }
-//
-//		    $obj->kategorie_kurzbz = "Akte";
-//
-//		    $type = pathinfo($file["name"], PATHINFO_EXTENSION);
-//		    $data = file_get_contents($file["tmp_name"]);
-//		    $obj->file_content = 'data:image/' . $type . ';base64,' . base64_encode($data);
-//
-//		    $this->_saveDms($obj);
-//
-//		    if($this->DmsModel->result->error == 0)
-//		    {
-//			$akte->dms_id = $this->DmsModel->result->retval->dms_id;
-//			$akte->person_id = $this->_data["person"]->person_id;
-//			$akte->mimetype = $file["type"];
-//
-//			$akte->bezeichnung = mb_substr($obj->name, 0, 32);
-//			$akte->dokument_kurzbz = $obj->dokument_kurzbz;
-//			$akte->titel = $key;
-//			$akte->insertvon = 'online';
-//			$akte->nachgereicht = 'f';
-//
-//			unset($akte->uid);
-//			unset($akte->inhalt_vorhanden);
-//
-//			$this->_saveAkte($akte);
-//		    }
-//
-//		    if(unlink($file["tmp_name"]))
-//		    {
-//			//removing tmp file successful
-//		    }
-//		}
-//		else
-//		{
-//		    if(isset($post[$key."_nachgereicht"]))
-//		    {
-//			$akte = new stdClass();
-//			$akte->person_id = $this->_data["person"]->person_id;
-//
-//			$akte->bezeichnung = $file["name"];
-//			$akte->dokument_kurzbz = $key;
-//			$akte->insertvon = 'online';
-//			$akte->nachgereicht = true;
-//
-//			$this->_saveAkte($akte);
-//			//$this->AkteModel->saveAkte($akte);
-//		    }
-//		}
-//
-//		//load dokumente
-//		$this->_loadDokumente($this->session->userdata()["person_id"]);
-//		foreach($this->_data["dokumente"] as $akte)
-//		{
-//		    if($akte->dms_id != null)
-//		    {
-//			$dms = $this->_loadDms($akte->dms_id);
-//			$akte->dokument = $dms;
-//		    }
-//		}
-//	    }
-//	}
 
 	//load dokumente
         $this->_loadDokumente($this->session->userdata()["person_id"]);
@@ -171,6 +72,7 @@ class Requirements extends MY_Controller {
         $this->load->view('requirements', $this->_data);
     }
 
+    //TODO check file upload with upload in controller Bewerbung
     public function uploadFiles()
     {
 	$files = $_FILES;
@@ -192,12 +94,12 @@ class Requirements extends MY_Controller {
 		}
 	    }
 
-
 	    foreach($files as $key=>$file)
 	    {
 		if(is_uploaded_file($file["tmp_name"]))
 		{
 		    $obj = new stdClass();
+		    $obj->new = true;
 		    $akte = new stdClass();
 
 		    $obj->version = 0;
@@ -210,19 +112,20 @@ class Requirements extends MY_Controller {
 		    {
 			if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != $this->config->item('dokumentTypen')["sonstiges"]))
 			{
-			    $dms = $this->_loadDms($akte_temp->dms_id);
-			    $obj->version = $dms->version+1;
+//			    $dms = $this->_loadDms($akte_temp->dms_id);
+//			    $obj->version = $dms->version+1;
+			    $akte = $akte_temp;
+			    $akte->updateamum = date("Y-m-d H:i:s");
+			    $akte->updatevon = "online";
 
-			    if($akte_temp->dms_id != null)
+			    if($akte->dms_id != null)
 			    {
-				$dms = $this->_loadDms($akte_temp->dms_id);
-				$obj->version = $dms->version+1;
-			    }
-			    else
-			    {
-				$akte = $akte_temp;
-				$akte->updateamum = date("Y-m-d H:i:s");
-				$akte->updatevon = "online";
+//				$obj = $akte->dokument;
+//				$obj->version = ($obj->version+1);
+				
+				$obj->version = ($akte->dokument->version+1);
+				$obj->mimetype = $file["type"];
+				$obj->name = $file["name"];
 			    }
 			}
 		    }
@@ -232,37 +135,63 @@ class Requirements extends MY_Controller {
 		    $type = pathinfo($file["name"], PATHINFO_EXTENSION);
 		    $data = file_get_contents($file["tmp_name"]);
 		    $obj->file_content = base64_encode($data);
-			$obj->new=true;
 
 		    $this->_saveDms($obj);
 
 		    if($this->DmsModel->result->error == 0)
 		    {
-			$akte->dms_id = $this->DmsModel->result->retval->dms_id;
-			$akte->person_id = $this->_data["person"]->person_id;
-			$akte->mimetype = $file["type"];
-
-			$akte->bezeichnung = mb_substr($obj->name, 0, 32);
-			$akte->dokument_kurzbz = $obj->dokument_kurzbz;
-			$akte->titel = $key;
-			$akte->insertvon = 'online';
-			$akte->nachgereicht = 'f';
-
-			unset($akte->uid);
-			unset($akte->inhalt_vorhanden);
-
 			$result = new stdClass();
-
-			if($this->_saveAkte($akte))
+			
+			if($obj->version >= 0)
 			{
-			    $result->success = true;
+			    $akte->dms_id = $this->DmsModel->result->retval->dms_id;
+			    $akte->person_id = $this->_data["person"]->person_id;
+			    $akte->mimetype = $file["type"];
 
+			    $akte->bezeichnung = mb_substr($obj->name, 0, 32);
+			    $akte->dokument_kurzbz = $obj->dokument_kurzbz;
+			    $akte->titel = $key;
+			    $akte->insertvon = 'online';
+			    $akte->nachgereicht = 'f';
+
+			    unset($akte->uid);
+			    unset($akte->inhalt_vorhanden);
+			    $akte->dokument = null;
+			    unset($akte->dokument);
+			    unset($akte->nachgereicht_am);
+
+			    if($this->_saveAkte($akte))
+			    {
+				$result->success = true;
+			    }
+			    else
+			    {
+				$result->success = false;
+			    }
 			}
 			else
 			{
-			    $result->success = false;
-			}
+			    $akte->mimetype = $file["type"];
+			    $akte->bezeichnung = mb_substr($obj->name, 0, 32);
+			    $akte->dokument_kurzbz = $obj->dokument_kurzbz;
+			    $akte->titel = $key;
+			    
+			    unset($akte->uid);
+			    unset($akte->inhalt_vorhanden);
+			    $akte->dokument = null;
+			    unset($akte->dokument);
+			    unset($akte->nachgereicht_am);
+			    
+			    if($this->_saveAkte($akte))
+			    {
+				$result->success = true;
 
+			    }
+			    else
+			    {
+				$result->success = false;
+			    }
+			}
 			echo json_encode($result);
 		    }
 		    else

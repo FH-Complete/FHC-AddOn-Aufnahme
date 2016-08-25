@@ -389,7 +389,8 @@ class Registration extends MY_Controller {
 	    "vorname" => $person->vorname,
 	    "nachname" => $person->nachname,
 	    "code" => $code,
-	    "link" => $link
+	    "link" => $link,
+	    "eMailAdresse" => $email,
 	);
 
 	if ($this->config->item('root_oe'))
