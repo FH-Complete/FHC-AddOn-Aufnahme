@@ -267,6 +267,7 @@ class Registration extends MY_Controller {
 
 			    //$data["message"] = $message;
 //			    $this->load->view('templates/header');
+			    $this->_data["success"] = true;
 			    $this->load->view('registration', $this->_data);
 //			    $this->load->view('templates/footer');
 			}
