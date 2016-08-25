@@ -105,9 +105,6 @@ class Messages extends MY_Controller {
 	$this->checkLogin();
 	$this->_loadData();
 	
-	//TODO set status to read
-	$this->_data["messages"] = $this->_getMessages($this->session->userdata()["person_id"]);
-	
 	if($this->MessageModel->isResultValid() === true)
 	{
 	    foreach($this->_data["messages"] as $msg)
@@ -115,7 +112,7 @@ class Messages extends MY_Controller {
 		if($msg->message_id === $messageId)
 		{
 		    $this->_data["msg"] = $msg;
-		    $this->_changeMessageStatus($this->session->userdata()["person_id"], $msg);
+		    $this->_changeMessageStatus($this->session->userdata()["person_id"], $msg, MSG_STATUS_READ);
 		}
 	    }
 	    
@@ -126,9 +123,24 @@ class Messages extends MY_Controller {
     
     public function deleteMessage($messageId)
     {
-	//TODO delete message
 	$this->checkLogin();
 	$this->_loadData();
+	
+	if($this->MessageModel->isResultValid() === true)
+	{
+	    foreach($this->_data["messages"] as $msg)
+	    {
+		if($msg->message_id === $messageId)
+		{
+		    $this->_data["msg"] = $msg;
+		    $this->_changeMessageStatus($this->session->userdata()["person_id"], $msg, MSG_STATUS_DELETED);
+		}
+	    }
+	    
+	    $this->load->view('messages', $this->_data);
+	}
+	
+	$this->load->view('messages', $this->_data);
     }
     
     private function _loadData()
@@ -182,6 +194,7 @@ class Messages extends MY_Controller {
 	$this->MessageModel->getMessagesByPersonId($person_id);
 	if($this->MessageModel->isResultValid() === true)
 	{
+//	    var_dump($this->MessageModel->result);
 	    return $this->MessageModel->result->retval;
 	}
 	else
@@ -229,9 +242,9 @@ class Messages extends MY_Controller {
 //	}
 //    }
     
-    private function _changeMessageStatus($person_id, $msg)
+    private function _changeMessageStatus($person_id, $msg, $status)
     {
-	$this->MessageModel->changeMessageStatus($person_id, $msg->message_id, MSG_STATUS_READ);
+	$this->MessageModel->changeMessageStatus($person_id, $msg->message_id, $status);
 	if($this->MessageModel->isResultValid() === true)
 	{
 	    return $this->MessageModel->result->retval;
