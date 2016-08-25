@@ -72,7 +72,6 @@ class Requirements extends MY_Controller {
         $this->load->view('requirements', $this->_data);
     }
 
-    //TODO check file upload with upload in controller Bewerbung
     public function uploadFiles()
     {
 	$files = $_FILES;
@@ -120,10 +119,11 @@ class Requirements extends MY_Controller {
 
 			    if($akte->dms_id != null)
 			    {
-//				$obj = $akte->dokument;
-//				$obj->version = ($obj->version+1);
+				$obj = $akte->dokument;
+				$obj->new = true;
+				$obj->version = ($obj->version+1);
 				
-				$obj->version = ($akte->dokument->version+1);
+//				$obj->version = ($akte->dokument->version+1);
 				$obj->mimetype = $file["type"];
 				$obj->name = $file["name"];
 			    }
