@@ -30,6 +30,7 @@ class Registration extends MY_Controller {
 	$this->load->model('adresse_model', "AdresseModel");
         $this->lang->load('aufnahme', $this->get_language());
 	$this->lang->load('login', $this->get_language());
+	$this->lang->load('registration', $this->get_language());
     }
 
     public function index()
@@ -119,7 +120,7 @@ class Registration extends MY_Controller {
             "sprache" => $this->get_language()
         );
 
-        if (($this->input->post("email") != null))
+        if (($this->input->post("email") != null) && ($this->input->post("email") != ""))
 	{
 	    $this->_data["email"] = $this->input->post("email");
 	    $bewerbung = $this->_checkBewerbung($this->_data["email"]);
@@ -139,16 +140,19 @@ class Registration extends MY_Controller {
 	    }
 	    else
 	    {
-		$this->_setError(true, "E-Mail Adresse ist nicht eindeutig zugeordnet.");
+		$this->_setError(true, $this->lang->line("aufnahme/eMailAdresseNichtEindeutig"));
 	    }
         }
 	else
 	{
-	    $this->_setError(true, "E-Mail Adresse wurde nicht angegeben.");
+	    if(!empty($this->input->post()))
+	    {
+		$this->_setError(true, $this->lang->line("aufnahme/eMailAdresseFehlt"));
+	    }
 	}
 
         $this->load->view('templates/header');
-        $this->load->view('registration/resendCode',  $this->_data);
+        $this->load->view('registration/resendCode', $this->_data);
         $this->load->view('templates/footer');
     }
 
