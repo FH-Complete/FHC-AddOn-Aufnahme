@@ -6,7 +6,7 @@
 		<li>API-Test: 
 			<?php 
 				if ($apitest->error)
-					echo 'Error (Time: '.$apitest->time.'ms): '.$apitest->value;
+					echo '<font color="red">Error (Time: '.$apitest->time.'ms): '.$apitest->value.'</font>';
 				else
 					echo 'OK (Time elapsed: '.$apitest->time.'ms)';
 			?>
@@ -21,9 +21,18 @@
 				<li>
 					<?php 
 						echo 'View "templates/header": '.$perfViewHeader->time.'ms';
-						echo FCPATH.'../vendor/';
 					?>
 				</li>
+				<li>
+					<?php 
+						echo 'Controller Studiengaenge/index(): '.$studiengaenge->time.'ms';
+						if (isset($studiengaenge->time1))
+							echo '<br>'.$studiengaenge->time1;
+						if (isset($studiengaenge->msg))
+							echo '<font color="red"><br>'.$studiengaenge->msg.'</font>';
+					?>
+				</li>
+				
 			</ul>
 		</li>
 	</ol>
