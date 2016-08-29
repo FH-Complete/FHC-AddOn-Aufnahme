@@ -48,7 +48,6 @@ class Bewerbung extends MY_Controller {
         {
             //load studiengaenge der prestudenten
             $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-
             $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
 
 	    if((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent"))
@@ -115,7 +114,6 @@ class Bewerbung extends MY_Controller {
         else
         {
 	    $post = $this->input->post();
-	    var_dump($post);
 	    $person = $this->_data["person"];
 	    $person->anrede = $post["anrede"];
 	    //$person->bundesland_code = $post["bundesland"];
@@ -150,7 +148,7 @@ class Bewerbung extends MY_Controller {
 	    
 	    if($post["adresse_nation"] === "A")
 	    {
-		if(($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort"] != ""))
+		if(($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort_dd"] != ""))
 		{
 		    if(isset($this->_data["adresse"]))
 		    {
@@ -223,7 +221,7 @@ class Bewerbung extends MY_Controller {
 
 	    if($post["zustelladresse_nation"] === "A")
 	    {
-		if(($post["zustell_strasse"] != "") && (($post["zustell_plz"] != "") && ($post["zustell_ort"] != "")))
+		if(($post["zustell_strasse"] != "") && (($post["zustell_plz"] != "") && ($post["zustell_ort_dd"] != "")))
 		{
 		    if(isset($this->_data["zustell_adresse"]))
 		    {
@@ -284,7 +282,6 @@ class Bewerbung extends MY_Controller {
 		}
 	    }
 
-            //TODO save new contact
             if(($post["telefon"] != "") && !(isset($this->_data["kontakt"]["telefon"])))
             {
                 $kontakt = new stdClass();
@@ -312,7 +309,6 @@ class Bewerbung extends MY_Controller {
 	    $this->_loadPerson();
 	    $this->_loadKontakt();
 	    $this->_loadAdresse();
-//	    $this->_getGemeinde();
 
 	    foreach($this->_data["gemeinden"] as $gemeinde)
 	    {
@@ -337,7 +333,6 @@ class Bewerbung extends MY_Controller {
 
         $this->session->set_userdata("studiengang_kz", $studiengang_kz);
 
-        //$this->StudiensemesterModel->getNextStudiensemester("WS");
         $this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
 
         //load person data
@@ -427,15 +422,19 @@ class Bewerbung extends MY_Controller {
         //load studiengang
         $this->_data["studiengang"] = $this->_loadStudiengang($studiengang_kz);
 
-         $this->_data["studiengaenge"] = array();
+        $this->_data["studiengaenge"] = array();
         foreach($this->_data["prestudent"] as $prestudent)
         {
             //load studiengaenge der prestudenten
             $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
             $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-            $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-            $studiengang->studienplan = $studienplan;
-            array_push($this->_data["studiengaenge"], $studiengang);
+
+	    if((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent"))
+	    {
+		$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+		$studiengang->studienplan = $studienplan;
+		array_push($this->_data["studiengaenge"], $studiengang);
+	    }
         }
 
         $this->load->view('bewerbung', $this->_data);
@@ -487,6 +486,8 @@ class Bewerbung extends MY_Controller {
 	{
 	    //load person data
 	    $this->_data["person"] = $this->_loadPerson();
+	    
+//	    var_dump($this->_data["person"]->person_id);
 
 	    //load dokumente
 	    $this->_loadDokumente($this->session->userdata()["person_id"]);
@@ -500,12 +501,12 @@ class Bewerbung extends MY_Controller {
 		}
 	    }
 
-
 	    foreach($files as $key=>$file)
 	    {
 		if(is_uploaded_file($file["tmp_name"]))
 		{
 		    $obj = new stdClass();
+		    $obj->new = true;
 		    $akte = new stdClass();
 
 		    $obj->version = 0;
@@ -528,21 +529,22 @@ class Bewerbung extends MY_Controller {
 
 		    foreach($this->_data["dokumente"] as $akte_temp)
 		    {
-			if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != "Sonst"))
+			if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != $this->config->item('dokumentTypen')["sonstiges"]))
 			{
-			    $dms = $this->_loadDms($akte_temp->dms_id);
-			    $obj->version = $dms->version+1;
+			    $akte = $akte_temp;
+			    $akte->updateamum = date("Y-m-d H:i:s");
+			    $akte->updatevon = "online";
 
-			    if($akte_temp->dms_id != null)
+			    if($akte->dms_id != null)
 			    {
-				$dms = $this->_loadDms($akte_temp->dms_id);
-				$obj->version = $dms->version+1;
-			    }
-			    else
-			    {
-				$akte = $akte_temp;
-				$akte->updateamum = date("Y-m-d H:i:s");
-				$akte->updatevon = "online";
+				$obj = $akte->dokument;
+				$obj->new = true;
+				$obj->version = ($obj->version+1);
+
+//				$obj->version = ($akte->dokument->version+1);
+				
+				$obj->mimetype = $file["type"];
+				$obj->name = $file["name"];
 			    }
 			}
 		    }
@@ -552,43 +554,75 @@ class Bewerbung extends MY_Controller {
 		    $type = pathinfo($file["name"], PATHINFO_EXTENSION);
 		    $data = file_get_contents($file["tmp_name"]);
 		    $obj->file_content = base64_encode($data);
-			$obj->new=true;
 
+//		    var_dump($obj);
+		    
 		    $this->_saveDms($obj);
+		    
+//		    var_dump($this->DmsModel->result);
 
 		    if($this->DmsModel->result->error == 0)
 		    {
-			$akte->dms_id = $this->DmsModel->result->retval->dms_id;
-			$akte->person_id = $this->_data["person"]->person_id;
-			$akte->mimetype = $file["type"];
-
-			$akte->bezeichnung = mb_substr($obj->name, 0, 32);
-			$akte->dokument_kurzbz = $obj->dokument_kurzbz;
-			$akte->titel = $key;
-			$akte->insertvon = 'online';
-			$akte->nachgereicht = 'f';
-
-			unset($akte->uid);
-			unset($akte->inhalt_vorhanden);
-
 			$result = new stdClass();
-
-			if($this->_saveAkte($akte))
+			
+			if($obj->version >= 0)
 			{
-			    $result->success = true;
+			    $akte->dms_id = $this->DmsModel->result->retval->dms_id;
+			    $akte->person_id = $this->_data["person"]->person_id;
+			    $akte->mimetype = $file["type"];
 
+			    $akte->bezeichnung = mb_substr($obj->name, 0, 32);
+			    $akte->dokument_kurzbz = $obj->dokument_kurzbz;
+			    $akte->titel = $key;
+			    $akte->insertvon = 'online';
+			    $akte->nachgereicht = 'f';
+
+			    unset($akte->uid);
+			    unset($akte->inhalt_vorhanden);
+			    $akte->dokument = null;
+			    unset($akte->dokument);
+			    unset($akte->nachgereicht_am);
+
+			    if($this->_saveAkte($akte))
+			    {
+				$result->success = true;
+
+			    }
+			    else
+			    {
+				$result->success = false;
+			    }
 			}
 			else
 			{
-			    $result->success = false;
+			    $akte->mimetype = $file["type"];
+			    $akte->bezeichnung = mb_substr($obj->name, 0, 32);
+			    $akte->dokument_kurzbz = $obj->dokument_kurzbz;
+			    $akte->titel = $key;
+			    
+			    unset($akte->uid);
+			    unset($akte->inhalt_vorhanden);
+			    $akte->dokument = null;
+			    unset($akte->dokument);
+			    unset($akte->nachgereicht_am);
+			    
+			    if($this->_saveAkte($akte))
+			    {
+				$result->success = true;
+
+			    }
+			    else
+			    {
+				$result->success = false;
+			    }
 			}
 
 			echo json_encode($result);
 		    }
 		    else
 		    {
-			//TODO handle error
-			var_dump($this->DmsModel->result);
+			$result->success = false;
+			$this->_setError(true, $this->DmsModel->getErrorMessage());
 		    }
 
 		    if(unlink($file["tmp_name"]))
@@ -788,7 +822,6 @@ class Bewerbung extends MY_Controller {
         $prestudent = new stdClass();
         $prestudent->person_id = $this->session->userdata()["person_id"];
         $prestudent->studiengang_kz = $studiengang_kz;
-        //TODO welches Studiensemester soll gewählt werden
         $prestudent->aufmerksamdurch_kurzbz = 'k.A.';
 	$this->PrestudentModel->savePrestudent($prestudent);
         if($this->PrestudentModel->isResultValid() === true)
@@ -839,7 +872,7 @@ class Bewerbung extends MY_Controller {
         }
         else
         {
-            //TODO studiensemester not found
+            //studiensemester not found
 	    $this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
         }
     }

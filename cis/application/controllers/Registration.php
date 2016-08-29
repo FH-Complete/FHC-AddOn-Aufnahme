@@ -30,6 +30,7 @@ class Registration extends MY_Controller {
 	$this->load->model('adresse_model', "AdresseModel");
         $this->lang->load('aufnahme', $this->get_language());
 	$this->lang->load('login', $this->get_language());
+	$this->lang->load('registration', $this->get_language());
     }
 
     public function index()
@@ -63,15 +64,15 @@ class Registration extends MY_Controller {
         $this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
         $this->form_validation->set_rules("email2", "E-Mail", "required|valid_email|callback_check_email");
 	$this->form_validation->set_rules("datenschutz", "Datenschutz", "callback_check_terms");
-        //TODO
         $this->form_validation->set_rules("captcha_code", "Captcha", "required|max_length[6]|callback_check_captcha");
 
 
-        if ($this->form_validation->run() == FALSE) {
-            //$this->load->view('templates/header');
+        if ($this->form_validation->run() == FALSE)
+	{
             $this->load->view('registration',  $this->_data);
-            //$this->load->view('templates/footer');
-        } else {
+        }
+	else 
+	{
             $this->saveRegistration($this->_data);
         }
     }
@@ -84,14 +85,14 @@ class Registration extends MY_Controller {
 
     public function check_captcha()
     {
-		if ($this->input->post("email") != $this->config->config["codeception_email"])
-		{
-			$securimage = new Securimage();
-			if (!$securimage->check($this->input->post("captcha_code"))) {
-				$this->form_validation->set_message("check_captcha", "Code does not match.");
-				return false;
-			}
-		}
+	if ($this->input->post("email") != $this->config->config["codeception_email"])
+	{
+	    $securimage = new Securimage();
+	    if (!$securimage->check($this->input->post("captcha_code"))) {
+		$this->form_validation->set_message("check_captcha", "Code does not match.");
+		return false;
+	    }
+	}
         return true;
     }
 
@@ -119,7 +120,7 @@ class Registration extends MY_Controller {
             "sprache" => $this->get_language()
         );
 
-        if (($this->input->post("email") != null))
+        if (($this->input->post("email") != null) && ($this->input->post("email") != ""))
 	{
 	    $this->_data["email"] = $this->input->post("email");
 	    $bewerbung = $this->_checkBewerbung($this->_data["email"]);
@@ -129,9 +130,7 @@ class Registration extends MY_Controller {
 		$person = $bewerbung[0];
 		$person = $this->_getPerson($person->person_id);
 
-		//$person = $this->PersonModel->result->retval[0];
-		//TODO define timespan until invalidation of timestamp in config
-		$person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +1 hour"));
+		$person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +".$this->config->item('invalidateResendTimestampAfter')." hour"));
 		$person->zugangscode = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
 		$this->_savePerson($person);
 		//$this->PersonModel->savePerson($person);
@@ -141,16 +140,19 @@ class Registration extends MY_Controller {
 	    }
 	    else
 	    {
-		$this->_setError(true, "E-Mail Adresse ist nicht eindeutig zugeordnet.");
+		$this->_setError(true, $this->lang->line("aufnahme/eMailAdresseNichtEindeutig"));
 	    }
         }
 	else
 	{
-	    $this->_setError(true, "E-Mail Adresse wurde nicht angegeben.");
+	    if(!empty($this->input->post()))
+	    {
+		$this->_setError(true, $this->lang->line("aufnahme/eMailAdresseFehlt"));
+	    }
 	}
 
         $this->load->view('templates/header');
-        $this->load->view('registration/resendCode',  $this->_data);
+        $this->load->view('registration/resendCode', $this->_data);
         $this->load->view('templates/footer');
     }
 
@@ -223,8 +225,7 @@ class Registration extends MY_Controller {
         $person->gebdatum = date('Y-m-d', strtotime($data["geb_datum"]));
         $person->zugangscode = $zugangscode;
 	//set timestamp which is indicated how long the code is valid
-	//TODO define timespan until invalidation of timestamp in config
-        $person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +24 hours"));
+        $person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +".$this->config->item('invalidateRegistrationTimestampAfter')." hours"));
         $person->insertvon = 'online';
         $person->vornamen = "";
 	$person->aktiv = "t";
@@ -238,14 +239,11 @@ class Registration extends MY_Controller {
             if (count($bewerbung) > 0) {
                 $data["message"] = '<p class="alert alert-danger" id="danger-alert">' . sprintf($this->lang->line('aufnahme/mailadresseBereitsGenutzt'), $data["email"]) . '</p>'
                         . '<a href="' . base_url("index.dist.php/Registration/resendCode") . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button></a>';
-//                $this->load->view('templates/header');
                 $this->load->view('registration', $data);
-//                $this->load->view('templates/footer');
             }
 	    else
 	    {
 		$person_id = $this->_savePerson($person);
-                //$this->PersonModel->savePerson($person);
                 //TODO error handling
                 if ($this->PersonModel->isResultValid() === true)
 		{
@@ -269,6 +267,7 @@ class Registration extends MY_Controller {
 
 			    //$data["message"] = $message;
 //			    $this->load->view('templates/header');
+			    $this->_data["success"] = true;
 			    $this->load->view('registration', $this->_data);
 //			    $this->load->view('templates/footer');
 			}
@@ -395,7 +394,8 @@ class Registration extends MY_Controller {
 	    "vorname" => $person->vorname,
 	    "nachname" => $person->nachname,
 	    "code" => $code,
-	    "link" => $link
+	    "link" => $link,
+	    "eMailAdresse" => $email,
 	);
 
 	if ($this->config->item('root_oe'))

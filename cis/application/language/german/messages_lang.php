@@ -12,5 +12,3 @@ $lang["msg_view"] = "anzeigen";
 $lang["msg_inbox"] = "Posteingang";
 $lang["msg_outbox"] = "Postausgang";
 $lang["msg_delete"] = "löschen";
-
-

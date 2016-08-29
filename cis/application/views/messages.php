@@ -28,10 +28,36 @@ $this->lang->load(array('aufnahme', 'messages'), $language);
     }
     
     ?>
-
-
     
 </div>
 <?php
     $this->load->view('templates/footer');
 ?>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+	$(".collapsed").on("click", function(event){
+	    var messageId = $(event.target).attr("messageId");
+	    
+	    if($("#status_"+messageId).hasClass("icon-unread"))
+	    {
+		
+		$.ajax({
+		    method: "POST",
+		    url: "<?php echo($this->config->item('fhc_api')['server']);?>system/message/changeStatus",
+		    data: {
+			person_id: "<?php echo $this->session->userdata()['person_id']; ?>",
+			message_id: messageId,
+			status: "<?php echo MSG_STATUS_READ; ?>"
+		    }
+		}).done(function(data){
+		    if(data.error === 0)
+		    {
+			$("#status_"+messageId).removeClass("icon-unread");
+			$("#status_"+messageId).addClass("icon-read");
+		    }
+		});
+	    }
+	});
+    });
+</script>

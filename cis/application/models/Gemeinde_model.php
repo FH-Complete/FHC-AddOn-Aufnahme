@@ -11,12 +11,21 @@ class Gemeinde_model extends MY_Model
 
     public function getGemeinde()
     {
-	if ($restquery = $this->rest->get('codex/gemeinde/gemeinde'))
+	if(isset($this->session->userdata()["gemeinde"]))
 	{
-	    $this->result = $restquery;
+	    $this->result= $this->session->userdata()["gemeinde"];
 	    return true;
 	}
 	else
-	    return false;
+	{	    
+	    if ($restquery = $this->rest->get('codex/gemeinde/gemeinde'))
+	    {
+		$this->result = $restquery;
+		$this->session->set_userdata("gemeinde", $this->result);
+		return true;
+	    }
+	    else
+		return false;
+	}
     }
 }

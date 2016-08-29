@@ -119,7 +119,6 @@ class Send extends MY_Controller {
 		}
 		else
 		{
-		    //TODO check if status exists
 		    if(is_null($prestudentStatus->bewerbung_abgeschicktamum))
 		    {
 			$prestudentStatus->bewerbung_abgeschicktamum=date('Y-m-d H:i:s');

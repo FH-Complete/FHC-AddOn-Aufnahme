@@ -4,7 +4,7 @@
     <?php $this->load->view('language'); ?>
 
     <ol class="breadcrumb">
-	<li class="active">Registration</li>
+	<li class="active"><a href="<?php echo base_url($this->config->config["index_page"]."/Registration") ?>">Registration</a></li>
     </ol>
     <?php echo form_open("Registration/resendCode", array("id" => "ResendCodeForm", "name" => "ResendCodeForm", "class" => "form-horizontal")); ?>
     <img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">

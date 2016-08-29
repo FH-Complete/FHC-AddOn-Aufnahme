@@ -61,7 +61,6 @@ if (isset($error) && ($error->error === true))
     
     function prepareUpload(event)
     {
-	console.log(event.target.files);
 	files = event.target.files;
     }
     
@@ -90,7 +89,8 @@ if (isset($error) && ($error->error === true))
 		if(data.success === true)
 		{
 		    // Success
-		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span><?php echo $this->lang->line('person_UploadErfolgreich');?></span>");
+		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span><?php echo $this->lang->line('requirements_UploadErfolgreich');?></span>");
+		    $("#"+document_kurzbz+'_hochgeladen').html("<span><?php echo $this->lang->line('requirements_DokHochgeladen'); ?></span>");
 		    $("#"+document_kurzbz+"_nachgereicht").prop("checked", false);
 		    $("#"+document_kurzbz+"_nachgereicht").prop("disabled", true);
 		    $("#"+document_kurzbz+"_nachreichenAnmerkung").parent().hide();
@@ -103,7 +103,7 @@ if (isset($error) && ($error->error === true))
 		else
 		{
 		    // Handle errors here
-		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span><?php echo $this->lang->line('person_UploadError');?></span>");
+		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span><?php echo $this->lang->line('requirements_UploadError');?></span>");
 		    console.log('ERRORS: ' + data.error);
 		}
 	    },

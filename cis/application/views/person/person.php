@@ -454,7 +454,6 @@
     
     function prepareUpload(event)
     {
-	console.log(event.target.files);
 	files = event.target.files;
     }
     
@@ -483,7 +482,6 @@
 		if(data.success === true)
 		{
 		    // Success
-		    console.log(document_kurzbz);
 		    $("#"+document_kurzbz+'_'+studienplan_id).after("<span><?php echo $this->lang->line('person_UploadErfolgreich');?></span>");
 		    $("#"+document_kurzbz+'_hochgeladen').html("<span><?php echo $this->lang->line('person_formDokumentupload_DokHochgeladen'); ?></span>");
 		}
