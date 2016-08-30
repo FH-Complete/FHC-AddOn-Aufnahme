@@ -138,7 +138,17 @@ class Bewerbung extends MY_Controller
 			}
 
 			$person->staatsbuergerschaft = $post["staatsbuergerschaft"];
-			$person->svnr = $post["svnr"];
+
+			// An die SVNR wird v1, v2, v3, etc hinzugefuegt wenn die SVNR bereits vorhanden ist
+			// In der Anzeige wird dies herausgefiltert. Deshalb muss beim Speichern der Daten
+			// wieder die SVNR mit v1 etc geschickt werden wenn diese nicht geaendert wurde
+			if($post["svnr_orig"]!='' && mb_substr($post["svnr_orig"],0,10)==$post["svnr"])
+				$person->svnr = $post["svnr_orig"];
+			else
+				$person->svnr = $post["svnr"];
+
+			log_message('error', 'SVNR:'.$person->svnr.' orig:'.$post["svnr_orig"].' normal:'.$post["svnr"]);
+
 			$person->titelpre = $post["titelpre"];
 			$person->titelpost = $post["titelpost"];
 

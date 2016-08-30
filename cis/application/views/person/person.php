@@ -76,7 +76,8 @@
         <div class="col-sm-6">
             <div class="form-group <?php echo (form_error("svnr") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formSvn'), "svnr", array("name" => "svnr", "for" => "svnr", "class" => "control-label")) ?>
-                <?php echo form_input(array('id' => 'svnr', 'name' => 'svnr', "type" => "text", "value" => set_value("svnr", (isset($person->svnr) ? $person->svnr : "")), "class" => "form-control")); ?>
+				<?php echo form_input(array('id' => 'svnr_orig', 'name' => 'svnr_orig', "type" => "hidden", "value" => set_value("svnr", (isset($person->svnr) ? $person->svnr : "")), "class" => "form-control")); ?>
+                <?php echo form_input(array('id' => 'svnr', 'name' => 'svnr', "type" => "text", "value" => set_value("svnr", (isset($person->svnr) ? mb_substr($person->svnr,0,10) : "")), "class" => "form-control")); ?>
                 <?php echo form_error("svnr"); ?>
             </div>
         </div>
@@ -170,7 +171,7 @@
 		    <label>
 			<?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => isset($zustell_adresse) ? TRUE : FALSE, "class"=>"zustelladresse", "studienplan_id"=>$studiengang->studienplan->studienplan_id));
 			    echo $this->getPhrase("Personal/DifferentAddress", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
-			?>			
+			?>
 		    </label>
 		</div>
 		<?php echo form_error("zustelladresse"); ?>
@@ -283,10 +284,10 @@
 		    <?php
 		    $data = array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente["pass"]) && ($dokumente["pass"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
 		    (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
-		    
+
 		    echo form_checkbox($data);
 			echo $this->lang->line('person_formNachgereicht')
-		    ?>			
+		    ?>
 		</label>
 	    </div>-->
         </div>
@@ -321,10 +322,10 @@
 		    <?php
 		    $data = array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
 		    (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
-		    
+
 		    echo form_checkbox($data);
 			echo $this->lang->line('person_formNachgereicht')
-		    ?>			
+		    ?>
 		</label>
 	    </div>-->
         </div>
@@ -357,11 +358,11 @@
 	    dateFormat: "dd.mm.yy",
 	    maxDate: new Date()
 	});
-	
+
 	$(".fhc-tooltip").tooltip();
-	
+
 	$('input[type=file]').on('change', prepareUpload);
-	
+
 	$(".zustelladresse").each(function(i,v){
 	   if($(v).prop("checked"))
 	   {
@@ -369,7 +370,7 @@
 	       $("#zustelladresse_"+id).show();
 	   }
 	});
-	
+
 	$(".zustelladresse").click(function(event)
 	{
 	    var id = $(event.currentTarget).attr("studienplan_id");
@@ -386,26 +387,26 @@
 	$("#adresse_nation").on("change", function(event){
 	   toggleAdresse();
 	});
-	
+
 	$("#zustelladresse_nation").on("change", function(event){
 	   toggleZustellAdresse();
 	});
-	
+
 	$("#plz").on("change", function(event){
 	    var plz = $("#plz").val();
-	    loadOrtData(plz, $("#ort_dropdown"));	   
+	    loadOrtData(plz, $("#ort_dropdown"));
 	});
-	
+
 	$("#zustell_plz").on("change", function(event){
 	    var plz = $("#zustell_plz").val();
-	    loadOrtData(plz, $("#zustell_ort_dropdown"));	   
+	    loadOrtData(plz, $("#zustell_ort_dropdown"));
 	});
-	
+
 	toggleAdresse();
 	toggleZustellAdresse();
-	
+
     });
-    
+
     function toggleAdresse()
     {
 	var code = $("#adresse_nation option:selected").val();
@@ -422,7 +423,7 @@
 	    hideElement($("#ort_dropdown"));
 	}
     }
-    
+
     function toggleZustellAdresse()
     {
 	var code = $("#zustelladresse_nation option:selected").val();
@@ -439,24 +440,24 @@
 	    hideElement($("#zustell_ort_dropdown"));
 	}
     }
-    
+
     function hideElement(ele)
     {
 	$(ele).hide();
     }
-    
+
     function showElement(ele)
     {
 	$(ele).show();
     }
-    
+
     var files;
-    
+
     function prepareUpload(event)
     {
 	files = event.target.files;
     }
-    
+
     // Catch the form submit and upload the files
     function uploadFiles(document_kurzbz, studienplan_id)
     {
@@ -500,7 +501,7 @@
 	    }
 	});
     }
-    
+
     function loadOrtData(plz, ele)
     {
 	$.ajax({
@@ -516,7 +517,7 @@
 		    {
 			if(v.gemeinde_id === '<?php echo isset($ort_dd) ? $ort_dd : ""; ?>')
 			{
-			    
+
 			    $(ele).find("select").append("<option value='"+v.gemeinde_id+"' selected>"+v.ortschaftsname+"</option>");
 			}
 			else

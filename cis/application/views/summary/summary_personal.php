@@ -34,7 +34,7 @@
 	    <?php echo ($person->vorname != null) ? $person->vorname : $this->lang->line("summary_unvollstaendig"); ?>
 	</div>
     </div>
-    <?php if($adresse->nation == "A") { ?>
+    <?php if(isset($adresse) && $adresse->nation == "A") { ?>
     <div class="col-sm-6">
         <div class="col-sm-6"><?php echo $this->lang->line("summary_bundesland"); ?></div>
         <div class="col-sm-6 <?php echo ($person->bundesland_code != null) ? "" : "incomplete"; ?>">
@@ -105,7 +105,7 @@
     <div class="col-sm-6">
         <div class="col-sm-6"><?php echo $this->lang->line("summary_svnr"); ?></div>
         <div class="col-sm-6 <?php echo ($person->svnr != null) ? "" : "incomplete"; ?>">
-	    <?php echo ($person->svnr != null) ? $person->svnr : $this->lang->line("summary_unvollstaendig"); ?>
+	    <?php echo ($person->svnr != null) ? mb_substr($person->svnr,0,10) : $this->lang->line("summary_unvollstaendig"); ?>
 	</div>
     </div>
     <div class="col-sm-6"></div>
