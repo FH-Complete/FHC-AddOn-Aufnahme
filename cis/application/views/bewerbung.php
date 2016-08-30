@@ -9,10 +9,10 @@ if (isset($error) && ($error->error === true))
     <?php
     $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
     echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
-    
-    foreach($studiengaenge as $studiengang){ 
+
+    foreach($studiengaenge as $studiengang){
         $data["studiengang"] = $studiengang;
-        
+
         ?>
         <div class="row">
             <div class="col-sm-12">
@@ -20,9 +20,9 @@ if (isset($error) && ($error->error === true))
             </div>
         </div>
         <div class="row">
-            <div id="<?php echo $studiengang->studiengang_kz; ?>" class='collapse'>
+            <div id="<?php echo $studiengang->studiengang_kz; ?>" >
                 <div class="col-sm-4 navigation">
-                    <?php echo 
+                    <?php echo
                         $this->template->widget(
                             "person_nav",
                             array(
@@ -51,10 +51,10 @@ $this->load->view('templates/footer');
 
 <script type="text/javascript">
     $(document).ready(function(){
-	
-	
+
+
 	checkDataCompleteness();
-	
+
     });
 
     function checkDataCompleteness()
@@ -77,7 +77,7 @@ $this->load->view('templates/footer');
 	    }
 	});
     }
-    
+
     function _isPersonDataComplete(person)
     {
 	if(person.vorname === null)
@@ -122,7 +122,7 @@ $this->load->view('templates/footer');
 
 	return true;
     }
-    
+
     function confirmStorno()
     {
 	if(confirm("<?php echo $this->getPhrase("Bewerbung/StornoConfirmation", $sprache); ?>"))
