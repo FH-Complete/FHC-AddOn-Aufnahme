@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/templates/header.php
+ *
+ * @package default
+ */
+
+
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,7 +21,7 @@
 	<link href="<?php echo base_url('../vendor/components/font-awesome/css/font-awesome.min.css'); ?>" rel="stylesheet">
 	<link href="<?php echo base_url('../vendor/components/jqueryui/themes/base/jquery-ui.min.css'); ?>" rel="stylesheet">
 	<link href="<?php echo base_url('themes/' . $this->config->item('theme') . '/global.css'); ?>" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 	<script src="<?php echo base_url('../vendor/components/jquery/jquery.min.js') ?>"></script>
 	<script src="<?php echo base_url('../vendor/components/jqueryui/jquery-ui.min.js') ?>"></script>
 	<script src="<?php echo base_url('../include/js/lodash/lodash.min.js') ?>"></script>
@@ -30,4 +39,3 @@
 	</script>
     </head>
     <body>
-

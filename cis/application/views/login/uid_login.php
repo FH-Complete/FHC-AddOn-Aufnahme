@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/login/uid_login.php
+ *
+ * @package default
+ */
+
+
+?>
 
 <div class="panel panel-info">
     <div class="panel-heading text-center">
@@ -23,8 +32,8 @@
 	    </span>
 	</div>
 	<?php
-	    if (isset($uid_error_msg))
-		echo '<div class="alert alert-danger" role="alert">'.$uid_error_msg.'</div>';
-	    ?>
+if (isset($uid_error_msg))
+	echo '<div class="alert alert-danger" role="alert">'.$uid_error_msg.'</div>';
+?>
     </div>
 </div>

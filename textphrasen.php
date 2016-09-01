@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./textphrasen.php
+ *
+ * @package default
+ */
+
+
 $textphrasen = array
 (
 	array
@@ -81,7 +88,7 @@ $textphrasen = array
 			'description' => 'Login on HomeScreen'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Test/ChooseDateForTest',
 		'phrasentext' => array
@@ -101,7 +108,7 @@ $textphrasen = array
 			'description' => 'Date selection for test'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Personal/Information',
 		'phrasentext' => array
@@ -121,7 +128,7 @@ $textphrasen = array
 			'description' => 'Personal information'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Personal/DifferentAddress',
 		'phrasentext' => array
@@ -141,7 +148,7 @@ $textphrasen = array
 			'description' => 'Alternative address for service'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Personal/PleaseUploadDocuments',
 		'phrasentext' => array
@@ -161,7 +168,7 @@ $textphrasen = array
 			'description' => 'Description for document upload'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'ZGV/AdmissionRequirements',
 		'phrasentext' => array
@@ -181,7 +188,7 @@ $textphrasen = array
 			'description' => 'Description for the admission requirements'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'ZGV/UploadDiploma',
 		'phrasentext' => array
@@ -201,7 +208,7 @@ $textphrasen = array
 			'description' => 'Description for diploma upload'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'ZGV/SpecificAdmissionRequirements',
 		'phrasentext' => array
@@ -221,7 +228,7 @@ $textphrasen = array
 			'description' => 'Description for specific admission requirements'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Submission/ApplicationReadyForSubmitting',
 		'phrasentext' => array
@@ -241,7 +248,7 @@ $textphrasen = array
 			'description' => 'The appplication is ready for submitting'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Overview/CompleteAndCheckData',
 		'phrasentext' => array
@@ -261,7 +268,7 @@ $textphrasen = array
 			'description' => 'Complete and check your data'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Registration/RegistrationForm',
 		'phrasentext' => array
@@ -282,7 +289,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'description' => 'Description for the registration form'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Registration/SpamProtection',
 		'phrasentext' => array
@@ -302,7 +309,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'description' => 'Description for the spam protection feature'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Registration/EmailWithAccessCodeSent',
 		'phrasentext' => array
@@ -322,7 +329,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'description' => 'E-Mail with access code sent'
 		)
 	),
-    array
+	array
 	(
 		'phrase' => 'Home/NewPassword',
 		'phrasentext' => array
@@ -563,5 +570,3 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 		)
 	)
 );
-
-

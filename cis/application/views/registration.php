@@ -1,6 +1,13 @@
-<?php 
-	$this->load->view('templates/header');
-	$this->lang->load(array('aufnahme', 'login'), $sprache);
+<?php
+/**
+ * ./cis/application/views/registration.php
+ *
+ * @package default
+ */
+
+
+$this->load->view('templates/header');
+$this->lang->load(array('aufnahme', 'login'), $sprache);
 ?>
 
 <div class="container">
@@ -10,5 +17,5 @@
     </div>
 </div>
 
-<?php 
-	$this->load->view('templates/footer');
+<?php
+$this->load->view('templates/footer');

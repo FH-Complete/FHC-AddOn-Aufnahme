@@ -1,4 +1,10 @@
 <?php
+/**
+ * ./cis/application/language/english/send_lang.php
+ *
+ * @package default
+ */
+
 
 $lang['send_header'] = 'Absenden der Daten';
 $lang['send_einleitung'] = 'Ihre Daten sind vollständig - Sie können nun Ihre Bewerbung absenden';
@@ -27,4 +33,3 @@ $lang['send_Staatsbürgerschaftsnachweis'] = "Staatsbürgerschaftsnachweis";
 $lang['send_Lichtbild'] = "Lichtbild";
 $lang['send_datenUnvollstaendig'] = "Bewerbung kann nicht abgesendet werden. Daten sind noch unvollständig.";
 $lang['send_studiengangkzFehlt'] = "Der Parameter Studiengangkennzahl fehlt.";
-

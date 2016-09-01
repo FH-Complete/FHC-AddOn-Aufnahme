@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/language.php
+ *
+ * @package default
+ */
+
+
+?>
 <div class="dropdown pull-right">
     <button class="btn btn-default dropdown-toggle" type="button" id="language-label" data-toggle="dropdown" aria-expanded="true">
 	<?php echo $this->lang->line($sprache); ?>
@@ -27,4 +36,3 @@
 	});
     </script>
 </div>
-

@@ -1,4 +1,10 @@
 <?php
+/**
+ * ./cis/application/language/english/termine_lang.php
+ *
+ * @package default
+ */
+
 
 $lang['termine/bachelor'] = 'Bachelor';
 $lang['termine/master'] = 'Master';

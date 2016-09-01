@@ -1,59 +1,83 @@
 <?php
+/**
+ * ./cis/application/models/Studiengang_model.php
+ *
+ * @package default
+ */
+
 
 if (!defined('BASEPATH'))
-    exit('No direct script access allowed');
+	exit('No direct script access allowed');
 
 class Studiengang_model extends MY_Model
 {
-    function __construct()
-    {
-        parent::__construct();
-    }
 
-    function getAll()
-    {
-        if ($restquery = $this->rest->get('organisation/studiengang/allForBewerbung'))
-	{
-	    $this->result = $restquery;
-	    return true;
+
+	/**
+	 *
+	 */
+	function __construct() {
+		parent::__construct();
 	}
-	else
-	    return false;
-    }
-    
-    function getStudiengang($stgkz)
-    {
-        if ($restquery = $this->rest->get('organisation/studiengang/studiengang', array("studiengang_kz"=>$stgkz)))
-	{
-	    $this->result = $restquery;
-	    return true;
+
+
+	/**
+	 *
+	 * @return unknown
+	 */
+	function getAll() {
+		if ($restquery = $this->rest->get('organisation/studiengang/allForBewerbung')) {
+			$this->result = $restquery;
+			return true;
+		}
+		else
+			return false;
 	}
-	else
-	    return false;
-    }
-    
-    function getStudiengangStudienplan($studiensemester_kurzbz, $ausbildungssemester)
-    {
-        if ($restquery = $this->rest->get('organisation/studiengang/studiengangStudienplan', array("studiensemester_kurzbz"=>$studiensemester_kurzbz, "ausbildungssemester"=>$ausbildungssemester)))
-	{
-	    $this->result = $restquery;
-	    return true;
+
+
+	/**
+	 *
+	 * @param unknown $stgkz
+	 * @return unknown
+	 */
+	function getStudiengang($stgkz) {
+		if ($restquery = $this->rest->get('organisation/studiengang/studiengang', array("studiengang_kz"=>$stgkz))) {
+			$this->result = $restquery;
+			return true;
+		}
+		else
+			return false;
 	}
-	else
-	    return false;
-    }
-    
-    function getCompleteStudiengang($studiensemester_kurzbz, $ausbildungssemester)
-    {
-        if ($restquery = $this->rest->get('organisation/studiengang/completeStudiengang', array("studiensemester_kurzbz"=>$studiensemester_kurzbz, "ausbildungssemester"=>$ausbildungssemester)))
-	{
-	    $this->result = $restquery;
-	    return true;
+
+
+	/**
+	 *
+	 * @param unknown $studiensemester_kurzbz
+	 * @param unknown $ausbildungssemester
+	 * @return unknown
+	 */
+	function getStudiengangStudienplan($studiensemester_kurzbz, $ausbildungssemester) {
+		if ($restquery = $this->rest->get('organisation/studiengang/studiengangStudienplan', array("studiensemester_kurzbz"=>$studiensemester_kurzbz, "ausbildungssemester"=>$ausbildungssemester))) {
+			$this->result = $restquery;
+			return true;
+		}
+		else
+			return false;
 	}
-	else
-	    return false;
-    }
+
+
+	function getCompleteStudiengang($studiensemester_kurzbz, $ausbildungssemester) {
+		if ($restquery = $this->rest->get('organisation/studiengang/completeStudiengang', array("studiensemester_kurzbz"=>$studiensemester_kurzbz, "ausbildungssemester"=>$ausbildungssemester))) {
+			$this->result = $restquery;
+			return true;
+		}
+		else
+			return false;
+	}
+
+
 }
+
 
 /* End of file Studiengang_model.php */
 /* Location: ./application/models/Studiengang_model.php */

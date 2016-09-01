@@ -1,4 +1,10 @@
 <?php
+/**
+ * ./cis/application/language/german/requirements_lang.php
+ *
+ * @package default
+ */
+
 
 $lang['requirements_einleitung'] = 'Die aktuellen Zugangsvoraussetzungen finden Sie auf der Website der Fachhochschule St. Pölten. Um sich über die Zugangsvoraussetzungen zu informieren, klicken sie bitte hier.';
 $lang['requirements_header'] = 'Allgemeine Zugangsvoraussetzungen';

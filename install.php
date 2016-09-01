@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./install.php
+ *
+ * @package default
+ */
+
+
 /* Copyright (C) 2013 FH Technikum-Wien
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,16 +23,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
  *
  */
+
 /**
  * FH-Complete Addon Template Installation
  *
  * Installationsscript zur Erstinitialisierung des Addons
  */
-require_once('version.php');
-require_once('../../version.php');
-require_once('../../config/system.config.inc.php');
-require_once('../../include/functions.inc.php');
-require_once('../../include/benutzerberechtigung.class.php');
+require_once 'version.php';
+require_once '../../version.php';
+require_once '../../config/system.config.inc.php';
+require_once '../../include/functions.inc.php';
+require_once '../../include/benutzerberechtigung.class.php';
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
         "http://www.w3.org/TR/html4/strict.dtd">
@@ -43,23 +51,19 @@ $uid = get_uid();
 $rechte = new benutzerberechtigung();
 $rechte->getBerechtigungen($uid);
 
-if(!$rechte->isBerechtigt('basis/addon'))
-{
+if (!$rechte->isBerechtigt('basis/addon')) {
 	exit('Sie haben keine Berechtigung für die Verwaltung von Addons');
 }
 
-if($fhcomplete_version>=$fhcomplete_target_version)
-{
+if ($fhcomplete_version>=$fhcomplete_target_version) {
 	echo 'Installiere Addon <span class="marked">'.$addon_name.'</span> Version <span class="marked">'.$addon_version.'</span><br><br>';
 
 	/**
 	 * Fuegen Sie hier Ihre Installationsroutine hinzu
 	 */
-
- 	echo '<a href="dbcheck.php">&gt;&gt; weiter zur Aktualisierung der Datenbank</a>';
+	echo '<a href="dbcheck.php">&gt;&gt; weiter zur Aktualisierung der Datenbank</a>';
 }
-else
-{
+else {
 	echo 'Dieses Addon funktioniert erst mit FHComplete Version '.$fhcomplete_target_version;
 	echo 'Installation abgebrochen';
 }

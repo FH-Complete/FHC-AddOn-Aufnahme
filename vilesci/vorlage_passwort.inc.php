@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./vilesci/vorlage_passwort.inc.php
+ *
+ * @package default
+ */
+
+
 /* Copyright (C) 2014 fhcomplete.org
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,20 +27,22 @@
 /*
  * Diese Datei überschreibt die Default-Funktionen zur Passwort Änderung
  * Zur Aktivierung muss die Datei in passwort.inc.php umbenannt werden
- * 
+ *
  * Ansonsten wird die Default Funktionalität unter /include/tw/passwort.inc.php verwendet
  */
 
+
 /**
- * Aendert das Passwort 
- * @param $passwort_alt Altes (aktuelles) Passwort
- * @param $passwort_neu neues Passwort
- * @param $uid - UID/Benutzername des Users
+ * Aendert das Passwort
+ *
+ * @param unknown $passwort_alt Altes (aktuelles) Passwort
+ * @param unknown $passwort_neu neues Passwort
+ * @param unknown $uid          - UID/Benutzername des Users
  * @return true wenn erfolgreich - Fehlermeldung im Fehlerfall
  */
-function change_password($passwort_alt, $passwort_neu, $uid)
-{
+function change_password($passwort_alt, $passwort_neu, $uid) {
 	return 'Passwort Änderung fehlgeschlagen.';
 }
+
 
 ?>

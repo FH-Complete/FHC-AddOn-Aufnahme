@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./locale/de-AT/bewerbung.php
+ *
+ * @package default
+ */
+
+
 $this->phrasen['bewerbung/ungueltigerZugriff']='ungültiger Zugriff';
 $this->phrasen['bewerbung/welcome']='Willkommen bei der Online Bewerbung';
 $this->phrasen['bewerbung/registration']='Zugangscode für Ihre Bewerbung';

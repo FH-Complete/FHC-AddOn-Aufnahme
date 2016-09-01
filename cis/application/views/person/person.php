@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/person/person.php
+ *
+ * @package default
+ */
+
+
+?>
 <div role="tabpanel" class="tab-pane" id="daten">
     <legend><?php echo $this->getPhrase("Personal/Information", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></legend>
     <?php echo form_open_multipart("Bewerbung", array("id" => "PersonForm", "name" => "PersonForm")); ?>
@@ -77,7 +86,7 @@
             <div class="form-group <?php echo (form_error("svnr") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formSvn'), "svnr", array("name" => "svnr", "for" => "svnr", "class" => "control-label")) ?>
 				<?php echo form_input(array('id' => 'svnr_orig', 'name' => 'svnr_orig', "type" => "hidden", "value" => set_value("svnr", (isset($person->svnr) ? $person->svnr : "")), "class" => "form-control")); ?>
-                <?php echo form_input(array('id' => 'svnr', 'name' => 'svnr', "type" => "text", "value" => set_value("svnr", (isset($person->svnr) ? mb_substr($person->svnr,0,10) : "")), "class" => "form-control")); ?>
+                <?php echo form_input(array('id' => 'svnr', 'name' => 'svnr', "type" => "text", "value" => set_value("svnr", (isset($person->svnr) ? mb_substr($person->svnr, 0, 10) : "")), "class" => "form-control")); ?>
                 <?php echo form_error("svnr"); ?>
             </div>
         </div>
@@ -170,8 +179,8 @@
 		<div class="checkbox">
 		    <label>
 			<?php echo form_checkbox(array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => isset($zustell_adresse) ? TRUE : FALSE, "class"=>"zustelladresse", "studienplan_id"=>$studiengang->studienplan->studienplan_id));
-			    echo $this->getPhrase("Personal/DifferentAddress", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
-			?>
+echo $this->getPhrase("Personal/DifferentAddress", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
+?>
 		    </label>
 		</div>
 		<?php echo form_error("zustelladresse"); ?>
@@ -270,24 +279,23 @@
             <?php echo form_label($this->lang->line('person_formDokumentupload_reisepass'), "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
             <div class="form-group" id="reisepass_hochgeladen">
                 <?php
-		if((!isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]])) || ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === "t")) {
-                    echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
-                 }
-		 else
-		 {
-		     echo $this->lang->line('person_formDokumentupload_DokHochgeladen');
-		 }
-                 ?>
+if ((!isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]])) || ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === "t")) {
+	echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
+}
+else {
+	echo $this->lang->line('person_formDokumentupload_DokHochgeladen');
+}
+?>
             </div>
 	    <!--<div class="checkbox">
 		<label>
 		    <?php
-		    $data = array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente["pass"]) && ($dokumente["pass"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
-		    (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
+$data = array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente["pass"]) && ($dokumente["pass"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 
-		    echo form_checkbox($data);
-			echo $this->lang->line('person_formNachgereicht')
-		    ?>
+echo form_checkbox($data);
+echo $this->lang->line('person_formNachgereicht')
+?>
 		</label>
 	    </div>-->
         </div>
@@ -308,24 +316,23 @@
             <?php echo form_label($this->lang->line('person_formDokumentupload_lebenslauf')."&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?><span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="inklusive Foto"></span>
             <div class="form-group" id="lebenslauf_hochgeladen">
                 <?php
-		if((!isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) || ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === "t")) {
-                    echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
-                 }
-		 else
-		 {
-		     echo $this->lang->line('person_formDokumentupload_DokHochgeladen');
-		 }
-                 ?>
+if ((!isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) || ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === "t")) {
+	echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
+}
+else {
+	echo $this->lang->line('person_formDokumentupload_DokHochgeladen');
+}
+?>
             </div>
 	    <!--<div class="checkbox">
 		<label>
 		    <?php
-		    $data = array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
-		    (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
+$data = array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+(isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 
-		    echo form_checkbox($data);
-			echo $this->lang->line('person_formNachgereicht')
-		    ?>
+echo form_checkbox($data);
+echo $this->lang->line('person_formNachgereicht')
+?>
 		</label>
 	    </div>-->
         </div>
@@ -506,7 +513,7 @@
     {
 	$.ajax({
 	    method: "GET",
-	    url: "<?php echo($this->config->item('fhc_api')['server']);?>codex/gemeinde/GemeindeByPlz?plz="+plz
+	    url: "<?php echo $this->config->item('fhc_api')['server'];?>codex/gemeinde/GemeindeByPlz?plz="+plz
 	}).done(function(data){
 	    if(data.error === 0)
 	    {

@@ -1,6 +1,13 @@
-<?php 
-	$this->load->view('templates/header');
-	$this->lang->load(array('aufnahme', 'login'), $sprache);
+<?php
+/**
+ * ./cis/application/views/login.php
+ *
+ * @package default
+ */
+
+
+$this->load->view('templates/header');
+$this->lang->load(array('aufnahme', 'login'), $sprache);
 ?>
 
 <div class="container">
@@ -16,9 +23,9 @@
 		<img class="center-block img-responsive" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/logo.png'); ?>" />
 		<h1 id="login_header" class="text-center page-header"><?php echo $this->getPhrase("Home/Greetings", $sprache); ?></h1>
 		<?php
-		    if (isset($error) && ($error->error === true))
-			echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
-		    ?>
+if (isset($error) && ($error->error === true))
+	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
+?>
 		<div class="panel panel-info">
 		    <div class="panel-heading text-center">
 			<h3 class="panel-title"><?php echo $this->getPhrase("Home/NoAccountOrAccessCode", $sprache); ?></h3>
@@ -40,11 +47,11 @@
 
 	/*window.setTimeout(function() {
 		 $("#success-alert").fadeTo(500, 0).slideUp(500, function(){
-		 $(this).remove(); 
+		 $(this).remove();
 		 });
 		 }, 1500);*/
 
 </script>
 
-<?php 
-	$this->load->view('templates/footer');
+<?php
+$this->load->view('templates/footer');

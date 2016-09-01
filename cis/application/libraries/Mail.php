@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./cis/application/libraries/Mail.php
+ *
+ * @package default
+ */
+
+
 /* Copyright (C) 2008 Technikum-Wien
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,16 +27,16 @@
  *          Rudolf Hangl <rudolf.hangl@technikum-wien.at> and
  *			Gerald Simane-Sequens <gerald.simane-sequens@technikum-wien.at>
  */
+
 /**
  * Klasse Mail
+ *
  * @create 2008-11-20
- * 
- * Versendet ein Mail als Text, Html, CC und BCC Empfaenger, 
+ *
+ * Versendet ein Mail als Text, Html, CC und BCC Empfaenger,
  * Replyto und Attachments
  */
-
-class Mail
-{
+class Mail {
 	public $to;
 	public $CC_recievers;
 	public $BCC_recievers;
@@ -40,16 +47,19 @@ class Mail
 	public $htmlContent;
 	public $attachments;
 	public $errormsg;
-	
+
+
+
 	/**
 	 * MAIL - Konstruktor
 	 * $to Empfaenger
 	 * $from Absender
 	 * $subject Betreff
 	 * $text Text des Mails
+	 *
+	 * @param unknown $params
 	 */
-	public function __construct($params)
-	{
+	public function __construct($params) {
 		$this->to = $params["to"];
 		$this->subject = $params["subject"];
 		$this->setTextContent($params["text"], 'UTF-8', '8bit');
@@ -60,32 +70,33 @@ class Mail
 		$this->attachmentsplain='';
 	}
 
+
 	/**
 	 * Mail zusammenbauen und senden
+	 *
+	 * @return unknown
 	 */
-	public function send()
-	{
+	public function send() {
 		//wenn MAIL_DEBUG gesetzt ist dann alles an diese Adresse schicken
-		if(MAIL_DEBUG!='')
-		{
+		if (MAIL_DEBUG!='') {
 			$this->to = MAIL_DEBUG;
 			$this->CC_recievers = ($this->CC_recievers!=''?MAIL_DEBUG:'');
 			$this->BCC_recievers = ($this->BCC_recievers!=''?MAIL_DEBUG:'');
 			$this->replyTo = ($this->replyTo!=''?MAIL_DEBUG:'');
 		}
-		
+
 		$mime_boundary_alternative = 'ALT+'.md5(time());
 		$mime_boundary_mixed = 'MIXD+'.md5(time());
 		$eol="\n";
-		
-		if(defined('MAIL_FROM') && MAIL_FROM!='')
+
+		if (defined('MAIL_FROM') && MAIL_FROM!='')
 			$this->sender = MAIL_FROM;
 
 		// Header
 		$header = '';
-  		$header .= "From: {$this->sender}".$eol;
-  		
-  		if (!empty($this->CC_recievers))
+		$header .= "From: {$this->sender}".$eol;
+
+		if (!empty($this->CC_recievers))
 			$header .= "CC: {$this->CC_recievers}".$eol;
 		if (!empty($this->BCC_recievers))
 			$header .= "BCC: {$this->BCC_recievers}".$eol;
@@ -94,10 +105,10 @@ class Mail
 		if (!empty($this->replyTo))
 			$header .= "Return-Path: {$this->replyTo}".$eol;
 
-		$header .= 'X-Mailer: FHComplete V1'.$eol; 
-	  	$header .= 'Mime-Version: 1.0'.$eol;
+		$header .= 'X-Mailer: FHComplete V1'.$eol;
+		$header .= 'Mime-Version: 1.0'.$eol;
 		$header .= "Content-Type: multipart/mixed; boundary=\"$mime_boundary_mixed\"".$eol;
-		
+
 		// Body
 		$mailbody = "";
 		$mailbody .= $eol;
@@ -111,9 +122,8 @@ class Mail
 		$mailbody .= $this->textContent[0];
 		$mailbody .= $eol;
 		$mailbody .= $eol;
-		
-		if (!empty($this->htmlContent[0])) 
-		{
+
+		if (!empty($this->htmlContent[0])) {
 			$mailbody .= "--$mime_boundary_alternative".$eol;
 			$mailbody .= "Content-Type: text/html; charset={$this->htmlContent[1]}".$eol;
 			$mailbody .= "Content-Transfer-Encoding: {$this->htmlContent[2]}".$eol;
@@ -125,17 +135,15 @@ class Mail
 		$mailbody .= "--{$mime_boundary_alternative}--".$eol;
 		$mailbody .= $eol;
 		$mailbody .= "--$mime_boundary_mixed";
-		
+
 		// Attachments Plain
-		if (is_array($this->attachmentsplain) && (count($this->attachmentsplain) > 0)) 
-		{
-			foreach ($this->attachmentsplain as $attachment) 
-			{
+		if (is_array($this->attachmentsplain) && (count($this->attachmentsplain) > 0)) {
+			foreach ($this->attachmentsplain as $attachment) {
 				$dispo = 'attachment';
 				$mailbody .= $eol;
 				$mailbody .= "Content-Disposition: $dispo; filename={$attachment[2]}".$eol;
 				$mailbody .= "Content-Type: {$attachment[1]}; name={$attachment[2]}".$eol;
-				
+
 				$mailbody .= 'Content-Transfer-Encoding: '.$attachment[3].$eol;
 				$mailbody .= $eol;
 				$mailbody .= $attachment[0];
@@ -143,18 +151,15 @@ class Mail
 				$mailbody .= "--$mime_boundary_mixed";
 			}
 		}
-		
+
 		// Attachments Binary
-		if (is_array($this->attachments) && (count($this->attachments) > 0)) 
-		{
-			foreach ($this->attachments as $attachment) 
-			{
+		if (is_array($this->attachments) && (count($this->attachments) > 0)) {
+			foreach ($this->attachments as $attachment) {
 				$dispo = empty($attachment[3]) ? 'attachment' : 'inline';
 				$mailbody .= $eol;
 				$mailbody .= "Content-Disposition: $dispo; filename={$attachment[2]}".$eol;
 				$mailbody .= "Content-Type: {$attachment[1]}; name={$attachment[2]}".$eol;
-				if (!empty($attachment[3])) 
-				{
+				if (!empty($attachment[3])) {
 					$mailbody .= "Content-ID: <{$attachment[3]}>".$eol;
 				}
 				$mailbody .= 'Content-Transfer-Encoding: base64'.$eol;
@@ -165,41 +170,53 @@ class Mail
 			}
 		}
 		$mailbody .= "--".$eol;
-		
+
 		// Subject Encoding setzen
 		$subject = "=?UTF-8?B?".base64_encode($this->subject)."?=";
-		
+
 		// Senden
-		if(mail($this->to, $subject, $mailbody, $header))
+		if (mail($this->to, $subject, $mailbody, $header))
 			return true;
-		else 
-			return false;		
+		else
+			return false;
 	}
+
 
 	/**
 	 * Setzt den Text fuer ein Mail
+	 *
+	 * @param unknown $text
+	 * @param unknown $charset  (optional)
+	 * @param unknown $encoding (optional)
+	 * @return unknown
 	 */
-	public function setTextContent($text, $charset = 'UTF-8', $encoding = '8bit')
-	{
+	public function setTextContent($text, $charset = 'UTF-8', $encoding = '8bit') {
 		$this->textContent[0] = $text;
 		$this->textContent[1] = $charset;
 		$this->textContent[2] = $encoding;
 		return true;
 	}
-	
+
+
+
 	/**
 	 * Setzt den HTMLText fuer ein Mail
+	 *
+	 * @param unknown $html
+	 * @param unknown $charset  (optional)
+	 * @param unknown $encoding (optional)
+	 * @return unknown
 	 */
-	public function setHTMLContent($html, $charset = 'UTF-8', $encoding = '8bit')
-	{
+	public function setHTMLContent($html, $charset = 'UTF-8', $encoding = '8bit') {
 		$this->htmlContent[0] = $html;
 		$this->htmlContent[1] = $charset;
 		$this->htmlContent[2] = $encoding;
 		if (empty($this->textContent[0]))
 			$this->setTextContent(strip_tags($html), $charset, $encoding);
-		
+
 		return true;
 	}
+
 
 	/**
 	 * Fuegt ein Binary Attachment zum Mail hinzu
@@ -207,87 +224,109 @@ class Mail
 	 * $type MIME Type "application/xls"
 	 * $name Anzeigename des Files
 	 * $ContentID die ContentID der Datei falls sie als inline-image genutzt wird
+	 *
+	 * @param unknown $file
+	 * @param unknown $type
+	 * @param unknown $name
+	 * @param unknown $ContentID (optional)
+	 * @return unknown
 	 */
-	public function addAttachmentBinary($file, $type, $name, $ContentID = "")
-	{
-		if (!file_exists($file)) 
-		{
+	public function addAttachmentBinary($file, $type, $name, $ContentID = "") {
+		if (!file_exists($file)) {
 			$this->errormsg = 'Attachment wurde nicht gefunden';
 			return false;
 		}
-		
-		$handle = fopen($file,'rb');
-		if (!$handle) 
-		{
+
+		$handle = fopen($file, 'rb');
+		if (!$handle) {
 			$this->errormsg = 'Fehler beim Oeffnen der Datei';
 			return false;
 		}
-		
-		$file_content = fread($handle,filesize($file));
+
+		$file_content = fread($handle, filesize($file));
 		@fclose($handle);
-				
+
 		$attachment_string = chunk_split(base64_encode($file_content));
-		$this->attachments[] = Array($attachment_string, $type, $name, $ContentID);
+		$this->attachments[] = array($attachment_string, $type, $name, $ContentID);
 		return true;
 	}
-	
+
+
+
 	/**
 	 * Fuegt ein Attachment zum Mail hinzu
 	 * $content
 	 * $type MIME Type "application/xls"
 	 * $name Anzeigename des Files
 	 * $ContentID die ContentID der Datei falls sie als inline-image genutzt wird
+	 *
+	 * @param unknown $content
+	 * @param unknown $type
+	 * @param unknown $name
+	 * @param unknown $encoding (optional)
+	 * @return unknown
 	 */
-	public function addAttachmentPlain($content, $type, $name, $encoding='8bit')
-	{
-		$this->attachmentsplain[] = Array($content, $type, $name, $encoding);
+	public function addAttachmentPlain($content, $type, $name, $encoding='8bit') {
+		$this->attachmentsplain[] = array($content, $type, $name, $encoding);
 		return true;
 	}
+
+
 	/**
 	 * Setzt den ReplyTo
+	 *
+	 * @param unknown $repl
+	 * @return unknown
 	 */
-	public function setReplyTo($repl)
-	{
+	public function setReplyTo($repl) {
 		$this->replyTo = $repl;
 		return true;
 	}
-	
+
+
+
 	/**
 	 * Setzt die CC Empfaenger
+	 *
+	 * @param unknown $rcvs
+	 * @return unknown
 	 */
-	public function setCCRecievers($rcvs)
-	{
+	public function setCCRecievers($rcvs) {
 		$this->CC_recievers = '';
-		if (is_array($rcvs)) 
-		{
+		if (is_array($rcvs)) {
 			foreach ($rcvs as $rcv)
 				$this->CC_recievers .= ",$rcv";
 			$this->CC_recievers = mb_substr($this->CC_recievers, 1);
 		}
-		else
-		{
+		else {
 			$this->CC_recievers = $rcvs;
 		}
 		return true;
 	}
-	
+
+
+
 	/**
 	 * Setzt die BCC Empfaenger
+	 *
+	 * @param unknown $rcvs
+	 * @return unknown
 	 */
-	public function setBCCRecievers($rcvs)
-	{
+	public function setBCCRecievers($rcvs) {
 		$this->BCC_recievers = '';
-		if (is_array($rcvs)) 
-		{
+		if (is_array($rcvs)) {
 			foreach ($rcvs as $rcv)
 				$this->BCC_recievers .= ",$rcv";
 			$this->BCC_recievers = mb_substr($this->BCC_recievers, 1);
 		}
-		else
-		{
+		else {
 			$this->BCC_recievers = $rcvs;
 		}
 		return true;
 	}
+
+
 }
+
+
 ?>

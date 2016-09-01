@@ -1,5 +1,12 @@
-<?php  
-if ( ! defined('BASEPATH')) 
+<?php
+/**
+ * ./cis/application/config/message.php
+ *
+ * @package default
+ */
+
+
+if ( ! defined('BASEPATH'))
 	exit('No direct script access allowed');
 
 

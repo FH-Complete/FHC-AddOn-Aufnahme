@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./version.php
+ *
+ * @package default
+ */
+
+
 /* Copyright (C) 2015 fhcomplete.org
  *
  * This program is free software; you can redistribute it and/or modify

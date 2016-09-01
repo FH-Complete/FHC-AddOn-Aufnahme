@@ -1,19 +1,26 @@
 <?php
+/**
+ * ./cis/application/views/bewerbung.php
+ *
+ * @package default
+ */
+
+
 $this->load->view('templates/header');
 $this->lang->load(array('aufnahme', 'person'), $language);
 
 if (isset($error) && ($error->error === true))
-    echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
+	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
 ?>
 <div class="container">
     <?php
-    $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
-    echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
+$this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
+echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
 
-    foreach($studiengaenge as $studiengang){
-        $data["studiengang"] = $studiengang;
+foreach ($studiengaenge as $studiengang) {
+	$data["studiengang"] = $studiengang;
 
-        ?>
+?>
         <div class="row">
             <div class="col-sm-12">
                 <?php $this->load_views('view_bewerbung_studiengang', $data); ?>
@@ -23,18 +30,18 @@ if (isset($error) && ($error->error === true))
             <div id="<?php echo $studiengang->studiengang_kz; ?>" >
                 <div class="col-sm-4 navigation">
                     <?php echo
-                        $this->template->widget(
-                            "person_nav",
-                            array(
-                                'aktiv' => 'personalData',
-                                "href"=>array(
-                                    "send"=>site_url("/Send?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id),
-                                    "summary"=>site_url("/Summary?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id),
-                                    "requirements"=>site_url("/Requirements?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id),
-                                    "personalData"=>site_url("/Bewerbung?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id)
-                                )
-                            )
-                        ); ?>
+	$this->template->widget(
+		"person_nav",
+		array(
+			'aktiv' => 'personalData',
+			"href"=>array(
+				"send"=>site_url("/Send?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id),
+				"summary"=>site_url("/Summary?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id),
+				"requirements"=>site_url("/Requirements?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id),
+				"personalData"=>site_url("/Bewerbung?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id)
+			)
+		)
+	); ?>
                 </div>
                 <div class="col-sm-8">
 
@@ -61,7 +68,7 @@ $this->load->view('templates/footer');
     {
 	$.ajax({
 	    method: "GET",
-	    url: "<?php echo($this->config->item('fhc_api')['server']);?>person/person/person?person_id=<?php echo $person->person_id; ?>"
+	    url: "<?php echo $this->config->item('fhc_api')['server'];?>person/person/person?person_id=<?php echo $person->person_id; ?>"
 	}).done(function(data){
 	    if(data.error === 0)
 	    {

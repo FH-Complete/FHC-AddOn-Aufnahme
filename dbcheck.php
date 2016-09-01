@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./dbcheck.php
+ *
+ * @package default
+ */
+
+
 /* Copyright (C) 2013 FH Technikum-Wien
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,15 +23,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
  *
  */
+
 /**
  * FH-Complete Addon Aufnahme Datenbank Check
  *
  * Prueft und aktualisiert die Datenbank
  */
-require_once('../../config/system.config.inc.php');
-require_once('../../include/basis_db.class.php');
-require_once('../../include/functions.inc.php');
-require_once('../../include/benutzerberechtigung.class.php');
+require_once '../../config/system.config.inc.php';
+require_once '../../include/basis_db.class.php';
+require_once '../../include/functions.inc.php';
+require_once '../../include/benutzerberechtigung.class.php';
 
 // Datenbank Verbindung
 $db = new basis_db();
@@ -46,8 +54,7 @@ $rechte = new benutzerberechtigung();
 $rechte->getBerechtigungen($uid);
 $app = 'aufnahme';
 
-if(!$rechte->isBerechtigt('basis/addon'))
-{
+if (!$rechte->isBerechtigt('basis/addon')) {
 	exit('Sie haben keine Berechtigung für die Verwaltung von Addons');
 }
 
@@ -59,69 +66,66 @@ if (!isset($_GET['start']))
 echo '<h2>Aktualisierung der Datenbank</h2>';
 
 // Check ob App in system.tbl_app angelegt ist.
-// ToDo: 
+// ToDo:
 
 // Textphrasen holen
-require_once('textphrasen.php');
+require_once 'textphrasen.php';
 
-foreach ($textphrasen AS $tp)
-{
+foreach ($textphrasen as $tp) {
 	// Check if Phrase exists
 	$qry = "SELECT phrase_id FROM system.tbl_phrase WHERE app='$app' AND phrase='".$tp['phrase']."';";
-	if(! $resPhrase = $db->db_fetch_object($db->db_query($qry)))
-	{
+	if (! $resPhrase = $db->db_fetch_object($db->db_query($qry))) {
 		// INSERT und id merken
 		$qry = "BEGIN;INSERT INTO system.tbl_phrase (app, phrase) VALUES ('$app', '".$tp['phrase']."');";
 
-		if(! $db->db_query($qry))
+		if (! $db->db_query($qry))
 			echo '<strong>system.tbl_phrase: '.$db->db_last_error().'</strong><br>';
-		else
-		{
+		else {
 			//Sequence auslesen
 			$qry = "SELECT currval('system.tbl_phrase_phrase_id_seq') as id";
-			if($db->db_query($qry))
-            {
-                if($row = $db->db_fetch_object())
-                {
-                    // ID holen
-                    $phrase_id = $row->id;
-                    $db->db_query('COMMIT');
-                    echo '<br>Phrase '.$tp['phrase'].' angelegt!';
-                }
-                else
-                {
-                    $db->db_query('ROLLBACK');
-                    echo '<strong>system.tbl_phrase: Fehler beim Auslesen der Sequence</strong><br>';
-                }
-            }
-            else
-            {
-                $db->db_query('ROLLBACK');
-                echo '<strong>system.tbl_phrase: Fehler beim Auslesen der Sequence</strong><br>';
-            }
+			if ($db->db_query($qry))
+			{
+				if($row = $db->db_fetch_object())
+				{
+					// ID holen
+					$phrase_id = $row->id;
+					$db->db_query('COMMIT');
+					echo '<br>Phrase '.$tp['phrase'].' angelegt!';
+				}
+				else
+				{
+					$db->db_query('ROLLBACK');
+					echo '<strong>system.tbl_phrase: Fehler beim Auslesen der Sequence</strong><br>';
+				}
+			}
+			else
+			{
+				$db->db_query('ROLLBACK');
+				echo '<strong>system.tbl_phrase: Fehler beim Auslesen der Sequence</strong><br>';
+			}
 		}
 	}
 	else
 		// ID holen
 		$phrase_id = $resPhrase->phrase_id;
-	
+
 	// Check if Phrasentext in this language exists
-    $qry = "SELECT phrasentext_id FROM system.tbl_phrasentext WHERE phrase_id=$phrase_id AND sprache='".$tp['phrasentext']['sprache']."'";
-    if(! $resPhrasentext = $db->db_fetch_object($db->db_query($qry)))
-    {
-        // INSERT
-        $qry = "INSERT INTO system.tbl_phrasentext (phrase_id, sprache, text, description) "
-             . "VALUES ($phrase_id, '".$tp['phrasentext']['sprache']."', '".$tp['phrasentext']['text']."', '".$tp['phrasentext']['description']."');";
-        
-        if(! $db->db_query($qry))
+	$qry = "SELECT phrasentext_id FROM system.tbl_phrasentext WHERE phrase_id=$phrase_id AND sprache='".$tp['phrasentext']['sprache']."'";
+	if(! $resPhrasentext = $db->db_fetch_object($db->db_query($qry)))
+	{
+		// INSERT
+		$qry = "INSERT INTO system.tbl_phrasentext (phrase_id, sprache, text, description) "
+			. "VALUES ($phrase_id, '".$tp['phrasentext']['sprache']."', '".$tp['phrasentext']['text']."', '".$tp['phrasentext']['description']."');";
+
+		if(! $db->db_query($qry))
 			echo '<strong>system.tbl_phrasentext: '.$db->db_last_error().'</strong><br>';
 		else
 		{
 			echo '<br>Phrasentext für Phrase '.$tp['phrase'].' in der Sprache '.$tp['phrasentext']['sprache'].' angelegt!';
 		}
-    }
-    else
-        echo '<br>Phrasentext für Phrase '.$tp['phrase'].' existiert bereits in der Sprache '.$tp['phrasentext']['sprache'].'!';
+	}
+	else
+		echo '<br>Phrasentext für Phrase '.$tp['phrase'].' existiert bereits in der Sprache '.$tp['phrasentext']['sprache'].'!';
 }
 
 

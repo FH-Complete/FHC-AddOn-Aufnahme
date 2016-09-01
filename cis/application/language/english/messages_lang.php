@@ -1,4 +1,10 @@
 <?php
+/**
+ * ./cis/application/language/english/messages_lang.php
+ *
+ * @package default
+ */
+
 
 $lang["msg_priority"] = "Priority";
 $lang["msg_sender"] = "Contact";
@@ -12,5 +18,3 @@ $lang["msg_view"] = "Show";
 $lang["msg_inbox"] = "Inbox";
 $lang["msg_outbox"] = "Outbox";
 $lang["msg_delete"] = "Delete";
-
-

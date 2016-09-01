@@ -1,4 +1,10 @@
 <?php
+/**
+ * ./cis/application/language/english/dokumente_lang.php
+ *
+ * @package default
+ */
+
 
 $lang["dokumente_Geburtsu"] = "Geburtsurkunde";
 $lang["dokumente_Maturaze"] = "Schul- bzw. Lehrabschlusszeugnis";

@@ -1,4 +1,11 @@
-<?php 
+<?php
+/**
+ * ./cis/application/language/english/person_lang.php
+ *
+ * @package default
+ */
+
+
 $lang['person_Firstname'] = 'Vorname';
 $lang['person_staatsbuergerschaft'] = "Staatsbürgerschaft";
 $lang["person_angabenZurPerson"] = "Angaben zur Person";

@@ -1,4 +1,10 @@
 <?php
+/**
+ * ./cis/application/libraries/securimage/example_form.php
+ *
+ * @package default
+ */
+
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -81,22 +87,22 @@ if (isset($_SESSION['ctform']['error']) &&  $_SESSION['ctform']['error'] == true
 
   <div>
     <?php
-      // show captcha HTML using Securimage::getCaptchaHtml()
-      require_once 'securimage.php';
-      $options = array();
-      $options['input_name']             = 'ct_captcha'; // change name of input element for form post
-      $options['disable_flash_fallback'] = false; // allow flash fallback
+	// show captcha HTML using Securimage::getCaptchaHtml()
+	require_once 'securimage.php';
+$options = array();
+$options['input_name']             = 'ct_captcha'; // change name of input element for form post
+$options['disable_flash_fallback'] = false; // allow flash fallback
 
-      if (!empty($_SESSION['ctform']['captcha_error'])) {
-        // error html to show in captcha output
-        $options['error_html'] = $_SESSION['ctform']['captcha_error'];
-      }
+if (!empty($_SESSION['ctform']['captcha_error'])) {
+	// error html to show in captcha output
+	$options['error_html'] = $_SESSION['ctform']['captcha_error'];
+}
 
-      echo "<div id='captcha_container_1'>\n";
-      echo Securimage::getCaptchaHtml($options);
-      echo "\n</div>\n";
+echo "<div id='captcha_container_1'>\n";
+echo Securimage::getCaptchaHtml($options);
+echo "\n</div>\n";
 
-      /*
+/*
       // To render some or all captcha components individually
       $options['input_name'] = 'ct_captcha_2';
       $options['image_id']   = 'ct_captcha_2';
@@ -115,7 +121,7 @@ if (isset($_SESSION['ctform']['error']) &&  $_SESSION['ctform']['error'] == true
       echo Securimage::getCaptchaHtml($options, Securimage::HTML_INPUT);
       echo "\n</div>";
       */
-    ?>
+?>
   </div>
 
   <p>
@@ -131,102 +137,105 @@ if (isset($_SESSION['ctform']['error']) &&  $_SESSION['ctform']['error'] == true
 
 <?php
 
-// The form processor PHP code
-function process_si_contact_form()
-{
-  $_SESSION['ctform'] = array(); // re-initialize the form session data
 
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' && @$_POST['do'] == 'contact') {
-  	// if the form has been submitted
+/**
+ * The form processor PHP code
+ */
+function process_si_contact_form() {
+	$_SESSION['ctform'] = array(); // re-initialize the form session data
 
-    foreach($_POST as $key => $value) {
-      if (!is_array($key)) {
-      	// sanitize the input data
-        if ($key != 'ct_message') $value = strip_tags($value);
-        $_POST[$key] = htmlspecialchars(stripslashes(trim($value)));
-      }
-    }
+	if ($_SERVER['REQUEST_METHOD'] == 'POST' && @$_POST['do'] == 'contact') {
+		// if the form has been submitted
 
-    $name    = @$_POST['ct_name'];    // name from the form
-    $email   = @$_POST['ct_email'];   // email from the form
-    $URL     = @$_POST['ct_URL'];     // url from the form
-    $message = @$_POST['ct_message']; // the message from the form
-    $captcha = @$_POST['ct_captcha']; // the user's entry for the captcha code
-    $name    = substr($name, 0, 64);  // limit name to 64 characters
+		foreach ($_POST as $key => $value) {
+			if (!is_array($key)) {
+				// sanitize the input data
+				if ($key != 'ct_message') $value = strip_tags($value);
+				$_POST[$key] = htmlspecialchars(stripslashes(trim($value)));
+			}
+		}
 
-    $errors = array();  // initialize empty error array
+		$name    = @$_POST['ct_name'];    // name from the form
+		$email   = @$_POST['ct_email'];   // email from the form
+		$URL     = @$_POST['ct_URL'];     // url from the form
+		$message = @$_POST['ct_message']; // the message from the form
+		$captcha = @$_POST['ct_captcha']; // the user's entry for the captcha code
+		$name    = substr($name, 0, 64);  // limit name to 64 characters
 
-    if (isset($GLOBALS['DEBUG_MODE']) && $GLOBALS['DEBUG_MODE'] == false) {
-      // only check for errors if the form is not in debug mode
+		$errors = array();  // initialize empty error array
 
-      if (strlen($name) < 3) {
-        // name too short, add error
-        $errors['name_error'] = 'Your name is required';
-      }
+		if (isset($GLOBALS['DEBUG_MODE']) && $GLOBALS['DEBUG_MODE'] == false) {
+			// only check for errors if the form is not in debug mode
 
-      if (strlen($email) == 0) {
-        // no email address given
-        $errors['email_error'] = 'Email address is required';
-      } else if ( !preg_match('/^(?:[\w\d-]+\.?)+@(?:(?:[\w\d]\-?)+\.)+\w{2,63}$/i', $email)) {
-        // invalid email format
-        $errors['email_error'] = 'Email address entered is invalid';
-      }
+			if (strlen($name) < 3) {
+				// name too short, add error
+				$errors['name_error'] = 'Your name is required';
+			}
 
-      if (strlen($message) < 20) {
-        // message length too short
-        $errors['message_error'] = 'Your message must be longer than 20 characters';
-      }
-    }
+			if (strlen($email) == 0) {
+				// no email address given
+				$errors['email_error'] = 'Email address is required';
+			} else if ( !preg_match('/^(?:[\w\d-]+\.?)+@(?:(?:[\w\d]\-?)+\.)+\w{2,63}$/i', $email)) {
+				// invalid email format
+				$errors['email_error'] = 'Email address entered is invalid';
+			}
 
-    // Only try to validate the captcha if the form has no errors
-    // This is especially important for ajax calls
-    if (sizeof($errors) == 0) {
-      require_once dirname(__FILE__) . '/securimage.php';
-      $securimage = new Securimage();
+			if (strlen($message) < 20) {
+				// message length too short
+				$errors['message_error'] = 'Your message must be longer than 20 characters';
+			}
+		}
 
-      if ($securimage->check($captcha) == false) {
-        $errors['captcha_error'] = 'Incorrect security code entered<br />';
-      }
-    }
+		// Only try to validate the captcha if the form has no errors
+		// This is especially important for ajax calls
+		if (sizeof($errors) == 0) {
+			require_once dirname(__FILE__) . '/securimage.php';
+			$securimage = new Securimage();
 
-    if (sizeof($errors) == 0) {
-      // no errors, send the form
-      $time       = date('r');
-      $message = "A message was submitted from the contact form.  The following information was provided.<br /><br />"
-                    . "<em>Name: $name</em><br />"
-                    . "<em>Email: $email</em><br />"
-                    . "<em>URL: $URL</em><br />"
-                    . "<em>Message:</em><br />"
-                    . "<pre>$message</pre>"
-                    . "<br /><br /><em>IP Address:</em> {$_SERVER['REMOTE_ADDR']}<br />"
-                    . "<em>Time:</em> $time<br />"
-                    . "<em>Browser:</em> {$_SERVER['HTTP_USER_AGENT']}<br />";
+			if ($securimage->check($captcha) == false) {
+				$errors['captcha_error'] = 'Incorrect security code entered<br />';
+			}
+		}
 
-      $message = wordwrap($message, 70);
+		if (sizeof($errors) == 0) {
+			// no errors, send the form
+			$time       = date('r');
+			$message = "A message was submitted from the contact form.  The following information was provided.<br /><br />"
+				. "<em>Name: $name</em><br />"
+				. "<em>Email: $email</em><br />"
+				. "<em>URL: $URL</em><br />"
+				. "<em>Message:</em><br />"
+				. "<pre>$message</pre>"
+				. "<br /><br /><em>IP Address:</em> {$_SERVER['REMOTE_ADDR']}<br />"
+				. "<em>Time:</em> $time<br />"
+				. "<em>Browser:</em> {$_SERVER['HTTP_USER_AGENT']}<br />";
 
-      if (isset($GLOBALS['DEBUG_MODE']) && $GLOBALS['DEBUG_MODE'] == false) {
-      	// send the message with mail()
-        mail($GLOBALS['ct_recipient'], $GLOBALS['ct_msg_subject'], $message, "From: {$GLOBALS['ct_recipient']}\r\nReply-To: {$email}\r\nContent-type: text/html; charset=UTF-8\r\nMIME-Version: 1.0");
-      }
+			$message = wordwrap($message, 70);
 
-      $_SESSION['ctform']['timetosolve'] = $securimage->getTimeToSolve();
-      $_SESSION['ctform']['error'] = false;  // no error with form
-      $_SESSION['ctform']['success'] = true; // message sent
-    } else {
-      // save the entries, this is to re-populate the form
-      $_SESSION['ctform']['ct_name'] = $name;       // save name from the form submission
-      $_SESSION['ctform']['ct_email'] = $email;     // save email
-      $_SESSION['ctform']['ct_URL'] = $URL;         // save URL
-      $_SESSION['ctform']['ct_message'] = $message; // save message
+			if (isset($GLOBALS['DEBUG_MODE']) && $GLOBALS['DEBUG_MODE'] == false) {
+				// send the message with mail()
+				mail($GLOBALS['ct_recipient'], $GLOBALS['ct_msg_subject'], $message, "From: {$GLOBALS['ct_recipient']}\r\nReply-To: {$email}\r\nContent-type: text/html; charset=UTF-8\r\nMIME-Version: 1.0");
+			}
 
-      foreach($errors as $key => $error) {
-      	// set up error messages to display with each field
-        $_SESSION['ctform'][$key] = "<span class=\"error\">$error</span>";
-      }
+			$_SESSION['ctform']['timetosolve'] = $securimage->getTimeToSolve();
+			$_SESSION['ctform']['error'] = false;  // no error with form
+			$_SESSION['ctform']['success'] = true; // message sent
+		} else {
+			// save the entries, this is to re-populate the form
+			$_SESSION['ctform']['ct_name'] = $name;       // save name from the form submission
+			$_SESSION['ctform']['ct_email'] = $email;     // save email
+			$_SESSION['ctform']['ct_URL'] = $URL;         // save URL
+			$_SESSION['ctform']['ct_message'] = $message; // save message
 
-      $_SESSION['ctform']['error'] = true; // set error floag
-    }
-  } // POST
+			foreach ($errors as $key => $error) {
+				// set up error messages to display with each field
+				$_SESSION['ctform'][$key] = "<span class=\"error\">$error</span>";
+			}
+
+			$_SESSION['ctform']['error'] = true; // set error floag
+		}
+	} // POST
 }
+
 
 $_SESSION['ctform']['success'] = false; // clear success value after running

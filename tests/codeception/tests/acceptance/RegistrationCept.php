@@ -1,4 +1,10 @@
 <?php
+/**
+ * ./tests/codeception/tests/acceptance/RegistrationCept.php
+ *
+ * @package default
+ */
+
 
 $I = new AcceptanceTester($scenario);
 
@@ -30,12 +36,10 @@ $I->click("#RegistrationLoginForm #registration_button");
 
 // Getting data from database
 $zugangscode = $I->grabFromDatabase("public.tbl_person", "zugangscode", array("vorname" => "Code", "nachname" => "Ception"));
-if (!isset($zugangscode) || $zugangscode == "")
-{
+if (!isset($zugangscode) || $zugangscode == "") {
 	$I->expect("Zugangscode to be set, it is NOT!");
 }
-else
-{
+else {
 	$I->comment("Zugangscode is: " . $zugangscode);
 }
 

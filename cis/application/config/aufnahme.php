@@ -1,5 +1,12 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * ./cis/application/config/aufnahme.php
+ *
+ * @package default
+ */
+
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
@@ -60,14 +67,14 @@ $config['fhc_models'] = '../../../../../application/models/';
 |
 */
 $config['fhc_api'] = array(
-    'server' => 'http://localhost/fhcomplete/index.ci.php/api/v1/',
-    'api_key'         => 'testapikey@fhcomplete.org',
-    'api_name'        => 'FHC-API-KEY',
-    'http_user'       => 'admin',
-    'http_pass'       => '1q2w3',
-    'http_auth'       => 'basic',
-    //'ssl_verify_peer' => TRUE,
-    //'ssl_cainfo'      => '/certs/cert.pem'
+	'server' => 'http://localhost/fhcomplete/index.ci.php/api/v1/',
+	'api_key'         => 'testapikey@fhcomplete.org',
+	'api_name'        => 'FHC-API-KEY',
+	'http_user'       => 'admin',
+	'http_pass'       => '1q2w3',
+	'http_auth'       => 'basic',
+	//'ssl_verify_peer' => TRUE,
+	//'ssl_cainfo'      => '/certs/cert.pem'
 );
 
 /*
@@ -177,13 +184,13 @@ $config['hybrid_login'] = true;
 |
 */
 $config['organisation'] = array(
-    "bezeichnung" => "Fachhochschule St. Pölten",
-    "strasse" => "Matthias Corvinus-Straße 15",
-    "plz" => "3100",
-    "ort" => "St. Pölten",
-    "telefon" => "+43/2742/313 228 - 200",
-    "fax" => "F: +43/2742/313 228 - 339",
-    "mail" => "<a href='mailto:csc@fhstp.ac.at'>csc@fhstp.ac.at</a>"
+	"bezeichnung" => "Fachhochschule St. Pölten",
+	"strasse" => "Matthias Corvinus-Straße 15",
+	"plz" => "3100",
+	"ort" => "St. Pölten",
+	"telefon" => "+43/2742/313 228 - 200",
+	"fax" => "F: +43/2742/313 228 - 339",
+	"mail" => "<a href='mailto:csc@fhstp.ac.at'>csc@fhstp.ac.at</a>"
 );
 
 /*
@@ -206,11 +213,11 @@ $config["anfahrtLink"] = "<a href='https://www.fhstp.ac.at/de/anfahrt'>Anfahrt</
 |--------------------------------------------------------------------------
 */
 $config['dokumentTypen'] = array(
-    "reisepass" => "pass",
-    "lebenslauf" => "Lebenslf",
-    "abschlusszeugnis" => "Maturaze",
-    "letztGueltigesZeugnis" => "Sonst",
-    "sonstiges" => "Sonst"
+	"reisepass" => "pass",
+	"lebenslauf" => "Lebenslf",
+	"abschlusszeugnis" => "Maturaze",
+	"letztGueltigesZeugnis" => "Sonst",
+	"sonstiges" => "Sonst"
 );
 
 /*

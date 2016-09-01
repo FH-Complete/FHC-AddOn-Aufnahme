@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/login/code_login.php
+ *
+ * @package default
+ */
+
+
+?>
 <div class="panel panel-info">
     <div class="panel-heading text-center">
 	<h3 class="panel-title"><?php echo $this->getPhrase("Home/AccessCodeAvailable", $sprache); ?></h3>
@@ -14,9 +23,9 @@
 		<p class="text-center"><input class="form-control" type="text" placeholder="Accesscode/Passphrase" name="code" autofocus="autofocus" value="<?php echo $code; ?>"></p>
 	    </div>
 	    <?php
-	    if (isset($code_error_msg))
-		echo '<div class="alert alert-danger" role="alert">'.$code_error_msg.'</div>';
-	    ?>
+if (isset($code_error_msg))
+	echo '<div class="alert alert-danger" role="alert">'.$code_error_msg.'</div>';
+?>
 	    <br>
 	</div>
 	<div class="form-group">
@@ -29,4 +38,3 @@
 	</div>
     </div>
 </div>
-

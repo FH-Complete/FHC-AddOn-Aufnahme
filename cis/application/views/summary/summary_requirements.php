@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/summary/summary_requirements.php
+ *
+ * @package default
+ */
+
+
+?>
 <legend><?php echo $this->lang->line("summary_requirements_header"); ?></legend>
 <div class="row">
     <div class="col-sm-12">
@@ -6,14 +15,13 @@
 	</div>
 	<div class="col-sm-5 <?php echo (!isset($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis"]])) ? "incomplete" : ""; ?>">
 	    <div class="form-group">
-		<?php if(!isset($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis"]])) {
-		    echo $this->lang->line('summary_unvollstaendig');
-		 }
-		 else
-		 {
-		     echo $this->lang->line('summary_dokumentVorhanden');
-		 }
-		 ?>
+		<?php if (!isset($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis"]])) {
+	echo $this->lang->line('summary_unvollstaendig');
+}
+else {
+	echo $this->lang->line('summary_dokumentVorhanden');
+}
+?>
 	    </div>
 	</div>
     </div>

@@ -1,14 +1,23 @@
+<?php
+/**
+ * ./cis/application/views/registration/registration.php
+ *
+ * @package default
+ */
+
+
+?>
 <div id="registration">
-    <?php echo form_open("Registration?studiengang_kz=".$studiengang_kz,array("id"=>"RegistrationLoginForm", "name"=>"RegistrationLoginForm", "class"=>"form-horizontal")); ?>
+    <?php echo form_open("Registration?studiengang_kz=".$studiengang_kz, array("id"=>"RegistrationLoginForm", "name"=>"RegistrationLoginForm", "class"=>"form-horizontal")); ?>
     <!--<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">	-->
-    <h2 class="text-center"><?php echo $this->lang->line('aufnahme/login_greeting_text'); ?></h2>		
+    <h2 class="text-center"><?php echo $this->lang->line('aufnahme/login_greeting_text'); ?></h2>
     <p class="infotext">
 	    <?php echo $this->getPhrase("Registration/RegistrationForm", $sprache); ?>
     </p>
     <div class="row">
 	<div class="col-lg-6 col-sm-6">
 	    <div class="form-group <?php echo (form_error("vorname")!="")? 'has-error': '' ?>">
-		<?php echo form_label($this->lang->line('aufnahme/vorname'), "vorname", array("name"=>"vorname","for"=>"vorname", "class"=>"col-sm-11 control-label")) ?>
+		<?php echo form_label($this->lang->line('aufnahme/vorname'), "vorname", array("name"=>"vorname", "for"=>"vorname", "class"=>"col-sm-11 control-label")) ?>
 		<div class="col-sm-11">
 		    <?php echo form_input(array('id' => 'vorname', 'name' => 'vorname', 'maxlength'=>32, "type"=>"text", "value"=>(isset($success) && $success == true) ? "" : set_value("vorname"), "class"=>"form-control")); ?>
 		    <?php echo form_error("vorname");?>
@@ -17,7 +26,7 @@
 	</div>
 	<div class="col-lg-6 col-sm-6">
 	    <div class="form-group <?php echo (form_error("nachname")!="")? 'has-error': '' ?>">
-		<?php echo form_label($this->lang->line('aufnahme/nachname'), "nachname", array("name"=>"nachname","for"=>"nachname", "class"=>"col-sm-11 control-label")) ?>
+		<?php echo form_label($this->lang->line('aufnahme/nachname'), "nachname", array("name"=>"nachname", "for"=>"nachname", "class"=>"col-sm-11 control-label")) ?>
 		<div class="col-sm-11">
 		    <?php echo form_input(array('id' => 'nachname', 'name' => 'nachname', 'maxlength'=>64, "type"=>"text", "value"=>(isset($success) && $success == true) ? "" : set_value("nachname"), "class"=>"form-control")); ?>
 		    <?php echo form_error("nachname");?>
@@ -28,7 +37,7 @@
     <div class="row">
 	<div class="col-lg-6 col-sm-6">
 	    <div class="form-group <?php echo (form_error("geb_datum")!="")? 'has-error': '' ?>">
-		<?php echo form_label($this->lang->line('aufnahme/geburtsdatum'), "geb_datum", array("name"=>"geb_datum","for"=>"geb_datum", "class"=>"col-sm-11 control-label")) ?>
+		<?php echo form_label($this->lang->line('aufnahme/geburtsdatum'), "geb_datum", array("name"=>"geb_datum", "for"=>"geb_datum", "class"=>"col-sm-11 control-label")) ?>
 		<div class="col-sm-11">
 		    <?php echo form_input(array('id' => 'geb_datum', 'name' => 'geb_datum', 'placeholder'=>'', "type"=>"date", "value"=>(isset($success) && $success == true) ? "" : set_value("geb_datum"), "class"=>"form-control datepicker")); ?>
 		    <?php echo form_error("geb_datum");?>
@@ -86,11 +95,11 @@
 		    <div class="checkbox">
 			<label>
 			    <?php echo form_checkbox(array('id' => 'datenschutz', 'name' => 'datenschutz', "checked" => FALSE, "class"=>"datenschutz"));
-				echo $this->getPhrase("Registration/Datenschutz", $sprache);
-				
-			    ?>			
+echo $this->getPhrase("Registration/Datenschutz", $sprache);
+
+?>
 			</label>
-			<a href="<?php echo ($this->config->item('LinkDatenschutz') ? $this->config->item('LinkDatenschutz') : ''); ?>" target="_blank">Link</a>
+			<a href="<?php echo $this->config->item('LinkDatenschutz') ? $this->config->item('LinkDatenschutz') : ''; ?>" target="_blank">Link</a>
 		    </div>
 		    <?php echo form_error("datenschutz"); ?>
 		</div>
@@ -101,7 +110,7 @@
 	<div class="col-lg-11 col-sm-11">
 	    <div class="form-group">
 		<div class="col-sm-3">
-		    <img id="captcha" src="<?=site_url('/Registration/securimage')?>" alt='captcha' class="center-block img-responsive" />
+		    <img id="captcha" src="<?php echo site_url('/Registration/securimage')?>" alt='captcha' class="center-block img-responsive" />
 		    <!-- TODO set link -->
 		    <a onclick="document.getElementById('captcha').src = '<?php echo base_url($this->config->config["index_page"].'/Registration/securimage'); ?>/'+Math.random();">
 			Andere Grafik
@@ -125,27 +134,27 @@
 	    </div>
 	</div>
     </div>
-    <?php echo form_close(); 
-    //wirtes message if email adress exists
-	echo (isset($message))? $message:"";
-	if (isset($error) && ($error->error === true))
-	    echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
-    ?>	
-</div>	
+    <?php echo form_close();
+//wirtes message if email adress exists
+echo (isset($message))? $message:"";
+if (isset($error) && ($error->error === true))
+	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
+?>
+</div>
 
 <script type="text/javascript">
     $(document).ready(function(){
 	$("#datenschutz").on("change", function(){
 	    if($("#datenschutz").prop("checked"))
 	    {
-		$("#registration_button").prop("disabled", false) 
+		$("#registration_button").prop("disabled", false)
 	    }
 	    else
 	    {
-		$("#registration_button").prop("disabled", true) 
+		$("#registration_button").prop("disabled", true)
 	    }
 	});
-	
+
 	$(".datepicker").datepicker({
 	    dateFormat: "dd.mm.yy",
 	    maxDate: new Date()

@@ -1,5 +1,12 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * ./cis/application/views/errors/html/error_404.php
+ *
+ * @package default
+ */
+
+
+defined('BASEPATH') or exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <html lang="en">
 <head>

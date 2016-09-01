@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/widgets/menu.php
+ *
+ * @package default
+ */
+
+
+?>
 <nav class="navbar navbar-default">
     <div class="container">
         <div class="navbar-header">
@@ -11,9 +20,9 @@
 
         <div class="collapse navbar-collapse" id="bewerber-navigation">
             <ul class="nav navbar-nav">
-		
+
                 <?php
-		foreach ($items as $item): ?>
+foreach ($items as $item): ?>
                     <li class="<?php if (isset($data['aktiv']) && $data["aktiv"] === $item["id"]) echo 'active'; ?>">
                         <a href="<?php echo $item['href']; ?>">
                             <?php echo $item['name']; ?>

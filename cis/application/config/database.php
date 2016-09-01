@@ -1,5 +1,12 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * ./cis/application/config/database.php
+ *
+ * @package default
+ */
+
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------
@@ -74,11 +81,11 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> '',
+	'dsn' => '',
 	'hostname' => DB_HOST,
 	'username' => DB_USER,
 	'password' => DB_PASSWORD,
-	'port'	   => DB_PORT,
+	'port'    => DB_PORT,
 	'database' => DB_NAME,
 	'dbdriver' => 'postgre',
 	'dbprefix' => '',

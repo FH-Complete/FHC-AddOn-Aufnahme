@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./locale/en-US/bewerbung.php
+ *
+ * @package default
+ */
+
+
 $this->phrasen['bewerbung/ungueltigerZugriff']='invalid request';
 $this->phrasen['bewerbung/welcome']='Welcome to the Online Application';
 $this->phrasen['bewerbung/registration']='Registration';

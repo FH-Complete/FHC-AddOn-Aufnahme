@@ -1,10 +1,17 @@
 <?php
+/**
+ * ./tests/phpunit/bootstrap.php
+ *
+ * @package default
+ */
+
+
 // UnitTest-Test
 $path = __DIR__ . '/';
 $phpunittest = 'PHPUnitTest.php';
 $i = 0;
 while (! file_exists($path . $phpunittest) && ! file_exists($path . 'htdocs/' . $phpunittest) && $i++ < 10) {
-    $path .= '../';
+	$path .= '../';
 }
 chdir(file_exists($path . $phpunittest) ? $path : $path . 'htdocs');
 //require_once $phpunittest;

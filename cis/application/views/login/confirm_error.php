@@ -1,4 +1,12 @@
-<?php $this->lang->load(array('registration'), $sprache); ?>
+<?php
+/**
+ * ./cis/application/views/login/confirm_error.php
+ *
+ * @package default
+ */
+
+
+$this->lang->load(array('registration'), $sprache); ?>
 
 <div class="container">
     <?php $this->load->view('language'); ?>
@@ -8,6 +16,6 @@
     </ol>
 
     <?php
-     echo (isset($message)) ? $message : "";
-    ?>
+echo (isset($message)) ? $message : "";
+?>
 </div>

@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./cis/application/language/german/summary_lang.php
+ *
+ * @package default
+ */
+
+
 $lang['summary_header'] = 'Zusammenfassung';
 $lang['summary_einleitung'] = 'Bitte vervollständigen Sie Ihre Daten und prüfen Sie diese Eingaben im Anschluss auf Richtigkeit';
 $lang['summary_persoenlicheDaten'] = 'Persönliche Daten';

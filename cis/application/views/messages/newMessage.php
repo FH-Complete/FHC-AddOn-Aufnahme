@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/messages/newMessage.php
+ *
+ * @package default
+ */
+
+
+?>
 <div id="answer">
     <?php echo form_open("Messages/sendMessage", array("id" => "MessageForm", "name" => "MessageForm")); ?>
 	<?php echo form_input(array('id' => 'msg_relationMessage_id', 'name' => 'msg_relationMessage_id', "type" => "hidden", "value" => isset($message_id) ? $message_id : null, "class" => "form-control")); ?>
@@ -8,7 +17,7 @@
 		    <?php echo form_input(array('id' => 'msg_subject', 'name' => 'msg_subject', "type" => "text", "value" =>set_value("msg_subject", isset($msg->subject) ? $msg->subject : "") , "class" => "form-control")); ?>
 		    <?php echo form_error("msg_subject"); ?>
 		</div>
-	    </div>   
+	    </div>
 	</div>
 	<div class="row">
 	    <div class="col-sm-6">

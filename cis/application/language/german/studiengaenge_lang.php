@@ -1,4 +1,10 @@
 <?php
+/**
+ * ./cis/application/language/german/studiengaenge_lang.php
+ *
+ * @package default
+ */
+
 
 $lang['studiengaenge/header'] = 'Studiengänge Auswahl';
 $lang['studiengaenge/bachelor'] = 'Bachelor';

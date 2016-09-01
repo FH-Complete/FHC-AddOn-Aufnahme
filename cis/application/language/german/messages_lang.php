@@ -1,4 +1,10 @@
 <?php
+/**
+ * ./cis/application/language/german/messages_lang.php
+ *
+ * @package default
+ */
+
 
 $lang["msg_priority"] = "Priorität";
 $lang["msg_sender"] = "Kontakt";

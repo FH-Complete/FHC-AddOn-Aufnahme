@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./cis/application/views/contact.php
+ *
+ * @package default
+ */
+
+
 $this->load->view('templates/header');
 //$this->load->view('menu', 'person');
 $this->lang->load(array('aufnahme', 'person'), $language);
@@ -7,9 +14,9 @@ $this->lang->load(array('aufnahme', 'person'), $language);
 
 <div class="container">
     <?php
-    echo $this->template->widget("menu", array('aktiv' => 'Overview'));
-    $this->load->view('language');
-    ?>
+echo $this->template->widget("menu", array('aktiv' => 'Overview'));
+$this->load->view('language');
+?>
 
 
 
@@ -17,5 +24,4 @@ $this->lang->load(array('aufnahme', 'person'), $language);
 
 
     <?php
-    $this->load->view('templates/footer');
-    
+$this->load->view('templates/footer');

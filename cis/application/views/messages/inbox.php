@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/messages/inbox.php
+ *
+ * @package default
+ */
+
+
+?>
 <div>
     <h1 class="message_title"><?php echo $this->lang->line("msg_inbox"); ?></h1>
     <a href="<?php echo base_url($this->config->config["index_page"].'/Messages/newMessage'); ?>">
@@ -6,9 +15,9 @@
 	</button>
     </a>
     <!-- TODO write JS function with API call to set message to status read -->
-    <?php if($view=="messages") { ?>
+    <?php if ($view=="messages") { ?>
 	<div id="messages">
-	    <?php foreach($messages as $msg) { ?>
+	    <?php foreach ($messages as $msg) { ?>
 	    <div id="message_<?php echo $msg->message_id; ?>" class="row">
 		<div class="col-sm-1">
 		    <span id="status_<?php echo $msg->message_id;?>" class='<?php echo ($msg->status == MSG_STATUS_READ) ? "icon-read" : (($msg->status == MSG_STATUS_UNREAD) ? "icon-unread" : "") ;?>'>&nbsp;</span>
@@ -20,9 +29,9 @@
 		</div>
 		<div class="col-sm-2">
 		    <?php
-			$time = strtotime($msg->insertamum);
-			echo date("d.m.Y h:m", $time); 
-		    ?>
+		$time = strtotime($msg->insertamum);
+		echo date("d.m.Y h:m", $time);
+?>
 		</div>
 		<div class="col-sm-1"><span class="icon-paperclip"></span></div>
 		<div class="col-sm-2">
@@ -45,4 +54,3 @@
 	</div>
     <?php } ?>
 </div>
-

@@ -1,4 +1,10 @@
 <?php
+/**
+ * ./cis/application/libraries/securimage/securimage_play.php
+ *
+ * @package default
+ */
+
 
 /**
  * Project:     Securimage: A PHP class for creating and managing form CAPTCHA images<br />
@@ -28,21 +34,20 @@
  * @link http://www.phpcaptcha.org/latest.zip Download Latest Version
  * @link http://www.phpcaptcha.org/Securimage_Docs/ Online Documentation
  * @copyright 2012 Drew Phillips
- * @author Drew Phillips <drew@drew-phillips.com>
  * @version 3.5.2 (Feb 15, 2014)
- * @package Securimage
  *
+ * @author Drew Phillips <drew@drew-phillips.com>
+ * @package Securimage
  */
-
 require_once dirname(__FILE__) . '/securimage.php';
 
 // if using database, adjust these options as necessary and change $img = new Securimage(); to $img = new Securimage($options);
 // see test.mysql.php or test.sqlite.php for examples
 $options = array(
-    'use_database'    => true,
-    'database_name'   => '',
-    'database_user'   => '',
-    'database_driver' => Securimage::SI_DRIVER_MYSQL
+	'use_database'    => true,
+	'database_name'   => '',
+	'database_user'   => '',
+	'database_driver' => Securimage::SI_DRIVER_MYSQL
 );
 
 $img = new Securimage();

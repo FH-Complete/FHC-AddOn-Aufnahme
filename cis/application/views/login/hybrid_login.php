@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/login/hybrid_login.php
+ *
+ * @package default
+ */
+
+
+?>
 <div id="login">
     <div class="panel panel-info">
 	<div class="panel-heading">
@@ -18,9 +27,9 @@
 			<input class="form-control" type="password" name="code" autofocus="autofocus" value="">
 		    </div>
 		    <?php
-		    if (isset($code_error_msg))
-			echo '<div class="alert alert-danger" role="alert">' . $code_error_msg . '</div>';
-		    ?>
+if (isset($code_error_msg))
+	echo '<div class="alert alert-danger" role="alert">' . $code_error_msg . '</div>';
+?>
 		    <br>
 		</div>
 		<div class="form-group">

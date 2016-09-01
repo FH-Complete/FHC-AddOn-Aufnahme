@@ -1,4 +1,11 @@
-<?php 
+<?php
+/**
+ * ./cis/application/language/german/login_lang.php
+ *
+ * @package default
+ */
+
+
 $lang['login_Welcome'] = 'Willkommen bei der Online Bewerbung';
 $lang['login_NoAccount'] = 'Sie haben noch keinen Account oder Zugangscode?';
 $lang['login_SubscribeHere'] = 'Hier unverbindlich anmelden!';

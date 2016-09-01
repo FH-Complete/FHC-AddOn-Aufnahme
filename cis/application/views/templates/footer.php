@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/templates/footer.php
+ *
+ * @package default
+ */
+
+
+?>
 <footer id="portal-footer" class="module shadow-top" role="contentinfo">
     <div class="container-fluid container">
 	<section class="row">

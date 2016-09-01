@@ -1,4 +1,10 @@
 <?php
+/**
+ * ./cis/application/libraries/securimage/securimage_show.php
+ *
+ * @package default
+ */
+
 
 /**
  * Project:     Securimage: A PHP class for creating and managing form CAPTCHA images<br />
@@ -38,12 +44,11 @@
  * @link http://www.phpcaptcha.org/latest.zip Download Latest Version
  * @link http://www.phpcaptcha.org/Securimage_Docs/ Online Documentation
  * @copyright 2013 Drew Phillips
- * @author Drew Phillips <drew@drew-phillips.com>
  * @version 3.5.2 (Feb 15, 2014)
- * @package Securimage
  *
+ * @author Drew Phillips <drew@drew-phillips.com>
+ * @package Securimage
  */
-
 // Remove the "//" from the following line for debugging problems
 // error_reporting(E_ALL); ini_set('display_errors', 1);
 

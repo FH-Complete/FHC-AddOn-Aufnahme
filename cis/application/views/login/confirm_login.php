@@ -1,4 +1,12 @@
-<?php $this->lang->load(array('aufnahme'), $sprache); ?>
+<?php
+/**
+ * ./cis/application/views/login/confirm_login.php
+ *
+ * @package default
+ */
+
+
+$this->lang->load(array('aufnahme'), $sprache); ?>
 
 <div class="container">
     <?php $this->load->view('language'); ?>
@@ -31,8 +39,8 @@
 	</div>
     </div>
     <?php
-    echo form_close();
+echo form_close();
 //wirtes message if email adress exists
-    echo (isset($message)) ? $message : "";
-    ?>
+echo (isset($message)) ? $message : "";
+?>
 </div>

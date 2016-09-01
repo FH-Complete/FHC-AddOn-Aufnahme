@@ -1,8 +1,15 @@
-<?php 
-    $this->load->view('templates/header');
-    $this->lang->load(array('aufnahme', 'person'), $language);
-    // This is an example to show that you can load stuff from inside the template file
-    echo $this->template->widget("menu", array('aktiv' => 'Person'));
+<?php
+/**
+ * ./cis/application/views/person.php
+ *
+ * @package default
+ */
+
+
+$this->load->view('templates/header');
+$this->lang->load(array('aufnahme', 'person'), $language);
+// This is an example to show that you can load stuff from inside the template file
+echo $this->template->widget("menu", array('aktiv' => 'Person'));
 
 ?>
 
@@ -14,5 +21,5 @@
 </div>
 
 
-<?php 
-    $this->load->view('templates/footer');
+<?php
+$this->load->view('templates/footer');

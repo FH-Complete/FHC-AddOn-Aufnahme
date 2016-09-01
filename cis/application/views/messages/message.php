@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/messages/message.php
+ *
+ * @package default
+ */
+
+
+?>
 <div id="message_<?php echo $msg->message_id; ?>" class="message">
     <div class="buttons">
 	<a href="<?php echo base_url($this->config->config["index_page"].'/Messages/answerMessage/'.$msg->message_id."/".$msg->oe_kurzbz); ?>">

@@ -1,4 +1,12 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * ./cis/application/config/template.php
+ *
+ * @package default
+ */
+
+
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 |--------------------------------------------------------------------------
 | Template configuration

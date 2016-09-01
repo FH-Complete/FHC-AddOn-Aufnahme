@@ -1,3 +1,12 @@
+<?php
+/**
+ * ./cis/application/views/summary/summary_personal.php
+ *
+ * @package default
+ */
+
+
+?>
 <fieldset><?php echo $this->getPhrase("Overview/CompleteAndCheckData", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></fieldset>
 
 <legend><?php echo $this->lang->line("summary_persoenlicheDaten"); ?></legend>
@@ -34,7 +43,7 @@
 	    <?php echo ($person->vorname != null) ? $person->vorname : $this->lang->line("summary_unvollstaendig"); ?>
 	</div>
     </div>
-    <?php if(isset($adresse) && $adresse->nation == "A") { ?>
+    <?php if (isset($adresse) && $adresse->nation == "A") { ?>
     <div class="col-sm-6">
         <div class="col-sm-6"><?php echo $this->lang->line("summary_bundesland"); ?></div>
         <div class="col-sm-6 <?php echo ($person->bundesland_code != null) ? "" : "incomplete"; ?>">
@@ -105,7 +114,7 @@
     <div class="col-sm-6">
         <div class="col-sm-6"><?php echo $this->lang->line("summary_svnr"); ?></div>
         <div class="col-sm-6 <?php echo ($person->svnr != null) ? "" : "incomplete"; ?>">
-	    <?php echo ($person->svnr != null) ? mb_substr($person->svnr,0,10) : $this->lang->line("summary_unvollstaendig"); ?>
+	    <?php echo ($person->svnr != null) ? mb_substr($person->svnr, 0, 10) : $this->lang->line("summary_unvollstaendig"); ?>
 	</div>
     </div>
     <div class="col-sm-6"></div>
@@ -115,26 +124,23 @@
         <div class="col-sm-6"><?php echo $this->lang->line("summary_geschlecht"); ?></div>
         <div class="col-sm-6 <?php echo ($person->geschlecht != null) ? "" : "incomplete"; ?>">
             <?php
-            if($person->geschlecht != null)
-            {
-                switch($person->geschlecht)
-                {
-                    case "m":
-                        echo $this->lang->line("summary_geschlecht_m");
-                        break;
-                    case "m":
-                        echo $this->lang->line("summary_geschlecht_m");
-                        break;
-                    default:
-                        echo $this->lang->line("summary_unvollstaendig");
-                        break;
-                }
-            }
-            else
-            {
-                echo $this->lang->line("summary_unvollstaendig");
-            }
-            ?>
+if ($person->geschlecht != null) {
+	switch ($person->geschlecht) {
+	case "m":
+		echo $this->lang->line("summary_geschlecht_m");
+		break;
+	case "m":
+		echo $this->lang->line("summary_geschlecht_m");
+		break;
+	default:
+		echo $this->lang->line("summary_unvollstaendig");
+		break;
+	}
+}
+else {
+	echo $this->lang->line("summary_unvollstaendig");
+}
+?>
         </div>
     </div>
     <div class="col-sm-6"></div>
@@ -148,14 +154,14 @@
 	    </div>
 	    <div class="col-sm-5 <?php echo (!isset($dokumente[$this->config->item('dokumentTypen')["reisepass"]])) ? "incomplete" : ""; ?>">
 		<div class="form-group">
-		    <?php if(!isset($dokumente[$this->config->item('dokumentTypen')["reisepass"]])){
-			echo $this->lang->line('summary_unvollstaendig');
-		     }
-		     else
-		     {
-			 echo $this->lang->line('summary_dokumentVorhanden');
-		     }
-		     ?>
+		    <?php if (!isset($dokumente[$this->config->item('dokumentTypen')["reisepass"]])){
+	echo $this->lang->line('summary_unvollstaendig');
+}
+else
+{
+	echo $this->lang->line('summary_dokumentVorhanden');
+}
+?>
 		</div>
 	    </div>
 	</div>
@@ -168,13 +174,13 @@
 	    <div class="col-sm-5 <?php echo (!isset($dokumente[$this->config->item('dokumentTypen')["lebenslauf"]])) ? "incomplete" : ""; ?>">
 		<div class="form-group">
 		    <?php if(!isset($dokumente[$this->config->item('dokumentTypen')["lebenslauf"]])) {
-			echo $this->lang->line('summary_unvollstaendig');
-		     }
-		     else
-		     {
-			 echo $this->lang->line('summary_dokumentVorhanden');
-		     }
-		     ?>
+	echo $this->lang->line('summary_unvollstaendig');
+}
+else
+{
+	echo $this->lang->line('summary_dokumentVorhanden');
+}
+?>
 		</div>
 	    </div>
 	</div>

@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./vilesci/vorlage_generateuid.inc.php
+ *
+ * @package default
+ */
+
+
 /* Copyright (C) 2014 fhcomplete.org
  *
 * This program is free software; you can redistribute it and/or modify
@@ -17,52 +24,54 @@
 *
 * Authors: Andreas Oesterreicher <andreas.oesterreicher@technikum-wien.at> and
 */
+
 /**
  * Benutzerdefinierte Funktion zur Generierung der UIDs
  * Zur Aktivierung muss die Datei in generateuid.inc.php umbenannt werden
  */
 
+
 /**
  * Generiert die UID für Studierende
  *
- * @param $stgkzl Studiengangskuerzel
- * @param $jahr Studienjahr (zB 2014)
- * @param $stgtyp Studiengangstyp einstellige Ziffer
- * @param $matrikelnummer Personenkennzeichen des Studierenden
+ * @param unknown $stgkzl         Studiengangskuerzel
+ * @param unknown $jahr           Studienjahr (zB 2014)
+ * @param unknown $stgtyp         Studiengangstyp einstellige Ziffer
+ * @param unknown $matrikelnummer Personenkennzeichen des Studierenden
+ * @return unknown
  */
-function generateUID($stgkzl, $jahr, $stgtyp, $matrikelnummer)
-{
+function generateUID($stgkzl, $jahr, $stgtyp, $matrikelnummer) {
 	return $matrikelnummer;
 }
+
 
 /**
  * Gerneriert die Mitarbeiter UID
  * Format v.nachname max 20 Zeichen
  * Im Fall von Doppelnamen wird vor dem Bindestrich abgeschnitten
  *
- * @param $vorname Vorname
- * @param $nachname Nachname
- * @param $lektor Boolean true wenn Lektor sonst false
+ * @param unknown $vorname  Vorname
+ * @param unknown $nachname Nachname
+ * @param unknown $lektor   Boolean true wenn Lektor sonst false
+ * @return unknown
  */
-function generateMitarbeiterUID($vorname, $nachname, $lektor)
-{
+function generateMitarbeiterUID($vorname, $nachname, $lektor) {
 	$bn = new benutzer();
 	$uid='';
 
 	// Wenn ein Bindestrich vorhanden ist (Doppelname), dort abschneiden
-	if(mb_strpos($nachname,'-')!==false)	
-		$nachname = mb_substr($nachname, 0, mb_strpos($nachname,'-'));
+	if (mb_strpos($nachname, '-')!==false)
+		$nachname = mb_substr($nachname, 0, mb_strpos($nachname, '-'));
 	// Nachname wird so lange verkuerzt bis eine eindeutige UID entsteht die noch nicht vergeben ist
-	for($nn=18;$nn!=0;$nn--)
-	{
-		$uid = mb_substr($vorname,0,1);
+	for ($nn=18;$nn!=0;$nn--) {
+		$uid = mb_substr($vorname, 0, 1);
 		$uid .= mb_substr($nachname,0,$nn);
-				
+
 		$uid = mb_str_replace(' ','',$uid);
 		$uid = mb_str_replace('-','',$uid);
 
 		$uid = mb_strtolower($uid);
-		if(!$bn->uid_exists($uid))
+		if (!$bn->uid_exists($uid))
 			return $uid;
 	}
 	return false;

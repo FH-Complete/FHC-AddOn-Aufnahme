@@ -1,4 +1,11 @@
-<?php 
+<?php
+/**
+ * ./cis/application/language/english/login_lang.php
+ *
+ * @package default
+ */
+
+
 $lang['login_Welcome'] = 'Welcome to the Online Application';
 $lang['login_NoAccount'] = 'You don`t have an account or access code?';
 $lang['login_SubscribeHere'] = 'Subscribe here!';

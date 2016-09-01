@@ -1,4 +1,11 @@
 <?php
+/**
+ * ./cis/application/language/english/summary_lang.php
+ *
+ * @package default
+ */
+
+
 $lang['summary_header'] = 'Zusammenfassung';
 $lang['summary_einleitung'] = 'Bitte vervollständigen Sie Ihre Daten und prüfen Sie diese Eingaben im Anschluss auf Richtigkeit';
 $lang['summary_persoenlicheDaten'] = 'Persönliche Daten';
@@ -33,4 +40,3 @@ $lang["summary_Geburtsu"] = "Geburtsurkunde";
 $lang["summary_Maturaze"] = "Schul- bzw. Lehrabschlusszeugnis";
 $lang["summary_Staatsbn"] = "Staatsbürgerschaftsnachweis";
 $lang["summary_Lichtbil"] = "Lichtbild";
-

@@ -1,4 +1,11 @@
-<?php 
+<?php
+/**
+ * ./cis/application/language/english/aufnahme_lang.php
+ *
+ * @package default
+ */
+
+
 $lang['aufnhame/login_greeting_text'] = 'Willkommen bei der Online Bewerbung';
 $lang['english'] = 'English';
 $lang['german'] = 'German';

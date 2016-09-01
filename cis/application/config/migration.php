@@ -1,5 +1,12 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * ./cis/application/config/migration.php
+ *
+ * @package default
+ */
+
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
