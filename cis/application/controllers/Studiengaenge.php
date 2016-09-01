@@ -2,7 +2,7 @@
 
 class Studiengaenge extends MY_Controller {
 
-    public function __construct() 
+    public function __construct()
 	{
         parent::__construct();
         $this->load->model('studiengang_model', "StudiengangModel");
@@ -15,7 +15,7 @@ class Studiengaenge extends MY_Controller {
         $this->lang->load('studiengaenge', $this->get_language());
     }
 
-    public function index() 
+    public function index()
     {
 		$this->benchmark->mark('code_start');
 		$this->checkLogin();
@@ -25,19 +25,19 @@ class Studiengaenge extends MY_Controller {
 
 		if(isset($this->input->get()["studiengang_kz"]))
 			$this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
-	
+
         $this->_data['title'] = 'Overview';
         $this->_data['sprache'] = $this->get_language();
-	
+
         $this->OrgformModel->getAll();
-        
+
         if($this->OrgformModel->result->error == 0)
             $this->_data["orgform"] = $this->OrgformModel->result->retval;
         else
 	    	$this->_setError(true, $this->OrgformModel->getErrorMessage());
 
 	    $studiensemester = $this->_getNextStudiensemester("WS");
-	
+
 	    if(($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
 	    {
 			$this->benchmark->mark('codepart_start');
@@ -72,12 +72,12 @@ class Studiengaenge extends MY_Controller {
 			$this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
 
 	    }
-	
-	$this->load->view('studiengaenge', $this->_data);
+
+	//$this->load->view('studiengaenge', $this->_data);
 	$this->benchmark->mark('code_end');
 	log_message('debug', 'Time elapsed for Studiengaenge/index(): '.$this->benchmark->elapsed_time('code_start', 'code_end').'ms');
     }
-    
+
     private function _loadPerson()
     {
 	$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
@@ -97,7 +97,7 @@ class Studiengaenge extends MY_Controller {
 	    $this->_setError(true, $this->PersonModel->getErrorMessage());
 	}
     }
-    
+
     private function _getNextStudiensemester($art)
     {
 		$this->StudiensemesterModel->getNextStudiensemester($art);
@@ -106,7 +106,7 @@ class Studiengaenge extends MY_Controller {
 		else
 			$this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
     }
-    
+
     private function _getStudiengaengeStudienplan($studiensemester_kurzbz, $ausbildungssemester)
     {
 		$this->StudiengangModel->getStudiengangStudienplan($studiensemester_kurzbz, $ausbildungssemester);
@@ -115,7 +115,7 @@ class Studiengaenge extends MY_Controller {
 		else
 			$this->_setError(true, $this->StudiengangModel->getErrorMessage());
     }
-    
+
 //    private function _getCompleteStudiengang($studiensemester_kurzbz, $ausbildungssemester)
 //    {
 //	$this->StudiengangModel->getCompleteStudiengang($studiensemester_kurzbz, $ausbildungssemester);
@@ -128,7 +128,7 @@ class Studiengaenge extends MY_Controller {
 //	    $this->_setError(true, $this->StudiengangModel->getErrorMessage());
 //	}
 //    }
-    
+
     private function _getBewerbungstermine($studiengang_kz, $studiensemester_kurzbz)
     {
 	$this->BewerbungstermineModel->getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz);
@@ -141,7 +141,7 @@ class Studiengaenge extends MY_Controller {
 	    $this->_setError(true, $this->BewerbungstermineModel->getErrorMessage());
 	}
     }
-    
+
 //    private function _loadReihungstests($studiengang_kz, $studiensemester_kurzbz=null)
 //    {
 //	$this->ReihungstestModel->getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz);
