@@ -10,7 +10,12 @@ class Person_model extends MY_Model
 
     public function getPersonen($person_id = NULL)
     {
-	if ($restquery = $this->rest->get('person/person/person', array("person_id" => $person_id, 'json')))
+		if(is_array($person_id))
+			$persondata = $person_id;
+		else
+			$persondata = array("person_id" => $person_id);
+
+	if ($restquery = $this->rest->get('person/person/person', $persondata))
 	{
 	    $this->result = $restquery;
 	    return true;
@@ -25,7 +30,7 @@ class Person_model extends MY_Model
 	    'code' => $code,
 	    'email' => $email
 	);
-	
+
 	if ($restquery = $this->rest->get('person/person/person', $data))
 	{
 	    $this->result = $restquery;
@@ -49,7 +54,7 @@ class Person_model extends MY_Model
 	    return false;
 	}
     }
-    
+
     public function updatePerson($data)
     {
 	if ($restquery = $this->rest->post('person/person/person', $data))
@@ -58,11 +63,11 @@ class Person_model extends MY_Model
 	    return true;
 	}
 	else
-	{   
+	{
 	    return false;
 	}
     }
-    
+
     public function checkBewerbung($data)
     {
 	if ($restquery = $this->rest->get('person/person/CheckBewerbung', $data))
@@ -75,7 +80,7 @@ class Person_model extends MY_Model
 	    return false;
 	}
     }
-    
+
     public function checkZugangscodePerson($code)
     {
 	if ($restquery = $this->rest->get('person/person/person', $code))
