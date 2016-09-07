@@ -5,10 +5,8 @@
  * @package default
  */
 
-
 class Reihungstest_model extends MY_Model
 {
-
 	/**
 	 *
 	 */
@@ -16,19 +14,24 @@ class Reihungstest_model extends MY_Model
 		parent::__construct();
 	}
 
-
 	/**
 	 *
 	 * @param unknown $reihungstest_id
 	 * @return unknown
 	 */
-	public function getReihungstest($reihungstest_id) {
-		if ($restquery = $this->rest->get('crm/reihungstest/reihungstest', array("reihungstest_id" => $reihungstest_id, 'json'))) {
+	public function getReihungstest($reihungstest_id)
+	{
+		$restquery = $this->rest->get(
+			'crm/reihungstest/reihungstest',
+			array("reihungstest_id" => $reihungstest_id, 'json'
+		));
+		
+		if ($restquery)
+		{
 			$this->result = $restquery;
 			return true;
 		}
 	}
-
 
 	/**
 	 *
@@ -36,25 +39,45 @@ class Reihungstest_model extends MY_Model
 	 * @param unknown $studiensemester_kurzbz
 	 * @return unknown
 	 */
-	public function getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz) {
-		if ($restquery = $this->rest->get('crm/reihungstest/ByStudiengangStudiensemester', array("studiengang_kz" => $studiengang_kz, "studiensemester_kurzbz"=> $studiensemester_kurzbz, 'json'))) {
+	public function getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz, $available = true)
+	{
+		$restquery = $this->rest->get(
+			'crm/reihungstest/ByStudiengangStudiensemester',
+			array(
+				"studiengang_kz" => $studiengang_kz,
+				"studiensemester_kurzbz" => $studiensemester_kurzbz,
+				"available" => $available,
+				'json'
+			)
+		);
+		
+		if ($restquery)
+		{
 			$this->result = $restquery;
 			return true;
 		}
 	}
-
 
 	/**
 	 *
 	 * @param unknown $person_id
 	 * @return unknown
 	 */
-	public function getReihungstestByPersonID($person_id) {
-		if ($restquery = $this->rest->get('crm/reihungstest/reihungstestByPersonId', array("person_id" => $person_id, 'json'))) {
+	public function getReihungstestByPersonID($person_id, $available = true)
+	{
+		$restquery = $this->rest->get(
+			'crm/reihungstest/reihungstestByPersonId',
+			array(
+				"person_id" => $person_id,
+				"available" => $available,
+				'json'
+			)
+		);
+		
+		if ($restquery)
+		{
 			$this->result = $restquery;
 			return true;
 		}
 	}
-
-
 }
