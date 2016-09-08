@@ -21,6 +21,7 @@
         <div class="col-sm-3">
             <div class="form-group <?php echo (form_error("titelpre") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formPrenomen'), "titelpre", array("name" => "titelpre", "for" => "titelpre", "class" => "control-label")) ?>
+				<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->lang->line('person_titelPostInfo'); ?>"></span>
                 <?php echo form_input(array('id' => 'titelpre', 'name' => 'titelpre', 'maxlength' => 64, "type" => "text", "value" => set_value("titelpre", isset($person->titelpre) ? $person->titelpre : ""), "class" => "form-control")); ?>
                 <?php echo form_error("titelpre"); ?>
             </div>
@@ -28,6 +29,7 @@
 	<div class="col-sm-3">
             <div class="form-group <?php echo (form_error("titelpost") != "") ? 'has-error' : '' ?>">
                 <?php echo form_label($this->lang->line('person_formPostnomen'), "titelpost", array("name" => "titelpost", "for" => "titelpost", "class" => "control-label")) ?>
+				<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->lang->line('person_titelPostInfo'); ?>"></span>
                 <?php echo form_input(array('id' => 'titelpost', 'name' => 'titelpost', 'maxlength' => 64, "type" => "text", "value" => set_value("titelpost", isset($person->titelpost) ? $person->titelpost : ""), "class" => "form-control")); ?>
                 <?php echo form_error("titelpost"); ?>
             </div>
