@@ -128,6 +128,23 @@ foreach ($textphrasen as $tp) {
 		echo '<br>Phrasentext für Phrase '.$tp['phrase'].' existiert bereits in der Sprache '.$tp['phrasentext']['sprache'].'!';
 }
 
-
 echo '<br>Aktualisierung abgeschlossen<br><br>';
+
+// Check if Phrasentext in DB is not in this Array
+echo '<h2>Gegencheck</h2>';
+// prepare NOT IN
+$notin = "''";
+foreach ($textphrasen as $tp)
+{
+	$notin.= ", '".$tp['phrase']."'";
+}
+$qry = "SELECT * FROM system.tbl_phrase WHERE app='aufnahme' AND phrase NOT IN (".$notin.');';
+$res = $db->db_query($qry);
+if ($db->db_num_rows() >0)
+{
+	while($row = $db->db_fetch_object())
+		var_dump($row);
+}
+else
+	echo 'Keine zusätzlichen Phrasen in der DB vorhanden!';
 ?>
