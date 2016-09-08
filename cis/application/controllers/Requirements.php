@@ -4,15 +4,15 @@
  *
  * @package default
  */
-
-
-class Requirements extends MY_Controller {
-
+class Requirements extends MY_Controller
+{
 	/**
 	 *
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
+		
 		$this->lang->load('requirements', $this->get_language());
 		$this->load->helper("form");
 		$this->load->library("form_validation");
@@ -26,11 +26,11 @@ class Requirements extends MY_Controller {
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
 	}
 
-
 	/**
 	 *
 	 */
-	public function index() {
+	public function index()
+	{
 		$this->checkLogin();
 		$this->_data['sprache'] = $this->get_language();
 
@@ -50,16 +50,19 @@ class Requirements extends MY_Controller {
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
 
 		//load prestudent data for correct studiengang
-		foreach ($this->_data["prestudent"] as $prestudent) {
+		foreach ($this->_data["prestudent"] as $prestudent)
+		{
 			//load studiengaenge der prestudenten
-			if ($prestudent->studiengang_kz == $this->input->get()["studiengang_kz"]) {
+			if ($prestudent->studiengang_kz == $this->input->get()["studiengang_kz"])
+			{
 				$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
 				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 				$this->_data["studiengang"]->studienplan = $studienplan;
 			}
 		}
 
-		foreach ($this->_data["dokumenteStudiengang"] as $dok) {
+		foreach ($this->_data["dokumenteStudiengang"] as $dok)
+		{
 			if (($this->input->post($dok->dokument_kurzbz."_nachgereicht") !== null))
 			{
 				$akte = new stdClass();
@@ -81,7 +84,6 @@ class Requirements extends MY_Controller {
 		$this->load->view('requirements', $this->_data);
 	}
 
-
 	/**
 	 *
 	 */
@@ -89,7 +91,7 @@ class Requirements extends MY_Controller {
 	{
 		$files = $_FILES;
 
-		if(count($files) > 0)
+		if (count($files) > 0)
 		{
 			//load person data
 			$this->_data["person"] = $this->_loadPerson();
@@ -99,7 +101,7 @@ class Requirements extends MY_Controller {
 
 			foreach($this->_data["dokumente"] as $akte)
 			{
-				if($akte->dms_id != null)
+				if ($akte->dms_id != null)
 				{
 					$dms = $this->_loadDms($akte->dms_id);
 					$akte->dokument = $dms;
@@ -108,21 +110,21 @@ class Requirements extends MY_Controller {
 
 			foreach($files as $key=>$file)
 			{
-				if(is_uploaded_file($file["tmp_name"]))
+				if (is_uploaded_file($file["tmp_name"][0]))
 				{
 					$obj = new stdClass();
 					$obj->new = true;
 					$akte = new stdClass();
 
 					$obj->version = 0;
-					$obj->mimetype = $file["type"];
-					$obj->name = $file["name"];
+					$obj->mimetype = $file["type"][0];
+					$obj->name = $file["name"][0];
 					$obj->oe_kurzbz = null;
 					$obj->dokument_kurzbz = $key;
 
 					foreach($this->_data["dokumente"] as $akte_temp)
 					{
-						if(($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != $this->config->item('dokumentTypen')["sonstiges"]))
+						if (($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != $this->config->item('dokumentTypen')["sonstiges"]))
 						{
 							//       $dms = $this->_loadDms($akte_temp->dms_id);
 							//       $obj->version = $dms->version+1;
@@ -130,36 +132,34 @@ class Requirements extends MY_Controller {
 							$akte->updateamum = date("Y-m-d H:i:s");
 							$akte->updatevon = "online";
 
-							if($akte->dms_id != null)
+							if ($akte->dms_id != null)
 							{
 								$obj = $akte->dokument;
 								$obj->new = true;
 								$obj->version = ($obj->version+1);
 
 								//    $obj->version = ($akte->dokument->version+1);
-								$obj->mimetype = $file["type"];
-								$obj->name = $file["name"];
+								$obj->mimetype = $file["type"][0];
+								$obj->name = $file["name"][0];
 							}
 						}
 					}
 
 					$obj->kategorie_kurzbz = "Akte";
 
-					$type = pathinfo($file["name"], PATHINFO_EXTENSION);
-					$data = file_get_contents($file["tmp_name"]);
+					$type = pathinfo($file["name"][0], PATHINFO_EXTENSION);
+					$data = file_get_contents($file["tmp_name"][0]);
 					$obj->file_content = base64_encode($data);
 
+					$result = new stdClass();
 					$this->_saveDms($obj);
-
-					if($this->DmsModel->result->error == 0)
+					if ($this->DmsModel->result->error == 0)
 					{
-						$result = new stdClass();
-
-						if($obj->version >= 0)
+						if ($obj->version >= 0)
 						{
 							$akte->dms_id = $this->DmsModel->result->retval->dms_id;
 							$akte->person_id = $this->_data["person"]->person_id;
-							$akte->mimetype = $file["type"];
+							$akte->mimetype = $file["type"][0];
 
 							$akte->bezeichnung = mb_substr($obj->name, 0, 32);
 							$akte->dokument_kurzbz = $obj->dokument_kurzbz;
@@ -173,7 +173,7 @@ class Requirements extends MY_Controller {
 							unset($akte->dokument);
 							unset($akte->nachgereicht_am);
 
-							if($this->_saveAkte($akte))
+							if ($this->_saveAkte($akte))
 							{
 								$result->success = true;
 							}
@@ -184,7 +184,7 @@ class Requirements extends MY_Controller {
 						}
 						else
 						{
-							$akte->mimetype = $file["type"];
+							$akte->mimetype = $file["type"][0];
 							$akte->bezeichnung = mb_substr($obj->name, 0, 32);
 							$akte->dokument_kurzbz = $obj->dokument_kurzbz;
 							$akte->titel = $key;
@@ -195,7 +195,7 @@ class Requirements extends MY_Controller {
 							unset($akte->dokument);
 							unset($akte->nachgereicht_am);
 
-							if($this->_saveAkte($akte))
+							if ($this->_saveAkte($akte))
 							{
 								$result->success = true;
 
@@ -210,10 +210,12 @@ class Requirements extends MY_Controller {
 					else
 					{
 						//TODO handle error
-						var_dump($this->DmsModel->result);
+						$result->success = false;
+						echo json_encode($result);
+						$this->_setError(true, $this->DmsModel->getErrorMessage());
 					}
 
-					if(unlink($file["tmp_name"]))
+					if (unlink($file["tmp_name"][0]))
 					{
 						//removing tmp file successful
 					}
@@ -222,7 +224,6 @@ class Requirements extends MY_Controller {
 		}
 	}
 
-
 	/**
 	 *
 	 * @param unknown $stgkz (optional)
@@ -230,15 +231,15 @@ class Requirements extends MY_Controller {
 	 */
 	private function _loadStudiengang($stgkz = null)
 	{
-		if(is_null($stgkz))
+		if (is_null($stgkz))
 		{
 			$stgkz = $this->_data["prestudent"][0]->studiengang_kz;
 		}
 
 		$this->StudiengangModel->getStudiengang($stgkz);
-		if($this->StudiengangModel->isResultValid() === true)
+		if ($this->StudiengangModel->isResultValid() === true)
 		{
-			if(count($this->StudiengangModel->result->retval) == 1)
+			if (count($this->StudiengangModel->result->retval) == 1)
 			{
 				return $this->StudiengangModel->result->retval[0];
 			}
@@ -253,11 +254,10 @@ class Requirements extends MY_Controller {
 		}
 	}
 
-
 	private function _loadPrestudent()
 	{
 		$this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"]));
-		if($this->PrestudentModel->isResultValid() === true)
+		if ($this->PrestudentModel->isResultValid() === true)
 		{
 			return $this->PrestudentModel->result->retval;
 		}
@@ -267,13 +267,12 @@ class Requirements extends MY_Controller {
 		}
 	}
 
-
 	private function _loadPrestudentStatus($prestudent_id)
 	{
 		$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
-		if($this->PrestudentStatusModel->isResultValid() === true)
+		if ($this->PrestudentStatusModel->isResultValid() === true)
 		{
-			if(($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
+			if (($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
 			{
 				return $this->PrestudentStatusModel->result->retval[0];
 			}
@@ -288,13 +287,12 @@ class Requirements extends MY_Controller {
 		}
 	}
 
-
 	private function _loadStudienplan($studienplan_id)
 	{
 		$this->StudienplanModel->getStudienplan($studienplan_id);
-		if($this->StudienplanModel->isResultValid() === true)
+		if ($this->StudienplanModel->isResultValid() === true)
 		{
-			if(count($this->StudienplanModel->result->retval) == 1)
+			if (count($this->StudienplanModel->result->retval) == 1)
 			{
 				return $this->StudienplanModel->result->retval[0];
 			}
@@ -309,13 +307,12 @@ class Requirements extends MY_Controller {
 		}
 	}
 
-
 	private function _loadDokumente($person_id, $dokumenttyp_kurzbz=null)
 	{
 		$this->_data["dokumente"] = array();
 		$this->AkteModel->getAkten($person_id, $dokumenttyp_kurzbz);
 
-		if($this->AkteModel->isResultValid() === true)
+		if ($this->AkteModel->isResultValid() === true)
 		{
 			foreach($this->AkteModel->result->retval as $akte)
 			{
@@ -328,13 +325,12 @@ class Requirements extends MY_Controller {
 		}
 	}
 
-
 	private function _loadPerson()
 	{
 		$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
-		if($this->PersonModel->isResultValid() === true)
+		if ($this->PersonModel->isResultValid() === true)
 		{
-			if(count($this->PersonModel->result->retval) == 1)
+			if (count($this->PersonModel->result->retval) == 1)
 			{
 				return $this->PersonModel->result->retval[0];
 			}
@@ -349,11 +345,10 @@ class Requirements extends MY_Controller {
 		}
 	}
 
-
 	private function _saveDms($dms)
 	{
 		$this->DmsModel->saveDms($dms);
-		if($this->DmsModel->isResultValid() === true)
+		if ($this->DmsModel->isResultValid() === true)
 		{
 			//TODO saved successfully
 		}
@@ -363,11 +358,10 @@ class Requirements extends MY_Controller {
 		}
 	}
 
-
 	private function _saveAkte($akte)
 	{
 		$this->AkteModel->saveAkte($akte);
-		if($this->AkteModel->isResultValid() === true)
+		if ($this->AkteModel->isResultValid() === true)
 		{
 			//TODO saved successfully
 			return true;
@@ -378,13 +372,12 @@ class Requirements extends MY_Controller {
 		}
 	}
 
-
 	private function _loadDms($dms_id)
 	{
 		$this->DmsModel->loadDms($dms_id);
-		if($this->DmsModel->isResultValid() === true)
+		if ($this->DmsModel->isResultValid() === true)
 		{
-			if(count($this->DmsModel->result->retval) == 1)
+			if (count($this->DmsModel->result->retval) == 1)
 			{
 				return $this->DmsModel->result->retval[0];
 			}
@@ -399,11 +392,10 @@ class Requirements extends MY_Controller {
 		}
 	}
 
-
 	private function _loadDokumentByStudiengang($studiengang_kz)
 	{
 		$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($studiengang_kz, true, true);
-		if($this->DokumentStudiengangModel->isResultValid() === true)
+		if ($this->DokumentStudiengangModel->isResultValid() === true)
 		{
 			return $this->DokumentStudiengangModel->result->retval;
 		}
@@ -412,6 +404,4 @@ class Requirements extends MY_Controller {
 			$this->_setError(true, $this->DokumentStudiengangModel->getErrorMessage());
 		}
 	}
-
-
 }

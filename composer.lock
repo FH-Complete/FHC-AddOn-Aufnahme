@@ -4,9 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0e21b24e125ebdfc155ace352f2e1a14",
-    "content-hash": "eb2e99e0d1e15094869f873e711d2f74",
+    "hash": "a6575462c0edf049a89b7760b195d0a7",
+    "content-hash": "76aba7c1db15a5cdde19e4768bf2b379",
     "packages": [
+        {
+            "name": "blueimp/jquery-file-upload",
+            "version": "9.12.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vkhramtsov/jQuery-File-Upload.git",
+                "reference": "f60a273f69303b140c5089e5cde1c8a187a94871"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vkhramtsov/jQuery-File-Upload/zipball/f60a273f69303b140c5089e5cde1c8a187a94871",
+                "reference": "f60a273f69303b140c5089e5cde1c8a187a94871",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Tschan",
+                    "homepage": "https://blueimp.net"
+                }
+            ],
+            "description": "File Upload widget for jQuery.",
+            "homepage": "https://github.com/blueimp/jQuery-File-Upload",
+            "keywords": [
+                "bootstrap",
+                "chunk",
+                "cross-domain",
+                "cross-site",
+                "drag",
+                "drop",
+                "file",
+                "gae",
+                "go",
+                "jquery",
+                "multiple",
+                "php",
+                "preview",
+                "progress",
+                "python",
+                "resume",
+                "selection",
+                "upload",
+                "widget"
+            ],
+            "time": "2016-06-13 05:52:31"
+        },
         {
             "name": "codeigniter/framework",
             "version": "3.0.6",

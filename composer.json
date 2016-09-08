@@ -31,7 +31,8 @@
     "components/font-awesome": "*",
 	"rogeriopradoj/codeigniter-restclient": "2.*",
     "components/angular.js": "*",
-    "components/jqueryui" : "1.*"
+    "components/jqueryui" : "1.*",
+    "blueimp/jquery-file-upload": "^9.12"
   },
   "require-dev": 
   {
