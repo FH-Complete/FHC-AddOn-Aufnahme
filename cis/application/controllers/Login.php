@@ -61,9 +61,15 @@ class Login extends MY_Controller {
 		$this->_data['code'] = $this->input->post('code') ? $this->input->post('code') : $this->input->get('code');
 
 		if ($this->config->item('hybrid_login')) {
-			if ($this->_data['email'] && $this->_data["code"]) {
+			if ($this->_data['email'] && $this->_data["code"]) 
+			{
 				$this->_cisLogin($this->_data['email'], $this->_data["code"]);
 				$this->code_login($this->_data['code'], $this->_data, $this->_data["email"]);
+				$this->load->view('registration', $this->_data);
+			}
+			else 
+			{
+				$this->_data["code_error_msg"] = "Bitte geben Sie eine E-Mail Adresse und ein Passwort ein";
 				$this->load->view('registration', $this->_data);
 			}
 		}

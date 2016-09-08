@@ -61,8 +61,9 @@ class Bewerbung extends MY_Controller
 			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
 			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
 
-			if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent"))
-			{
+			if ((!empty($prestudent->prestudentStatus))
+				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) {
 				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 				$studiengang->studienplan = $studienplan;
 				array_push($this->_data["studiengaenge"], $studiengang);
@@ -156,8 +157,6 @@ class Bewerbung extends MY_Controller
 				$person->svnr = $post["svnr_orig"];
 			else
 				$person->svnr = $post["svnr"];
-
-			log_message('error', 'SVNR:'.$person->svnr.' orig:'.$post["svnr_orig"].' normal:'.$post["svnr"]);
 
 			$person->titelpre = $post["titelpre"];
 			$person->titelpost = $post["titelpost"];
@@ -352,13 +351,13 @@ class Bewerbung extends MY_Controller
 	 * @param unknown $studiengang_kz
 	 * @param unknown $studienplan_id
 	 */
-	public function studiengang($studiengang_kz, $studienplan_id)
+	public function studiengang($studiengang_kz, $studienplan_id, $studiensemester_kurzbz)
 	{
 		$this->checkLogin();
 
 		$this->session->set_userdata("studiengang_kz", $studiengang_kz);
 
-		$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
+		$this->session->set_userdata("studiensemester_kurzbz", $studiensemester_kurzbz);
 
 		//load person data
 		$this->_data["person"] = $this->_loadPerson();
@@ -369,7 +368,7 @@ class Bewerbung extends MY_Controller
 		//load Studienplan
 		$this->_data["studienplan"] = $this->_loadStudienplan($studienplan_id);
 
-		$fristen = $this->_getBewerbungstermine($studiengang_kz, $this->session->userdata()["studiensemester_kurzbz"]);
+		$fristen = $this->_getBewerbungstermineStudienplan($studienplan_id);
 
 		$bewerbungMoeglich = false;
 		if (!empty($fristen))
@@ -682,8 +681,9 @@ class Bewerbung extends MY_Controller
 
 	private function _loadPrestudentStatus($prestudent_id)
 	{
-		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1));
-		if ($this->PrestudentStatusModel->isResultValid() === true)
+		//$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1));
+		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>'', "ausbildungssemester"=>1));
+		if($this->PrestudentStatusModel->isResultValid() === true)
 		{
 			if (($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
 			{
@@ -857,8 +857,8 @@ class Bewerbung extends MY_Controller
 		$prestudentStatus->status_kurzbz = $status_kurzbz;
 		$prestudentStatus->rt_stufe = 1;
 
-		if (($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
-		{
+		//if(($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
+		//{
 			$prestudentStatus->studiensemester_kurzbz = $this->session->userdata()["studiensemester_kurzbz"];
 			//nicht notwendig da defaultwert 1
 			//$prestudentStatus->ausbildungssemester = "1";
@@ -882,12 +882,12 @@ class Bewerbung extends MY_Controller
 			{
 				$this->_setError(true, $this->PrestudentStatusModel->getErrorMessage());
 			}
-		}
+		/*}
 		else
 		{
 			//studiensemester not found
 			$this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
-		}
+		}*/
 	}
 
 	private function _saveKontakt($kontakt)
@@ -1024,10 +1024,11 @@ class Bewerbung extends MY_Controller
 		}
 	}
 
-	private function _getBewerbungstermine($studiengang_kz, $studiensemester_kurzbz)
+
+	private function _getBewerbungstermineStudienplan($studienplan_id)
 	{
-		$this->BewerbungstermineModel->getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz);
-		if ($this->BewerbungstermineModel->isResultValid() === true)
+		$this->BewerbungstermineModel->getByStudienplan($studienplan_id);
+		if($this->BewerbungstermineModel->isResultValid() === true)
 		{
 			return $this->BewerbungstermineModel->result->retval;
 		}

@@ -52,18 +52,32 @@ class Studiengaenge extends MY_Controller {
 		if (($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0)) {
 			$this->benchmark->mark('codepart_start');
 			$this->_data["studiensemester"] = $studiensemester;
-			$this->_data["studiengaenge"] = $this->_getStudiengaengeStudienplan($this->_data["studiensemester"]->studiensemester_kurzbz, 1);
+			//$this->_data["studiengaenge"] = $this->_getStudiengaengeStudienplan($this->_data["studiensemester"]->studiensemester_kurzbz, 1);
+			$this->_data["studiengaenge"] = $this->_getStudiengaengeBewerbung();
 			$this->benchmark->mark('codepart_end');
 			log_message('debug', 'Time elapsed for Studiengaenge/index->getStudienplan: '.$this->benchmark->elapsed_time('codepart_start', 'codepart_end').'ms');
 
 			$this->benchmark->mark('foreach_start');
+			$bewerbungstermine = $this->_getBewerbungstermine();
 			foreach ($this->_data["studiengaenge"] as $stg)
 			{
 				if($stg->onlinebewerbung === "t")
 				{
 					$this->benchmark->mark('codepart_start');
-					$stg->fristen = $this->_getBewerbungstermine($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
+					//$stg->fristen = $this->_getBewerbungstermine($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
 					//$stg->reihungstests = $this->_loadReihungstests($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
+
+					foreach($stg->studienplaene as $key_studienplaene=>$row_studienplaene)
+					{
+						$stg->studienplaene[$key_studienplaene]->fristen=array();
+						foreach($bewerbungstermine as $row_bewerbungstermin)
+						{
+							if($row_studienplaene->studienplan_id==$row_bewerbungstermin->studienplan_id)
+							{
+								$stg->studienplaene[$key_studienplaene]->fristen[]=$row_bewerbungstermin;
+							}
+						}
+					}
 					$this->benchmark->mark('codepart_end');
 					log_message('debug', 'Time elapsed for Studiengaenge/index->Reihunstest/Termin: '.$this->benchmark->elapsed_time('codepart_start', 'codepart_end').'ms');
 
@@ -138,6 +152,14 @@ class Studiengaenge extends MY_Controller {
 			$this->_setError(true, $this->StudiengangModel->getErrorMessage());
 	}
 
+	private function _getStudiengaengeBewerbung()
+	{
+		$this->StudiengangModel->getStudiengangBewerbung();
+		if($this->StudiengangModel->isResultValid() === true)
+			return $this->StudiengangModel->result->retval;
+		else
+			$this->_setError(true, $this->StudiengangModel->getErrorMessage());
+	}
 
 	//    private function _getCompleteStudiengang($studiensemester_kurzbz, $ausbildungssemester)
 	//    {
@@ -152,9 +174,9 @@ class Studiengaenge extends MY_Controller {
 	// }
 	//    }
 
-	private function _getBewerbungstermine($studiengang_kz, $studiensemester_kurzbz)
+	private function _getBewerbungstermine()
 	{
-		$this->BewerbungstermineModel->getByStudiengangStudiensemester($studiengang_kz, $studiensemester_kurzbz);
+		$this->BewerbungstermineModel->getCurrent();
 		if($this->BewerbungstermineModel->isResultValid() === true)
 		{
 			return $this->BewerbungstermineModel->result->retval;

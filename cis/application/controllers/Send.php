@@ -34,7 +34,8 @@ class Send extends MY_Controller {
 	/**
 	 *
 	 */
-	public function index() {
+	public function index()
+	{
 		$this->checkLogin();
 		$this->_data['sprache'] = $this->get_language();
 		$this->_loadLanguage($this->_data["sprache"]);
@@ -63,9 +64,11 @@ class Send extends MY_Controller {
 			$this->_data["prestudent"] = $this->_loadPrestudent();
 
 			//load prestudent data for correct studiengang
-			foreach ($this->_data["prestudent"] as $prestudent) {
+			foreach ($this->_data["prestudent"] as $prestudent)
+			{
 				//load studiengaenge der prestudenten
-				if ($prestudent->studiengang_kz == $this->input->get()["studiengang_kz"]) {
+				if ($prestudent->studiengang_kz == $this->input->get()["studiengang_kz"])
+				{
 					$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
 					$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 					$this->_data["studiengang"]->studienplan = $studienplan;
@@ -197,7 +200,8 @@ class Send extends MY_Controller {
 
 	private function _loadPrestudentStatus($prestudent_id)
 	{
-		$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
+		//$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
+		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>'', "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
 		if($this->PrestudentStatusModel->isResultValid() === true)
 		{
 			return $this->PrestudentStatusModel->result->retval[0];
@@ -452,21 +456,30 @@ class Send extends MY_Controller {
 		}
 
 		//check adress data
-		$adresse = $this->_data["adresse"];
-
-		if(($adresse->strasse == null) || ($adresse->strasse == ""))
+		if(isset($this->_data["adresse"]))
 		{
-			$error["strasse"] = true;
+			$adresse = $this->_data["adresse"];
+
+			if(($adresse->strasse == null) || ($adresse->strasse == ""))
+			{
+				$error["strasse"] = true;
+			}
+
+			if(($adresse->plz == null) || ($adresse->plz == ""))
+			{
+				$error["plz"] = true;
+			}
+
+			if(($adresse->ort == null) || ($adresse->ort == ""))
+			{
+				$error["ort"] = true;
+			}
 		}
-
-		if(($adresse->plz == null) || ($adresse->plz == ""))
+		else
 		{
-			$error["plz"] = true;
-		}
-
-		if(($adresse->ort == null) || ($adresse->ort == ""))
-		{
-			$error["ort"] = true;
+			$error['strasse']=true;
+			$error['plz']=true;
+			$error['ort']=true;
 		}
 
 		//check contact data
