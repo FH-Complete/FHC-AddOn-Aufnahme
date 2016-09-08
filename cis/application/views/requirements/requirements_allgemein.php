@@ -63,7 +63,7 @@
 		<div class="form-group">
 			<div class="form-group <?php echo (form_error("Maturaze") != "") ? 'has-error' : '' ?>">
 				<div class="upload">
-					<?php echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_'.$studiengang->studienplan->studienplan_id, 'name' => 'Maturaze', "type" => "file")); ?>
+					<?php //echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_'.$studiengang->studienplan->studienplan_id, 'name' => 'Maturaze', "type" => "file")); ?>
 					<?php echo form_error("Maturaze"); ?>
 				</div>
 			</div>
