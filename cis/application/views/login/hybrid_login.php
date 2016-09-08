@@ -39,7 +39,7 @@ if (isset($code_error_msg))
 		</div>
 		<div class="form-group">
 		    <div class="col-sm-12">
-			<a href="<?php echo base_url($this->config->config["index_page"] . "/Registration/resendCode") ?>"><?php echo $this->lang->line('aufnahme/zugangscodeVergessen');?></a>
+			<a href="<?php echo base_url($this->config->config["index_page"] . "/Registration/resendCode") ?>"><?php echo $this->lang->line('aufnahme/zuganscodeVergessen');?></a>
 		    </div>
 		</div>
 	    </form>
