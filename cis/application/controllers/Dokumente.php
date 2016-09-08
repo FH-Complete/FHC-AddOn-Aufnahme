@@ -163,7 +163,7 @@ class Dokumente extends MY_Controller {
 	private function _loadData()
 	{
 		//load studiensemester
-		$this->_data["studiensemester"] = $this->_loadNextStudiensemester();
+		//$this->_data["studiensemester"] = $this->_loadNextStudiensemester();
 
 		//load person data
 		$this->_data["person"] = $this->_loadPerson();
@@ -243,7 +243,8 @@ class Dokumente extends MY_Controller {
 
 	private function _loadPrestudentStatus($prestudent_id)
 	{
-		$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
+		//$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
+		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>'', "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
 		if($this->PrestudentStatusModel->isResultValid() === true)
 		{
 			if(($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))

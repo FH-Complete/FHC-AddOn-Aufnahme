@@ -65,6 +65,22 @@ class Studiengang_model extends MY_Model
 			return false;
 	}
 
+	/**
+	 *
+	 * @param unknown $studiensemester_kurzbz
+	 * @param unknown $ausbildungssemester
+	 * @return unknown
+	 */
+	function getStudiengangBewerbung()
+	{
+		if ($restquery = $this->rest->get('organisation/studiengang/studiengangBewerbung'))
+		{
+			$this->result = $restquery;
+			return true;
+		}
+		else
+			return false;
+	}
 
 	function getCompleteStudiengang($studiensemester_kurzbz, $ausbildungssemester) {
 		if ($restquery = $this->rest->get('organisation/studiengang/completeStudiengang', array("studiensemester_kurzbz"=>$studiensemester_kurzbz, "ausbildungssemester"=>$ausbildungssemester))) {

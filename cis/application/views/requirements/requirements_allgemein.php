@@ -5,7 +5,6 @@
  * @package default
  */
 
-
 ?>
 <legend><?php echo $this->lang->line("requirements_header"); ?></legend>
 <?php

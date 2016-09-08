@@ -97,7 +97,7 @@ class Login extends MY_Controller {
 	 */
 	private function code_login($code, &$data, $email = null) {
 		//$this->StudiensemesterModel->getNextStudiensemester("WS");
-		$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
+		//$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
 
 		$this->person_model->getPersonFromCode($code, $email);
 		if (($this->person_model->result->error == 0) && (count($this->person_model->result->retval) == 1))
