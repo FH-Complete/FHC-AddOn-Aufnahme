@@ -23,7 +23,7 @@ if (!isset($plz)) $plz = null;
 			<div class="col-sm-3">
 				<div class="form-group <?php echo (form_error("titelpre") != "") ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formPrenomen'), "titelpre", array("name" => "titelpre", "for" => "titelpre", "class" => "control-label")) ?>
-					<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->lang->line('person_titelPostInfo'); ?>"></span>
+					<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->lang->line('person_titelPreInfo'); ?>"></span>
 					<?php echo form_input(array('id' => 'titelpre', 'name' => 'titelpre', 'maxlength' => 64, "type" => "text", "value" => set_value("titelpre", isset($person->titelpre) ? $person->titelpre : ""), "class" => "form-control")); ?>
 					<?php echo form_error("titelpre"); ?>
 				</div>
@@ -317,7 +317,7 @@ if (!isset($plz)) $plz = null;
 					</div>
 				</div>
 				<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('reisepass', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button> -->
-				
+
 				<!-- The fileinput-button span is used to style the file input field as button -->
 				<span class="btn btn-success fileinput-button">
 					<i class="glyphicon glyphicon-plus"></i>
@@ -331,7 +331,7 @@ if (!isset($plz)) $plz = null;
 				<div id="reisepassProgress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
 					<div class="progress-bar progress-bar-success"></div>
 				</div>
-			
+
 			</div>
 		</div>
 		<div class="row">
@@ -372,7 +372,7 @@ if (!isset($plz)) $plz = null;
 					</div>
 				</div>
 				<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('lebenslauf', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button> -->
-				
+
 				<!-- The fileinput-button span is used to style the file input field as button -->
 				<span class="btn btn-success fileinput-button">
 					<i class="glyphicon glyphicon-plus"></i>
@@ -386,7 +386,7 @@ if (!isset($plz)) $plz = null;
 				<div id="lebenslaufProgress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
 					<div class="progress-bar progress-bar-success"></div>
 				</div>
-				
+
 			</div>
 		</div>
 		<div class="row">
@@ -402,7 +402,7 @@ if (!isset($plz)) $plz = null;
 <script type="text/javascript">
 
     $(document).ready(function() {
-    
+
 		$(".datepicker").datepicker({
 			dateFormat: "dd.mm.yy",
 			maxDate: new Date()
@@ -452,7 +452,7 @@ if (!isset($plz)) $plz = null;
 
 		toggleAdresse();
 		toggleZustellAdresse();
-		
+
 		// File upload
 		$('#reisepassFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
 			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles"); ?>',
@@ -460,15 +460,15 @@ if (!isset($plz)) $plz = null;
 			disableValidation: false,
 			add: function(e, data) {
 				var uploadErrors = [];
-				var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i;
-				
-				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1014)
+				var acceptFileTypes = /^image\/(jpe?g|docx|doc|pdf)$/i;
+
+				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
 				{
-					uploadErrors.push('Filesize is too big');
+					uploadErrors.push('Datei zu groß');
 				}
 				if (typeof data.originalFiles[0]['type'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['type']))
 				{
-					uploadErrors.push('Not an accepted file type');
+					uploadErrors.push('Kein zulässiger Dateityp');
 				}
 				if (uploadErrors.length > 0)
 				{
@@ -501,7 +501,7 @@ if (!isset($plz)) $plz = null;
 			}
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
-		
+
 		// File upload
 		$('#lebenslaufFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
 			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles"); ?>',
@@ -509,15 +509,15 @@ if (!isset($plz)) $plz = null;
 			disableValidation: false,
 			add: function(e, data) {
 				var uploadErrors = [];
-				var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i;
-				
-				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1014)
+				var acceptFileTypes = /^image\/(jpe?g|docx|doc|pdf)$/i;
+
+				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
 				{
-					uploadErrors.push('Filesize is too big');
+					uploadErrors.push('Datei zu groß');
 				}
 				if (typeof data.originalFiles[0]['type'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['type']))
 				{
-					uploadErrors.push('Not an accepted file type');
+					uploadErrors.push('Kein zulässiger Dateityp');
 				}
 				if (uploadErrors.length > 0)
 				{

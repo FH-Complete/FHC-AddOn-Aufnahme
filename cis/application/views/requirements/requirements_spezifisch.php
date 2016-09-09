@@ -46,7 +46,7 @@
 						</div>
 					</div>
 					<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $dok->dokument_kurzbz; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button> -->
-					
+
 					<!-- The fileinput-button span is used to style the file input field as button -->
 					<span class="btn btn-success fileinput-button">
 						<i class="glyphicon glyphicon-plus"></i>
@@ -60,7 +60,7 @@
 					<div id="<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
 						<div class="progress-bar progress-bar-success"></div>
 					</div>
-					
+
 				</div>
 				<div class="form-group">
 					<div class="form-group">
@@ -89,15 +89,15 @@
 		disableValidation: false,
 		add: function(e, data) {
 			var uploadErrors = [];
-			var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i;
-			
-			if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1014)
+			var acceptFileTypes = /^image\/(jpe?g|doc|pdf)$/i;
+
+			if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
 			{
-				uploadErrors.push('Filesize is too big');
+				uploadErrors.push('Datei zu groß');
 			}
 			if (typeof data.originalFiles[0]['type'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['type']))
 			{
-				uploadErrors.push('Not an accepted file type');
+				uploadErrors.push('Kein zulässiger Dateityp');
 			}
 			if (uploadErrors.length > 0)
 			{
@@ -110,7 +110,7 @@
 			}
 		},
 		done: function (e, data) {
-			
+
 			var msg = "";
 			if (data.result.success === true)
 			{
@@ -154,9 +154,9 @@
     function toggleDateField()
     {
 		$(".nachreichenDatum").each(function(i,v) {
-			
+
 			var id = $(v).attr("id");
-			
+
 			if($("#"+id+"_nachgereicht").prop("checked"))
 			{
 				$(v).show();
