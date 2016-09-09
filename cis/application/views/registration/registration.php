@@ -99,7 +99,7 @@ echo $this->getPhrase("Registration/Datenschutz", $sprache);
 
 ?>
 			</label>
-			<a href="<?php echo $this->config->item('LinkDatenschutz') ? $this->config->item('LinkDatenschutz') : ''; ?>" target="_blank">Link</a>
+			<!--<a href="<?php echo $this->config->item('LinkDatenschutz') ? $this->config->item('LinkDatenschutz') : ''; ?>" target="_blank">Link</a>-->
 		    </div>
 		    <?php echo form_error("datenschutz"); ?>
 		</div>

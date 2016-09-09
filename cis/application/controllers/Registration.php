@@ -104,7 +104,8 @@ class Registration extends MY_Controller {
 		if ($this->input->post("email") != $this->config->config["codeception_email"]) {
 			$securimage = new Securimage();
 			if (!$securimage->check($this->input->post("captcha_code"))) {
-				$this->form_validation->set_message("check_captcha", "Code does not match.");
+				//$this->form_validation->set_message("check_captcha", "Code does not match.");
+				$this->form_validation->set_rules("captcha_code", "E-Captcha", "check_captcha");
 				return false;
 			}
 		}
@@ -118,7 +119,8 @@ class Registration extends MY_Controller {
 	 */
 	public function check_email() {
 		if (!($this->input->post("email") == $this->input->post("email2"))) {
-			$this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
+			//$this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
+			$this->form_validation->set_rules("email2", "E-Mail", "check_email");
 			return false;
 		}
 		return true;
@@ -127,7 +129,7 @@ class Registration extends MY_Controller {
 
 	public function check_terms() {
 		if (($this->input->post("datenschutz") !== "")) {
-			$this->form_validation->set_message("check_terms", "Sie müssen die Datenschutzbedingungen aktzeptieren.");
+			$this->form_validation->set_message("check_terms", "Sie müssen die Datenschutzbedingungen akzeptieren.");
 			return false;
 		}
 		return true;
