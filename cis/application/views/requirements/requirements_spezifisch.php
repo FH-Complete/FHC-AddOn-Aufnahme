@@ -84,7 +84,7 @@
 <script type="text/javascript">
 	// File upload
 	$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
-		url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/uploadFiles"); ?>',
+		url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles/".$dok->dokument_kurzbz); ?>',
 		dataType: 'json',
 		disableValidation: false,
 		add: function(e, data) {

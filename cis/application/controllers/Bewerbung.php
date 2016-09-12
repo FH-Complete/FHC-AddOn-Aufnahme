@@ -504,7 +504,7 @@ class Bewerbung extends MY_Controller
 		}
 	}
 
-	public function uploadFiles()
+	public function uploadFiles($typ)
 	{
 		$files = $_FILES;
 
@@ -548,6 +548,9 @@ class Bewerbung extends MY_Controller
 						default:
 							$obj->dokument_kurzbz = $this->config->item('dokumentTypen')["sonstiges"];
 					}
+					
+					if ($typ)
+						$obj->dokument_kurzbz = $this->config->item('dokumentTypen')[$typ];
 
 					foreach($this->_data["dokumente"] as $akte_temp)
 					{

@@ -455,7 +455,7 @@ if (!isset($plz)) $plz = null;
 
 		// File upload
 		$('#reisepassFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
-			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles"); ?>',
+			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles/reisepass"); ?>',
 			dataType: 'json',
 			disableValidation: false,
 			add: function(e, data) {
@@ -484,11 +484,11 @@ if (!isset($plz)) $plz = null;
 				var msg = "";
 				if (data.result.success === true)
 				{
-					msg = "File uploaded";
+					msg = "Upload erfolgreich";
 				}
 				else
 				{
-					msg = "Error while uploading";
+					msg = "Fehler beim Upload";
 				}
 				$('#reisepass_hochgeladen_<?php echo $studiengang->studienplan->studienplan_id; ?>').html(msg);
 			},
@@ -504,7 +504,7 @@ if (!isset($plz)) $plz = null;
 
 		// File upload
 		$('#lebenslaufFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
-			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles"); ?>',
+			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles/lebenslauf"); ?>',
 			dataType: 'json',
 			disableValidation: false,
 			add: function(e, data) {
@@ -533,11 +533,11 @@ if (!isset($plz)) $plz = null;
 				var msg = "";
 				if (data.result.success === true)
 				{
-					msg = "File uploaded";
+					msg = "Upload erfolgreich";
 				}
 				else
 				{
-					msg = "Error while uploading";
+					msg = "Fehler beim Upload";
 				}
 				$('#lebenslauf_hochgeladen_<?php echo $studiengang->studienplan->studienplan_id; ?>').html(msg);
 			},
