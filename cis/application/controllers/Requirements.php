@@ -12,7 +12,7 @@ class Requirements extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		
+
 		$this->lang->load('requirements', $this->get_language());
 		$this->load->helper("form");
 		$this->load->library("form_validation");
@@ -398,7 +398,7 @@ class Requirements extends MY_Controller
 
 	private function _loadDokumentByStudiengang($studiengang_kz)
 	{
-		$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($studiengang_kz, true, true);
+		$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($studiengang_kz, true, null);
 		if ($this->DokumentStudiengangModel->isResultValid() === true)
 		{
 			return $this->DokumentStudiengangModel->result->retval;
