@@ -560,7 +560,7 @@ class Bewerbung extends MY_Controller
 							$akte->updateamum = date("Y-m-d H:i:s");
 							$akte->updatevon = "online";
 
-							if ($akte->dms_id != null)
+							if ($akte->dms_id != null && !is_null($akte->dokument))
 							{
 								$obj = $akte->dokument;
 								$obj->new = true;

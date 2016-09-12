@@ -449,19 +449,17 @@ if (!isset($plz)) $plz = null;
 			var plz = $("#zustell_plz").val();
 			loadOrtData(plz, $("#zustell_ort_dropdown"));
 		});
-
-		toggleAdresse();
-		toggleZustellAdresse();
-
+		
 		// File upload
 		$('#reisepassFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
 			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles/reisepass"); ?>',
 			dataType: 'json',
 			disableValidation: false,
 			add: function(e, data) {
+				
 				var uploadErrors = [];
-				var acceptFileTypes = /^image\/(jpe?g|docx|doc|pdf)$/i;
-
+				var acceptFileTypes = /^image\/(jpe?g)|^application\/(.+doc.+|msword|pdf)$/i;
+				
 				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
 				{
 					uploadErrors.push('Datei zu groß');
@@ -489,6 +487,10 @@ if (!isset($plz)) $plz = null;
 				else
 				{
 					msg = "Fehler beim Upload";
+					$('#reisepassProgress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+						'width',
+						'0%'
+					);
 				}
 				$('#reisepass_hochgeladen_<?php echo $studiengang->studienplan->studienplan_id; ?>').html(msg);
 			},
@@ -509,7 +511,7 @@ if (!isset($plz)) $plz = null;
 			disableValidation: false,
 			add: function(e, data) {
 				var uploadErrors = [];
-				var acceptFileTypes = /^image\/(jpe?g|docx|doc|pdf)$/i;
+				var acceptFileTypes = /^image\/(jpe?g)|^application\/(.+doc.+|msword|pdf)$/i;
 
 				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
 				{
@@ -538,6 +540,10 @@ if (!isset($plz)) $plz = null;
 				else
 				{
 					msg = "Fehler beim Upload";
+					$('#lebenslaufProgress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+						'width',
+						progress + '%'
+					);
 				}
 				$('#lebenslauf_hochgeladen_<?php echo $studiengang->studienplan->studienplan_id; ?>').html(msg);
 			},
@@ -550,6 +556,9 @@ if (!isset($plz)) $plz = null;
 			}
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+		toggleAdresse();
+		toggleZustellAdresse();
     });
 
     function toggleAdresse()

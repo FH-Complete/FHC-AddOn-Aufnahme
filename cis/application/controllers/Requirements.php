@@ -87,7 +87,7 @@ class Requirements extends MY_Controller
 	/**
 	 *
 	 */
-	public function uploadFiles()
+	public function uploadFiles($typ)
 	{
 		$files = $_FILES;
 
@@ -108,7 +108,7 @@ class Requirements extends MY_Controller
 				}
 			}
 
-			foreach($files as $key=>$file)
+			foreach ($files as $key => $file)
 			{
 				if (is_uploaded_file($file["tmp_name"][0]))
 				{
@@ -120,7 +120,10 @@ class Requirements extends MY_Controller
 					$obj->mimetype = $file["type"][0];
 					$obj->name = $file["name"][0];
 					$obj->oe_kurzbz = null;
-					$obj->dokument_kurzbz = $key;
+					//$obj->dokument_kurzbz = $key;
+					
+					if ($typ)
+						$obj->dokument_kurzbz = $this->config->item('dokumentTypen')[$typ];
 
 					foreach($this->_data["dokumente"] as $akte_temp)
 					{
@@ -132,7 +135,7 @@ class Requirements extends MY_Controller
 							$akte->updateamum = date("Y-m-d H:i:s");
 							$akte->updatevon = "online";
 
-							if ($akte->dms_id != null)
+							if ($akte->dms_id != null && !is_null($akte->dokument))
 							{
 								$obj = $akte->dokument;
 								$obj->new = true;

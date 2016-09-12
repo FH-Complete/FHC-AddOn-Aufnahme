@@ -112,7 +112,7 @@
 		<div class="form-group">
 			<div class="form-group <?php echo (form_error("Sonst") != "") ? 'has-error' : '' ?>">
 				<div class="upload">
-					<?php echo form_input(array('id' => $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"].'_'.$studiengang->studienplan->studienplan_id, 'name' => 'Sonst', "type" => "file")); ?>
+					<?php //echo form_input(array('id' => $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"].'_'.$studiengang->studienplan->studienplan_id, 'name' => 'Sonst', "type" => "file")); ?>
 					<?php echo form_error("Sonst"); ?>
 				</div>
 			</div>
@@ -148,6 +148,116 @@
 		$(".nachreichen_checkbox_zeugnis").each(function (i, v) {
 			toggleDocumentField($(".nachreichen_checkbox_zeugnis").prop("checked"));
 		});
+		
+		// File upload
+		$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
+			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/uploadFiles/".$this->config->config["dokumentTypen"]["abschlusszeugnis"]); ?>',
+			dataType: 'json',
+			disableValidation: false,
+			add: function(e, data) {
+				var uploadErrors = [];
+				var acceptFileTypes = /^image\/(jpe?g)|^application\/(.+doc.+|msword|pdf)$/i;
+
+				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
+				{
+					uploadErrors.push('Datei zu groß');
+				}
+				if (typeof data.originalFiles[0]['type'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['type']))
+				{
+					uploadErrors.push('Kein zulässiger Dateityp');
+				}
+				if (uploadErrors.length > 0)
+				{
+					alert(uploadErrors.join("\n"));
+				}
+				else
+				{
+					data.originalFiles['<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>'] = data.originalFiles[0];
+					data.submit();
+				}
+			},
+			done: function (e, data) {
+
+				var msg = "";
+				if (data.result.success === true)
+				{
+					msg = "File uploaded";
+				}
+				else
+				{
+					msg = "Error while uploading";
+					var progress = parseInt(data.loaded / data.total * 100, 10);
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+						'width',
+						'0%'
+					);
+				}
+				$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_hochgeladen').html(msg);
+			},
+			progressall: function (e, data) {
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+					'width',
+					progress + '%'
+				);
+			}
+		}).prop('disabled', !$.support.fileInput)
+			.parent().addClass($.support.fileInput ? undefined : 'disabled');
+		
+		// File upload
+		$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
+			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/uploadFiles/".$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]); ?>',
+			dataType: 'json',
+			disableValidation: false,
+			add: function(e, data) {
+				var uploadErrors = [];
+				var acceptFileTypes = /^image\/(jpe?g)|^application\/(.+doc.+|msword|pdf)$/i;
+
+				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
+				{
+					uploadErrors.push('Datei zu groß');
+				}
+				if (typeof data.originalFiles[0]['type'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['type']))
+				{
+					uploadErrors.push('Kein zulässiger Dateityp');
+				}
+				if (uploadErrors.length > 0)
+				{
+					alert(uploadErrors.join("\n"));
+				}
+				else
+				{
+					data.originalFiles['<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>'] = data.originalFiles[0];
+					data.submit();
+				}
+			},
+			done: function (e, data) {
+
+				var msg = "";
+				if (data.result.success === true)
+				{
+					msg = "File uploaded";
+				}
+				else
+				{
+					msg = "Error while uploading";
+					var progress = parseInt(data.loaded / data.total * 100, 10);
+					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+						'width',
+						'0%'
+					);
+				}
+				$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>_hochgeladen').html(msg);
+			},
+			progressall: function (e, data) {
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+					'width',
+					progress + '%'
+				);
+			}
+		}).prop('disabled', !$.support.fileInput)
+			.parent().addClass($.support.fileInput ? undefined : 'disabled');
 	});
 
 	function toggleDocumentField(isChecked)

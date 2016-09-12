@@ -82,55 +82,63 @@
 		</div>
 
 <script type="text/javascript">
-	// File upload
-	$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
-		url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles/".$dok->dokument_kurzbz); ?>',
-		dataType: 'json',
-		disableValidation: false,
-		add: function(e, data) {
-			var uploadErrors = [];
-			var acceptFileTypes = /^image\/(jpe?g|doc|pdf)$/i;
+	$(document).ready(function() {
+		// File upload
+		$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
+			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/uploadFiles/".$dok->dokument_kurzbz); ?>',
+			dataType: 'json',
+			disableValidation: false,
+			add: function(e, data) {
+			
+				var uploadErrors = [];
+				var acceptFileTypes = /^image\/(jpe?g)|^application\/(.+doc.+|msword|pdf)$/i;
 
-			if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
-			{
-				uploadErrors.push('Datei zu groß');
-			}
-			if (typeof data.originalFiles[0]['type'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['type']))
-			{
-				uploadErrors.push('Kein zulässiger Dateityp');
-			}
-			if (uploadErrors.length > 0)
-			{
-				alert(uploadErrors.join("\n"));
-			}
-			else
-			{
-				data.originalFiles['<?php echo $dok->dokument_kurzbz; ?>'] = data.originalFiles[0];
-				data.submit();
-			}
-		},
-		done: function (e, data) {
+				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
+				{
+					uploadErrors.push('Datei zu groß');
+				}
+				if (typeof data.originalFiles[0]['type'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['type']))
+				{
+					uploadErrors.push('Kein zulässiger Dateityp');
+				}
+				if (uploadErrors.length > 0)
+				{
+					alert(uploadErrors.join("\n"));
+				}
+				else
+				{
+					data.originalFiles['<?php echo $dok->dokument_kurzbz; ?>'] = data.originalFiles[0];
+					data.submit();
+				}
+			},
+			done: function (e, data) {
 
-			var msg = "";
-			if (data.result.success === true)
-			{
-				msg = "File uploaded";
+				var msg = "";
+				if (data.result.success === true)
+				{
+					msg = "File uploaded";
+				}
+				else
+				{
+					msg = "Error while uploading";
+					var progress = parseInt(data.loaded / data.total * 100, 10);
+					$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+						'width',
+						'0%'
+					);
+				}
+				$('#<?php echo $dok->dokument_kurzbz; ?>_hochgeladen').html(msg);
+			},
+			progressall: function (e, data) {
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+					'width',
+					progress + '%'
+				);
 			}
-			else
-			{
-				msg = "Error while uploading";
-			}
-			$('#<?php echo $dok->dokument_kurzbz; ?>_hochgeladen').html(msg);
-		},
-		progressall: function (e, data) {
-			var progress = parseInt(data.loaded / data.total * 100, 10);
-			$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
-				'width',
-				progress + '%'
-			);
-		}
-	}).prop('disabled', !$.support.fileInput)
-		.parent().addClass($.support.fileInput ? undefined : 'disabled');
+		}).prop('disabled', !$.support.fileInput)
+			.parent().addClass($.support.fileInput ? undefined : 'disabled');
+	});
 </script>
 
 <?php } ?>
