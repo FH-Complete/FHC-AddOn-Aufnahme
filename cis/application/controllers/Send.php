@@ -139,6 +139,9 @@ class Send extends MY_Controller {
 					if(is_null($prestudentStatus->bewerbung_abgeschicktamum))
 					{
 						$prestudentStatus->bewerbung_abgeschicktamum=date('Y-m-d H:i:s');
+						unset($prestudentStatus->studienplan_bezeichnung);
+						unset($prestudentStatus->bezeichnung_mehrsprachig);
+						
 						$this->_savePrestudentStatus($prestudentStatus);
 						$this->_sendMessageMailApplicationConfirmation($this->_data["person"], $this->_data["studiengang"]);
 						//TODO vorlage fehlt in DB
