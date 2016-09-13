@@ -96,13 +96,13 @@
 			add: function(e, data) {
 
 				var uploadErrors = [];
-				var acceptFileTypes = /^image\/(jpe?g)|^application\/(.+doc.+|msword|pdf)$/i;
+				var acceptFileTypes = /^.*\.(jpe?g|docx?|pdf)$/i;
 
 				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
 				{
 					uploadErrors.push('Datei zu groß');
 				}
-				if (typeof data.originalFiles[0]['type'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['type']))
+				if (typeof data.originalFiles[0]['name'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['name']))
 				{
 					uploadErrors.push('Kein zulässiger Dateityp');
 				}
