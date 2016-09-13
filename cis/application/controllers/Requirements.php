@@ -123,7 +123,7 @@ class Requirements extends MY_Controller
 					//$obj->dokument_kurzbz = $key;
 					
 					if ($typ)
-						$obj->dokument_kurzbz = $this->config->item('dokumentTypen')[$typ];
+						$obj->dokument_kurzbz = $typ;
 
 					foreach($this->_data["dokumente"] as $akte_temp)
 					{
@@ -208,6 +208,19 @@ class Requirements extends MY_Controller
 								$result->success = false;
 							}
 						}
+						
+						if($typ == $this->config->item('dokumentTypen')["letztGueltigesZeugnis"])
+						{
+							$akte = new stdClass();
+							$akte->person_id = $this->_data["person"]->person_id;
+
+							$akte->dokument_kurzbz = $this->config->item('dokumentTypen')["abschlusszeugnis"];
+							$akte->insertvon = 'online';
+							$akte->nachgereicht = true;
+
+							$this->_saveAkte($akte);
+						}
+						
 						echo json_encode($result);
 					}
 					else
