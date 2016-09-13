@@ -57,7 +57,7 @@ if (!isset($plz)) $plz = null;
 			<div class="col-sm-6">
 				<div class="form-group <?php echo (form_error("gebdatum") != "") ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_geburtsdatum'), "gebdatum", array("name" => "gebdatum", "for" => "gebdatum", "class" => "control-label")) ?>
-					<?php echo form_input(array('id' => 'gebdatum', 'name' => 'gebdatum', 'maxlength' => 64, "type" => "date", "value" => set_value("gebdatum", isset($person->gebdatum) ? $person->gebdatum : ""), "class" => "form-control datepicker")); ?>
+					<?php echo form_input(array('id' => 'gebdatum', 'name' => 'gebdatum', 'maxlength' => 64, "type" => "date", "value" => set_value("gebdatum", isset($person->gebdatum) ? date("d.m.Y", strtotime($person->gebdatum)) : ""), "class" => "form-control datepicker")); ?>
 					<?php echo form_error("gebdatum"); ?>
 				</div>
 			</div>
