@@ -22,6 +22,7 @@
 		<link href="<?php echo base_url('themes/' . $this->config->item('theme') . '/global.css'); ?>" rel="stylesheet" type="text/css">
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 		<link href="<?php echo base_url('../vendor/blueimp/jquery-file-upload/css/jquery.fileupload.css'); ?>" rel="stylesheet">
+		<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/favicon.ico'); ?>">
 		
 		<script src="<?php echo base_url('../vendor/components/jquery/jquery.min.js') ?>"></script>
 		<script src="<?php echo base_url('../vendor/components/jqueryui/jquery-ui.min.js') ?>"></script>
