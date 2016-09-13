@@ -42,9 +42,9 @@ class Bewerbung extends MY_Controller
 
 		$this->_data['title'] = 'Personendaten';
 		
-		if($this->input->get("id") != null)
+		if($this->input->get("studiengang_kz") != null)
 		{
-			$this->_data["id"] = $this->input->get("id");
+			$this->_data["studiengang_kz"] = $this->input->get("studiengang_kz");
 		}
 
 		//$this->StudiensemesterModel->getNextStudiensemester("WS");

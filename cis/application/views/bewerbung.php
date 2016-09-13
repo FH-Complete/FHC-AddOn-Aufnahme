@@ -27,7 +27,7 @@ foreach ($studiengaenge as $studiengang) {
             </div>
         </div>
         <div class="row">
-            <div id="<?php echo $studiengang->studiengang_kz; ?>" class="collapse <?php echo (isset($id) && ($id == $studiengang->studiengang_kz)) ? "in" : ""?>">
+            <div id="<?php echo $studiengang->studiengang_kz; ?>" class="collapse <?php echo (isset($studiengang_kz) && ($studiengang_kz == $studiengang->studiengang_kz)) ? "in" : ""?>">
                 <div class="col-sm-4 navigation">
                     <?php echo
 	$this->template->widget(
