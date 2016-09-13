@@ -41,6 +41,11 @@ class Bewerbung extends MY_Controller
 		$this->checkLogin();
 
 		$this->_data['title'] = 'Personendaten';
+		
+		if($this->input->get("id") != null)
+		{
+			$this->_data["id"] = $this->input->get("id");
+		}
 
 		//$this->StudiensemesterModel->getNextStudiensemester("WS");
 		$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));

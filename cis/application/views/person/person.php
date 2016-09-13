@@ -11,7 +11,7 @@ if (!isset($plz)) $plz = null;
 
 <div role="tabpanel" class="tab-pane" id="daten">
     <legend><?php echo $this->getPhrase("Personal/Information", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></legend>
-    <?php echo form_open_multipart("Bewerbung", array("id" => "PersonForm", "name" => "PersonForm")); ?>
+    <?php echo form_open_multipart("Bewerbung?id=".$studiengang->studiengang_kz, array("id" => "PersonForm", "name" => "PersonForm")); ?>
 		<div class="row">
 			<div class="col-sm-3">
 				<div class="form-group <?php echo (form_error("anrede") != "") ? 'has-error' : '' ?>">
