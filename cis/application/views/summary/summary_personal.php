@@ -96,7 +96,7 @@
     <div class="col-sm-6">
         <div class="col-sm-6"><?php echo $this->lang->line("summary_geburtsnation"); ?></div>
         <div class="col-sm-6 <?php echo ($person->geburtsnation != null) ? "" : "incomplete"; ?>">
-	    <?php echo ($person->geburtsnation != null) ? $person->geburtsnation : $this->lang->line("summary_unvollstaendig"); ?>
+	    <?php echo ($person->geburtsnation != null) ? $person->geburtsnation_text : $this->lang->line("summary_unvollstaendig"); ?>
 	</div>
     </div>
     <div class="col-sm-6"></div>
@@ -114,7 +114,7 @@
     <div class="col-sm-6">
         <div class="col-sm-6"><?php echo $this->lang->line("summary_svnr"); ?></div>
         <div class="col-sm-6 <?php echo ($person->svnr != null) ? "" : "incomplete"; ?>">
-	    <?php echo ($person->svnr != null) ? mb_substr($person->svnr, 0, 10) : $this->lang->line("summary_unvollstaendig"); ?>
+	    <?php echo ($person->svnr != null) ? mb_substr($person->svnr, 0, 10) : ((($person->geburtsnation != null) && ($person->geburtsnation != "A")) ? "" : $this->lang->line("summary_unvollstaendig")); ?>
 	</div>
     </div>
     <div class="col-sm-6"></div>

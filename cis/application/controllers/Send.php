@@ -448,7 +448,7 @@ class Send extends MY_Controller {
 			$error["staatsbuergerschaft"] = true;
 		}
 
-		if(($person->svnr == null) || ($person->svnr== ""))
+		if((($person->svnr == null) || ($person->svnr== "")) && ($person->geburtsnation == "A"))
 		{
 			$error["svnr"] = true;
 		}

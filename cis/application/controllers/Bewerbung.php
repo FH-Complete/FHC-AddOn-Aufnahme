@@ -389,7 +389,7 @@ class Bewerbung extends MY_Controller
 			foreach($this->_data["prestudent"] as $prestudent)
 			{
 				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-				if (($prestudent->studiengang_kz == $studiengang_kz) && (!is_null($prestudentStatus)) && ($prestudentStatus->studienplan_id == $studienplan_id))
+				if (($prestudent->studiengang_kz == $studiengang_kz) && (!is_null($prestudentStatus)) && ($prestudentStatus->studienplan_id == $studienplan_id) && ($prestudentStatus->studiensemester_kurzbz == $this->session->userdata()["studiensemester_kurzbz"]))
 				{
 					$exists = true;
 				}

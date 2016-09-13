@@ -130,7 +130,7 @@ class Summary extends MY_Controller {
 
 					if($nation->nation_code == $person->geburtsnation)
 					{
-						$person->geburtsnation = $nation->kurztext;
+						$person->geburtsnation_text = $nation->kurztext;
 					}
 				}
 
