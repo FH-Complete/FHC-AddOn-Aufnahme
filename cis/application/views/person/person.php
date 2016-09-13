@@ -458,13 +458,13 @@ if (!isset($plz)) $plz = null;
 			add: function(e, data) {
 				
 				var uploadErrors = [];
-				var acceptFileTypes = /^image\/(jpe?g)|^application\/(.+doc.+|msword|pdf)$/i;
+				var acceptFileTypes = /^.*\.(jpe?g|docx?|pdf)$/i;
 				
 				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
 				{
 					uploadErrors.push('Datei zu groß');
 				}
-				if (typeof data.originalFiles[0]['type'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['type']))
+				if (typeof data.originalFiles[0]['name'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['name']))
 				{
 					uploadErrors.push('Kein zulässiger Dateityp');
 				}
@@ -511,13 +511,13 @@ if (!isset($plz)) $plz = null;
 			disableValidation: false,
 			add: function(e, data) {
 				var uploadErrors = [];
-				var acceptFileTypes = /^image\/(jpe?g)|^application\/(.+doc.+|msword|pdf)$/i;
+				var acceptFileTypes = /^.*\.(jp?g|doc?|pdf)$/i;
 
 				if (typeof data.originalFiles[0]['size'] != 'undefined' && data.originalFiles[0]['size'] > 1024 * 1024 * 4)
 				{
 					uploadErrors.push('Datei zu groß');
 				}
-				if (typeof data.originalFiles[0]['type'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['type']))
+				if (typeof data.originalFiles[0]['name'] != 'undefined' && !acceptFileTypes.test(data.originalFiles[0]['name']))
 				{
 					uploadErrors.push('Kein zulässiger Dateityp');
 				}
@@ -542,7 +542,7 @@ if (!isset($plz)) $plz = null;
 					msg = "Fehler beim Upload";
 					$('#lebenslaufProgress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
 						'width',
-						progress + '%'
+						'0%'
 					);
 				}
 				$('#lebenslauf_hochgeladen_<?php echo $studiengang->studienplan->studienplan_id; ?>').html(msg);
