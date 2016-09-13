@@ -260,6 +260,7 @@ class Registration extends MY_Controller {
 					$kontakt->kontakt = $data["email"];
 					$kontakt->insertamum = date('Y-m-d H:i:s');
 					$kontakt->insertvon = 'online';
+					$kontakt->zustellung = true;
 					$this->Kontakt_model->saveKontakt($kontakt);
 
 					//TODO error handling

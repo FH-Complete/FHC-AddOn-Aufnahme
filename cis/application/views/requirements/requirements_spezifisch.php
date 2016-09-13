@@ -94,7 +94,7 @@
 			dataType: 'json',
 			disableValidation: false,
 			add: function(e, data) {
-			
+
 				var uploadErrors = [];
 				var acceptFileTypes = /^image\/(jpe?g)|^application\/(.+doc.+|msword|pdf)$/i;
 
@@ -121,11 +121,11 @@
 				var msg = "";
 				if (data.result.success === true)
 				{
-					msg = "File uploaded";
+					msg = "Upload erfolgreich";
 				}
 				else
 				{
-					msg = "Error while uploading";
+					msg = "Fehler beim Upload";
 					var progress = parseInt(data.loaded / data.total * 100, 10);
 					$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
 						'width',

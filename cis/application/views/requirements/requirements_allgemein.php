@@ -67,9 +67,9 @@
 					<?php echo form_error("Maturaze"); ?>
 				</div>
 			</div>
-			
+
 			<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button> -->
-			
+
 			<!-- The fileinput-button span is used to style the file input field as button -->
 			<span class="btn btn-success fileinput-button">
 				<i class="glyphicon glyphicon-plus"></i>
@@ -83,7 +83,7 @@
 			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
 				<div class="progress-bar progress-bar-success"></div>
 			</div>
-			
+
 		</div>
     </div>
 </div>
@@ -116,9 +116,9 @@
 					<?php echo form_error("Sonst"); ?>
 				</div>
 			</div>
-			
+
 			<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>, true)">Upload</button> -->
-			
+
 			<!-- The fileinput-button span is used to style the file input field as button -->
 			<span class="btn btn-success fileinput-button">
 				<i class="glyphicon glyphicon-plus"></i>
@@ -132,7 +132,7 @@
 			<div id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
 				<div class="progress-bar progress-bar-success"></div>
 			</div>
-			
+
 		</div>
     </div>
 </div>
@@ -148,7 +148,7 @@
 		$(".nachreichen_checkbox_zeugnis").each(function (i, v) {
 			toggleDocumentField($(".nachreichen_checkbox_zeugnis").prop("checked"));
 		});
-		
+
 		// File upload
 		$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
 			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/uploadFiles/".$this->config->config["dokumentTypen"]["abschlusszeugnis"]); ?>',
@@ -181,11 +181,11 @@
 				var msg = "";
 				if (data.result.success === true)
 				{
-					msg = "File uploaded";
+					msg = "Upload erfolgreich";
 				}
 				else
 				{
-					msg = "Error while uploading";
+					msg = "Fehler beim Upload";
 					var progress = parseInt(data.loaded / data.total * 100, 10);
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
 						'width',
@@ -203,7 +203,7 @@
 			}
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
-		
+
 		// File upload
 		$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
 			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/uploadFiles/".$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]); ?>',
@@ -236,11 +236,11 @@
 				var msg = "";
 				if (data.result.success === true)
 				{
-					msg = "File uploaded";
+					msg = "Upload erfolgreich";
 				}
 				else
 				{
-					msg = "Error while uploading";
+					msg = "Fehler beim Upload";
 					var progress = parseInt(data.loaded / data.total * 100, 10);
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
 						'width',
