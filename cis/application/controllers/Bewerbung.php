@@ -394,7 +394,9 @@ class Bewerbung extends MY_Controller
 			foreach($this->_data["prestudent"] as $prestudent)
 			{
 				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-				if (($prestudent->studiengang_kz == $studiengang_kz) && (!is_null($prestudentStatus)) && ($prestudentStatus->studienplan_id == $studienplan_id) && ($prestudentStatus->studiensemester_kurzbz == $this->session->userdata()["studiensemester_kurzbz"]))
+				if (($prestudent->studiengang_kz == $studiengang_kz) && (is_object($prestudentStatus)) &&
+					($prestudentStatus->studienplan_id == $studienplan_id) &&
+					($prestudentStatus->studiensemester_kurzbz == $this->session->userdata()["studiensemester_kurzbz"]))
 				{
 					$exists = true;
 				}
@@ -488,24 +490,19 @@ class Bewerbung extends MY_Controller
 		$this->_data["prestudent"] = $this->_loadPrestudent();
 
 		$prestudentStatus = null;
-		$ps = null;
 		foreach($this->_data["prestudent"] as $prestudent)
 		{
 			if ($prestudent->studiengang_kz === $studiengang_kz)
 			{
-				$ps = $prestudent;
 				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+				
+				if ($prestudentStatus !== null)
+				{
+					$this->_deletePrestudentStatus(get_object_vars($prestudentStatus));
+				}
+				
+				$this->_deletePrestudent(get_object_vars($prestudent));
 			}
-		}
-
-		if ($prestudentStatus !== null)
-		{
-			//load Studienplan
-			$this->_data["studienplan"] = $this->_loadStudienplan($prestudentStatus->studienplan_id);
-			$prestudentStatus->status_kurzbz = "Abbrecher";
-			//TODO noch nicht in DB vorhanden
-			//$prestudentStatus->grund = "Storno";
-			$this->_savePrestudentStatus($ps, "Abbrecher");
 		}
 	}
 
@@ -896,6 +893,32 @@ class Bewerbung extends MY_Controller
 			//studiensemester not found
 			$this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
 		}*/
+	}
+	
+	private function _deletePrestudentStatus($prestudentStatus)
+	{
+		$this->PrestudentStatusModel->deletePrestudentStatus($prestudentStatus);
+		if ($this->PrestudentStatusModel->isResultValid() === true)
+		{
+			// TODO Ok!
+		}
+		else
+		{
+			$this->_setError(true, $this->PrestudentStatusModel->getErrorMessage());
+		}
+	}
+	
+	private function _deletePrestudent($prestudent)
+	{
+		$this->PrestudentModel->deletePrestudent($prestudent);
+		if ($this->PrestudentModel->isResultValid() === true)
+		{
+			// TODO Ok!
+		}
+		else
+		{
+			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
+		}
 	}
 
 	private function _saveKontakt($kontakt)
