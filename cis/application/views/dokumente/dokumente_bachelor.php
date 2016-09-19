@@ -16,7 +16,7 @@ foreach ($studiengaenge as $stg) {
 ?>
 	<div class="row">
 	    <div class="col-sm-5">
-		<?php echo form_label($this->lang->line('dokumente_'.$dok->dokument_kurzbz), $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label")) ?>
+		<?php echo form_label($dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1], $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label")) ?>
 		<div class="form-group">
 		    <?php
 			if ((!isset($dokumente[$dok->dokument_kurzbz])) || ($dokumente[$dok->dokument_kurzbz]->nachgereicht === "t")) {
