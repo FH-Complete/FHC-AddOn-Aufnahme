@@ -280,6 +280,6 @@ define('VIEWPATH', $view_folder);
 
 require_once '../../../config/global.config.inc.php';
 //require_once '../../../config/vilesci.config.inc.php';
-//require_once '../../../config/cis.config.inc.php';
+require_once '../../../config/cis.config.inc.php';
 // Now the bootstrap file
 require_once BASEPATH.'core/CodeIgniter.php';
