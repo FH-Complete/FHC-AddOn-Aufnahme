@@ -75,10 +75,10 @@ class Bewerbung extends MY_Controller
 			}
 		}
 
-		if (count($this->_data["studiengaenge"]) == 0)
-		{
-			redirect("/Studiengaenge");
-		}
+//		if (count($this->_data["studiengaenge"]) == 0)
+//		{
+//			redirect("/Studiengaenge");
+//		}
 
 		//load adress data
 		$this->_loadAdresse();
@@ -502,6 +502,8 @@ class Bewerbung extends MY_Controller
 				}
 				
 				$this->_deletePrestudent(get_object_vars($prestudent));
+				
+				redirect("/Bewerbung");
 			}
 		}
 	}

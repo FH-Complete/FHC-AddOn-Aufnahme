@@ -12,7 +12,7 @@
 		(<?php echo $studiengang->orgform_kurzbz; ?>)
 	</h1>
 </a>
-<a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung") ?>" onclick="confirmStorno(<?php echo $studiengang->studiengang_kz; ?>)">
+<a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/$studiengang->studiengang_kz") ?>" onclick="confirmStorno(<?php echo $studiengang->studiengang_kz; ?>)">
 	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 </a>
 </br>
