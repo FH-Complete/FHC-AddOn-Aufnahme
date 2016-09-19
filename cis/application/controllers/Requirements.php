@@ -48,6 +48,47 @@ class Requirements extends MY_Controller
 
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
+		
+		if(($this->input->post("doktype") != null) && ($this->input->post("doktype") !== ""))
+		{
+			if(isset($this->_data["dokumente"][$this->config->item('dokumentTypen')["abschlusszeugnis"]]))
+			{
+				$akte = $this->_data["dokumente"][$this->config->item('dokumentTypen')["abschlusszeugnis"]];
+				$akte->anmerkung = $this->input->post("doktype");
+				$akte->updateamum = date('Y-m-d H:i:s');
+				$akte->updatevon = 'online';
+
+				if(is_null($akte->dms_id))
+					unset($akte->dms_id);
+				if(is_null($akte->nachgereicht_am))
+					unset($akte->nachgereicht_am);
+				if(is_null($akte->uid))
+					unset($akte->uid);
+
+				unset($akte->inhalt_vorhanden);
+				
+			}
+			else
+			{
+				$akte = new stdClass();
+				$akte->person_id = $this->_data["person"]->person_id;
+
+				$akte->dokument_kurzbz = $this->config->item('dokumentTypen')["abschlusszeugnis"];
+				$akte->insertvon = 'online';
+				$akte->anmerkung = $this->input->post("doktype");
+
+				$this->_saveAkte($akte);
+			}
+			
+			if($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis"]."_nachgereicht") !== null)
+			{
+				$akte->nachgereicht = true;
+			}
+			
+			$this->_saveAkte($akte);
+		}
+		
+		$this->_loadDokumente($this->session->userdata()["person_id"]);
 
 		//load prestudent data for correct studiengang
 		foreach ($this->_data["prestudent"] as $prestudent)

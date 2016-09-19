@@ -15,16 +15,36 @@
 		<span><?php echo $this->getPhrase("ZGV/introduction_short", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></span>
 		<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->getPhrase("ZGV/introduction_long", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"></span>
 		<div class="radio">
-			<label><input type="radio" name="doktype" value="" />österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)</label>&nbsp;<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+			<label>
+				<input type="radio" name="doktype" value="österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)" <?php echo (strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)") !== false) ? 'checked' : ""; ?> />
+				österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)
+			</label>
+			&nbsp;
+			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
 		</div>
 		<div class="radio">
-			<label><input type="radio" name="doktype" value="" />Studienberechtigungsprüfung</label>&nbsp;<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+			<label>
+				<input type="radio" name="doktype" value="Studienberechtigungsprüfung" <?php echo (strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "Studienberechtigungsprüfung") !== false) ? 'checked' : ""; ?> />
+				Studienberechtigungsprüfung
+			</label>
+			&nbsp;
+			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
 		</div>
 		<div class="radio">
-			<label><input type="radio" name="doktype" value="" />gleichwertiges ausländisches Zeugnis</label>&nbsp;<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+			<label>
+				<input type="radio" name="doktype" value="gleichwertiges ausländisches Zeugnis" <?php echo (strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "gleichwertiges ausländisches Zeugnis") !== false) ? 'checked' : ""; ?> />
+				gleichwertiges ausländisches Zeugnis
+			</label>
+			&nbsp;
+			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
 		</div>
 		<div class="radio">
-			<label><input type="radio" name="doktype" value="" />einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen</label>&nbsp;<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+			<label>
+				<input type="radio" name="doktype" value="einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen" <?php echo (strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen") !== false) ? 'checked' : false; ?> />
+				einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen
+			</label>
+			&nbsp;
+			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
 		</div>
     </div>
 </div>
@@ -38,7 +58,9 @@
 	<!--<?php echo form_label($this->lang->line('requirements_abschlusszeugnis'), "maturazeugnis", array("name" => "Maturaze", "for" => "Maturaze", "class" => "control-label")) ?>-->
 		<div class="form-group" id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_hochgeladen'; ?>">
 			<?php
-				if ((!isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]])) || ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht === "t"))
+				if ((!isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]))
+						|| ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht === "t")
+						|| ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id === null))
 				{
 					echo $this->lang->line('requirements_keinDokHochgeladen');
 				}
