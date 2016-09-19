@@ -17,7 +17,7 @@
 					//echo form_label($this->lang->line('requirements_'.$dok->dokument_kurzbz), $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
 					$p = ($dok->pflicht == 't') ? ' *' : '';
 
-					echo form_label($dok->bezeichnung.$p, $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
+					echo form_label($dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1].$p, $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
 				?>
 				<div class="form-group" id="<?php echo $dok->dokument_kurzbz.'_hochgeladen'; ?>">
 					<?php

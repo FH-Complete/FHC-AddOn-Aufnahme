@@ -22,8 +22,10 @@ class MY_Controller extends CI_Controller
 		$this->load->helper('url');
 		$this->load->library('session');
 		$this->load->model("phrase_model", "PhraseModel");
+		$this->load->model("sprache_model", "SpracheModel");
 		//$this->load->spark('restclient/2.1.0');
 		$this->_data['language'] = $this->get_language();
+		$this->_getSprache($this->_data['language']);
 	}
 
 	/**
@@ -163,5 +165,21 @@ class MY_Controller extends CI_Controller
 		$this->_data["error"] = new stdClass();
 		$this->_data["error"]->error = $bool;
 		$this->_data["error"]->msg = $msg;
+	}
+	
+	private function _getSprache($sprache)
+	{
+		if((is_null($this->session->sprache)) || (ucfirst($sprache) != $this->session->sprache->sprache))
+		{
+			$this->SpracheModel->getSprache(ucfirst($sprache));
+			if ($this->SpracheModel->isResultValid() == true)
+			{
+				$this->session->sprache = $this->SpracheModel->result->retval[0];
+			}
+			else
+			{
+				$this->_setError(true, $this->SpracheModel->getErrorMessage());
+			}
+		}
 	}
 }
