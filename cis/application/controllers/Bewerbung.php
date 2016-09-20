@@ -71,6 +71,11 @@ class Bewerbung extends MY_Controller
 					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) {
 				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 				$studiengang->studienplan = $studienplan;
+				
+				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+				{
+					$this->_data["bewerbung_abgeschickt"] = true;
+				}
 				array_push($this->_data["studiengaenge"], $studiengang);
 			}
 		}
@@ -424,7 +429,7 @@ class Bewerbung extends MY_Controller
 		{
 			redirect("/Studiengaenge");
 		}
-
+		
 		//load adress data
 		$this->_loadAdresse();
 
@@ -468,7 +473,13 @@ class Bewerbung extends MY_Controller
 				$studiengang->studienplan = $studienplan;
 				array_push($this->_data["studiengaenge"], $studiengang);
 			}
+			
+			if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+			{
+				$this->_data["bewerbung_abgeschickt"] = true;
+			}
 		}
+		
 		$this->load->view('bewerbung', $this->_data);
 	}
 

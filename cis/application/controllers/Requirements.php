@@ -97,6 +97,10 @@ class Requirements extends MY_Controller
 			if ($prestudent->studiengang_kz == $this->input->get()["studiengang_kz"])
 			{
 				$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+				{
+					$this->_data["bewerbung_abgeschickt"] = true;
+				}
 				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 				$this->_data["studiengang"]->studienplan = $studienplan;
 			}
