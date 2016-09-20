@@ -30,7 +30,7 @@
 		<div class="col-sm-2">
 		    <?php
 		$time = strtotime($msg->insertamum);
-		echo date("d.m.Y h:m", $time);
+		echo date("d.m.Y H:m", $time);
 ?>
 		</div>
 		<div class="col-sm-1"><span class="icon-paperclip"></span></div>
