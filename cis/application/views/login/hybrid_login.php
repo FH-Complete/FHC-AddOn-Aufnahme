@@ -16,7 +16,7 @@
 	    <p><?php echo $this->getPhrase("Home/Login", $sprache); ?></p>
 	    <form id="LoginForm" action="<?php echo base_url($this->config->config["index_page"] . '/Login'); ?>" method="POST">
 		<div class="form-group">
-		    <label><?php echo $this->lang->line('aufnahme/emailAdresse'); ?></label>
+		    <label><?php echo $this->lang->line('aufnahme/loginEmailAdresse'); ?></label>
 		    <div class="input-group col-sm-12">
 			<input class="form-control" type="text" name="email" autofocus="autofocus" value="">
 		    </div>
