@@ -16,7 +16,7 @@
 		<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->getPhrase("ZGV/introduction_long", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"></span>
 		<div class="radio">
 			<label>
-				<input type="radio" name="doktype" value="österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)" <?php echo (strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)") !== false) ? 'checked' : ""; ?> />
+				<input type="radio" name="doktype" value="österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)" <?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)") !== false) ? 'checked' : "") : ""; ?> />
 				österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)
 			</label>
 			&nbsp;
@@ -24,7 +24,7 @@
 		</div>
 		<div class="radio">
 			<label>
-				<input type="radio" name="doktype" value="Studienberechtigungsprüfung" <?php echo (strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "Studienberechtigungsprüfung") !== false) ? 'checked' : ""; ?> />
+				<input type="radio" name="doktype" value="Studienberechtigungsprüfung" <?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "Studienberechtigungsprüfung") !== false) ? 'checked' : "") : ""; ?> />
 				Studienberechtigungsprüfung
 			</label>
 			&nbsp;
@@ -32,7 +32,7 @@
 		</div>
 		<div class="radio">
 			<label>
-				<input type="radio" name="doktype" value="gleichwertiges ausländisches Zeugnis" <?php echo (strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "gleichwertiges ausländisches Zeugnis") !== false) ? 'checked' : ""; ?> />
+				<input type="radio" name="doktype" value="gleichwertiges ausländisches Zeugnis" <?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "gleichwertiges ausländisches Zeugnis") !== false) ? 'checked' : "") : ""; ?> />
 				gleichwertiges ausländisches Zeugnis
 			</label>
 			&nbsp;
@@ -40,7 +40,7 @@
 		</div>
 		<div class="radio">
 			<label>
-				<input type="radio" name="doktype" value="einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen" <?php echo (strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen") !== false) ? 'checked' : false; ?> />
+				<input type="radio" name="doktype" value="einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen" <?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen") !== false) ? 'checked' : "") : ""; ?> />
 				einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen
 			</label>
 			&nbsp;
@@ -204,6 +204,7 @@
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
 				}
 				else
 				{
@@ -225,6 +226,14 @@
 			}
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
+		
+		<?php if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id != null))
+		{
+		?>
+			$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload().prop("disabled", true);
+		<?php
+		}
+		?>
 
 		// File upload
 		$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
@@ -259,6 +268,7 @@
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
+					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
 				}
 				else
 				{
@@ -280,6 +290,14 @@
 			}
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
+		
+		<?php if(isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]))
+		{
+		?>
+			$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload().prop("disabled", true);
+		<?php
+		}
+		?>
 	});
 
 	function toggleDocumentField(isChecked)

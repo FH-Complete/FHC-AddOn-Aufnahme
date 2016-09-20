@@ -122,6 +122,7 @@
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
+					$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
 				}
 				else
 				{
@@ -143,6 +144,14 @@
 			}
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
+		
+		<?php if(isset($dokumente[$dok->dokument_kurzbz]))
+		{
+		?>
+			$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload().prop("disabled", true);
+		<?php
+		}
+		?>
 	});
 </script>
 

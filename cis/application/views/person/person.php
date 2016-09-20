@@ -299,7 +299,7 @@ if (!isset($plz)) $plz = null;
 			<!--<div class="checkbox">
 			<label>
 				<?php
-					$data = array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente["pass"]) && ($dokumente["pass"]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+					$data = array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
 					(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 					echo form_checkbox($data);
 					echo $this->lang->line('person_formNachgereicht')
@@ -485,6 +485,7 @@ if (!isset($plz)) $plz = null;
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
+					$('#reisepassFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
 				}
 				else
 				{
@@ -505,6 +506,14 @@ if (!isset($plz)) $plz = null;
 			}
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
+		
+		<?php if(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]))
+		{
+		?>
+			$('#reisepassFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload().prop("disabled", true);
+		<?php
+		}
+		?>
 
 		// File upload
 		$('#lebenslaufFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
@@ -538,6 +547,7 @@ if (!isset($plz)) $plz = null;
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
+					$('#lebenslaufFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
 				}
 				else
 				{
@@ -558,6 +568,14 @@ if (!isset($plz)) $plz = null;
 			}
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
+		
+		<?php if(isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]))
+		{
+		?>
+			$('#lebenslaufFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload().prop("disabled", true);
+		<?php
+		}
+		?>
 
 		toggleAdresse();
 		toggleZustellAdresse();

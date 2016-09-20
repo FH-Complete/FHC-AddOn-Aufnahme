@@ -77,7 +77,7 @@ class Requirements extends MY_Controller
 				$akte->insertvon = 'online';
 				$akte->anmerkung = $this->input->post("doktype");
 
-				$this->_saveAkte($akte);
+//				$this->_saveAkte($akte);
 			}
 			
 			if($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis"]."_nachgereicht") !== null)
