@@ -32,3 +32,4 @@ $lang["requirements_letztesZeugnis"] = "letztgültiges Zeugnis";
 $lang["requirements_UploadErfolgreich"] = "Upload erfolgreich";
 $lang["requirements_UploadError"] = "Fehler beim hochladen";
 $lang["requirements_nachreichenAbschlussGeplantDatum"] = "Abschluss geplant am";
+$lang["requirements_dateiAuswahl"] = "Datei auswählen";

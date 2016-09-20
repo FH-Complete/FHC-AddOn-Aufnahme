@@ -394,7 +394,7 @@ if (!isset($plz)) $plz = null;
 				<!-- The fileinput-button span is used to style the file input field as button -->
 				<span class="btn btn-success fileinput-button">
 					<i class="glyphicon glyphicon-plus"></i>
-					<span>Select files...</span>
+					<span><?php echo $this->lang->line("aufnahme_dateiAuswahl"); ?></span>
 					<!-- The file input field used as target for the file upload widget -->
 					<input id="reisepassFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
 				</span>
@@ -449,7 +449,7 @@ if (!isset($plz)) $plz = null;
 				<!-- The fileinput-button span is used to style the file input field as button -->
 				<span class="btn btn-success fileinput-button">
 					<i class="glyphicon glyphicon-plus"></i>
-					<span>Select files...</span>
+					<span><?php echo $this->lang->line("aufnahme_dateiAuswahl"); ?></span>
 					<!-- The file input field used as target for the file upload widget -->
 					<input id="lebenslaufFileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
 				</span>
@@ -481,7 +481,12 @@ if (!isset($plz)) $plz = null;
 
 		$(".datepicker").datepicker({
 			dateFormat: "dd.mm.yy",
-			maxDate: new Date()
+			maxDate: new Date(),
+			beforeShow: function() {
+				setTimeout(function(){
+					$('.ui-datepicker').css('z-index', 10);
+				}, 0);
+			}
 		});
 
 		$(".fhc-tooltip").tooltip();

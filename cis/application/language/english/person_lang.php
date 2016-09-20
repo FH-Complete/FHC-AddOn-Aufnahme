@@ -43,3 +43,4 @@ $lang["person_formPlzOrt"] = "PLZ/Ort";
 $lang["person_formNachgereicht"] = "wird nachgereicht";
 $lang["person_UploadErfolgreich"] = "Upload successful";
 $lang["person_UploadError"] = "An error occured";
+$lang["aufnahme_dateiAuswahl"] = "Select file";

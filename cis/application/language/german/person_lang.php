@@ -46,3 +46,4 @@ $lang["person_UploadErfolgreich"] = "Upload erfolgreich";
 $lang["person_UploadError"] = "Fehler beim hochladen";
 $lang["person_titelPreInfo"] = "Titel der vor dem Namen geschrieben wird – z.B. Dr. xxxx";
 $lang["person_titelPostInfo"] = "Titel der nach dem Namen geschrieben wird – z.B. xxx, BSc";
+$lang["aufnahme_dateiAuswahl"] = "Datei auswählen";

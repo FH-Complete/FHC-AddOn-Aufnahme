@@ -56,7 +56,7 @@
 					<!-- The fileinput-button span is used to style the file input field as button -->
 					<span class="btn btn-success fileinput-button">
 						<i class="glyphicon glyphicon-plus"></i>
-						<span>Select files...</span>
+						<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
 						<!-- The file input field used as target for the file upload widget -->
 						<input id="<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
 					</span>
@@ -168,7 +168,12 @@
 
 		$(".datepicker").datepicker({
 			dateFormat: "dd.mm.yy",
-			minDate: new Date()
+			minDate: new Date(),
+			beforeShow: function() {
+				setTimeout(function(){
+					$('.ui-datepicker').css('z-index', 10);
+				}, 0);
+			}
 		});
 
 		toggleDateField();

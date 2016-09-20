@@ -144,20 +144,25 @@ if (isset($error) && ($error->error === true))
 
 <script type="text/javascript">
     $(document).ready(function(){
-	$("#datenschutz").on("change", function(){
-	    if($("#datenschutz").prop("checked"))
-	    {
-		$("#registration_button").prop("disabled", false)
-	    }
-	    else
-	    {
-		$("#registration_button").prop("disabled", true)
-	    }
-	});
+		$("#datenschutz").on("change", function(){
+			if($("#datenschutz").prop("checked"))
+			{
+			$("#registration_button").prop("disabled", false)
+			}
+			else
+			{
+			$("#registration_button").prop("disabled", true)
+			}
+		});
 
-	$(".datepicker").datepicker({
-	    dateFormat: "dd.mm.yy",
-	    maxDate: new Date()
-	});
+		$(".datepicker").datepicker({
+			dateFormat: "dd.mm.yy",
+			maxDate: new Date(),
+			beforeShow: function() {
+				setTimeout(function(){
+					$('.ui-datepicker').css('z-index', 10);
+				}, 0);
+			}
+		});
     });
 </script>
