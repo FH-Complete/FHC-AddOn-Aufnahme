@@ -354,8 +354,10 @@ class Registration extends MY_Controller {
 		}
 		if ($geschlecht == 'm')
 			$anrede = $this->lang->line('aufnahme/anredeMaennlich');
-		else
+		elseif($geschlecht == 'w')
 			$anrede = $this->lang->line('aufnahme/anredeWeiblich');
+		else
+			$anrede = $this->lang->line('aufnahme/anredeUnknown');
 
 		$this->load->library("mail", array("to" => $email, "from" => 'no-reply', "subject" => $this->lang->line('aufnahme/registration'), "text" => $this->lang->line('aufnahme/mailtextHtml')));
 		$text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, $studiengang_kz);
@@ -383,8 +385,10 @@ class Registration extends MY_Controller {
 
 		if ($geschlecht == 'm')
 			$anrede = $this->lang->line('aufnahme/anredeMaennlich');
-		else
+		elseif($geschlecht == 'w')
 			$anrede = $this->lang->line('aufnahme/anredeWeiblich');
+		else
+			$anrede = $this->lang->line('aufnahme/anredeUnknown');
 
 		$this->load->library("mail", array("to" => $email, "from" => 'no-reply', "subject" => $this->lang->line('aufnahme/registration'), "text" => $this->lang->line('aufnahme/mailtextHtml')));
 		$text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, NULL);

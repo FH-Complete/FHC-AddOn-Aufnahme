@@ -229,4 +229,5 @@ $lang['aufnahme/Geschlecht']='Geschlecht*';
 $lang['aufnahme/Maennlich']='männlich';
 $lang['aufnahme/Weiblich']='weiblich';
 $lang["aufnahme/loginEmailAdresse"] = "E-Mail oder FH-BenutzerInnenname";
+$lang['aufnahme/anredeUnknown']='geehrte/r Frau/Herr';
 ?>
