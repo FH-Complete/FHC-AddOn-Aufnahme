@@ -363,6 +363,8 @@ class Bewerbung extends MY_Controller
 		$this->session->set_userdata("studiengang_kz", $studiengang_kz);
 
 		$this->session->set_userdata("studiensemester_kurzbz", $studiensemester_kurzbz);
+		
+		$this->_data["studiengang_kz"] = $studiengang_kz;
 
 		//load person data
 		$this->_data["person"] = $this->_loadPerson();
