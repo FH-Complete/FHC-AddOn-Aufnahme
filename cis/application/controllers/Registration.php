@@ -68,7 +68,7 @@ class Registration extends MY_Controller {
 		$this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
 		$this->form_validation->set_rules("vorname", "Vorname", "required|max_length[32]");
 		$this->form_validation->set_rules("nachname", "Nachname", "required|max_length[64]");
-		$this->form_validation->set_rules("geb_datum", "Geburtsdatum", "required");
+		$this->form_validation->set_rules("geb_datum", "Geburtsdatum", "required|callback_check_date");
 		// $this->form_validation->set_rules("wohnort", "Wohnort", "required");
 		$this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
 		$this->form_validation->set_rules("email2", "E-Mail", "required|valid_email|callback_check_email");
@@ -130,6 +130,20 @@ class Registration extends MY_Controller {
 	public function check_terms() {
 		if (($this->input->post("datenschutz") !== "")) {
 			$this->form_validation->set_message("check_terms", "Sie müssen die Datenschutzbedingungen akzeptieren.");
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 *
+	 * @return unknown
+	 */
+	public function check_date() {
+		$date = explode(".", $this->input->post("geb_datum"));
+		if (!checkdate($date[1], $date[0], $date[2])) {
+			//$this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
+			$this->form_validation->set_message("check_date", "Bitte geben Sie ein gültiges Datum an.");
 			return false;
 		}
 		return true;

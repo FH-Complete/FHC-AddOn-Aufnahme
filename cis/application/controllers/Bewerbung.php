@@ -126,7 +126,7 @@ class Bewerbung extends MY_Controller
 		$this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
 		$this->form_validation->set_rules("vorname", "Vorname", "required|max_length[32]");
 		$this->form_validation->set_rules("nachname", "Nachname", "required|max_length[64]");
-		//$this->form_validation->set_rules("geb_datum", "Geburtsdatum", "required");
+		$this->form_validation->set_rules("gebdatum", "Geburtsdatum", "callback_check_date");
 		$this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
 
 		if ($this->form_validation->run() == FALSE)
@@ -139,9 +139,10 @@ class Bewerbung extends MY_Controller
 			$person = $this->_data["person"];
 			$person->anrede = $post["anrede"];
 			//$person->bundesland_code = $post["bundesland"];
-			if (isset($post["geb_datum"]))
+			
+			if (isset($post["gebdatum"]))
 			{
-				$person->gebdatum = date('Y-m-d', strtotime($post["geb_datum"]));
+				$person->gebdatum = date('Y-m-d', strtotime($post["gebdatum"]));
 			}
 			$person->gebort = $post["geburtsort"];
 			$person->geburtsnation = $post["nation"];
@@ -354,6 +355,21 @@ class Bewerbung extends MY_Controller
 			}
 			$this->load->view('bewerbung', $this->_data);
 		}
+	}
+	
+	/**
+	 *
+	 * @return unknown
+	 */
+	public function check_date() {
+		$date = explode(".", $this->input->post("gebdatum"));
+		var_dump($date);
+		if (!checkdate($date[1], $date[0], $date[2])) {
+			//$this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
+			$this->form_validation->set_message("check_date", "Bitte geben Sie ein gültiges Datum an.");
+			return false;
+		}
+		return true;
 	}
 
 	/**
