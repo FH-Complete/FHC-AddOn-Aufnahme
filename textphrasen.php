@@ -589,4 +589,25 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'description' => ''
 		)
 	)
+	,
+	array
+	(
+		'phrase' => 'Registration/Header',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Registrierung und Login für die Online-Bewerbung an der FH St. Pölten',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Registration/Header',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Registrierung und Login für die Online-Bewerbung an der FH St. Pölten',
+			'description' => ''
+		)
+	)
 );

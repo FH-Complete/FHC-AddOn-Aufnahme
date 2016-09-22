@@ -11,7 +11,7 @@ $this->lang->load(array('aufnahme', 'login'), $sprache);
 ?>
 
 <div class="container">
-    <?php $this->load->view('templates/iconHeader'); ?>
+    <?php $this->load->view('templates/iconHeader', array("header" => $this->getPhrase("Registration/Header", $sprache))); ?>
     <div class="row">
 	<?php $this->load_views('view_registration'); ?>
     </div>
