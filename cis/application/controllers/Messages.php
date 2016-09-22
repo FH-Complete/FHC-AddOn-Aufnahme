@@ -153,10 +153,9 @@ class Messages extends MY_Controller {
 					$this->_changeMessageStatus($this->session->userdata()["person_id"], $msg, MSG_STATUS_DELETED);
 				}
 			}
-
-			$this->load->view('messages', $this->_data);
 		}
 
+		$this->_loadData();
 		$this->load->view('messages', $this->_data);
 	}
 
