@@ -8,7 +8,8 @@
 
 $this->load->view('templates/header');
 //$this->load->view('menu', 'person');
-$this->lang->load(array('aufnahme', 'messages'), $language);
+$this->lang->load(array('aufnahme', 'messages'), $sprache);
+$this->load->view('templates/metaHeader');
 ?>
 
 <div class="container">
@@ -42,28 +43,30 @@ $this->load->view('templates/footer');
 
 <script type="text/javascript">
     $(document).ready(function(){
-	$(".collapsed").on("click", function(event){
-	    var messageId = $(event.target).attr("messageId");
+		$(".collapsed").on("click", function(event){
+			var messageId = $(event.target).attr("messageId");
 
-	    if($("#status_"+messageId).hasClass("icon-unread"))
-	    {
+			if($("#status_"+messageId).hasClass("icon-unread"))
+			{
 
-		$.ajax({
-		    method: "POST",
-		    url: "<?php echo $this->config->item('fhc_api')['server'];?>system/message/changeStatus",
-		    data: {
-			person_id: "<?php echo $this->session->userdata()['person_id']; ?>",
-			message_id: messageId,
-			status: "<?php echo MSG_STATUS_READ; ?>"
-		    }
-		}).done(function(data){
-		    if(data.error === 0)
-		    {
-			$("#status_"+messageId).removeClass("icon-unread");
-			$("#status_"+messageId).addClass("icon-read");
-		    }
+			$.ajax({
+				method: "POST",
+				dataType: 'json',
+				url: '<?php echo base_url($this->config->config["index_page"]."/Messages/changeMessageStatus"); ?>',
+				data: {
+					message_id: messageId,
+					status: "<?php echo MSG_STATUS_READ; ?>"
+				}
+			}).done(function(data){
+				console.log(data);
+				if(data.error === 0)
+				{
+					console.log("test");
+					$("#status_"+messageId).removeClass("icon-unread");
+					$("#status_"+messageId).addClass("icon-read");
+				}
+			});
+			}
 		});
-	    }
-	});
     });
 </script>

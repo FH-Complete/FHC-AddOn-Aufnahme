@@ -158,6 +158,33 @@ class Messages extends MY_Controller {
 		$this->_loadData();
 		$this->load->view('messages', $this->_data);
 	}
+	
+	public function changeMessageStatus()
+	{
+		if((isset($this->input->post()["message_id"])) &&(isset($this->input->post()["status"])))
+		{
+			$this->_data["messages"] = $this->_getMessages($this->session->userdata("person_id"));
+			foreach($this->_data["messages"] as $msg)
+			{
+				if(($msg->message_id == $this->input->post()["message_id"]))
+				{
+					$status = $this->input->post()["status"];
+					$result = $this->_changeMessageStatus($this->session->userdata("person_id"), $msg, $status);
+					if((count($result) == 1) && (isset($result[0]->message_id)))
+					{
+						$return = new stdClass();
+						$return->error = 0;
+						echo json_encode($return);
+						return;
+					}
+				}
+			}
+		}
+		else
+		{
+			//TODO param missing
+		}
+	}
 
 
 	private function _loadData()

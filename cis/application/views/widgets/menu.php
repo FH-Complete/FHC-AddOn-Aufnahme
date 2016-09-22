@@ -30,7 +30,6 @@ foreach ($items as $item): ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
-	    <?php $this->load->view('language'); ?>
         </div>
     </div>
 </nav>
