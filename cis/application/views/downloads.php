@@ -7,7 +7,8 @@
 
 
 $this->load->view('templates/header');
-$this->lang->load(array('aufnahme', 'downloads'), $language);
+$this->lang->load(array('aufnahme', 'downloads'), $sprache);
+$this->load->view('templates/metaHeader');
 ?>
 
 <div class="container">

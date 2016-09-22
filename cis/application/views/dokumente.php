@@ -8,6 +8,7 @@
 
 $this->load->view('templates/header');
 $this->lang->load(array('aufnahme', 'dokumente'), $language);
+$this->load->view('templates/metaHeader');
 
 
 if (isset($error) && ($error->error === true))

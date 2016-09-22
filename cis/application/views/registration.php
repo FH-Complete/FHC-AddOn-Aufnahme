@@ -7,6 +7,7 @@
 
 
 $this->load->view('templates/header');
+$this->load->view('templates/metaHeader');
 $this->lang->load(array('aufnahme', 'login'), $sprache);
 ?>
 

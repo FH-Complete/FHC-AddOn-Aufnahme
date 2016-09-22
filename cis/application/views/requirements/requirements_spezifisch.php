@@ -54,21 +54,27 @@
 					<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $dok->dokument_kurzbz; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button> -->
 
 					<!-- The fileinput-button span is used to style the file input field as button -->
-					<span class="btn btn-success fileinput-button">
-						<i class="glyphicon glyphicon-plus"></i>
-						<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
-						<!-- The file input field used as target for the file upload widget -->
-						<input id="<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
-					</span>
-					<br>
-					<br>
-					<!-- The global progress bar -->
-					<div id="<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
-						<div class="progress-bar progress-bar-success"></div>
+					<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f") && ($dokumente[$dok->dokument_kurzbz]->dms_id != null)) { ?>
+						<div id="<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $dokumente[$dok->dokument_kurzbz]->akte_id; ?>">
+							<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->akte_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>
+						</div>
+					<?php
+					}
+					?>
+					<div id="<?php echo $dok->dokument_kurzbz; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="<?php echo (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
+						<span class="btn btn-success fileinput-button">
+							<i class="glyphicon glyphicon-plus"></i>
+							<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
+							<!-- The file input field used as target for the file upload widget -->
+							<input id="<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
+						</span>
+						<br>
+						<br>
+						<!-- The global progress bar -->
+						<div id="<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
+							<div class="progress-bar progress-bar-success"></div>
+						</div>
 					</div>
-					<!--<div class="<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $dokumente[$dok->dokument_kurzbz]->akte_id; ?>">
-						<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->akte_id; ?>);">löschen</button>
-					</div>-->
 				</div>
 				<div class="form-group">
 					<div class="form-group">

@@ -7,7 +7,8 @@
 
 
 $this->load->view('templates/header');
-$this->lang->load(array('aufnahme', 'send'), $language);
+$this->lang->load(array('aufnahme', 'send'), $sprache);
+$this->load->view('templates/metaHeader');
 
 if (isset($error) && ($error->error === true))
 	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';

@@ -284,6 +284,40 @@ class Requirements extends MY_Controller
 			}
 		}
 	}
+	
+	/**
+	 * 
+	 * @return unknown
+	 */
+	public function deleteDocument()
+	{
+		$result = new stdClass();
+		if((isset($this->input->post()["akte_id"])) && (isset($this->input->post()["studienplan_id"])))
+		{
+			$akte_id = $this->input->post()["akte_id"];
+			$studienplan_id = $this->input->post()["studienplan_id"];
+			$this->_loadDokumente($this->session->userdata()["person_id"]);
+
+			foreach($this->_data["dokumente"] as $dok)
+			{
+				if(($dok->akte_id === $akte_id))
+				{
+					//TODO call API to delete document
+					$result->dokument_kurzbz = $dok->dokument_kurzbz;
+					$result->studienplan_id = $studienplan_id;
+				}
+//				var_dump($result);
+			}
+		}
+		else
+		{
+			//TODO parameter missing
+			$result->error = true;
+			$result->msg = "akte_id is missing";
+		}
+
+		echo json_encode($result);
+	}
 
 	/**
 	 *

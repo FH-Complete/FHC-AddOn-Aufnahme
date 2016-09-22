@@ -6,7 +6,8 @@
  */
 
 $this->load->view('templates/header');
-$this->lang->load(array('aufnahme', 'requirements'), $language);
+$this->lang->load(array('aufnahme', 'requirements'), $sprache);
+$this->load->view('templates/metaHeader');
 
 if (isset($error) && ($error->error === true))
 	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
@@ -123,6 +124,41 @@ if (isset($error) && ($error->error === true))
 			}
 		});
     }*/
+	
+	function deleteDocument(akte_id, studienplan_id)
+	{	
+		console.log(akte_id);
+		$.ajax({
+			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/deleteDocument"); ?>',
+			type: 'POST',
+			data: {
+				"akte_id": akte_id,
+				"studienplan_id": studienplan_id
+			},
+			cache: false,
+			dataType: 'json',
+			success: function(data, textStatus, jqXHR)
+			{
+				console.log(data);
+				if(data.error)
+				{
+					//TODO display error
+				}
+				else
+				{
+					$("#"+data.dokument_kurzbz+"Upload_"+data.studienplan_id).show();
+					$("#"+data.dokument_kurzbz+"Delete_"+akte_id).remove();
+					$("#"+data.dokument_kurzbz+"_hochgeladen").html("<?php echo $this->lang->line('requirements_keinDokHochgeladen'); ?>");
+					$("#"+data.dokument_kurzbz+"_nachgereicht").prop("disabled", false);
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				// Handle errors here
+				console.log('ERRORS: ' + textStatus);
+				// STOP LOADING SPINNER
+			}
+		});
+	}
 </script>
 
 <?php

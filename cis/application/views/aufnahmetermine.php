@@ -7,7 +7,8 @@
 
 
 $this->load->view('templates/header');
-$this->lang->load(array('aufnahme', 'termine'), $language);
+$this->lang->load(array('aufnahme', 'termine'), $sprache);
+$this->load->view('templates/metaHeader');
 
 
 if (isset($error) && ($error->error === true))
