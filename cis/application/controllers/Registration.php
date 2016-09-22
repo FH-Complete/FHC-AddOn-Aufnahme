@@ -181,9 +181,9 @@ class Registration extends MY_Controller {
 			}
 		}
 
-		$this->load->view('templates/header');
+//		$this->load->view('templates/header');
 		$this->load->view('registration/resendCode', $this->_data);
-		$this->load->view('templates/footer');
+//		$this->load->view('templates/footer');
 	}
 
 
@@ -225,9 +225,9 @@ class Registration extends MY_Controller {
 					if (strtotime(date('Y-m-d H:i:s')) < strtotime($person->zugangscode_timestamp)) {
 						$person->zugangscode =  $this->_data["zugangscode"];
 						$this->PersonModel->updatePerson($person);
-						$this->load->view('templates/header');
+//						$this->load->view('templates/header');
 						$this->load->view('login/confirm_login',  $this->_data);
-						$this->load->view('templates/footer');
+//						$this->load->view('templates/footer');
 					}
 					else {
 						$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
