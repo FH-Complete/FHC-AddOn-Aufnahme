@@ -108,7 +108,7 @@
 			<!-- The fileinput-button span is used to style the file input field as button -->
 			<span class="btn btn-success fileinput-button">
 				<i class="glyphicon glyphicon-plus"></i>
-				<span>Select files...</span>
+				<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
 				<!-- The file input field used as target for the file upload widget -->
 				<input id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
 			</span>
@@ -118,7 +118,14 @@
 			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
 				<div class="progress-bar progress-bar-success"></div>
 			</div>
-
+		</div>
+		<div class="form-group">
+			<div class="form-group">
+				<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>" class="nachreichenDatum">
+					<?php echo form_label($this->lang->line('requirements_nachreichenAbschlussGeplantDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
+					<?php echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum', 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum', 'maxlength' => 64, "type" => "date", "value" => set_value("nachreichenDatum", isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht_am : ""), "class" => "form-control datepicker")); ?>
+				</div>
+			</div>
 		</div>
     </div>
 </div>
@@ -157,7 +164,7 @@
 			<!-- The fileinput-button span is used to style the file input field as button -->
 			<span class="btn btn-success fileinput-button">
 				<i class="glyphicon glyphicon-plus"></i>
-				<span>Select files...</span>
+				<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
 				<!-- The file input field used as target for the file upload widget -->
 				<input id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
 			</span>
@@ -178,10 +185,12 @@
 
 		$(".nachreichen_checkbox_zeugnis").on("change", function(evt) {
 			toggleDocumentField($(".nachreichen_checkbox_zeugnis").prop("checked"));
+			toggleDateField();
 		});
 
 		$(".nachreichen_checkbox_zeugnis").each(function (i, v) {
 			toggleDocumentField($(".nachreichen_checkbox_zeugnis").prop("checked"));
+			toggleDateField();
 		});
 
 		// File upload
@@ -323,5 +332,22 @@
 		{
 			$("#letztesZeugnis").hide();
 		}
+    }
+	
+	function toggleDateField()
+    {
+		$(".nachreichenDatum").each(function(i,v) {
+
+			var id = $(v).attr("id");
+
+			if($("#"+id+"_nachgereicht").prop("checked"))
+			{
+				$(v).show();
+			}
+			else
+			{
+				$(v).hide();
+			}
+		});
     }
 </script>

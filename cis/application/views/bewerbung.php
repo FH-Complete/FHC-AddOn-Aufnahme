@@ -60,29 +60,29 @@ $this->load->view('templates/footer');
     $(document).ready(function(){
 
 
-	checkDataCompleteness();
+//	checkDataCompleteness();
 
     });
 
     function checkDataCompleteness()
     {
-	$.ajax({
-	    method: "GET",
-	    url: "<?php echo $this->config->item('fhc_api')['server'];?>person/person/person?person_id=<?php echo $person->person_id; ?>"
-	}).done(function(data){
-	    if(data.error === 0)
-	    {
-		var person = data.retval[0];
-		if(_isPersonDataComplete(person))
-		{
-		    $(".personalData").addClass("complete");
-		}
-		else
-		{
-		    $(".personalData").addClass("incomplete");
-		}
-	    }
-	});
+		$.ajax({
+			method: "GET",
+			url: "<?php echo $this->config->item('fhc_api')['server'];?>person/person/person?person_id=<?php echo $person->person_id; ?>"
+		}).done(function(data){
+			if(data.error === 0)
+			{
+			var person = data.retval[0];
+			if(_isPersonDataComplete(person))
+			{
+				$(".personalData").addClass("complete");
+			}
+			else
+			{
+				$(".personalData").addClass("incomplete");
+			}
+			}
+		});
     }
 
     function _isPersonDataComplete(person)

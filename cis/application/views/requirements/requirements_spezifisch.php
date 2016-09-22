@@ -5,7 +5,7 @@
  * @package default
  */
 ?>
-
+<?php if(!empty($dokumenteStudiengang)) { ?>
 <legend><?php echo $this->lang->line("requirements_specific_header"); ?></legend>
 <div class="row">
     <div class="col-sm-12">
@@ -66,7 +66,9 @@
 					<div id="<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
 						<div class="progress-bar progress-bar-success"></div>
 					</div>
-
+					<!--<div class="<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $dokumente[$dok->dokument_kurzbz]->akte_id; ?>">
+						<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->akte_id; ?>);">löschen</button>
+					</div>-->
 				</div>
 				<div class="form-group">
 					<div class="form-group">
@@ -95,7 +97,7 @@
 			dataType: 'json',
 			disableValidation: false,
 			add: function(e, data) {
-
+				$('#<?php echo $dok->dokument_kurzbz; ?>_hochgeladen').html("");
 				var uploadErrors = [];
 				var acceptFileTypes = /^.*\.(jpe?g|docx?|pdf)$/i;
 
@@ -123,7 +125,14 @@
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
-					$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
+//					$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
+//					$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
+//					$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
+//					$('#<?php echo $dok->dokument_kurzbz; ?>delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
+					$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+						'width',
+						'0%'
+					);
 				}
 				else
 				{
@@ -149,7 +158,7 @@
 		<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f"))
 		{
 		?>
-			$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload().prop("disabled", true);
+			//$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload().prop("disabled", true);
 		<?php
 		}
 		?>
@@ -159,6 +168,7 @@
 <?php } ?>
 	</div>
 </div>
+<?php } ?>
 
 <script type="text/javascript">
     $(document).ready(function() {
