@@ -568,5 +568,25 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'Ihre Bewerbung ist eingelangt, bitte wählen Sie einen Termin für das erste Aufnahmeverfahren aus:',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'Studiengaenge/Header',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Studiengang Auswahl:',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Studiengaenge/Header',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Studiengang Auswahl:',
+			'description' => ''
+		)
 	)
 );
