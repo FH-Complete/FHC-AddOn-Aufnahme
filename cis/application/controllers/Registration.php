@@ -195,14 +195,26 @@ class Registration extends MY_Controller {
 		if (isset($this->input->get()["studiengang_kz"])) {
 			$this->_data["studiengang_kz"] = $this->input->get()["studiengang_kz"];
 		}
-
-		$result = $this->_checkZugangscodePerson($this->input->get("code"));
+		
+		if(!isset($this->session->userdata()["zugangscode"]))
+		{
+			$this->session->set_userdata("zugangscode", $this->input->get("code"));
+		}
+		
+		$result = $this->_checkZugangscodePerson($this->session->userdata()["zugangscode"]);
 		if (($this->PersonModel->isResultValid() === true) && (count($result) == 1)) {
 			$person_id = $result[0]->person_id;
 			$this->_data["zugangscode"] = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
+			$this->session->set_userdata("zugangscode", $this->_data["zugangscode"]);
 
 			if ($this->Kontakt_model->getKontakt($person_id)) {
-				$this->_data["email"] = $this->Kontakt_model->result->retval[0]->kontakt;
+				foreach($this->Kontakt_model->result->retval as $kontakt)
+				{
+					if($kontakt->kontakttyp == "email")
+					{
+						$this->_data["email"] = $kontakt->kontakt;
+					}
+				}
 				$person = new stdClass();
 				$person->person_id = $person_id;
 				$result = $this->_getPerson($person_id);
