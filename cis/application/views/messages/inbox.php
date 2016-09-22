@@ -48,10 +48,11 @@
 				<button class="btn btn-sm btn-primary icon-trash" id="answer_<?php echo $msg->message_id; ?>"><?php echo $this->lang->line('msg_delete'); ?></button>
 				</a>
 			</div>
+			<div id="message_body_<?php echo $msg->message_id; ?>" class="collapse messageBody" style="float: left;">
+				<?php echo $msg->body;?>
+			</div>
 	    </div>
-	    <div id="message_body_<?php echo $msg->message_id; ?>" class="collapse" style="float: left;">
-			<?php echo $msg->body;?>
-	    </div>
+	    
 	    <?php } ?>
 	</div>
     <?php } ?>
