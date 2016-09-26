@@ -486,7 +486,8 @@ if (!isset($plz)) $plz = null;
 				setTimeout(function(){
 					$('.ui-datepicker').css('z-index', 10);
 				}, 0);
-			}
+			},
+			changeYear: true
 		});
 
 		$(".fhc-tooltip").tooltip();
