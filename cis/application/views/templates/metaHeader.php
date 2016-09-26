@@ -1,8 +1,8 @@
 <div id="metaHeader">
-	<div id="metaHeaderTitle">
+	<div class="container">
 		St. Pölten University of Applied Sciences
-	</div>
-	<div class="pull-right metaHeaderLang">
-		<?php $this->load->view('language'); ?>
+		<div class="pull-right metaHeaderLang">
+			<?php $this->load->view('language'); ?>
+		</div>
 	</div>
 </div>
