@@ -5,7 +5,6 @@
  * @package default
  */
 
-
 ?>
 <a class="<?php echo (isset($studiengang_kz) && ($studiengang_kz == $studiengang->studiengang_kz)) ? "" : "collapsed"?>" data-toggle='collapse' data-target='#<?php echo $studiengang->studiengang_kz; ?>'>
 	<h1 class="studiengang-list-item"><?php echo $studiengang->bezeichnung ?>

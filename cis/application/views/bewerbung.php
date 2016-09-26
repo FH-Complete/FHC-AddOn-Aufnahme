@@ -138,4 +138,39 @@ $this->load->view('templates/footer');
 			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + studiengang_kz;
 		}
     }
+	
+	function deleteDocument(dms_id, studienplan_id)
+	{	
+		$.ajax({
+			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/deleteDocument"); ?>',
+			type: 'POST',
+			data: {
+				"dms_id": dms_id
+			},
+			cache: false,
+			dataType: 'json',
+			success: function(data, textStatus, jqXHR)
+			{
+				console.log(data);
+				if(data.error !== 0)
+				{
+					//TODO display error
+				}
+				else
+				{
+					$("#"+data.dokument_kurzbz+"Upload_"+studienplan_id).show();
+					$("#"+data.dokument_kurzbz+"Delete_"+studienplan_id).html("");
+					$('#'+data.dokument_kurzbz+'FileUpload_'+studienplan_id).parent().show();
+					$('#'+data.dokument_kurzbz+'Progress_'+studienplan_id).show();
+					$("#"+data.dokument_kurzbz+"_hochgeladen_"+studienplan_id).html("<?php echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen'); ?>");
+					$("#"+data.dokument_kurzbz+"_nachgereicht_"+studienplan_id).prop("disabled", false);
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				// Handle errors here
+				console.log('ERRORS: ' + textStatus);
+				// STOP LOADING SPINNER
+			}
+		});
+	}
 </script>

@@ -5,12 +5,12 @@
  * @package default
  */
 ?>
-<?php if(!empty($dokumenteStudiengang)) { ?>
+<?php if((isset($dokumenteStudiengang[$studiengang->studiengang_kz])) && (!empty($dokumenteStudiengang))) { ?>
 <legend><?php echo $this->lang->line("requirements_specific_header"); ?></legend>
 <div class="row">
     <div class="col-sm-12">
 		<fieldset><?php echo $this->getPhrase("ZGV/SpecificAdmissionRequirements", $sprache); ?></fieldset>
-<?php foreach ($dokumenteStudiengang as $dok) { ?>
+<?php foreach ($dokumenteStudiengang[$studiengang->studiengang_kz] as $dok) { ?>
 		<div class="row">
 			<div class="col-sm-5">
 				<?php
@@ -34,7 +34,7 @@
 				<div class="checkbox">
 					<label>
 						<?php
-							$data = array('id' => $dok->dokument_kurzbz.'_nachgereicht', 'class'=>'nachreichen_checkbox', 'name' => $dok->dokument_kurzbz.'_nachgereicht', "checked" => (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+							$data = array('id' => $dok->dokument_kurzbz.'_nachgereicht_'.$studiengang->studienplan->studienplan_id, 'class'=>'nachreichen_checkbox', 'name' => $dok->dokument_kurzbz.'_nachgereicht', "checked" => (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
 							(isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 							(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
 							echo form_checkbox($data);
@@ -54,13 +54,13 @@
 					<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $dok->dokument_kurzbz; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button> -->
 
 					<!-- The fileinput-button span is used to style the file input field as button -->
-					<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f") && ($dokumente[$dok->dokument_kurzbz]->dms_id != null)) { ?>
-						<div id="<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $dokumente[$dok->dokument_kurzbz]->akte_id; ?>">
-							<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->akte_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>
-						</div>
-					<?php
-					}
-					?>
+					<div id="<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
+						<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f") && ($dokumente[$dok->dokument_kurzbz]->dms_id != null)) { ?>
+							<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>
+						<?php
+						}
+						?>
+					</div>
 					<div id="<?php echo $dok->dokument_kurzbz; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="<?php echo (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
 						<span class="btn btn-success fileinput-button">
 							<i class="glyphicon glyphicon-plus"></i>
@@ -80,7 +80,7 @@
 					<div class="form-group">
 						<div id="<?php echo $dok->dokument_kurzbz; ?>" class="nachreichenDatum">
 							<?php echo form_label($this->lang->line('requirements_nachreichenDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
-							<?php echo form_input(array('id' => $dok->dokument_kurzbz.'_nachreichenDatum', 'name' => $dok->dokument_kurzbz.'_nachreichenDatum', 'maxlength' => 64, "type" => "date", "value" => set_value("nachreichenDatum", isset($dokumente[$dok->dokument_kurzbz]) ? $dokumente[$dok->dokument_kurzbz]->nachgereicht_am : ""), "class" => "form-control datepicker")); ?>
+							<?php echo form_input(array('id' => $dok->dokument_kurzbz.'_nachreichenDatum', 'name' => $dok->dokument_kurzbz.'_nachreichenDatum', 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($dokumente[$dok->dokument_kurzbz]) ? date("d.m.Y", strtotime($dokumente[$dok->dokument_kurzbz]->nachgereicht_am)) : ""), "class" => "form-control datepicker")); ?>
 						</div>
 					</div>
 				</div>
@@ -132,9 +132,12 @@
 				{
 					msg = "Upload erfolgreich";
 //					$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
-//					$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
-//					$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
-//					$('#<?php echo $dok->dokument_kurzbz; ?>delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
+					$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
+					$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
+					$('#<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').append(
+							'<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>');
+					$('#<?php echo $dok->dokument_kurzbz; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
+					$('#<?php echo $dok->dokument_kurzbz; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("checked", false);
 					$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
 						'width',
 						'0%'
@@ -179,7 +182,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
 		$(".nachreichen_checkbox").on("change", function(evt) {
-			toggleDateField();
+			var studienplan_id = $(evt.target).attr("studienplan_id");
+			toggleDateField(studienplan_id);
 		});
 
 		$(".datepicker").datepicker({
@@ -191,36 +195,43 @@
 				}, 0);
 			}
 		});
-
-		toggleDateField();
+		
+		$(".nachreichen_checkbox_zeugnis").each(function(i,v){
+			toggleDateField($(v).attr("studienplan_id"));
+		});
     });
 
-    function toggleDateField()
+    function toggleDateField(studienplan_id)
     {
 		$(".nachreichenDatum").each(function(i,v) {
-
 			var id = $(v).attr("id");
-
-			if($("#"+id+"_nachgereicht").prop("checked"))
+//			console.log("#"+id+"_nachgereicht_"+studienplan_id);
+			if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked") !== undefined)
 			{
-				$(v).show();
-			}
-			else
-			{
-				$(v).hide();
+				if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked"))
+				{
+					$(v).show();
+				}
+				else
+				{
+					$(v).hide();
+				}
 			}
 		});
 
 		$(".nachreichenAnmerkung").each(function(i,v)
 		{
 			var id = $(v).attr("id");
-			if($("#"+id+"_nachgereicht").prop("checked"))
+			if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked") !== undefined)
 			{
-				$(v).show();
-			}
-			else
-			{
-				$(v).hide();
+				if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked"))
+				{
+					$(v).show();
+				}
+				else
+				{
+					$(v).hide();
+				}
 			}
 		});
     }

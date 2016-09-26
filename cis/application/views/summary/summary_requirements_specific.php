@@ -8,7 +8,7 @@
 
 ?>
 <legend><?php echo $this->lang->line("summary_specific_requirements_header"); ?></legend>
-<?php foreach ($dokumenteStudiengang as $dok) { ?>
+<?php foreach ($dokumenteStudiengang[$studiengang->studiengang_kz] as $dok) { ?>
 <div class="row">
     <div class="col-sm-12">
 	<div class="col-sm-6">

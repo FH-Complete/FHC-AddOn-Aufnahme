@@ -49,5 +49,18 @@ class Dms_model extends MY_Model
 		}
 	}
 
-
+	/**
+	 *
+	 * @param unknown $dms_id
+	 * @return unknown
+	 */
+	public function deleteDms($person_id, $dms_id) {
+		if ($restquery = $this->rest->post('content/dms/deldms', array("person_id"=>$person_id, "dms_id"=>$dms_id))) {
+			$this->result = $restquery;
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }

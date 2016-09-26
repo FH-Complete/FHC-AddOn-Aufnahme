@@ -10,6 +10,8 @@
 <?php
 	echo form_open_multipart("Requirements/?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id, array("id" => "RequirementsForm", "name" => "RequirementsForm"));
 ?>
+<input type="hidden" name="studiengang_kz" value="<?php echo $studiengang->studiengang_kz; ?>"/>
+<input type="hidden" name="studienplan_id" value="<?php echo $studiengang->studienplan->studienplan_id; ?>"/>
 <div class="row">
     <div class="col-sm-12">
 		<span><?php echo $this->getPhrase("ZGV/introduction_short", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></span>
@@ -85,7 +87,7 @@
 		<div class="checkbox">
 			<label>
 				<?php
-					$data = array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachgereicht', 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id, "class"=>"nachreichen_checkbox_zeugnis");
+					$data = array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachgereicht_'.$studiengang->studienplan->studienplan_id, 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachgereicht_'.$studiengang->studienplan->studienplan_id, "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id, "class"=>"nachreichen_checkbox_zeugnis");
 					(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 					(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
 					echo form_checkbox($data);
@@ -106,24 +108,33 @@
 			<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button> -->
 
 			<!-- The fileinput-button span is used to style the file input field as button -->
-			<span class="btn btn-success fileinput-button">
-				<i class="glyphicon glyphicon-plus"></i>
-				<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
-				<!-- The file input field used as target for the file upload widget -->
-				<input id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
-			</span>
-			<br>
-			<br>
-			<!-- The global progress bar -->
-			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
-				<div class="progress-bar progress-bar-success"></div>
+			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
+				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]])) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id != null)) { ?>
+					<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>
+				<?php
+				}
+				?>
+			</div>
+			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
+				<span class="btn btn-success fileinput-button">
+					<i class="glyphicon glyphicon-plus"></i>
+					<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
+					<!-- The file input field used as target for the file upload widget -->
+					<input id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
+				</span>
+				<br>
+				<br>
+				<!-- The global progress bar -->
+				<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
+					<div class="progress-bar progress-bar-success"></div>
+				</div>
 			</div>
 		</div>
 		<div class="form-group">
 			<div class="form-group">
-				<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>" class="nachreichenDatum">
+				<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id.'_div'; ?>" class="">
 					<?php echo form_label($this->lang->line('requirements_nachreichenAbschlussGeplantDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
-					<?php echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum', 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum', 'maxlength' => 64, "type" => "date", "value" => set_value("nachreichenDatum", isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht_am : ""), "class" => "form-control datepicker")); ?>
+					<?php echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? date("d.m.Y", strtotime($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht_am)) : ""), "class" => "form-control datepicker")); ?>
 				</div>
 			</div>
 		</div>
@@ -162,19 +173,27 @@
 			<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>, true)">Upload</button> -->
 
 			<!-- The fileinput-button span is used to style the file input field as button -->
-			<span class="btn btn-success fileinput-button">
-				<i class="glyphicon glyphicon-plus"></i>
-				<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
-				<!-- The file input field used as target for the file upload widget -->
-				<input id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
-			</span>
-			<br>
-			<br>
-			<!-- The global progress bar -->
-			<div id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
-				<div class="progress-bar progress-bar-success"></div>
+			<div id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
+				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]])) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id != null)) { ?>
+					<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>
+				<?php
+				}
+				?>
 			</div>
-
+			<div id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
+				<span class="btn btn-success fileinput-button">
+					<i class="glyphicon glyphicon-plus"></i>
+					<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
+					<!-- The file input field used as target for the file upload widget -->
+					<input id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
+				</span>
+				<br>
+				<br>
+				<!-- The global progress bar -->
+				<div id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
+					<div class="progress-bar progress-bar-success"></div>
+				</div>
+			</div>
 		</div>
     </div>
 </div>
@@ -184,13 +203,30 @@
 		$(".fhc-tooltip").tooltip();
 
 		$(".nachreichen_checkbox_zeugnis").on("change", function(evt) {
-			toggleDocumentField($(".nachreichen_checkbox_zeugnis").prop("checked"));
-			toggleDateField();
+			var studienplan_id = $(evt.target).attr("studienplan_id");
+			toggleDocumentField($(evt.target).prop("checked"));
+			if($(evt.target).prop("checked"))
+			{
+				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"];?>_nachreichenDatum_"+studienplan_id+"_div").show();
+			}
+			else
+			{
+				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"];?>_nachreichenDatum_"+studienplan_id+"_div").hide();
+			}
 		});
 
 		$(".nachreichen_checkbox_zeugnis").each(function (i, v) {
-			toggleDocumentField($(".nachreichen_checkbox_zeugnis").prop("checked"));
-			toggleDateField();
+			var studienplan_id = $(v).attr("studienplan_id");
+			toggleDocumentField($(v).prop("checked"));
+			if($(v).prop("checked"))
+			{
+				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"];?>_nachreichenDatum_"+studienplan_id+"_div").show();
+			}
+			else
+			{
+				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"];?>_nachreichenDatum_"+studienplan_id+"_div").hide();
+			}
+
 		});
 
 		// File upload
@@ -226,7 +262,16 @@
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
-					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').append(
+							'<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>');
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("checked", false);
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+						'width',
+						'0%'
+					);
 				}
 				else
 				{
@@ -248,14 +293,6 @@
 			}
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
-		
-		<?php if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id != null))
-		{
-		?>
-			$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload().prop("disabled", true);
-		<?php
-		}
-		?>
 
 		// File upload
 		$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
@@ -290,7 +327,16 @@
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
-					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
+					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
+					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
+					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').append(
+							'<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>');
+					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
+					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("checked", false);
+					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+						'width',
+						'0%'
+					);
 				}
 				else
 				{
@@ -313,13 +359,7 @@
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
 		
-		<?php if(isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]))
-		{
-		?>
-			$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload().prop("disabled", true);
-		<?php
-		}
-		?>
+		
 	});
 
 	function toggleDocumentField(isChecked)
@@ -332,22 +372,5 @@
 		{
 			$("#letztesZeugnis").hide();
 		}
-    }
-	
-	function toggleDateField()
-    {
-		$(".nachreichenDatum").each(function(i,v) {
-
-			var id = $(v).attr("id");
-
-			if($("#"+id+"_nachgereicht").prop("checked"))
-			{
-				$(v).show();
-			}
-			else
-			{
-				$(v).hide();
-			}
-		});
     }
 </script>

@@ -35,12 +35,42 @@ class Summary extends MY_Controller {
 	public function index() {
 		$this->checkLogin();
 		$this->_data['sprache'] = $this->get_language();
+		
+		if($this->input->get("studiengang_kz") != null)
+		{
+			$this->_data["studiengang_kz"] = $this->input->get("studiengang_kz");
+		}
 
-		//load studiengang
-		$this->_loadStudiengang($this->input->get()["studiengang_kz"]);
+		//load preinteressent data
+		$this->_data["prestudent"] = $this->_loadPrestudent();
+		
+		$this->_data["studiengaenge"] = array();
+		foreach ($this->_data["prestudent"] as $prestudent)
+		{
+			//load studiengaenge der prestudenten
+			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+
+			if ((!empty($prestudent->prestudentStatus))
+				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) {
+				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+				$studiengang->studienplan = $studienplan;
+				
+				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+				{
+					$this->_data["bewerbung_abgeschickt"] = true;
+				}
+				array_push($this->_data["studiengaenge"], $studiengang);
+			}
+		}
 
 		//load Dokumente from Studiengang
-		$this->_data["dokumenteStudiengang"] = $this->_loadDokumentByStudiengang($this->input->get()["studiengang_kz"]);
+		$this->_data["dokumenteStudiengang"] = array();
+		foreach($this->_data["studiengaenge"] as $stg)
+		{
+			$this->_data["dokumenteStudiengang"][$stg->studiengang_kz] = $this->_loadDokumentByStudiengang($stg->studiengang_kz);
+		}
 
 		//load nationen
 		$this->_loadNationen();
@@ -56,18 +86,6 @@ class Summary extends MY_Controller {
 
 		//load kontakt
 		$this->_loadKontakt();
-
-		//load prestudent
-		$this->_data["prestudent"] = $this->_loadPrestudent();
-
-		//load studiengang
-		foreach ($this->_data["prestudent"] as $prestudent) {
-			if ($prestudent->studiengang_kz == $this->input->get()["studiengang_kz"]) {
-				$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-				$this->_data["studiengang"]->studienplan = $studienplan;
-			}
-		}
 
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
@@ -90,21 +108,26 @@ class Summary extends MY_Controller {
 	 */
 	private function _loadStudiengang($stgkz = null)
 	{
-		if(is_null($stgkz))
+		if (is_null($stgkz))
 		{
-			$stgkz = $this->_data["prestudent"]->studiengang_kz;
+			$stgkz = $this->_data["prestudent"][0]->studiengang_kz;
 		}
 
-		if($this->StudiengangModel->getStudiengang($stgkz))
+		$this->StudiengangModel->getStudiengang($stgkz);
+		if ($this->StudiengangModel->isResultValid() === true)
 		{
-			if(($this->StudiengangModel->result->error == 0) && (count($this->StudiengangModel->result->retval) == 1))
+			if (count($this->StudiengangModel->result->retval) == 1)
 			{
-				$this->_data["studiengang"] = $this->StudiengangModel->result->retval[0];
+				return $this->StudiengangModel->result->retval[0];
 			}
 			else
 			{
-				$this->_setError(true, $this->StudiengangModel->getErrorMessage());
+				return $this->StudiengangModel->result->retval;
 			}
+		}
+		else
+		{
+			$this->_setError(true, $this->StudiengangModel->getErrorMessage());
 		}
 	}
 
@@ -242,10 +265,10 @@ class Summary extends MY_Controller {
 	private function _loadPrestudentStatus($prestudent_id)
 	{
 		//$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
-		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "status_kurzbz"=>"Interessent"));
+		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>'', "status_kurzbz"=>"Interessent"));
 		if($this->PrestudentStatusModel->isResultValid() === true)
 		{
-			if(($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
+			if (($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
 			{
 				return $this->PrestudentStatusModel->result->retval[0];
 			}

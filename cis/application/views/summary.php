@@ -17,13 +17,18 @@ if (isset($error) && ($error->error === true))
 <div class="container">
     <?php
 $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
-echo $this->template->widget("menu", array('aktiv' => 'Bewerbung')); ?>
+echo $this->template->widget("menu", array('aktiv' => 'Bewerbung')); 
+foreach ($studiengaenge as $studiengang)
+{
+	$data["studiengang"] = $studiengang;
+
+?>
     <div class="row">
         <div class="col-sm-12">
-            <?php $this->load_views('view_bewerbung_studiengang'); ?>
+            <?php $this->load_views('view_bewerbung_studiengang', $data); ?>
         </div>
     </div>
-    <div class="row">
+    <div id="<?php echo $studiengang->studiengang_kz; ?>" class="row collapse <?php echo (isset($studiengang_kz) && ($studiengang_kz == $studiengang->studiengang_kz)) ? "in" : ""?>">
         <div class="col-sm-3 navigation">
             <?php echo
 $this->template->widget(
@@ -47,6 +52,7 @@ $this->template->widget(
             </div>
         </div>
     </div>
+	<?php } ?>
 </div>
 
 <?php

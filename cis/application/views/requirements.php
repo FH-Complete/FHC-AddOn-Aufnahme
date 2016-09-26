@@ -17,13 +17,17 @@ if (isset($error) && ($error->error === true))
     <?php
 		$this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
 		echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
-	?>
+
+	foreach ($studiengaenge as $studiengang) {
+		$data["studiengang"] = $studiengang;
+
+?>
     <div class="row">
         <div class="col-sm-12">
-            <?php $this->load_views('view_bewerbung_studiengang'); ?>
+            <?php $this->load_views('view_bewerbung_studiengang', $data); ?>
         </div>
     </div>
-    <div class="row">
+    <div id="<?php echo $studiengang->studiengang_kz; ?>" class="row collapse <?php echo (isset($studiengang_kz) && ($studiengang_kz == $studiengang->studiengang_kz)) ? "in" : ""?>">
         <div class="col-sm-3 navigation">
             <?php echo
 				$this->template->widget(
@@ -48,19 +52,22 @@ if (isset($error) && ($error->error === true))
                     </div>
                 </div>
 				<?php $this->load_views('view_requirements'); ?>
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="form-group">
+							<?php echo form_button(array("content"=>"Speichern", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
+						</div>
+					</div>
+				</div>
+				<?php echo form_close(); ?>
             </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="form-group">
-						<?php echo form_button(array("content"=>"Speichern", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
-                    </div>
-                </div>
-			</div>
+            
 		</div>
     </div>
+	<?php } ?>
 </div>
 
-<?php echo form_close(); ?>
+
 
 <script type="text/javascript">
 
@@ -125,31 +132,32 @@ if (isset($error) && ($error->error === true))
 		});
     }*/
 	
-	function deleteDocument(akte_id, studienplan_id)
+	function deleteDocument(dms_id, studienplan_id)
 	{	
-		console.log(akte_id);
+		console.log(dms_id);
 		$.ajax({
 			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/deleteDocument"); ?>',
 			type: 'POST',
 			data: {
-				"akte_id": akte_id,
-				"studienplan_id": studienplan_id
+				"dms_id": dms_id
 			},
 			cache: false,
 			dataType: 'json',
 			success: function(data, textStatus, jqXHR)
 			{
 				console.log(data);
-				if(data.error)
+				if(data.error !== 0)
 				{
 					//TODO display error
 				}
 				else
 				{
-					$("#"+data.dokument_kurzbz+"Upload_"+data.studienplan_id).show();
-					$("#"+data.dokument_kurzbz+"Delete_"+akte_id).remove();
+					$("#"+data.dokument_kurzbz+"Upload_"+studienplan_id).show();
+					$("#"+data.dokument_kurzbz+"Delete_"+studienplan_id).html("");
+					$('#'+data.dokument_kurzbz+'FileUpload_'+studienplan_id).parent().show();
+					$('#'+data.dokument_kurzbz+'Progress_'+studienplan_id).show();
 					$("#"+data.dokument_kurzbz+"_hochgeladen").html("<?php echo $this->lang->line('requirements_keinDokHochgeladen'); ?>");
-					$("#"+data.dokument_kurzbz+"_nachgereicht").prop("disabled", false);
+					$("#"+data.dokument_kurzbz+"_nachgereicht_"+studienplan_id).prop("disabled", false);
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {

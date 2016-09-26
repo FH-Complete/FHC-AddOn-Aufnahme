@@ -363,7 +363,6 @@ class Bewerbung extends MY_Controller
 	 */
 	public function check_date() {
 		$date = explode(".", $this->input->post("gebdatum"));
-		var_dump($date);
 		if (!checkdate($date[1], $date[0], $date[2])) {
 			//$this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
 			$this->form_validation->set_message("check_date", "Bitte geben Sie ein gültiges Datum an.");
@@ -618,6 +617,7 @@ class Bewerbung extends MY_Controller
 						if ($obj->version >= 0)
 						{
 							$akte->dms_id = $this->DmsModel->result->retval->dms_id;
+							$result->dms_id = $akte->dms_id;
 							$akte->person_id = $this->_data["person"]->person_id;
 							$akte->mimetype = $file["type"][0];
 
@@ -636,6 +636,7 @@ class Bewerbung extends MY_Controller
 							if ($this->_saveAkte($akte))
 							{
 								$result->success = true;
+								$result->akte_id = $this->AkteModel->result->retval;
 							}
 							else
 							{
@@ -1097,6 +1098,51 @@ class Bewerbung extends MY_Controller
 		else
 		{
 			$this->_setError(true, $this->BewerbungstermineModel->getErrorMessage());
+		}
+	}
+	
+	/**
+	 * 
+	 * @return unknown
+	 */
+	public function deleteDocument()
+	{
+		$result = new stdClass();
+		if((isset($this->input->post()["dms_id"])))
+		{
+			$dms_id = $this->input->post()["dms_id"];
+			$this->_loadDokumente($this->session->userdata()["person_id"]);
+
+			foreach($this->_data["dokumente"] as $dok)
+			{
+				if(($dok->dms_id === $dms_id))
+				{
+					$result = $this->_deleteDms($dms_id);
+					$result->dokument_kurzbz = $dok->dokument_kurzbz;
+				}
+//				var_dump($result);
+			}
+		}
+		else
+		{
+			//TODO parameter missing
+			$result->error = true;
+			$result->msg = "dms_id is missing";
+		}
+
+		echo json_encode($result);
+	}
+	
+	private function _deleteDms($dms_id)
+	{
+		$this->DmsModel->deleteDms($this->session->userdata("person_id"), $dms_id);
+		if ($this->DmsModel->isResultValid() === true)
+		{
+			return $this->DmsModel->result;
+		}
+		else
+		{
+			$this->_setError(true, $this->DmsModel->getErrorMessage());
 		}
 	}
 }

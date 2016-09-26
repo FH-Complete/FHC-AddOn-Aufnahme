@@ -40,49 +40,64 @@ class Send extends MY_Controller {
 		$this->_data['sprache'] = $this->get_language();
 		$this->_loadLanguage($this->_data["sprache"]);
 
-		if (isset($this->input->get()["studiengang_kz"])) {
-			//load person data
-			$this->_data["person"] = $this->_loadPerson();
 
-			//load studiengang
-			$this->_data["studiengang"] = $this->_loadStudiengang($this->input->get()["studiengang_kz"]);
+		//load person data
+		$this->_data["person"] = $this->_loadPerson();
 
-			$this->_data["studiengang"]->studiengangstyp = $this->_loadStudiengangstyp($this->_data["studiengang"]->typ);
+		if($this->input->get("studiengang_kz") != null)
+		{
+			$this->_data["studiengang_kz"] = $this->input->get("studiengang_kz");
+		}
 
-			$this->_loadAdresse();
+		//load studiengang
+		$this->_data["studiengang"] = $this->_loadStudiengang($this->input->get()["studiengang_kz"]);
 
-			//load kontakt data
-			$this->_loadKontakt();
+		$this->_data["studiengang"]->studiengangstyp = $this->_loadStudiengangstyp($this->_data["studiengang"]->typ);
 
-			//load Dokumente from Studiengang
-			$this->_data["dokumenteStudiengang"] = $this->_loadDokumentByStudiengang($this->input->get()["studiengang_kz"]);
+		$this->_loadAdresse();
 
-			//load dokumente
-			$this->_loadDokumente($this->session->userdata()["person_id"]);
+		//load kontakt data
+		$this->_loadKontakt();
+		
+		//load preinteressent data
+		$this->_data["prestudent"] = $this->_loadPrestudent();
+		
+		$this->_data["studiengaenge"] = array();
+		$this->_data["prestudentStatus"] = array();
+		foreach ($this->_data["prestudent"] as $prestudent)
+		{
+			//load studiengaenge der prestudenten
+			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+			$this->_data["prestudentStatus"][$prestudent->studiengang_kz] = $prestudent->prestudentStatus;
 
-			//load preinteressent data
-			$this->_data["prestudent"] = $this->_loadPrestudent();
-
-			//load prestudent data for correct studiengang
-			foreach ($this->_data["prestudent"] as $prestudent)
-			{
-				//load studiengaenge der prestudenten
-				if ($prestudent->studiengang_kz == $this->input->get()["studiengang_kz"])
+			if ((!empty($prestudent->prestudentStatus))
+				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) {
+				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+				$studiengang->studienplan = $studienplan;
+				
+				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
 				{
-					$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-					$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-					$this->_data["studiengang"]->studienplan = $studienplan;
-					$this->_data["prestudentStatus"] = $prestudent->prestudentStatus;
+					$this->_data["bewerbung_abgeschickt"] = true;
 				}
+				array_push($this->_data["studiengaenge"], $studiengang);
 			}
-
-			$this->_data["completenessError"] = $this->_checkDataCompleteness();
-
-			$this->load->view('send', $this->_data);
 		}
-		else {
-			$this->_setError(true, $this->lang->line("send_studiengangkzFehlt"));
+
+		//load Dokumente from Studiengang
+		$this->_data["dokumenteStudiengang"] = array();
+		foreach($this->_data["studiengaenge"] as $stg)
+		{
+			$this->_data["dokumenteStudiengang"][$stg->studiengang_kz] = $this->_loadDokumentByStudiengang($stg->studiengang_kz);
 		}
+
+		//load dokumente
+		$this->_loadDokumente($this->session->userdata()["person_id"]);
+
+		$this->_data["completenessError"] = $this->_checkDataCompleteness();
+
+		$this->load->view('send', $this->_data);
 	}
 
 
@@ -499,11 +514,14 @@ class Send extends MY_Controller {
 		}
 
 		//check documents
-		foreach($this->_data["dokumenteStudiengang"] as $dokType)
+		foreach($this->_data["dokumenteStudiengang"] as $key=>$doks)
 		{
-			if(!isset($this->_data["dokumente"][$dokType->dokument_kurzbz]))
+			foreach($doks as $dokType)
 			{
-				$error["dokumente"][$dokType->bezeichnung] = true;
+				if(!isset($this->_data["dokumente"][$key][$dokType->dokument_kurzbz]))
+				{
+					$error["dokumente"][$key][$dokType->bezeichnung] = true;
+				}
 			}
 		}
 
