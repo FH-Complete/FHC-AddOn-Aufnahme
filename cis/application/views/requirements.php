@@ -28,7 +28,7 @@ if (isset($error) && ($error->error === true))
         </div>
     </div>
     <div id="<?php echo $studiengang->studiengang_kz; ?>" class="row collapse <?php echo (isset($studiengang_kz) && ($studiengang_kz == $studiengang->studiengang_kz)) ? "in" : ""?>">
-        <div class="col-sm-3 navigation">
+        <div class="col-sm-4 navigation">
             <?php echo
 				$this->template->widget(
 					"person_nav",
