@@ -58,10 +58,8 @@ $this->load->view('templates/footer');
 					status: "<?php echo MSG_STATUS_READ; ?>"
 				}
 			}).done(function(data){
-				console.log(data);
 				if(data.error === 0)
 				{
-					console.log("test");
 					$("#status_"+messageId).removeClass("icon-unread");
 					$("#status_"+messageId).addClass("icon-read");
 				}
