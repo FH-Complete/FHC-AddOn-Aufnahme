@@ -212,7 +212,8 @@ class Messages extends MY_Controller {
 	private function _sendMessage($person_id, $subject, $body, $oe_kurzbz, $relationMessage_id = null)
 	{
 		$message = array(
-			"person_id" => $person_id,
+			"person_id" => $this->session->userdata()["person_id"],
+			"receiver_id" => $person_id,
 			"subject" => $subject,
 			"body" => $body,
 			"oe_kurzbz" => $oe_kurzbz
