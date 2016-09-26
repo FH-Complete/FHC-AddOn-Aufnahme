@@ -110,7 +110,7 @@
 			<!-- The fileinput-button span is used to style the file input field as button -->
 			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
 				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]])) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id != null)) { ?>
-					<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>
+					<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);"><?php echo $this->lang->line("requirements_delete"); ?></button>
 				<?php
 				}
 				?>
@@ -175,7 +175,7 @@
 			<!-- The fileinput-button span is used to style the file input field as button -->
 			<div id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
 				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]])) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id != null)) { ?>
-					<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>
+					<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);"><?php echo $this->lang->line("requirements_delete"); ?></button>
 				<?php
 				}
 				?>
@@ -265,7 +265,7 @@
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').append(
-							'<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>');
+							'<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);"><?php echo $this->lang->line("requirements_delete"); ?></button>');
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("checked", false);
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
@@ -330,7 +330,7 @@
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').append(
-							'<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);">löschen</button>');
+							'<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);"><?php echo $this->lang->line("requirements_delete"); ?></button>');
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("checked", false);
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
