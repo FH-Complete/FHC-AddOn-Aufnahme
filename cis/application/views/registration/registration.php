@@ -94,7 +94,7 @@
 		<div class="col-lg-11 col-sm-11">
 		    <div class="checkbox">
 			<label>
-			    <?php echo form_checkbox(array('id' => 'datenschutz', 'name' => 'datenschutz', "checked" => FALSE, "class"=>"datenschutz"));
+			    <?php echo form_checkbox(array('id' => 'datenschutz', 'name' => 'datenschutz', "checked" => isset($this->input->post()["datenschutz"]) ? TRUE : FALSE, "class"=>"datenschutz"));
 echo $this->getPhrase("Registration/Datenschutz", $sprache);
 
 ?>
