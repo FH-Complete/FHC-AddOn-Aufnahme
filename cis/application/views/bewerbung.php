@@ -135,7 +135,7 @@ $this->load->view('templates/footer');
     {
 		if(confirm("<?php echo $this->getPhrase("Bewerbung/StornoConfirmation", $sprache); ?>"))
 		{
-			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + studiengang_kz;
+			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + "/"+ studiengang_kz;
 		}
     }
 	
