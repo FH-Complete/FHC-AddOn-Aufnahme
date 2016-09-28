@@ -36,7 +36,7 @@ $lang['aufnahme/anredeWeiblich']='geehrte Frau';
 $lang['aufnahme/mailtext']='Sehr %4$s %1$s %2$s!<br><br>
         Vielen Dank für Ihr Interesse an einem Studiengang oder Lehrgang der FH. <br><br>
 	Bevor Sie fortfahren können bestätigen Sie bitte Ihre Registrierung unter folgendem Link: <br>
-        <a href="'.site_url('/Registration/confirm?code=%3$s&studiengang_kz=%5$s"').'>Registrierung bestätigen</a><br>
+        <a href="'.site_url('/Registration/confirm?code=%3$s&studiengang_kz=%5$s&email=%6$s"').'>Registrierung bestätigen</a><br>
         Dieser Link ist 24 Stunden gültig.<br><br>
         Mit freundlichen Grüßen, <br>
         FH';

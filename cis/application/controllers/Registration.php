@@ -207,14 +207,24 @@ class Registration extends MY_Controller {
 			$this->_data["zugangscode"] = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
 			$this->session->set_userdata("zugangscode", $this->_data["zugangscode"]);
 
-			if ($this->Kontakt_model->getKontakt($person_id)) {
-				foreach($this->Kontakt_model->result->retval as $kontakt)
+//			if ($this->Kontakt_model->getKontakt($person_id)) {
+//				foreach($this->Kontakt_model->result->retval as $kontakt)
+//				{
+//					if($kontakt->kontakttyp == "email")
+//					{
+//						$this->_data["email"] = $kontakt->kontakt;
+//					}
+//				}
+				
+				if(isset($this->input->get()["email"]))
 				{
-					if($kontakt->kontakttyp == "email")
-					{
-						$this->_data["email"] = $kontakt->kontakt;
-					}
+					$this->_data["email"] = $this->input->get()["email"];
 				}
+				else
+				{
+					$this->_data["email"] = "";
+				}
+				
 				$person = new stdClass();
 				$person->person_id = $person_id;
 				$result = $this->_getPerson($person_id);
@@ -239,7 +249,7 @@ class Registration extends MY_Controller {
 				else {
 					//error msg already set
 				}
-			}
+//			}
 		}
 		elseif (empty($this->PersonModel->result->data)) {
 			$this->_data["zugangscode"] = "";
@@ -417,7 +427,7 @@ class Registration extends MY_Controller {
 			$anrede = $this->lang->line('aufnahme/anredeUnknown');
 
 		$this->load->library("mail", array("to" => $email, "from" => 'no-reply', "subject" => $this->lang->line('aufnahme/registration'), "text" => $this->lang->line('aufnahme/mailtextHtml')));
-		$text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, NULL);
+		$text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, NULL, $email);
 		$this->mail->setHTMLContent($text);
 		if (!$this->mail->send())
 			$msg = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
