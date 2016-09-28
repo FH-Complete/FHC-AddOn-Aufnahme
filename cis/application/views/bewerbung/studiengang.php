@@ -11,7 +11,7 @@
 		(<?php echo $studiengang->orgform_kurzbz; ?>)
 	</h1>
 </a>
-<a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/$studiengang->studiengang_kz") ?>" onclick="confirmStorno(<?php echo $studiengang->studiengang_kz; ?>)">
+<button class="btn btn-sm btn-primary" type="button" onclick="confirmStorno(<?php echo $studiengang->studiengang_kz; ?>)">
 	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-</a>
+</button>
 </br>
