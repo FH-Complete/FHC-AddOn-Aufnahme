@@ -331,11 +331,11 @@ class Bewerbung extends MY_Controller
 				$this->_saveKontakt($kontakt);
 			}
 
-			foreach($this->_data["kontakt"] as $key=>$kontakt)
-			{
-				$kontakt->kontakt = $post[$key];
-				$this->_saveKontakt($kontakt);
-			}
+//			foreach($this->_data["kontakt"] as $key=>$kontakt)
+//			{
+//				$kontakt->kontakt = $post[$key];
+//				$this->_saveKontakt($kontakt);
+//			}
 
 			$this->_loadPerson();
 			$this->_loadKontakt();
