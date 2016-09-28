@@ -26,7 +26,12 @@ $this->lang->load(array('aufnahme', 'login'), $sprache);
 			<div class="row">
 				<div class="col-sm-12">
 					<p class="infotext">
-						<?php echo sprintf($this->getPhrase('Home/NewPassword', $sprache), $zugangscode);?>
+						<?php 
+						if($zugangscode !== "")
+						{
+							echo sprintf($this->getPhrase('Home/NewPassword', $sprache), $zugangscode);
+						}
+						?>
 					</p>
 				</div>
 			</div>
