@@ -134,7 +134,6 @@ if (isset($error) && ($error->error === true))
 	
 	function deleteDocument(dms_id, studienplan_id)
 	{	
-		console.log(dms_id);
 		$.ajax({
 			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/deleteDocument"); ?>',
 			type: 'POST',
@@ -145,7 +144,6 @@ if (isset($error) && ($error->error === true))
 			dataType: 'json',
 			success: function(data, textStatus, jqXHR)
 			{
-				console.log(data);
 				if(data.error !== 0)
 				{
 					//TODO display error

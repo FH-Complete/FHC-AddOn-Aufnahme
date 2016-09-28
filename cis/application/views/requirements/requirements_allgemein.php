@@ -67,6 +67,7 @@
         <?php echo $this->getPhrase("ZGV/UploadDiploma", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
     </div>
 </div>
+<hr>
 <div class="row">
     <div class="col-sm-5">
 	<!--<?php echo form_label($this->lang->line('requirements_abschlusszeugnis'), "maturazeugnis", array("name" => "Maturaze", "for" => "Maturaze", "class" => "control-label")) ?>-->
@@ -134,12 +135,13 @@
 			<div class="form-group">
 				<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id.'_div'; ?>" class="">
 					<?php echo form_label($this->lang->line('requirements_nachreichenAbschlussGeplantDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
-					<?php echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? date("d.m.Y", strtotime($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht_am)) : ""), "class" => "form-control datepicker")); ?>
+					<?php echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($geplanter_abschluss) ? date("d.m.Y", strtotime($geplanter_abschluss)) : ""), "class" => "form-control datepicker")); ?>
 				</div>
 			</div>
 		</div>
     </div>
 </div>
+<hr>
 <div id="letztesZeugnis" class="row" style="display: none;">
     <div class="col-sm-10">
 		<?php echo $this->getPhrase("ZGV/letztgueltigesZeugnis", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
@@ -197,7 +199,7 @@
 		</div>
     </div>
 </div>
-
+<hr>
 <script type="text/javascript">
     $(document).ready(function() {
 		$(".fhc-tooltip").tooltip();

@@ -10,6 +10,7 @@
 <div class="row">
     <div class="col-sm-12">
 		<fieldset><?php echo $this->getPhrase("ZGV/SpecificAdmissionRequirements", $sprache); ?></fieldset>
+		<hr>
 <?php foreach ($dokumenteStudiengang[$studiengang->studiengang_kz] as $dok) { ?>
 		<div class="row">
 			<div class="col-sm-5">
@@ -31,7 +32,7 @@
 						}
 					?>
 				</div>
-				<div class="checkbox">
+				<div class="checkbox" style="<?php echo ($dok->pflicht == 'f') ? 'visibility: hidden;' : ''; ?>">
 					<label>
 						<?php
 							$data = array('id' => $dok->dokument_kurzbz.'_nachgereicht_'.$studiengang->studienplan->studienplan_id, 'class'=>'nachreichen_checkbox', 'name' => $dok->dokument_kurzbz.'_nachgereicht', "checked" => (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
@@ -94,7 +95,7 @@
 				</div>
 			</div>
 		</div>
-
+<hr>
 <script type="text/javascript">
 	$(document).ready(function() {
 		// File upload

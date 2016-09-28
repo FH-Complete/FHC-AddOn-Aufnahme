@@ -147,43 +147,46 @@ else {
 </div>
 
 <div class="personal_documents">
+	<hr>
     <div class="row">
-	<div class="col-sm-12">
-	    <div class="col-sm-6">
-		<?php echo $this->lang->line("summary_pass"); ?>
-	    </div>
-	    <div class="col-sm-5 <?php echo (!isset($dokumente[$this->config->item('dokumentTypen')["reisepass"]])) ? "incomplete" : ""; ?>">
-		<div class="form-group">
-		    <?php if (!isset($dokumente[$this->config->item('dokumentTypen')["reisepass"]])){
-	echo $this->lang->line('summary_unvollstaendig');
-}
-else
-{
-	echo $this->lang->line('summary_dokumentVorhanden');
-}
-?>
+		<div class="col-sm-12">
+			<div class="col-sm-6">
+			<?php echo $this->lang->line("summary_pass"); ?>
+			</div>
+			<div class="col-sm-5 <?php echo (!isset($dokumente[$this->config->item('dokumentTypen')["reisepass"]])) ? "incomplete" : ""; ?>">
+				<div class="form-group">
+					<?php if (!isset($dokumente[$this->config->item('dokumentTypen')["reisepass"]])){
+								echo $this->lang->line('summary_unvollstaendig');
+							}
+							else
+							{
+								echo $this->lang->line('summary_dokumentVorhanden');
+							}
+							?>
+				</div>
+			</div>
 		</div>
-	    </div>
-	</div>
     </div>
+	<hr>
     <div class="row">
-	<div class="col-sm-12">
-	    <div class="col-sm-6">
-		<?php echo $this->lang->line("summary_lebenslauf"); ?>
-	    </div>
-	    <div class="col-sm-5 <?php echo (!isset($dokumente[$this->config->item('dokumentTypen')["lebenslauf"]])) ? "incomplete" : ""; ?>">
-		<div class="form-group">
-		    <?php if(!isset($dokumente[$this->config->item('dokumentTypen')["lebenslauf"]])) {
-	echo $this->lang->line('summary_unvollstaendig');
-}
-else
-{
-	echo $this->lang->line('summary_dokumentVorhanden');
-}
-?>
+		<div class="col-sm-12">
+			<div class="col-sm-6">
+			<?php echo $this->lang->line("summary_lebenslauf"); ?>
+			</div>
+			<div class="col-sm-5 <?php echo (!isset($dokumente[$this->config->item('dokumentTypen')["lebenslauf"]])) ? "incomplete" : ""; ?>">
+				<div class="form-group">
+					<?php if(!isset($dokumente[$this->config->item('dokumentTypen')["lebenslauf"]])) {
+							echo $this->lang->line('summary_unvollstaendig');
+						}
+						else
+						{
+							echo $this->lang->line('summary_dokumentVorhanden');
+						}
+						?>
+				</div>
+			</div>
 		</div>
-	    </div>
-	</div>
     </div>
+	<hr>
 </div>
 </br>

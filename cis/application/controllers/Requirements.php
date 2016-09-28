@@ -54,6 +54,7 @@ class Requirements extends MY_Controller
 			//load studiengaenge der prestudenten
 			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
 			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+			$this->_data["geplanter_abschluss"] = $prestudent->zgvdatum;
 
 			if ((!empty($prestudent->prestudentStatus))
 				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
@@ -160,6 +161,8 @@ class Requirements extends MY_Controller
 		{
 			//load person data
 			$this->_data["person"] = $this->_loadPerson();
+			
+			$this->_data["prestudent"] = $this->_loadPrestudent();
 
 			//load dokumente
 			$this->_loadDokumente($this->session->userdata()["person_id"]);
@@ -295,6 +298,18 @@ class Requirements extends MY_Controller
 							if(isset($this->input->post()["doktype"]))
 								$akte->anmerkung = $this->input->post("doktype");
 							
+							foreach($this->_data["prestudent"] as $prestudent)
+							{
+								if($prestudent->studiengang_kz == $this->input->post()["studiengang_kz"])
+								{
+//									if(($prestudent->zgvdatum == null) && ($prestudent->zgvort == null))
+									{
+										$prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis"]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
+										$prestudent->zgvort = "geplanter Abschluss";
+										$this->_savePrestudent($prestudent);
+									}
+								}
+							}
 							//TODO set geplanter Abschluss
 							//$akte->geplanterAbschluss = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis"]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
 
@@ -551,6 +566,82 @@ class Requirements extends MY_Controller
 		else
 		{
 			$this->_setError(true, $this->DmsModel->getErrorMessage());
+		}
+	}
+	private function _savePrestudent($prestudent)
+	{
+		if($prestudent->berufstaetigkeit_code == null)
+			unset($prestudent->berufstaetigkeit_code);
+		
+		if($prestudent->ausbildungcode == null)
+			unset($prestudent->ausbildungcode);
+		
+		if($prestudent->zgv_code == null)
+			unset($prestudent->zgv_code);
+		
+		if($prestudent->zgvmas_code == null)
+			unset($prestudent->zgvmas_code);
+		
+		if($prestudent->zgvmadatum == null)
+			unset($prestudent->zgvmadatum);
+		
+		if($prestudent->facheinschlberuf == null)
+			unset($prestudent->facheinschlberuf);
+		
+		if($prestudent->aufnahmeschluessel == null)
+			unset($prestudent->aufnahmeschluessel);
+		
+		if($prestudent->reihungstest_id == null)
+			unset($prestudent->reihungstest_id);
+		
+		if($prestudent->anmeldungreihungstest == null)
+			unset($prestudent->anmeldungreihungstest);
+		
+		if($prestudent->rt_gesamtpunkte == null)
+			unset($prestudent->rt_gesamtpunkte);
+		
+		if($prestudent->insertamum == null)
+			unset($prestudent->insertamum);
+		
+		if($prestudent->updateamum == null)
+			unset($prestudent->updateamum);
+		
+		if($prestudent->ext_id == null)
+			unset($prestudent->ext_id);
+		
+		if($prestudent->rt_punkte1 == null)
+			unset($prestudent->rt_punkte1);
+		
+		if($prestudent->rt_punkte2 == null)
+			unset($prestudent->rt_punkte2);
+		
+		if($prestudent->zgvdoktor_code == null)
+			unset($prestudent->zgvdoktor_code);
+		
+		if($prestudent->zgvdoktordatum == null)
+			unset($prestudent->zgvdoktordatum);
+		
+		if($prestudent->ausstellungsstaat == null)
+			unset($prestudent->ausstellungsstaat);
+		
+		if($prestudent->zgvdoktornation == null)
+			unset($prestudent->zgvdoktornation);
+		
+		if($prestudent->zgvmanation == null)
+			unset($prestudent->zgvmanation);
+		
+		if($prestudent->zgvnation == null)
+			unset($prestudent->zgvnation);
+		
+		$this->PrestudentModel->savePrestudent($prestudent);
+
+		if ($this->PrestudentModel->isResultValid() === true)
+		{
+			return $this->PrestudentModel->result;
+		}
+		else
+		{
+			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
 		}
 	}
 }

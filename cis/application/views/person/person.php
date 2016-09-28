@@ -354,6 +354,7 @@ if (!isset($plz)) $plz = null;
 				</div>
 			</div>
 		</div>
+		<hr>
 		<div class="row">
 			<div class="col-sm-5">
 				<?php echo form_label($this->lang->line('person_formDokumentupload_reisepass'), "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
@@ -417,6 +418,7 @@ if (!isset($plz)) $plz = null;
 				</div>
 			</div>
 		</div>
+		<hr>
 		<div class="row">
 			<div class="col-sm-5">
 				<?php echo form_label($this->lang->line('person_formDokumentupload_lebenslauf')."&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?><span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="inklusive Foto"></span>
@@ -480,6 +482,7 @@ if (!isset($plz)) $plz = null;
 				</div>
 			</div>
 		</div>
+		<hr>
 		<div class="row">
 			<div class="col-sm-4">
 				<div class="form-group">
