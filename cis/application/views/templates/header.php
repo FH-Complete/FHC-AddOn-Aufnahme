@@ -35,17 +35,6 @@
 		<script src="<?php echo base_url('../vendor/blueimp/jquery-file-upload/js/jquery.fileupload-ui.js') ?>"></script>
 		<script src="<?php echo base_url('../vendor/blueimp/jquery-file-upload/js/jquery.fileupload-process.js') ?>"></script>
 		<script src="<?php echo base_url('../vendor/blueimp/jquery-file-upload/js/jquery.fileupload-validate.js') ?>"></script>
-		
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$.ajaxSetup({
-					headers: {
-						'<?php echo $this->config->item('fhc_api')['api_name']; ?>': '<?php echo $this->config->item('fhc_api')['api_key']; ?>',
-						"Authorization": "Basic " + '<?php echo base64_encode($this->config->item('fhc_api')['http_user'].":".$this->config->item('fhc_api')['http_pass']); ?>'
-					}
-				});
-			});
-		</script>
 	
 	</head>
 	

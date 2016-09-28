@@ -780,7 +780,8 @@ if (!isset($plz)) $plz = null;
     {
 		$.ajax({
 			method: "GET",
-			url: "<?php echo $this->config->item('fhc_api')['server'];?>codex/gemeinde/GemeindeByPlz?plz="+plz
+			url: "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/ort"); ?>/"+plz,
+			dataType: "json"
 		}).done(function(data) {
 			if(data.error === 0)
 			{

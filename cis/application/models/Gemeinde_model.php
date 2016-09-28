@@ -38,5 +38,18 @@ class Gemeinde_model extends MY_Model
 		}
 	}
 
-
+	/**
+	 *
+	 * @return unknown
+	 */
+	public function getGemeindeByPlz($plz) 
+	{
+		if ($restquery = $this->rest->get('codex/gemeinde/GemeindeByPlz', array("plz"=>$plz))) {
+			$this->result = $restquery;
+			$this->session->set_userdata("gemeinde", $this->result);
+			return true;
+		}
+		else
+			return false;
+	}
 }

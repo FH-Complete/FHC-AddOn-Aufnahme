@@ -1145,4 +1145,22 @@ class Bewerbung extends MY_Controller
 			$this->_setError(true, $this->DmsModel->getErrorMessage());
 		}
 	}
+	
+	private function _loadGemeindeByPlz($plz)
+	{
+		$this->GemeindeModel->getGemeindeByPlz($plz);
+		if ($this->GemeindeModel->isResultValid() === true)
+		{
+			return $this->GemeindeModel->result;
+		}
+		else
+		{
+			$this->_setError(true, $this->GemeindeModel->getErrorMessage());
+		}
+	}
+	
+	public function ort($plz)
+	{
+		echo json_encode($this->_loadGemeindeByPlz($plz));
+	}
 }
