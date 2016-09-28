@@ -137,7 +137,9 @@ if (!isset($plz)) $plz = null;
 				</div>
 			</div>-->
 		</div>
-		<legend class=""><?php echo $this->lang->line("person_adresse"); ?></legend>
+		<legend class="">
+			<?php echo $this->getPhrase("Personal/Addresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+		</legend>
 		<!--<div class="row">
 			<div class="col-sm-12">
 				<div class="form-group <?php echo (form_error("heimatadresse") != "") ? 'has-error' : '' ?>">
@@ -242,7 +244,7 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 		<div id="zustelladresse_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="display: none;">
-			<legend class=""><?php echo $this->lang->line("person_formZustelladresse"); ?></legend>
+			<legend class=""><?php echo $this->getPhrase("Personal/Zustelladresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></legend>
 			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group <?php echo (form_error("zustelladresse_nation") != "") ? 'has-error' : '' ?>">
@@ -309,7 +311,7 @@ if (!isset($plz)) $plz = null;
 				</div>
 			</div>
 		</div>
-		<legend class=""><?php echo $this->lang->line("person_formKontakt"); ?></legend>
+		<legend class=""><?php echo $this->getPhrase("Personal/Kontakt", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></legend>
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="form-group <?php echo (form_error("telefon") != "") ? 'has-error' : '' ?>">
@@ -344,7 +346,7 @@ if (!isset($plz)) $plz = null;
 				</div>
 			</div>
 		</div>
-		<legend class=""><?php echo $this->lang->line("person_formDokumentupload"); ?></legend>
+		<legend class=""><?php echo $this->getPhrase("Personal/DokumentenUpload", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></legend>
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="form-group">

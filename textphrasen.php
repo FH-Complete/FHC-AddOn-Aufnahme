@@ -609,5 +609,85 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'Registrierung und Login für die Online-Bewerbung an der FH St. Pölten',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'Personal/Addresse',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Adresse',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Personal/Adresse',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Address',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Personal/Zustelladresse',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Zustelladresse',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Personal/Zustelladresse',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Delivery Address',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Personal/Kontakt',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Kontakt',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Personal/Kontakt',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Contact',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Personal/DokumentenUpload',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Dokumenten-Upload',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Personal/DokumentenUpload',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Document-Upload',
+			'description' => ''
+		)
 	)
 );
