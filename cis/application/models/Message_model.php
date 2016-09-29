@@ -30,6 +30,20 @@ class Message_model extends MY_Model
 		else
 			return false;
 	}
+	
+	/**
+	 *
+	 * @param unknown $person_id
+	 * @return unknown
+	 */
+	public function getSentMessagesByPersonId($person_id) {
+		if ($restquery = $this->rest->get('system/message/SentMessagesByPerson', array("person_id"=>$person_id))) {
+			$this->result = $restquery;
+			return true;
+		}
+		else
+			return false;
+	}
 
 
 	/**

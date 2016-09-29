@@ -30,7 +30,7 @@ case "message":
 	break;
 default:
 	$this->load->view('messages/inbox');
-	//$this->load->view('messages/outbox');
+	$this->load->view('messages/outbox');
 	break;
 }
 

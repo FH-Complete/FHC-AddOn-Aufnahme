@@ -41,7 +41,7 @@
 					</button>
 				</a>
 				<a href="<?php echo base_url($this->config->config['index_page'].'/Messages/deleteMessage/'.$msg->message_id); ?>">
-					<button class="btn btn-sm btn-primary" id="answer_<?php echo $msg->message_id; ?>"><span class="glyphicon glyphicon-trash"></span></button>
+					<button class="btn btn-sm btn-primary" id="delete_<?php echo $msg->message_id; ?>"><span class="glyphicon glyphicon-trash"></span></button>
 				</a>
 			</div>
 			<div id="message_body_<?php echo $msg->message_id; ?>" class="collapse message-body" style="float: left;">

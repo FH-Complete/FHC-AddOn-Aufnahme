@@ -206,6 +206,13 @@ class Messages extends MY_Controller {
 		}
 
 		$this->_data["messages"] = $this->_getMessages($this->session->userdata()["person_id"]);
+//		var_dump($this->_data["messages"]);
+		
+//		$this->_data["messages_outbox"] = array();
+		$this->_data["messages_outbox"] = $this->_getSentMessages($this->session->userdata()["person_id"]);
+//		var_dump($this->_data["messages_outbox"]);
+		
+
 	}
 
 
@@ -239,6 +246,20 @@ class Messages extends MY_Controller {
 	private function _getMessages($person_id)
 	{
 		$this->MessageModel->getMessagesByPersonId($person_id);
+		if($this->MessageModel->isResultValid() === true)
+		{
+			//     var_dump($this->MessageModel->result);
+			return $this->MessageModel->result->retval;
+		}
+		else
+		{
+			$this->_setError(true, $this->MessageModel->getErrorMessage());
+		}
+	}
+	
+	private function _getSentMessages($person_id)
+	{
+		$this->MessageModel->getSentMessagesByPersonId($person_id);
 		if($this->MessageModel->isResultValid() === true)
 		{
 			//     var_dump($this->MessageModel->result);
