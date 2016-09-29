@@ -11,7 +11,7 @@
 		(<?php echo $studiengang->orgform_kurzbz; ?>)
 	</h1>
 </a>
-<button class="btn btn-sm btn-primary" type="button" onclick="confirmStorno(<?php echo $studiengang->studiengang_kz; ?>)">
+<button class="btn btn-sm btn-primary btn-background" type="button" onclick="confirmStorno(<?php echo $studiengang->studiengang_kz; ?>)">
 	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 </button>
 </br>

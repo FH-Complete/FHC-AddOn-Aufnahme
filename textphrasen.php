@@ -689,5 +689,25 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'Document-Upload',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'Submission/ApplicationFor',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Bewerbung für den Studiengang',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Submission/ApplicationFor',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Bewerbung für den Studiengang',
+			'description' => ''
+		)
 	)
 );

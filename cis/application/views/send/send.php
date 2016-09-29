@@ -13,11 +13,11 @@
     <!--<fieldset><?php echo $this->lang->line("send_einleitung").'!'; ?></fieldset>-->
     <fieldset><?php
 if (empty($completenessError)) {
-	echo $this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
+	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz)."</p>";
 }
 else {
-	echo $this->getPhrase("Submission/ApplicationNotReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
-	echo "<ul>";
+	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationNotReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz)."</p>";
+	echo "<ul class='list'>";
 	foreach ($completenessError as $error=>$value) {
 		if ($value === true) {
 			echo "<li>".$this->lang->line("send_".$error)."</li>";
@@ -27,8 +27,8 @@ else {
 
 	if (isset($completenessError["dokumente"][$studiengang->studiengang_kz]))
 	{
-		echo $this->lang->line("send_dokumenteErgaenzen");
-		echo "<ul>";
+		echo "<p class='p'>".$this->lang->line("send_dokumenteErgaenzen")."</p>";
+		echo "<ul class='list'>";
 		foreach($completenessError["dokumente"][$studiengang->studiengang_kz] as $error=>$value)
 		{
 			if($value === true)
@@ -40,18 +40,19 @@ else {
 	}
 }
 ?></fieldset>
-    <?php echo $studiengang->bezeichnung; ?></br>
+	<span id="absenden_text"><?php echo $this->getPhrase("Submission/ApplicationFor", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);?></span>
+    <span id="studiengang"><?php echo $studiengang->bezeichnung; ?></span></br>
     <?php echo form_open("Send/send/".$studiengang->studiengang_kz."/".$studiengang->studienplan->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
 		    <?php if(($prestudentStatus[$studiengang->studiengang_kz]->bewerbung_abgeschicktamum != null) ||(!empty($completenessError)))
 {
-	echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit", "disabled"=>"disabled"));
+	echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden button-absenden", "type"=>"submit", "disabled"=>"disabled"));
 }
 else
 {
-	echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit"));
+	echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden button-absenden", "type"=>"submit"));
 }
 ?>
                 </div>
@@ -64,7 +65,7 @@ else
 		<?php
 if($prestudentStatus[$studiengang->studiengang_kz]->bewerbung_abgeschicktamum != null)
 {
-	echo $this->lang->line("send_bereitsAbgeschickt")."</br>";
+	echo "<p class='p'>".$this->lang->line("send_bereitsAbgeschickt")."</p>";
 }
 ?>
 	    </div>
