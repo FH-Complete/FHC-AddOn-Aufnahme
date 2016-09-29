@@ -51,6 +51,17 @@ class Requirements extends MY_Controller
 		$this->_data["studiengaenge"] = array();
 		foreach ($this->_data["prestudent"] as $prestudent)
 		{
+			if(isset($this->input->post()["studiengang_kz"]))
+			{
+				if($prestudent->studiengang_kz == $this->input->post()["studiengang_kz"])
+				{
+					{
+						$prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis"]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
+						$prestudent->zgvort = "geplanter Abschluss";
+						$this->_savePrestudent($prestudent);
+					}
+				}
+			}
 			//load studiengaenge der prestudenten
 			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
 			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
@@ -114,8 +125,6 @@ class Requirements extends MY_Controller
 			if($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis"]."_nachgereicht_".$this->input->post("studienplan_id")) !== null)
 			{
 				$akte->nachgereicht = true;
-				//TODO geplanter Abschluss
-				//$akte->geplanterAbschluss = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis"]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
 			}
 			
 			$this->_saveAkte($akte);
