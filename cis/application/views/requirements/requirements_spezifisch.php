@@ -134,7 +134,7 @@
 					<!-- The fileinput-button span is used to style the file input field as button -->
 					<div id="<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
 						<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f") && ($dokumente[$dok->dokument_kurzbz]->dms_id != null)) { ?>
-							<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo ($bewerbung_abgeschickt) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
+							<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true)) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
 						<?php
 						}
 						?>
