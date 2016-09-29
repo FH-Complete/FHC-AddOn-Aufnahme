@@ -710,14 +710,19 @@ if (!isset($plz)) $plz = null;
 					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 						logo = "docx.gif";
 					default:
-						if(data.result.bezeichnung.strpos("docx") != -1)
+						if(data.result.bezeichnung.indexOf("docx") !== false)
 						{
 							logo = "docx.gif";
 							break;
 						}
-						else if(data.result.bezeichnung.strpos("doc") != -1)
+						else if(data.result.bezeichnung.indexOf("doc") !== false)
 						{
 							logo = "docx.gif";
+							break;
+						}
+						else if(data.result.bezeichnung.indexOf("pdf") !== false)
+						{
+							logo = "pdf.jpg";
 							break;
 						}
 						else
@@ -807,14 +812,19 @@ if (!isset($plz)) $plz = null;
 					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 						logo = "docx.gif";
 					default:
-						if(data.result.bezeichnung.strpos("docx") != -1)
+						if(data.result.bezeichnung.indexOf("docx") !== false)
 						{
 							logo = "docx.gif";
 							break;
 						}
-						else if(data.result.bezeichnung.strpos("doc") != -1)
+						else if(data.result.bezeichnung.indexOf("doc") !== false)
 						{
 							logo = "docx.gif";
+							break;
+						}
+						else if(data.result.bezeichnung.indexOf("pdf") !== false)
+						{
+							logo = "pdf.jpg";
 							break;
 						}
 						else
