@@ -102,7 +102,10 @@
 					<div class="form-group">
 						<div id="<?php echo $dok->dokument_kurzbz; ?>_nachreichenDatum_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="nachreichenDatum">
 							<?php echo form_label($this->lang->line('requirements_nachreichenDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
-							<?php echo form_input(array('id' => $dok->dokument_kurzbz.'_nachreichenDatum', 'name' => $dok->dokument_kurzbz.'_nachreichenDatum', 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($dokumente[$dok->dokument_kurzbz]) ? date("d.m.Y", strtotime($dokumente[$dok->dokument_kurzbz]->nachgereicht_am)) : ""), "class" => "form-control datepicker")); ?>
+							<?php 
+							$data = array('id' => $dok->dokument_kurzbz.'_nachreichenDatum', 'name' => $dok->dokument_kurzbz.'_nachreichenDatum', 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($dokumente[$dok->dokument_kurzbz]) ? date("d.m.Y", strtotime($dokumente[$dok->dokument_kurzbz]->nachgereicht_am)) : ""), "class" => "form-control datepicker");
+							(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
+							echo form_input($data); ?>
 						</div>
 					</div>
 				</div>
@@ -110,7 +113,10 @@
 					<div class="form-group">
 						<div id="<?php echo $dok->dokument_kurzbz; ?>_nachreichenAnmerkung_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="nachreichenAnmerkung">
 							<?php echo form_label($this->lang->line('requirements_nachreichenAnmerkung'), "nachreichenAnmerkung", array("name" => "nachreichenAnmerkung", "for" => "nachreichenAnmerkung", "class" => "control-label")) ?>
-							<?php echo form_input(array('id' => $dok->dokument_kurzbz.'_nachreichenAnmerkung', 'name' => $dok->dokument_kurzbz.'_nachreichenAnmerkung', 'maxlength' => 128, "type" => "text", "value" => set_value("nachreichenAnmerkung", isset($dokumente[$dok->dokument_kurzbz]) ? $dokumente[$dok->dokument_kurzbz]->anmerkung : ""), "class" => "form-control")); ?>
+							<?php 
+							$data = array('id' => $dok->dokument_kurzbz.'_nachreichenAnmerkung', 'name' => $dok->dokument_kurzbz.'_nachreichenAnmerkung', 'maxlength' => 128, "type" => "text", "value" => set_value("nachreichenAnmerkung", isset($dokumente[$dok->dokument_kurzbz]) ? $dokumente[$dok->dokument_kurzbz]->anmerkung : ""), "class" => "form-control");
+							(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
+							echo form_input($data); ?>
 						</div>
 					</div>
 				</div>
@@ -128,7 +134,7 @@
 					<!-- The fileinput-button span is used to style the file input field as button -->
 					<div id="<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
 						<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f") && ($dokumente[$dok->dokument_kurzbz]->dms_id != null)) { ?>
-							<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>
+							<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo ($bewerbung_abgeschickt) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
 						<?php
 						}
 						?>

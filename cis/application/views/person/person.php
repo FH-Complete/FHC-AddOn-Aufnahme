@@ -452,7 +452,7 @@ if (!isset($plz)) $plz = null;
 				<!-- The fileinput-button span is used to style the file input field as button -->
 				<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
 					<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]])) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id != null)) { ?>
-						<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>
+						<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo ($bewerbung_abgeschickt) ? "disabled='disabled'":"";?> ><span class="glyphicon glyphicon-trash"></span></button>
 					<?php
 					}
 					?>
