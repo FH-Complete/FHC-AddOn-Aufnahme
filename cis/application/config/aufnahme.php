@@ -145,7 +145,7 @@ $config['view_messages'][] = 'messages/messages';
 $config['view_registration'][] = 'registration/registration';
 $config['view_registration'][] = 'login/hybrid_login';
 
-$config['view_dokumente'][] = 'dokumente/dokumente_bachelor';
+$config['view_dokumente'][] = 'dokumente/dokumente';
 
 
 /*
