@@ -90,7 +90,8 @@ class Summary extends MY_Controller {
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
 
-		foreach ($this->_data["dokumente"] as $akte) {
+		foreach ($this->_data["dokumente"] as $akte)
+		{
 			if ($akte->dms_id != null)
 			{
 				$dms = $this->_loadDms($akte->dms_id);
