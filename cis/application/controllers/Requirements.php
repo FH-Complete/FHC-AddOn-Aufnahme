@@ -590,69 +590,6 @@ class Requirements extends MY_Controller
 	}
 	private function _savePrestudent($prestudent)
 	{
-		if($prestudent->berufstaetigkeit_code == null)
-			unset($prestudent->berufstaetigkeit_code);
-		
-		if($prestudent->ausbildungcode == null)
-			unset($prestudent->ausbildungcode);
-		
-		if($prestudent->zgv_code == null)
-			unset($prestudent->zgv_code);
-		
-		if($prestudent->zgvmas_code == null)
-			unset($prestudent->zgvmas_code);
-		
-		if($prestudent->zgvmadatum == null)
-			unset($prestudent->zgvmadatum);
-		
-		if($prestudent->facheinschlberuf == null)
-			unset($prestudent->facheinschlberuf);
-		
-		if($prestudent->aufnahmeschluessel == null)
-			unset($prestudent->aufnahmeschluessel);
-		
-		if($prestudent->reihungstest_id == null)
-			unset($prestudent->reihungstest_id);
-		
-		if($prestudent->anmeldungreihungstest == null)
-			unset($prestudent->anmeldungreihungstest);
-		
-		if($prestudent->rt_gesamtpunkte == null)
-			unset($prestudent->rt_gesamtpunkte);
-		
-		if($prestudent->insertamum == null)
-			unset($prestudent->insertamum);
-		
-		if($prestudent->updateamum == null)
-			unset($prestudent->updateamum);
-		
-		if($prestudent->ext_id == null)
-			unset($prestudent->ext_id);
-		
-		if($prestudent->rt_punkte1 == null)
-			unset($prestudent->rt_punkte1);
-		
-		if($prestudent->rt_punkte2 == null)
-			unset($prestudent->rt_punkte2);
-		
-		if($prestudent->zgvdoktor_code == null)
-			unset($prestudent->zgvdoktor_code);
-		
-		if($prestudent->zgvdoktordatum == null)
-			unset($prestudent->zgvdoktordatum);
-		
-		if($prestudent->ausstellungsstaat == null)
-			unset($prestudent->ausstellungsstaat);
-		
-		if($prestudent->zgvdoktornation == null)
-			unset($prestudent->zgvdoktornation);
-		
-		if($prestudent->zgvmanation == null)
-			unset($prestudent->zgvmanation);
-		
-		if($prestudent->zgvnation == null)
-			unset($prestudent->zgvnation);
-		
 		$this->PrestudentModel->savePrestudent($prestudent);
 
 		if ($this->PrestudentModel->isResultValid() === true)

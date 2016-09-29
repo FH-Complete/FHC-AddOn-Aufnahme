@@ -10,7 +10,10 @@
 		<div class="col-sm-6">
 			<?php echo $this->lang->line("dokumente_name"); ?>
 		</div>
-		<div class="col-sm-3">
+		<div class="col-sm-1">
+			<?php echo $this->lang->line("dokumente_status"); ?>
+		</div>
+		<div class="col-sm-1">
 			<?php echo $this->lang->line("dokumente_aktion"); ?>
 		</div>
 		<div class="col-sm-3">
@@ -30,7 +33,10 @@
 					<div class="progress-bar progress-bar-success"></div>
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-1">
+				&nbsp;
+			</div>
+			<div class="col-sm-1">
 				<div id="<?php echo $dok->dokument_kurzbz;?>_delete">
 				<?php 
 				if((isset($dok->dokument)) && ($dok->dokument->dms_id != null))

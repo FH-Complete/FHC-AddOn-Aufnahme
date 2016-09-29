@@ -16,3 +16,4 @@ $lang["dokumente_formNachgereicht"] = "wird nachgereicht";
 $lang["dokumente_name"] = "Name";
 $lang["dokumente_aktion"] = "Aktion";
 $lang["dokumente_benoetigt"] = "Benötigt für";
+$lang["dokumente_status"] = "Status";
