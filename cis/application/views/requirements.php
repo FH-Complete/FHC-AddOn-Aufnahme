@@ -156,6 +156,8 @@ if (isset($error) && ($error->error === true))
 					$('#'+data.dokument_kurzbz+'Progress_'+studienplan_id).show();
 					$("#"+data.dokument_kurzbz+"_hochgeladen").html("<?php echo $this->lang->line('requirements_keinDokHochgeladen'); ?>");
 					$("#"+data.dokument_kurzbz+"_nachgereicht_"+studienplan_id).prop("disabled", false);
+					$("#"+data.dokument_kurzbz+"_logo_"+studienplan_id).children().hide();
+					toggleDateField(studienplan_id);
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {

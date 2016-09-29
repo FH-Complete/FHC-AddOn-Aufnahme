@@ -13,13 +13,63 @@
 		<hr>
 <?php foreach ($dokumenteStudiengang[$studiengang->studiengang_kz] as $dok) { ?>
 		<div class="row">
-			<div class="col-sm-5">
+			<div class="col-sm-3">
 				<?php
 					//echo form_label($this->lang->line('requirements_'.$dok->dokument_kurzbz), $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
 					$p = ($dok->pflicht == 't') ? ' *' : '';
 
 					echo form_label($dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1].$p, $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
 				?>
+			</div>
+			<?php
+			if((isset($dokumente[$dok->dokument_kurzbz]->mimetype)) && ($dokumente[$dok->dokument_kurzbz]->mimetype !== null))
+			{
+				switch($dokumente[$dok->dokument_kurzbz]->mimetype)
+				{
+					case "application/pdf":
+						$logo = "pdf.jpg";
+						break;
+
+					case "image/jpeg":
+						$logo = "";
+						break;
+
+					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+						$logo = "docx.gif";
+					default:
+						if(strpos($dokumente[$dok->dokument_kurzbz]->titel, "docx") !== false)
+						{
+							$logo = "docx.gif";
+							break;
+						}
+						elseif(strpos($dokumente[$dok->dokument_kurzbz]->titel, "doc") !== false)
+						{
+							$logo = "docx.gif";
+							break;
+						}
+						else
+						{
+							$logo = false;
+							break;
+						}
+				}
+			}
+			else
+			{
+				$logo = "";
+			}
+			?>
+			<div id="<?php echo $dok->dokument_kurzbz; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="col-sm-1">
+				<?php 
+				if(isset($logo) && ($logo != false))
+				{
+				?>
+				<img class="document_logo" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'.$logo); ?>"/>
+				<?php
+				}
+				?>
+			</div>
+			<div class="col-sm-5">
 				<div class="form-group" id="<?php echo $dok->dokument_kurzbz.'_hochgeladen'; ?>">
 					<?php
 						if ((!isset($dokumente[$dok->dokument_kurzbz])) || ($dokumente[$dok->dokument_kurzbz]->nachgereicht === "t"))
@@ -28,9 +78,14 @@
 						}
 						else
 						{
+							echo $dokumente[$dok->dokument_kurzbz]->dokument->name."</br>";
 							echo $this->lang->line('requirements_DokHochgeladen');
 						}
 					?>
+					<!-- The global progress bar -->
+					<div id="<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
+						<div class="progress-bar progress-bar-success"></div>
+					</div>
 				</div>
 				<div class="checkbox" style="<?php echo ($dok->pflicht == 'f') ? 'visibility: hidden;' : ''; ?>">
 					<label>
@@ -43,8 +98,24 @@
 						?>
 					</label>
 				</div>
+				<div class="form-group">
+					<div class="form-group">
+						<div id="<?php echo $dok->dokument_kurzbz; ?>_nachreichenDatum_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="nachreichenDatum">
+							<?php echo form_label($this->lang->line('requirements_nachreichenDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
+							<?php echo form_input(array('id' => $dok->dokument_kurzbz.'_nachreichenDatum', 'name' => $dok->dokument_kurzbz.'_nachreichenDatum', 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($dokumente[$dok->dokument_kurzbz]) ? date("d.m.Y", strtotime($dokumente[$dok->dokument_kurzbz]->nachgereicht_am)) : ""), "class" => "form-control datepicker")); ?>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="form-group">
+						<div id="<?php echo $dok->dokument_kurzbz; ?>_nachreichenAnmerkung_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="nachreichenAnmerkung">
+							<?php echo form_label($this->lang->line('requirements_nachreichenAnmerkung'), "nachreichenAnmerkung", array("name" => "nachreichenAnmerkung", "for" => "nachreichenAnmerkung", "class" => "control-label")) ?>
+							<?php echo form_input(array('id' => $dok->dokument_kurzbz.'_nachreichenAnmerkung', 'name' => $dok->dokument_kurzbz.'_nachreichenAnmerkung', 'maxlength' => 128, "type" => "text", "value" => set_value("nachreichenAnmerkung", isset($dokumente[$dok->dokument_kurzbz]) ? $dokumente[$dok->dokument_kurzbz]->anmerkung : ""), "class" => "form-control")); ?>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="col-sm-5">
+			<div class="col-sm-3">
 				<div class="form-group">
 					<div class="form-group <?php echo (form_error($dok->dokument_kurzbz) != "") ? 'has-error' : '' ?>">
 						<div class="upload">
@@ -57,7 +128,7 @@
 					<!-- The fileinput-button span is used to style the file input field as button -->
 					<div id="<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
 						<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f") && ($dokumente[$dok->dokument_kurzbz]->dms_id != null)) { ?>
-							<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);"><?php echo $this->lang->line("requirements_delete"); ?></button>
+							<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>
 						<?php
 						}
 						?>
@@ -69,28 +140,6 @@
 							<!-- The file input field used as target for the file upload widget -->
 							<input id="<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
 						</span>
-						<br>
-						<br>
-						<!-- The global progress bar -->
-						<div id="<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
-							<div class="progress-bar progress-bar-success"></div>
-						</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="form-group">
-						<div id="<?php echo $dok->dokument_kurzbz; ?>" class="nachreichenDatum">
-							<?php echo form_label($this->lang->line('requirements_nachreichenDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
-							<?php echo form_input(array('id' => $dok->dokument_kurzbz.'_nachreichenDatum', 'name' => $dok->dokument_kurzbz.'_nachreichenDatum', 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($dokumente[$dok->dokument_kurzbz]) ? date("d.m.Y", strtotime($dokumente[$dok->dokument_kurzbz]->nachgereicht_am)) : ""), "class" => "form-control datepicker")); ?>
-						</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="form-group">
-						<div id="<?php echo $dok->dokument_kurzbz; ?>" class="nachreichenAnmerkung">
-							<?php echo form_label($this->lang->line('requirements_nachreichenAnmerkung'), "nachreichenAnmerkung", array("name" => "nachreichenAnmerkung", "for" => "nachreichenAnmerkung", "class" => "control-label")) ?>
-							<?php echo form_input(array('id' => $dok->dokument_kurzbz.'_nachreichenAnmerkung', 'name' => $dok->dokument_kurzbz.'_nachreichenAnmerkung', 'maxlength' => 128, "type" => "text", "value" => set_value("nachreichenAnmerkung", isset($dokumente[$dok->dokument_kurzbz]) ? $dokumente[$dok->dokument_kurzbz]->anmerkung : ""), "class" => "form-control")); ?>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -104,7 +153,6 @@
 			dataType: 'json',
 			disableValidation: false,
 			add: function(e, data) {
-				$('#<?php echo $dok->dokument_kurzbz; ?>_hochgeladen').html("");
 				var uploadErrors = [];
 				var acceptFileTypes = /^.*\.(jpe?g|docx?|pdf)$/i;
 
@@ -136,13 +184,48 @@
 					$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
 					$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
 					$('#<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').append(
-							'<button type="button" class="btn btn-sm btn-primary icon-trash" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);"><?php echo $this->lang->line("requirements_delete"); ?></button>');
+							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>');
 					$('#<?php echo $dok->dokument_kurzbz; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
 					$('#<?php echo $dok->dokument_kurzbz; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("checked", false);
+					toggleDateField(<?php echo $studiengang->studienplan->studienplan_id; ?>);
 					$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
 						'width',
 						'0%'
 					);
+					$('#<?php echo $dok->dokument_kurzbz; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>').show();
+					var logo = "";
+					switch(data.result.mimetype)
+					{
+						case "application/pdf":
+						logo = "pdf.jpg";
+						break;
+							
+					case "image/jpeg":
+						logo = "";
+						break;
+					
+					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+						logo = "docx.gif";
+					default:
+						if(data.result.bezeichnung.strpos("docx") != -1)
+						{
+							logo = "docx.gif";
+							break;
+						}
+						else if(data.result.bezeichnung.strpos("doc") != -1)
+						{
+							logo = "docx.gif";
+							break;
+						}
+						else
+						{
+							logo = false;
+							break;
+						}
+					}
+
+					$("#<?php echo $dok->dokument_kurzbz; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
+					msg += "</br>"+data.result.bezeichnung;
 				}
 				else
 				{
@@ -206,7 +289,7 @@
     {
 		$(".nachreichenDatum").each(function(i,v) {
 			var id = $(v).attr("id");
-//			console.log("#"+id+"_nachgereicht_"+studienplan_id);
+			id = id.substring(0, id.indexOf("_"));
 			if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked") !== undefined)
 			{
 				if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked"))
@@ -223,6 +306,7 @@
 		$(".nachreichenAnmerkung").each(function(i,v)
 		{
 			var id = $(v).attr("id");
+			id = id.substring(0, id.indexOf("_"));
 			if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked") !== undefined)
 			{
 				if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked"))

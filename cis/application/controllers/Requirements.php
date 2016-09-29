@@ -146,6 +146,15 @@ class Requirements extends MY_Controller
 
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
+		
+		foreach($this->_data["dokumente"] as $akte)
+		{
+			if ($akte->dms_id != null)
+			{
+				$dms = $this->_loadDms($akte->dms_id);
+				$akte->dokument = $dms;
+			}
+		}
 
 		$this->load->view('requirements', $this->_data);
 	}
@@ -249,6 +258,8 @@ class Requirements extends MY_Controller
 							{
 								$result->success = true;
 								$result->akte_id = $this->AkteModel->result->retval;
+								$result->bezeichnung = $obj->name;
+								$result->mimetype = $akte->mimetype;
 							}
 							else
 							{

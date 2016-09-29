@@ -78,7 +78,6 @@ $this->load->view('templates/footer');
 			dataType: 'json',
 			success: function(data, textStatus, jqXHR)
 			{
-				console.log(data);
 				if(data.error !== 0)
 				{
 					//TODO display error
@@ -91,6 +90,7 @@ $this->load->view('templates/footer');
 					$('#'+data.dokument_kurzbz+'Progress_'+studienplan_id).show();
 					$("#"+data.dokument_kurzbz+"_hochgeladen_"+studienplan_id).html("<?php echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen'); ?>");
 					$("#"+data.dokument_kurzbz+"_nachgereicht_"+studienplan_id).prop("disabled", false);
+					$("#"+data.dokument_kurzbz+"_logo_"+studienplan_id).children().hide();
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {

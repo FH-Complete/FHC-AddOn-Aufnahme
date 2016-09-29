@@ -637,6 +637,8 @@ class Bewerbung extends MY_Controller
 							{
 								$result->success = true;
 								$result->akte_id = $this->AkteModel->result->retval;
+								$result->bezeichnung = $obj->name;
+								$result->mimetype = $akte->mimetype;
 							}
 							else
 							{
