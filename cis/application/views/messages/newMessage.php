@@ -39,3 +39,8 @@
 	<?php echo form_button(array("content"=>$this->lang->line('msg_send'), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
     <?php echo form_close(); ?>
 </div>
+<script type="text/javascript">
+	tinymce.init({
+		selector: "#msg_body"
+	});
+</script>

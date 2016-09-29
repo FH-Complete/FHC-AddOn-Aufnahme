@@ -35,6 +35,7 @@
 		<script src="<?php echo base_url('../vendor/blueimp/jquery-file-upload/js/jquery.fileupload-ui.js') ?>"></script>
 		<script src="<?php echo base_url('../vendor/blueimp/jquery-file-upload/js/jquery.fileupload-process.js') ?>"></script>
 		<script src="<?php echo base_url('../vendor/blueimp/jquery-file-upload/js/jquery.fileupload-validate.js') ?>"></script>
+		<script src="<?php echo base_url('../vendor/tinymce/tinymce/tinymce.min.js') ?>"></script>
 	
 	</head>
 	

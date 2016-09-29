@@ -43,7 +43,7 @@ $this->load->view('templates/footer');
 
 <script type="text/javascript">
     $(document).ready(function(){
-		$(".collapsed").on("click", function(event){
+		$(".collapsed_inbox").on("click", function(event){
 			var messageId = $(event.target).attr("messageId");
 
 			if($("#status_"+messageId).hasClass("icon-unread"))
