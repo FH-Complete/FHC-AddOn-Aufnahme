@@ -139,7 +139,7 @@
 						}
 						?>
 					</div>
-					<div id="<?php echo $dok->dokument_kurzbz; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="<?php echo (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
+					<div id="<?php echo $dok->dokument_kurzbz; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
 						<span class="btn btn-success fileinput-button">
 							<i class="glyphicon glyphicon-plus"></i>
 							<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>

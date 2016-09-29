@@ -47,7 +47,7 @@
 				}
 				?>
 				</div>
-				<div id="<?php echo $dok->dokument_kurzbz; ?>_Upload" style="<?php echo ((!isset($dok->dokument)) || ($dok->dokument->dms_id == null)) ? "" : "display: none;"; ?>">
+				<div id="<?php echo $dok->dokument_kurzbz; ?>_Upload" class="upload-widget" style="<?php echo ((!isset($dok->dokument)) || ($dok->dokument->dms_id == null)) ? "" : "display: none;"; ?>">
 					<span class="btn btn-success fileinput-button">
 						<i class="glyphicon glyphicon-plus"></i>
 						<!-- The file input field used as target for the file upload widget -->

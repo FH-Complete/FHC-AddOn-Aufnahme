@@ -457,7 +457,7 @@ if (!isset($plz)) $plz = null;
 					}
 					?>
 				</div>
-				<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
+				<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
 					<span class="btn btn-success fileinput-button">
 						<i class="glyphicon glyphicon-plus"></i>
 						<span><?php echo $this->lang->line("aufnahme_dateiAuswahl"); ?></span>
@@ -571,7 +571,7 @@ if (!isset($plz)) $plz = null;
 					}
 					?>
 				</div>
-				<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
+				<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
 					<span class="btn btn-success fileinput-button">
 						<i class="glyphicon glyphicon-plus"></i>
 						<span><?php echo $this->lang->line("aufnahme_dateiAuswahl"); ?></span>
