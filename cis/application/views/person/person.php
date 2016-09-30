@@ -13,7 +13,7 @@ if (!isset($plz)) $plz = null;
     <legend>
 		<?php echo $this->getPhrase("Personal/Information", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
 	</legend>
-    <?php echo form_open_multipart("Bewerbung?studiengang_kz=".$studiengang->studiengang_kz, array("id" => "PersonForm", "name" => "PersonForm")); ?>
+    <?php echo form_open_multipart("Bewerbung?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
 		<div class="row form-row">
 			<div class="col-sm-3">
 				<div class="form-group <?php echo (form_error("anrede") != "") ? 'has-error' : '' ?>">
@@ -586,7 +586,7 @@ if (!isset($plz)) $plz = null;
 			<div class="col-sm-4">
 				<div class="form-group">
 					<?php 
-					$data = array("content"=>"Speichern", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit");
+					$data = array("content"=>$this->lang->line("person_speichern"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit");
 					(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
 					echo form_button($data); ?>
 				</div>

@@ -48,3 +48,4 @@ $lang["person_titelPreInfo"] = "Titel der vor dem Namen geschrieben wird – z.B
 $lang["person_titelPostInfo"] = "Titel der nach dem Namen geschrieben wird – z.B. xxx, BSc";
 $lang["aufnahme_dateiAuswahl"] = "Datei auswählen";
 $lang["person_delete"] = "löschen";
+$lang["person_speichern"] = "Speichern & Weiter";

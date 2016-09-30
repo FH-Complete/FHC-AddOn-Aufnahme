@@ -55,7 +55,7 @@ if (isset($error) && ($error->error === true))
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="form-group">
-							<?php echo form_button(array("content"=>"Speichern", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
+							<?php echo form_button(array("content"=>$this->lang->line("requirements_speichern"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
 						</div>
 					</div>
 				</div>

@@ -353,7 +353,15 @@ class Bewerbung extends MY_Controller
 					$this->_data["zustell_ort_dd"] = $gemeinde->gemeinde_id;
 				}
 			}
-			$this->load->view('bewerbung', $this->_data);
+			
+			if(!isset($this->_data["error"]) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
+			{
+				redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+			}
+			else
+			{
+				$this->load->view('bewerbung', $this->_data);
+			}
 		}
 	}
 	

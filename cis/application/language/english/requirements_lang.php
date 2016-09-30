@@ -34,3 +34,4 @@ $lang["requirements_UploadError"] = "Fehler beim hochladen";
 $lang["requirements_nachreichenAbschlussGeplantDatum"] = "Abschluss geplant am";
 $lang["requirements_dateiAuswahl"] = "Select file";
 $lang["requirements_delete"] = "delete";
+$lang["requirements_speichern"] = "Save & Next";
