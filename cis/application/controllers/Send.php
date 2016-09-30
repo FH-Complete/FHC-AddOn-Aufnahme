@@ -518,7 +518,7 @@ class Send extends MY_Controller {
 		{
 			foreach($doks as $dokType)
 			{
-				if(!isset($this->_data["dokumente"][$key][$dokType->dokument_kurzbz]))
+				if((!isset($this->_data["dokumente"][$key][$dokType->dokument_kurzbz])) && ($dokType->pflicht == "t"))
 				{
 					$error["dokumente"][$key][$dokType->bezeichnung] = true;
 				}
