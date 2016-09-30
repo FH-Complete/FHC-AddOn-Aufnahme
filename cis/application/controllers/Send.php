@@ -40,7 +40,6 @@ class Send extends MY_Controller {
 		$this->_data['sprache'] = $this->get_language();
 		$this->_loadLanguage($this->_data["sprache"]);
 
-
 		//load person data
 		$this->_data["person"] = $this->_loadPerson();
 
@@ -109,6 +108,8 @@ class Send extends MY_Controller {
 	public function send($studiengang_kz, $studienplan_id) {
 		$this->checkLogin();
 		$this->_data['sprache'] = $this->get_language();
+		
+		$this->_data["studiengang_kz"] = $studiengang_kz;
 
 		//load person data
 		$this->_data["person"] = $this->_loadPerson();
@@ -123,15 +124,43 @@ class Send extends MY_Controller {
 		//load kontakt data
 		$this->_loadKontakt();
 
+		//load preinteressent data
+		$this->_data["prestudent"] = $this->_loadPrestudent();
+		
+		$this->_data["studiengaenge"] = array();
+		$this->_data["prestudentStatus"] = array();
+		foreach ($this->_data["prestudent"] as $prestudent)
+		{
+			//load studiengaenge der prestudenten
+			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+			$this->_data["prestudentStatus"][$prestudent->studiengang_kz] = $prestudent->prestudentStatus;
+
+			if ((!empty($prestudent->prestudentStatus))
+				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) {
+				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+				$studiengang->studienplan = $studienplan;
+				
+				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+				{
+					$this->_data["bewerbung_abgeschickt"] = true;
+				}
+				array_push($this->_data["studiengaenge"], $studiengang);
+			}
+		}
+
 		//load Dokumente from Studiengang
-		$this->_data["dokumenteStudiengang"] = $this->_loadDokumentByStudiengang($studiengang_kz);
+		$this->_data["dokumenteStudiengang"] = array();
+		foreach($this->_data["studiengaenge"] as $stg)
+		{
+			$this->_data["dokumenteStudiengang"][$stg->studiengang_kz] = $this->_loadDokumentByStudiengang($stg->studiengang_kz);
+		}
 
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
-
+		
 		$this->_data["completenessError"] = $this->_checkDataCompleteness();
-
-		$this->_data["prestudent"] = $this->_loadPrestudent();
 
 		//load prestudent data for correct studiengang
 		foreach ($this->_data["prestudent"] as $prestudent)
@@ -142,7 +171,7 @@ class Send extends MY_Controller {
 				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
 				$studienplan = $this->_loadStudienplan($prestudentStatus->studienplan_id);
 				$this->_data["studiengang"]->studienplan = $studienplan;
-				$this->_data["prestudentStatus"] = $prestudentStatus;
+//				$this->_data["prestudentStatus"] = $prestudentStatus;
 
 				if(!empty($this->_data["completenessError"]))
 				{
@@ -162,6 +191,11 @@ class Send extends MY_Controller {
 						//TODO vorlage fehlt in DB
 						$this->_sendMessageMailNewApplicationInfo($this->_data["person"], $this->_data["studiengang"]);
 						redirect("/Aufnahmetermine");
+					}
+					else
+					{
+						$this->_setError(true, $this->lang->line("send_bereitsAbgeschickt"));
+						$this->load->view('send', $this->_data);
 					}
 				}
 			}
@@ -525,8 +559,7 @@ class Send extends MY_Controller {
 		{
 			foreach($doks as $dokType)
 			{
-//				var_dump($dokType);
-				if((!isset($this->_data["dokumente"][$key][$dokType->dokument_kurzbz])) && ($dokType->pflicht == "t"))
+				if((!isset($this->_data["dokumente"][$dokType->dokument_kurzbz])) && ($dokType->pflicht == "t"))
 				{
 					$error["dokumente"][$key][$dokType->bezeichnung] = $dokType;
 				}

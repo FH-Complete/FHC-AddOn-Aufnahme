@@ -40,3 +40,4 @@ $lang["summary_Geburtsu"] = "Geburtsurkunde";
 $lang["summary_Maturaze"] = "Schul- bzw. Lehrabschlusszeugnis";
 $lang["summary_Staatsbn"] = "Staatsbürgerschaftsnachweis";
 $lang["summary_Lichtbil"] = "Lichtbild";
+$lang["summary_nachgereicht"] = "wird nachgereicht";

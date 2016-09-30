@@ -69,6 +69,10 @@
 					{
 						echo $this->lang->line('summary_unvollstaendig');
 					}
+					elseif($dokumente[$dok->dokument_kurzbz]->nachgereicht == "t")
+					{
+						echo $this->lang->line('summary_nachgereicht');
+					}
 					else
 					{
 						echo $dokumente[$dok->dokument_kurzbz]->dokument->name;
