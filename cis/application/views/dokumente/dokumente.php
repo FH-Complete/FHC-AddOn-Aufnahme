@@ -7,16 +7,16 @@
 ?>
 <div id="dokumente">
 	<div class="row document-header">
-		<div class="col-sm-6">
+		<div class="col-sm-5">
 			<?php echo $this->lang->line("dokumente_name"); ?>
 		</div>
-		<div class="col-sm-1">
+		<div class="col-sm-2">
 			<?php echo $this->lang->line("dokumente_status"); ?>
 		</div>
 		<div class="col-sm-1">
 			<?php echo $this->lang->line("dokumente_aktion"); ?>
 		</div>
-		<div class="col-sm-3">
+		<div class="col-sm-4">
 			<?php echo $this->lang->line("dokumente_benoetigt"); ?>
 		</div>
 	</div>
@@ -33,7 +33,7 @@
 		}
 	?>
 		<div class="row document-row">
-			<div class="col-sm-6">
+			<div class="col-sm-5">
 				<?php echo $dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1].$p;
 				?>
 				<!-- The global progress bar -->
@@ -41,8 +41,13 @@
 					<div class="progress-bar progress-bar-success"></div>
 				</div>
 			</div>
-			<div class="col-sm-1">
-				&nbsp;
+			<div class="col-sm-2">
+				<?php
+					if((isset($dok->dokument->nachgereicht)) && ($dok->dokument->nachgereicht == "t"))
+					{
+						echo $this->lang->line("dokumente_formNachgereicht");
+					}
+				?>
 			</div>
 			<div class="col-sm-1">
 				<div id="<?php echo $dok->dokument_kurzbz;?>_delete">
@@ -63,7 +68,7 @@
 					</span>
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<?php
 				if(isset($dok->studiengaenge))
 				{
