@@ -13,13 +13,14 @@
 		<hr>
 <?php foreach ($dokumenteStudiengang[$studiengang->studiengang_kz] as $dok) { ?>
 		<div class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<?php
 					//echo form_label($this->lang->line('requirements_'.$dok->dokument_kurzbz), $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
 					$p = ($dok->pflicht == 't') ? ' *' : '';
 
 					echo form_label($dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1].$p, $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
 				?>
+				<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->getPhrase("ZGV/".$dok->dokument_kurzbz, $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"></span>
 			</div>
 			<?php
 			if((isset($dokumente[$dok->dokument_kurzbz]->mimetype)) && ($dokumente[$dok->dokument_kurzbz]->mimetype !== null))
@@ -103,7 +104,7 @@
 						<div id="<?php echo $dok->dokument_kurzbz; ?>_nachreichenDatum_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="nachreichenDatum">
 							<?php echo form_label($this->lang->line('requirements_nachreichenDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
 							<?php 
-							$data = array('id' => $dok->dokument_kurzbz.'_nachreichenDatum', 'name' => $dok->dokument_kurzbz.'_nachreichenDatum', 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($dokumente[$dok->dokument_kurzbz]) ? date("d.m.Y", strtotime($dokumente[$dok->dokument_kurzbz]->nachgereicht_am)) : ""), "class" => "form-control datepicker");
+							$data = array('id' => $dok->dokument_kurzbz.'_nachreichenDatum'.$studiengang->studiengang_kz.$studiengang->studienplan->studienplan_id, 'name' => $dok->dokument_kurzbz.'_nachreichenDatum', 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($dokumente[$dok->dokument_kurzbz]) ? date("d.m.Y", strtotime($dokumente[$dok->dokument_kurzbz]->nachgereicht_am)) : ""), "class" => "form-control datepicker");
 							(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
 							echo form_input($data); ?>
 						</div>
@@ -121,7 +122,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-2">
 				<div class="form-group">
 					<div class="form-group <?php echo (form_error($dok->dokument_kurzbz) != "") ? 'has-error' : '' ?>">
 						<div class="upload">
