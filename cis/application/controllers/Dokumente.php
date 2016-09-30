@@ -38,6 +38,7 @@ class Dokumente extends MY_Controller {
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
 		$this->load->model('akte_model', "AkteModel");
 		$this->load->model('dms_model', "DmsModel");
+		$this->load->model('dokument_model', "DokumentModel");
 		$this->load->helper("form");
 		$this->_data["sprache"] = $this->get_language();
 		$this->_loadLanguage($this->_data["sprache"]);
@@ -203,6 +204,43 @@ class Dokumente extends MY_Controller {
 				}
 				array_push($this->_data["docs"][$dok->dokument_kurzbz]->studiengaenge, $stg);
 			}
+			
+			if((!isset($this->_data["docs"][$this->config->config["dokumentTypen"]["reisepass"]])) || ($this->_data["docs"][$this->config->config["dokumentTypen"]["reisepass"]] ==null))
+			{
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["reisepass"]] = $this->_getDokument($this->config->config["dokumentTypen"]["reisepass"]);
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["reisepass"]]->studiengaenge = array();
+			}
+
+			if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
+			{
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["reisepass"]]->dokument = $this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]];
+			}
+			array_push($this->_data["docs"][$this->config->config["dokumentTypen"]["reisepass"]]->studiengaenge, $stg);
+			
+			if((!isset($this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]])) || ($this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]] ==null))
+			{
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]] = $this->_getDokument($this->config->config["dokumentTypen"]["lebenslauf"]);
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]]->studiengaenge = array();
+			}
+
+			if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
+			{
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument = $this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]];
+			}
+			array_push($this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]]->studiengaenge, $stg);
+			
+			if((!isset($this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]])) || ($this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]] ==null))
+			{
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]] = $this->_getDokument($this->config->config["dokumentTypen"]["abschlusszeugnis"]);
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->studiengaenge = array();
+			}
+
+			if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]))
+			{
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument = $this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]];
+			}
+			array_push($this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->studiengaenge, $stg);
+
 		}
 	}
 	
@@ -636,5 +674,31 @@ class Dokumente extends MY_Controller {
 		}
 	}
 
-
+	private function _getDokument($dokument_kurzbz)
+	{
+		$this->DokumentModel->getDokument($dokument_kurzbz);
+		if($this->DokumentModel->isResultValid() === true)
+		{
+			
+			if(count($this->DokumentModel->result->retval) == 1)
+			{
+				foreach($this->DokumentModel->result->retval as $dok)
+				{
+					$dok->bezeichnung_mehrsprachig = str_replace("\"","", $dok->bezeichnung_mehrsprachig);
+					$dok->bezeichnung_mehrsprachig = str_replace("{","", $dok->bezeichnung_mehrsprachig);
+					$dok->bezeichnung_mehrsprachig = str_replace("}","", $dok->bezeichnung_mehrsprachig);
+					$dok->bezeichnung_mehrsprachig = explode(",", $dok->bezeichnung_mehrsprachig);
+				}
+				return $this->DokumentModel->result->retval[0];
+			}
+			else
+			{
+				$this->_setError(true, "Dokument konnte nicht gefunden werden.");
+			}
+		}
+		else
+		{
+			$this->_setError(true, $this->DokumentModel->getErrorMessage());
+		}
+	}
 }

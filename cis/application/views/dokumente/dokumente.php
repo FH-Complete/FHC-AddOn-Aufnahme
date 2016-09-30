@@ -23,10 +23,18 @@
 	<?php
 	foreach ($docs as $dok)
 	{
+		if(isset($dok->pflicht))
+		{
+			$p = ($dok->pflicht == 't') ? ' *' : '';
+		}
+		else
+		{
+			$p = "*";
+		}
 	?>
 		<div class="row document-row">
 			<div class="col-sm-6">
-				<?php echo $dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1];
+				<?php echo $dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1].$p;
 				?>
 				<!-- The global progress bar -->
 				<div id="<?php echo $dok->dokument_kurzbz; ?>Progress" class="progress">
