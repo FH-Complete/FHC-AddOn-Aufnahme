@@ -192,7 +192,7 @@
     </div>
 </div>
 <hr>
-<div id="letztesZeugnis" class="row" style="display: none;">
+<div id="letztesZeugnis_<?php echo $studiengang->studienplan->studienplan_id;?>" class="row" style="display: none;">
 	<div class="row">
 		<div class="col-sm-12">
 			<?php echo $this->getPhrase("ZGV/letztgueltigesZeugnis", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
@@ -309,7 +309,7 @@
 
 		$(".nachreichen_checkbox_zeugnis").on("change", function(evt) {
 			var studienplan_id = $(evt.target).attr("studienplan_id");
-			toggleDocumentField($(evt.target).prop("checked"));
+			toggleDocumentField($(evt.target).prop("checked"), studienplan_id);
 			if($(evt.target).prop("checked"))
 			{
 				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"];?>_nachreichenDatum_"+studienplan_id+"_div").show();
@@ -322,7 +322,7 @@
 
 		$(".nachreichen_checkbox_zeugnis").each(function (i, v) {
 			var studienplan_id = $(v).attr("studienplan_id");
-			toggleDocumentField($(v).prop("checked"));
+			toggleDocumentField($(v).prop("checked"), studienplan_id);
 			if($(v).prop("checked"))
 			{
 				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"];?>_nachreichenDatum_"+studienplan_id+"_div").show();
@@ -541,15 +541,18 @@
 		
 	});
 
-	function toggleDocumentField(isChecked)
+	function toggleDocumentField(isChecked, studienplan_id)
 	{
+		console.log($("#letztesZeugnis:visible"));
 		if(isChecked)
 		{
-			$("#letztesZeugnis").show();
+			console.log("test");
+			$("#letztesZeugnis_"+studienplan_id).show();
 		}
 		else
 		{
-			$("#letztesZeugnis").hide();
+			console.log("test1");
+			$("#letztesZeugnis_"+studienplan_id).hide();
 		}
     }
 </script>
