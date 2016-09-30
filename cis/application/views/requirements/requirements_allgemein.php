@@ -543,15 +543,12 @@
 
 	function toggleDocumentField(isChecked, studienplan_id)
 	{
-		console.log($("#letztesZeugnis:visible"));
 		if(isChecked)
 		{
-			console.log("test");
 			$("#letztesZeugnis_"+studienplan_id).show();
 		}
 		else
 		{
-			console.log("test1");
 			$("#letztesZeugnis_"+studienplan_id).hide();
 		}
     }

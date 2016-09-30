@@ -79,6 +79,8 @@ class MY_Loader extends CI_Loader {
 							return $p->text;
 					}
 				}
+				if ($this->config->item('display_phrase_name'))
+					return "<i>[$phrase]</i>";
 			}
 			else {
 				return $phrasen;

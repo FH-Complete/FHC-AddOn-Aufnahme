@@ -148,6 +148,9 @@ class MY_Controller extends CI_Controller
 							return $p->text;
 					}
 				}
+				
+				if ($this->config->item('display_phrase_name'))
+					return "<i>[$phrase]</i>";
 			}
 			else
 			{
