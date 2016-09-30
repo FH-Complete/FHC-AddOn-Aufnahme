@@ -398,6 +398,13 @@ class Send extends MY_Controller {
 		$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($studiengang_kz, true, true);
 		if($this->DokumentStudiengangModel->isResultValid() === true)
 		{
+			foreach($this->DokumentStudiengangModel->result->retval as $dok)
+			{
+				$dok->bezeichnung_mehrsprachig = str_replace("\"","", $dok->bezeichnung_mehrsprachig);
+				$dok->bezeichnung_mehrsprachig = str_replace("{","", $dok->bezeichnung_mehrsprachig);
+				$dok->bezeichnung_mehrsprachig = str_replace("}","", $dok->bezeichnung_mehrsprachig);
+				$dok->bezeichnung_mehrsprachig = explode(",", $dok->bezeichnung_mehrsprachig);
+			}
 			return $this->DokumentStudiengangModel->result->retval;
 		}
 		else
@@ -518,9 +525,10 @@ class Send extends MY_Controller {
 		{
 			foreach($doks as $dokType)
 			{
+//				var_dump($dokType);
 				if((!isset($this->_data["dokumente"][$key][$dokType->dokument_kurzbz])) && ($dokType->pflicht == "t"))
 				{
-					$error["dokumente"][$key][$dokType->bezeichnung] = true;
+					$error["dokumente"][$key][$dokType->bezeichnung] = $dokType;
 				}
 			}
 		}

@@ -31,10 +31,7 @@ else {
 		echo "<ul class='list'>";
 		foreach($completenessError["dokumente"][$studiengang->studiengang_kz] as $error=>$value)
 		{
-			if($value === true)
-			{
-				echo "<li>".$this->lang->line("send_".$error)."</li>";
-			}
+			echo "<li>".$value->bezeichnung_mehrsprachig[$this->session->sprache->index-1]."</li>";
 		}
 		echo "</ul>";
 	}
