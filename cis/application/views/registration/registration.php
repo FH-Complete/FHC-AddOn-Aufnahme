@@ -150,15 +150,10 @@ if (isset($error) && ($error->error === true))
 
 <script type="text/javascript">
     $(document).ready(function(){
+		toggleButton();
+		
 		$("#datenschutz").on("change", function(){
-			if($("#datenschutz").prop("checked"))
-			{
-			$("#registration_button").prop("disabled", false)
-			}
-			else
-			{
-			$("#registration_button").prop("disabled", true)
-			}
+			toggleButton();
 		});
 
 		$(".datepicker").datepicker({
@@ -172,4 +167,16 @@ if (isset($error) && ($error->error === true))
 			changeYear: true
 		});
     });
+	
+	function toggleButton()
+	{
+		if($("#datenschutz").prop("checked"))
+		{
+		$("#registration_button").prop("disabled", false)
+		}
+		else
+		{
+		$("#registration_button").prop("disabled", true)
+		}
+	}
 </script>
