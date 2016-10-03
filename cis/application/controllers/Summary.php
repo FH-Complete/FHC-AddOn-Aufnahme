@@ -26,6 +26,7 @@ class Summary extends MY_Controller {
 		$this->load->model('dms_model', "DmsModel");
 		$this->load->model('akte_model', "AkteModel");
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
+		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
 

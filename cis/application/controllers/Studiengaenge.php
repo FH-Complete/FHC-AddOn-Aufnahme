@@ -21,6 +21,7 @@ class Studiengaenge extends MY_Controller {
 		$this->load->model('Bewerbungstermine_model', 'BewerbungstermineModel');
 		//$this->load->model('reihungstest_model', "ReihungstestModel");
 		$this->lang->load('studiengaenge', $this->get_language());
+		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
 

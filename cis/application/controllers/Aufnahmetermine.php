@@ -39,6 +39,7 @@ class Aufnahmetermine extends MY_Controller {
 		$this->load->model('studiengangstyp_model', 'StudiengangstypModel');
 		$this->load->model('message_model', 'MessageModel');
 		$this->load->helper("form");
+		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
 

@@ -21,9 +21,9 @@ class Messages extends MY_Controller {
 		$this->load->helper("form");
 		$this->load->library("form_validation");
 		$this->config->load('message');
-
 		$this->_data["sprache"] = $this->get_language();
 		$this->_data["view"] = "messages";
+		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
 

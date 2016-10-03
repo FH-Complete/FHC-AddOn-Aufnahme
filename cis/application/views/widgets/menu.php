@@ -22,11 +22,18 @@
             <ul class="nav navbar-nav">
 
                 <?php
-foreach ($items as $item): ?>
+					foreach ($items as $item): ?>
                     <li class="<?php if (isset($data['aktiv']) && $data["aktiv"] === $item["id"]) echo 'active'; ?>">
                         <a href="<?php echo $item['href']; ?>">
-                            <?php echo $item['name']; ?>
+                            <?php 
+								echo $item['name']." "; 
+								if(isset($data["numberOfUnreadMessages"]) && ($data["numberOfUnreadMessages"] > 0) &&($item["id"] == "Nachrichten"))
+								{
+									echo "<span class='glyphicon glyphicon-exclamation-sign red'></span>";	
+								}
+							?>
                         </a>
+						
                     </li>
                 <?php endforeach; ?>
             </ul>

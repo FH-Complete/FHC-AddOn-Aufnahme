@@ -14,7 +14,7 @@ $this->load->view('templates/metaHeader');
 <div class="container">
     <?php
 $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
-echo $this->template->widget("menu", array('aktiv' => 'Downloads'));
+echo $this->template->widget("menu", array('aktiv' => 'Downloads', 'numberOfUnreadMessages'=>$numberOfUnreadMessages));
 if (isset($error) && ($error->error === true))
 	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
 ?>

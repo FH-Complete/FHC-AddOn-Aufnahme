@@ -18,11 +18,13 @@ class MY_Controller extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->config('aufnahme');
+		$this->config->load('message');
 		$this->output->enable_profiler($this->config->item('profiler'));
 		$this->load->helper('url');
 		$this->load->library('session');
 		$this->load->model("phrase_model", "PhraseModel");
 		$this->load->model("sprache_model", "SpracheModel");
+		$this->load->model("message_model", "MessageModel");
 		//$this->load->spark('restclient/2.1.0');
 		$this->_data['language'] = $this->get_language();
 		$this->_getSprache($this->_data['language']);
@@ -183,6 +185,38 @@ class MY_Controller extends CI_Controller
 			{
 				$this->_setError(true, $this->SpracheModel->getErrorMessage());
 			}
+		}
+	}
+	
+	protected function _getNumberOfUnreadMessages()
+	{
+		if(isset($this->session->userdata()["person_id"]))
+		{
+			$this->_data["messages"] = $this->_getMessages($this->session->userdata()["person_id"]);
+			$numberOfUnreadMessages = 0;
+			foreach($this->_data["messages"] as $msg)
+			{
+				if($msg->status == MSG_STATUS_UNREAD)
+				{
+					$numberOfUnreadMessages++;
+				}
+			}
+			return $numberOfUnreadMessages;
+		}
+		return 0;
+	}
+	
+	private function _getMessages($person_id)
+	{
+		$this->MessageModel->getMessagesByPersonId($person_id);
+		if($this->MessageModel->isResultValid() === true)
+		{
+			//     var_dump($this->MessageModel->result);
+			return $this->MessageModel->result->retval;
+		}
+		else
+		{
+			$this->_setError(true, $this->MessageModel->getErrorMessage());
 		}
 	}
 }

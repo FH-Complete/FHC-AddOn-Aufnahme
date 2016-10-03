@@ -17,6 +17,7 @@ class Downloads extends MY_Controller {
 		$this->load->model('studiengang_model', "StudiengangModel");
 		$this->load->model('person_model', 'PersonModel');
 		$this->_data["sprache"] = $this->get_language();
+		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
 

@@ -42,6 +42,7 @@ class Dokumente extends MY_Controller {
 		$this->load->helper("form");
 		$this->_data["sprache"] = $this->get_language();
 		$this->_loadLanguage($this->_data["sprache"]);
+		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
 

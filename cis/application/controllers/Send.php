@@ -28,6 +28,7 @@ class Send extends MY_Controller {
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
 		$this->load->helper("form");
 		$this->load->library("form_validation");
+		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
 

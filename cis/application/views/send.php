@@ -17,7 +17,7 @@ if (isset($error) && ($error->error === true))
 <div class="container">
     <?php
 $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
-echo $this->template->widget("menu", array('aktiv' => 'Bewerbung'));
+echo $this->template->widget("menu", array('aktiv' => 'Bewerbung', 'numberOfUnreadMessages'=>$numberOfUnreadMessages));
 foreach ($studiengaenge as $studiengang)
 {
 	$data["studiengang"] = $studiengang;
