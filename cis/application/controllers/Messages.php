@@ -220,7 +220,7 @@ class Messages extends MY_Controller {
 	{
 		$message = array(
 			"person_id" => $this->session->userdata()["person_id"],
-			"receiver_id" => $person_id,
+			"receiver_id" => $this->config->item("systemPersonId"),
 			"subject" => $subject,
 			"body" => $body,
 			"oe_kurzbz" => $oe_kurzbz
