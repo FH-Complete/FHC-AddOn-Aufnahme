@@ -90,7 +90,8 @@ $this->load->view('templates/footer');
 					$('#'+data.dokument_kurzbz+'Progress_'+studienplan_id).show();
 					$("#"+data.dokument_kurzbz+"_hochgeladen_"+studienplan_id).html("<?php echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen'); ?>");
 					$("#"+data.dokument_kurzbz+"_nachgereicht_"+studienplan_id).prop("disabled", false);
-					$("#"+data.dokument_kurzbz+"_logo_"+studienplan_id).children().hide();
+					$("#"+data.dokument_kurzbz+"_logo_"+studienplan_id).html("");
+					toggleDocumentsComplete(studienplan_id);
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {

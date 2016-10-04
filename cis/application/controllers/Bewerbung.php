@@ -132,6 +132,7 @@ class Bewerbung extends MY_Controller
 
 		if ($this->form_validation->run() == FALSE)
 		{
+			$this->_data["complete"] = $this->_checkDataCompleteness();
 			$this->load->view('bewerbung', $this->_data);
 		}
 		else
@@ -361,6 +362,7 @@ class Bewerbung extends MY_Controller
 			}
 			else
 			{
+				$this->_data["complete"] = $this->_checkDataCompleteness();
 				$this->load->view('bewerbung', $this->_data);
 			}
 		}
@@ -1173,5 +1175,122 @@ class Bewerbung extends MY_Controller
 	public function ort($plz)
 	{
 		echo json_encode($this->_loadGemeindeByPlz($plz));
+	}
+	
+	private function _checkDataCompleteness()
+	{
+		$complete = array("person"=>true, "adresse"=>true, "kontakt"=>true, "zustelladresse"=>true, "dokumente"=>true);
+
+		//check personal data
+		$person = $this->_data["person"];
+
+		if($person->vorname == "")
+		{
+			$complete["person"] = false;
+		}
+
+		if($person->nachname == "")
+		{
+			$complete["person"] = false;
+		}
+
+		if($person->gebdatum == null)
+		{
+			$complete["person"] = false;
+		}
+
+		if(($person->gebort == null) || ($person->gebort== ""))
+		{
+			$complete["person"] = false;
+		}
+
+		if(($person->geburtsnation == null) || ($person->geburtsnation== ""))
+		{
+			$complete["person"] = false;
+		}
+
+		if(($person->staatsbuergerschaft == null) || ($person->staatsbuergerschaft== ""))
+		{
+			$complete["person"] = false;
+		}
+
+		if((($person->svnr == null) || ($person->svnr== "")) && ($person->geburtsnation == "A"))
+		{
+			$complete["person"] = false;
+		}
+
+		//check adress data
+		if(isset($this->_data["adresse"]))
+		{
+			$adresse = $this->_data["adresse"];
+
+			if(($adresse->strasse == null) || ($adresse->strasse == ""))
+			{
+				$complete["adresse"] = false;
+			}
+
+			if(($adresse->plz == null) || ($adresse->plz == ""))
+			{
+				$complete["adresse"] = false;
+			}
+
+			if(($adresse->ort == null) || ($adresse->ort == ""))
+			{
+				$complete["adresse"] = false;
+			}
+		}
+		else
+		{
+			$complete['adresse'] = false;
+		}
+		
+		//check adress data
+		if(isset($this->_data["zustell_adresse"]))
+		{
+			$adresse = $this->_data["zustell_adresse"];
+
+			if(($adresse->strasse == null) || ($adresse->strasse == ""))
+			{
+				$complete["zustelladresse"] = false;
+			}
+
+			if(($adresse->plz == null) || ($adresse->plz == ""))
+			{
+				$complete["zustelladresse"] = false;
+			}
+
+			if(($adresse->ort == null) || ($adresse->ort == ""))
+			{
+				$complete["zustelladresse"] = false;
+			}
+		}
+		
+
+		//check contact data
+		$kontakt = $this->_data["kontakt"];
+
+		if((!isset($kontakt["telefon"])) || ($kontakt["telefon"]->kontakt == ""))
+		{
+			$complete["kontakt"] = false;
+		}
+
+		if((!isset($kontakt["email"])) || ($kontakt["email"]->kontakt == ""))
+		{
+			$complete["kontakt"] = false;
+		}
+
+		//check documents
+
+		if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
+		{
+			$complete["dokumente"] = false;
+		}
+
+		if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
+		{
+			$complete["dokumente"] = false;
+		}
+
+		return $complete;
 	}
 }

@@ -12,6 +12,9 @@ if (!isset($plz)) $plz = null;
 <div role="tabpanel" class="tab-pane" id="daten">
     <legend>
 		<?php echo $this->getPhrase("Personal/Information", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+		<div class="pull-right">
+			<span class="incomplete"><?php echo ((isset($complete)) && (!$complete["person"])) ? $this->lang->line("aufnahme/unvollstaendig") : "";?></span>
+		</div>
 	</legend>
     <?php echo form_open_multipart("Bewerbung?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
 		<div class="row form-row">
@@ -139,6 +142,9 @@ if (!isset($plz)) $plz = null;
 		</div>
 		<legend class="">
 			<?php echo $this->getPhrase("Personal/Addresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+			<div class="pull-right">
+				<span class="incomplete"><?php echo ((isset($complete)) && (!$complete["adresse"])) ? $this->lang->line("aufnahme/unvollstaendig") : "";?></span>
+			</div>
 		</legend>
 		<!--<div class="row">
 			<div class="col-sm-12">
@@ -244,7 +250,12 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 		<div id="zustelladresse_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="display: none;">
-			<legend class=""><?php echo $this->getPhrase("Personal/Zustelladresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></legend>
+			<legend class="">
+				<?php echo $this->getPhrase("Personal/Zustelladresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+				<div class="pull-right">
+					<span class="incomplete"><?php echo ((isset($complete)) && (!$complete["zustelladresse"])) ? $this->lang->line("aufnahme/unvollstaendig") : "";?></span>
+				</div>
+			</legend>
 			<div class="row form-row">
 				<div class="col-sm-6">
 					<div class="form-group <?php echo (form_error("zustelladresse_nation") != "") ? 'has-error' : '' ?>">
@@ -311,7 +322,12 @@ if (!isset($plz)) $plz = null;
 				</div>
 			</div>
 		</div>
-		<legend class=""><?php echo $this->getPhrase("Personal/Kontakt", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></legend>
+		<legend class="">
+			<?php echo $this->getPhrase("Personal/Kontakt", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+			<div class="pull-right">
+				<span class="incomplete"><?php echo ((isset($complete)) && (!$complete["kontakt"])) ? $this->lang->line("aufnahme/unvollstaendig") : "";?></span>
+			</div>
+		</legend>
 		<div class="row form-row">
 			<div class="col-sm-6">
 				<div class="form-group <?php echo (form_error("telefon") != "") ? 'has-error' : '' ?>">
@@ -346,7 +362,12 @@ if (!isset($plz)) $plz = null;
 				</div>
 			</div>
 		</div>
-		<legend class=""><?php echo $this->getPhrase("Personal/DokumentenUpload", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></legend>
+		<legend class="">
+			<?php echo $this->getPhrase("Personal/DokumentenUpload", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+			<div class="pull-right">
+				<span id="document_incomplete" class="incomplete"><?php echo ((isset($complete)) && (!$complete["dokumente"])) ? $this->lang->line("aufnahme/unvollstaendig") : "";?></span>
+			</div>
+		</legend>
 		<div class="row form-row">
 			<div class="col-sm-12">
 				<div class="form-group">
@@ -402,7 +423,7 @@ if (!isset($plz)) $plz = null;
 				if(isset($logo) && ($logo != false))
 				{
 				?>
-				<img class="document_logo" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'.$logo); ?>"/>
+				<img class="document_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'.$logo); ?>"/>
 				<?php
 				}
 				?>
@@ -515,7 +536,7 @@ if (!isset($plz)) $plz = null;
 				if(isset($logo) && ($logo != false))
 				{
 				?>
-				<img class="document_logo" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'.$logo); ?>"/>
+				<img class="document_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'.$logo); ?>"/>
 				<?php
 				}
 				?>
@@ -732,8 +753,9 @@ if (!isset($plz)) $plz = null;
 						}
 					}
 
-					$("#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
+					$("#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
 					msg += "</br>"+data.result.bezeichnung;
+					toggleDocumentsComplete(<?php echo $studiengang->studienplan->studienplan_id; ?>);
 				}
 				else
 				{
@@ -834,8 +856,9 @@ if (!isset($plz)) $plz = null;
 						}
 					}
 
-					$("#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
+					$("#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
 					msg += "</br>"+data.result.bezeichnung;
+					toggleDocumentsComplete(<?php echo $studiengang->studienplan->studienplan_id; ?>);
 				}
 				else
 				{
@@ -911,47 +934,18 @@ if (!isset($plz)) $plz = null;
     {
 		files = event.target.files;
     }
-
-    // Catch the form submit and upload the files
-    /*function uploadFiles(document_kurzbz, studienplan_id)
-    {
-		// START A LOADING SPINNER HERE
-
-		// Create a formdata object and add the files
-		var data = new FormData();
-		$.each(files, function(key, value) {
-			data.append(document_kurzbz, value);
-		});
-
-		$.ajax({
-			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles"); ?>',
-			type: 'POST',
-			data: data,
-			cache: false,
-			dataType: 'json',
-			processData: false, // Don't process the files
-			contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-			success: function(data, textStatus, jqXHR) {
-				if(data.success === true)
-				{
-					// Success
-					$("#"+document_kurzbz+'_'+studienplan_id).after("<span><?php echo $this->lang->line('person_UploadErfolgreich');?></span>");
-					$("#"+document_kurzbz+'_hochgeladen').html("<span><?php echo $this->lang->line('person_formDokumentupload_DokHochgeladen'); ?></span>");
-				}
-				else
-				{
-					// Handle errors here
-					$("#"+document_kurzbz+'_'+studienplan_id).after("<span><?php echo $this->lang->line('person_UploadError');?></span>");
-					console.log('ERRORS: ' + data.error);
-				}
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-				// Handle errors here
-				console.log('ERRORS: ' + textStatus);
-				// STOP LOADING SPINNER
-			}
-		});
-    }*/
+	
+	function toggleDocumentsComplete(studienplan_id)
+	{		
+		if($(".document_logo_"+studienplan_id).length < 2)
+		{
+			$("#document_incomplete").show();
+		}
+		else
+		{
+			$("#document_incomplete").hide();
+		}
+	}
 
     function loadOrtData(plz, ele)
     {
