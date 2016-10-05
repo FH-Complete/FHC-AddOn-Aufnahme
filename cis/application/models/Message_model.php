@@ -72,10 +72,9 @@ class Message_model extends MY_Model
 	 * @param unknown $orgform_kurzbz (optional)
 	 * @return unknown
 	 */
-	public function sendMessageVorlage($sender_id, $receiver_id, $vorlage_kurzbz, $oe_kurzbz, $data, $sprache, $orgform_kurzbz = null) {
+	public function sendMessageVorlage($vorlage_kurzbz, $oe_kurzbz, $data, $sprache, $orgform_kurzbz = null, $sender_id = null, $receiver_id = null) {
 		$message = array(
-			"sender_id" => $sender_id,
-			"receiver_id" => $receiver_id,
+
 			"vorlage_kurzbz" => $vorlage_kurzbz,
 			"oe_kurzbz" => $oe_kurzbz,
 			"data" => $data,
@@ -83,6 +82,16 @@ class Message_model extends MY_Model
 			"orgform_kurzbz" => $orgform_kurzbz,
 			"relationmessage_id" => null
 		);
+		
+		if($receiver_id !== null)
+		{
+			$message["receiver_id"] = $receiver_id;
+		}
+		
+		if($sender_id !== null)
+		{
+			$message["sender_id"] = $sender_id;
+		}
 
 		if ($restquery = $this->rest->post('system/message/messageVorlage', $message)) {
 			$this->result = $restquery;

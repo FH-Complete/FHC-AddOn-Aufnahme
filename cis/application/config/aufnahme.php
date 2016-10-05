@@ -222,13 +222,6 @@ $config['dokumentTypen'] = array(
 
 /*
 |--------------------------------------------------------------------------
-| Person ID des Systems zum Versenden von Nachrichten
-|--------------------------------------------------------------------------
-*/
-$config['systemPersonId'] = 1;
-
-/*
-|--------------------------------------------------------------------------
 | Email used for testing purposes, if is it used captcha check will be disabled
 |--------------------------------------------------------------------------
 */

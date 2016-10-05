@@ -379,7 +379,7 @@ class Aufnahmetermine extends MY_Controller {
 
 		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
 
-		$this->MessageModel->sendMessageVorlage($this->config->item("systemPersonId"), $person->person_id, "MailAppointmentConfirmation", $oe, $data, $sprache, $orgform_kurzbz=null);
+		$this->MessageModel->sendMessageVorlage("MailAppointmentConfirmation", $oe, $data, $sprache, $orgform_kurzbz=null, null, $person->person_id);
 
 		// var_dump($this->MessageModel->result);
 

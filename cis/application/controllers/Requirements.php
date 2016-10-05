@@ -24,6 +24,7 @@ class Requirements extends MY_Controller
 		$this->load->model('akte_model', "AkteModel");
 		$this->load->model('person_model', "PersonModel");
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
+		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
 	/**

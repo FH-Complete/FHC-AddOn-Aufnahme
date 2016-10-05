@@ -78,24 +78,33 @@
 		switch($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->mimetype)
 		{
 			case "application/pdf":
-				$logo = "pdf.jpg";
+				$logo = "document-pdf.svg";
 				break;
-
 			case "image/jpeg":
-				$logo = "";
+				$logo = "document-picture.svg";
 				break;
-
 			case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 				$logo = "docx.gif";
+				break;
 			default:
-				if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->titel, "docx") !== false)
+				if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "docx") !== false)
 				{
 					$logo = "docx.gif";
 					break;
 				}
-				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->titel, "doc") !== false)
+				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "doc") !== false)
 				{
 					$logo = "docx.gif";
+					break;
+				}
+				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "pdf") !== false)
+				{
+					$logo = "document-pdf.svg";
+					break;
+				}
+				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "jpg") !== false)
+				{
+					$logo = "document-picture.svg";
 					break;
 				}
 				else
@@ -210,24 +219,34 @@
 			switch($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->mimetype)
 			{
 				case "application/pdf":
-					$logo = "pdf.jpg";
+					$logo = "document-pdf.svg";
 					break;
 
 				case "image/jpeg":
-					$logo = "";
+					$logo = "document-picture.svg";
 					break;
-
 				case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 					$logo = "docx.gif";
+					break;
 				default:
-					if(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->titel, "docx") !== false)
+					if(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, "docx") !== false)
 					{
 						$logo = "docx.gif";
 						break;
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->titel, "doc") !== false)
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, "doc") !== false)
 					{
 						$logo = "docx.gif";
+						break;
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, "pdf") !== false)
+					{
+						$logo = "document-pdf.svg";
+						break;
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, "jpg") !== false)
+					{
+						$logo = "document-picture.svg";
 						break;
 					}
 					else
@@ -383,36 +402,42 @@
 					switch(data.result.mimetype)
 					{
 						case "application/pdf":
-						logo = "pdf.jpg";
-						break;
-							
-					case "image/jpeg":
-						logo = "";
-						break;
-					
-					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-						logo = "docx.gif";
-					default:
-						if(data.result.bezeichnung.indexOf("docx") !== false)
-						{
+							logo = "document-pdf.svg";
+							break;
+
+						case "image/jpeg":
+							logo = "document-picture.svg";
+							break;
+
+						case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 							logo = "docx.gif";
 							break;
-						}
-						else if(data.result.bezeichnung.indexOf("doc") !== false)
-						{
-							logo = "docx.gif";
-							break;
-						}
-						else if(data.result.bezeichnung.indexOf("pdf") !== false)
-						{
-							logo = "pdf.jpg";
-							break;
-						}
-						else
-						{
-							logo = false;
-							break;
-						}
+						default:
+							if(data.result.bezeichnung.indexOf("docx") !== false)
+							{
+								logo = "docx.gif";
+								break;
+							}
+							else if(data.result.bezeichnung.indexOf("doc") !== false)
+							{
+								logo = "docx.gif";
+								break;
+							}
+							else if(data.result.bezeichnung.indexOf("pdf") !== false)
+							{
+								logo = "document-pdf.svg";
+								break;
+							}
+							else if(data.result.bezeichnung.indexOf("jpg") !== false)
+							{
+								logo = "document-picture.svg";
+								break;
+							}
+							else
+							{
+								logo = false;
+								break;
+							}
 					}
 
 					$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
@@ -487,31 +512,35 @@
 					switch(data.result.mimetype)
 					{
 						case "application/pdf":
-						logo = "pdf.jpg";
-						break;
-							
-					case "image/jpeg":
-						logo = "";
-						break;
-					
-					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-						logo = "docx.gif";
-					default:
-						if(data.result.bezeichnung.strpos("docx") != -1)
-						{
+							logo = "document-pdf.svg";
+							break;
+						case "image/jpeg":
+							logo = "document-picture.svg";
+							break;
+						case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 							logo = "docx.gif";
 							break;
-						}
-						else if(data.result.bezeichnung.strpos("doc") != -1)
-						{
-							logo = "docx.gif";
-							break;
-						}
-						else
-						{
-							logo = false;
-							break;
-						}
+						default:
+							if(data.result.bezeichnung.indexOf("docx") !== false)
+							{
+								logo = "docx.gif";
+								break;
+							}
+							else if(data.result.bezeichnung.indexOf("doc") !== false)
+							{
+								logo = "docx.gif";
+								break;
+							}
+							else if(data.result.bezeichnung.indexOf("jpg") !== false)
+							{
+								logo = "document-picture.svg";
+								break;
+							}
+							else
+							{
+								logo = false;
+								break;
+							}
 					}
 
 					$("#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');

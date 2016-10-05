@@ -20,7 +20,14 @@
 
 					echo form_label($dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1].$p, $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
 				?>
-				<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->getPhrase("ZGV/".$dok->dokument_kurzbz, $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"></span>
+				<?php
+//				if((isset($dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1])) && ($dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1]!='null'))
+//				{
+//				?>
+					<!--<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="//<?php echo $dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1];?>"></span>-->
+				<?php
+//					}
+//				?>
 			</div>
 			<?php
 			if((isset($dokumente[$dok->dokument_kurzbz]->mimetype)) && ($dokumente[$dok->dokument_kurzbz]->mimetype !== null))
@@ -28,24 +35,33 @@
 				switch($dokumente[$dok->dokument_kurzbz]->mimetype)
 				{
 					case "application/pdf":
-						$logo = "pdf.jpg";
+						$logo = "document-pdf.svg";
 						break;
-
 					case "image/jpeg":
-						$logo = "";
+						$logo = "document-picture.svg";
 						break;
-
 					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 						$logo = "docx.gif";
+						break;
 					default:
-						if(strpos($dokumente[$dok->dokument_kurzbz]->titel, "docx") !== false)
+						if(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "docx") !== false)
 						{
 							$logo = "docx.gif";
 							break;
 						}
-						elseif(strpos($dokumente[$dok->dokument_kurzbz]->titel, "doc") !== false)
+						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "doc") !== false)
 						{
 							$logo = "docx.gif";
+							break;
+						}
+						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "pdf") !== false)
+						{
+							$logo = "document-pdf.svg";
+							break;
+						}
+						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "jpg") !== false)
+						{
+							$logo = "document-picture.svg";
 							break;
 						}
 						else
@@ -204,36 +220,40 @@
 					switch(data.result.mimetype)
 					{
 						case "application/pdf":
-						logo = "pdf.jpg";
-						break;
-							
-					case "image/jpeg":
-						logo = "";
-						break;
-					
-					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-						logo = "docx.gif";
-					default:
-						if(data.result.bezeichnung.indexOf("docx") !== false)
-						{
+							logo = "document-pdf.svg";
+							break;
+						case "image/jpeg":
+							logo = "document-picture.svg";
+							break;
+						case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 							logo = "docx.gif";
 							break;
-						}
-						else if(data.result.bezeichnung.indexOf("doc") !== false)
-						{
-							logo = "docx.gif";
-							break;
-						}
-						else if(data.result.bezeichnung.indexOf("pdf") !== false)
-						{
-							logo = "pdf.jpg";
-							break;
-						}
-						else
-						{
-							logo = false;
-							break;
-						}
+						default:
+							if(data.result.bezeichnung.indexOf("docx") !== false)
+							{
+								logo = "docx.gif";
+								break;
+							}
+							else if(data.result.bezeichnung.indexOf("doc") !== false)
+							{
+								logo = "docx.gif";
+								break;
+							}
+							else if(data.result.bezeichnung.indexOf("pdf") !== false)
+							{
+								logo = "document-pdf.svg";
+								break;
+							}
+							else if(data.result.bezeichnung.indexOf("jpg") !== false)
+							{
+								logo = "document-picture.svg";
+								break;
+							}
+							else
+							{
+								logo = false;
+								break;
+							}
 					}
 
 					$("#<?php echo $dok->dokument_kurzbz; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');

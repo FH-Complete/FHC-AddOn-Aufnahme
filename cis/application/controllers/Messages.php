@@ -110,8 +110,9 @@ class Messages extends MY_Controller {
 				$this->input->post()["msg_body"],
 				$this->input->post()["msg_oe_kurzbz"],
 				$relationMessage_id);
-
-			$this->load->view('messages', $this->_data);
+			
+//			$this->load->view('messages', $this->_data);
+			redirect("/Messages");
 		}
 	}
 
@@ -220,7 +221,6 @@ class Messages extends MY_Controller {
 	{
 		$message = array(
 			"person_id" => $this->session->userdata()["person_id"],
-			"receiver_id" => $this->config->item("systemPersonId"),
 			"subject" => $subject,
 			"body" => $body,
 			"oe_kurzbz" => $oe_kurzbz

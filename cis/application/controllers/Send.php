@@ -330,7 +330,7 @@ class Send extends MY_Controller {
 
 		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
 
-		$this->MessageModel->sendMessageVorlage($this->config->item("systemPersonId"), $person->person_id, "MailApplicationConfirmation", $oe, $data, $sprache, $orgform_kurzbz=null);
+		$this->MessageModel->sendMessageVorlage("MailApplicationConfirmation", $oe, $data, $sprache, $orgform_kurzbz=null, null, $person->person_id);
 
 		if($this->MessageModel->isResultValid() === true)
 		{
@@ -366,7 +366,7 @@ class Send extends MY_Controller {
 
 		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data["sprache"];
 
-		$this->MessageModel->sendMessageVorlage($person->person_id, $this->config->item("systemPersonId"), "MailNewApplicationInfo", $oe, $data, $sprache, $orgform_kurzbz);
+		$this->MessageModel->sendMessageVorlage("MailNewApplicationInfo", $oe, $data, $sprache, $orgform_kurzbz, $person->person_id, null);
 
 		if($this->MessageModel->isResultValid() === true)
 		{
