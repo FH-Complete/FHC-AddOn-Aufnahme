@@ -68,7 +68,7 @@
     </div>
 </div>
 <hr>
-<div class="row">
+<div class="row form-upload">
 	<div class="col-sm-2">
 		&nbsp;
 	</div>
@@ -209,7 +209,7 @@
 			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->getPhrase("ZGV/letztesZeugnisInfo", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"></span>
 		</div>
 	</div>
-    <div class="row">
+    <div class="row form-upload">
 		<div class="col-sm-2">
 			<?php echo form_label($this->lang->line('requirements_letztesZeugnis'), "maturazeugnis", array("name" => "Sonst", "for" => "Sonst", "class" => "control-label")) ?>
 		</div>

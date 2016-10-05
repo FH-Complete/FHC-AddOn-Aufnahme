@@ -12,7 +12,7 @@
 		<fieldset><?php echo $this->getPhrase("ZGV/SpecificAdmissionRequirements", $sprache); ?></fieldset>
 		<hr>
 <?php foreach ($dokumenteStudiengang[$studiengang->studiengang_kz] as $dok) { ?>
-		<div class="row">
+		<div class="row form-upload">
 			<div class="col-sm-4">
 				<?php
 					//echo form_label($this->lang->line('requirements_'.$dok->dokument_kurzbz), $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
