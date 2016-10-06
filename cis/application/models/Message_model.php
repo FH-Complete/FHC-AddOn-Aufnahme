@@ -74,7 +74,6 @@ class Message_model extends MY_Model
 	 */
 	public function sendMessageVorlage($vorlage_kurzbz, $oe_kurzbz, $data, $sprache, $orgform_kurzbz = null, $sender_id = null, $receiver_id = null) {
 		$message = array(
-
 			"vorlage_kurzbz" => $vorlage_kurzbz,
 			"oe_kurzbz" => $oe_kurzbz,
 			"data" => $data,

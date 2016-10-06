@@ -31,6 +31,10 @@
 								{
 									echo "<span class='glyphicon glyphicon-exclamation-sign red'></span>";	
 								}
+								if($item["id"] == "Dokumente")
+								{
+									echo "<span id='document-sign' class='glyphicon glyphicon-exclamation-sign red' style='display: none;'></span>";	
+								}
 							?>
                         </a>
 						
@@ -40,3 +44,26 @@
         </div>
     </div>
 </nav>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.ajax({
+			url: '<?php echo base_url($this->config->config["index_page"]."/Dokumente/areDocumentsComplete"); ?>',
+			type: 'POST',
+			cache: false,
+			dataType: 'json',
+			success: function(data, textStatus, jqXHR)
+			{
+				console.log(data);
+				if((data.complete !== undefined) && (data.complete == false))
+				{
+					$("#document-sign").show();
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				// Handle errors here
+				console.log('ERRORS: ' + textStatus);
+				// STOP LOADING SPINNER
+			}
+		});
+	});
+</script>

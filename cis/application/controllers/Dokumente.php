@@ -702,4 +702,42 @@ class Dokumente extends MY_Controller {
 			$this->_setError(true, $this->DokumentModel->getErrorMessage());
 		}
 	}
+	
+	public function areDocumentsComplete()
+	{
+		if(isset($this->session->userdata()["person_id"]))
+		{
+			$result = new stdClass();
+			$result->complete = true;
+			//load dokumente
+			$this->_loadDokumente($this->session->userdata()["person_id"]);
+
+			if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
+			{
+				$result->complete = false;
+			}
+
+			if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
+			{
+				$result->complete = false;
+			}
+
+			//load preinteressent data
+			$this->_data["prestudent"] = $this->_loadPrestudent();
+
+			foreach($this->_data["prestudent"] as $prestudent)
+			{
+				$doks = $this->_loadDokumentByStudiengang($prestudent->studiengang_kz);
+				foreach($doks as $dok)
+				{
+					if(!isset($this->_data["dokumente"][$dok->dokument_kurzbz]))
+					{
+						$result->complete = false;
+					}
+				}
+			}
+
+			echo json_encode($result);
+		}
+	}
 }
