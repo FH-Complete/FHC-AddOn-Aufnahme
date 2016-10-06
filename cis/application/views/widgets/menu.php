@@ -53,7 +53,6 @@
 			dataType: 'json',
 			success: function(data, textStatus, jqXHR)
 			{
-				console.log(data);
 				if((data.complete !== undefined) && (data.complete == false))
 				{
 					$("#document-sign").show();

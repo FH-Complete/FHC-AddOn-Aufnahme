@@ -310,6 +310,17 @@
 					$('.ui-datepicker').css('z-index', 10);
 				}, 0);
 			}
+			<?php
+			if(ucfirst($sprache) === "German")
+			{
+				?>
+
+					,monthNames: ["Jänner", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+					dayNamesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+					dayNamesMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
+				<?php
+			}
+			?>
 		});
 		
 		$(".nachreichen_checkbox_zeugnis").each(function(i,v){

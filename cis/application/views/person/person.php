@@ -647,6 +647,18 @@ if (!isset($plz)) $plz = null;
 				}, 0);
 			},
 			changeYear: true
+			<?php
+			if(ucfirst($sprache) === "German")
+			{
+				?>
+
+					,monthNames: ["Jänner", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+					dayNamesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+					dayNamesMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
+
+				<?php
+			}
+			?>
 		});
 
 		$(".fhc-tooltip").tooltip();

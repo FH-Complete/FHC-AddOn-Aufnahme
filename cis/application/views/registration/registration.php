@@ -165,7 +165,20 @@ if (isset($error) && ($error->error === true))
 				}, 0);
 			},
 			changeYear: true
+			<?php
+			if(ucfirst($sprache) === "German")
+			{
+				?>
+
+					,monthNames: ["Jänner", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+					dayNamesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+					dayNamesMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
+				<?php
+			}
+			?>
 		});
+		
+		
     });
 	
 	function toggleButton()
