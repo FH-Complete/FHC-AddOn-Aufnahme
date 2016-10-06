@@ -709,5 +709,25 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'Bewerbung für den Studiengang',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'Registration/HeaderConfirmation',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Registrierungsbestätigung',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Registration/HeaderConfirmation',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Registration Confirmation',
+			'description' => ''
+		)
 	)
 );

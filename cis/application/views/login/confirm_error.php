@@ -5,17 +5,23 @@
  * @package default
  */
 
-
-$this->lang->load(array('registration'), $sprache); ?>
+$this->load->view('templates/header');
+$this->load->view('templates/metaHeader');
+$this->lang->load(array('aufnahme', 'login', 'registration'), $sprache); ?>
 
 <div class="container">
-    <?php $this->load->view('language'); ?>
-
-    <ol class="breadcrumb">
-	<li class="active">Registration</li>
-    </ol>
-
-    <?php
-echo (isset($message)) ? $message : "";
-?>
+    <?php $this->load->view('templates/iconHeader', array("header" => $this->getPhrase("Registration/HeaderConfirmation", $sprache))); ?>
+	<div class="row">
+		<div id="confirm">
+			<div class="row">
+				<div class="col-sm-12">
+					<?php
+						echo (isset($message)) ? $message : "";
+					?>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+<?php
+$this->load->view('templates/footer');

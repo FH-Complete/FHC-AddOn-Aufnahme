@@ -204,9 +204,6 @@ class Registration extends MY_Controller {
 		$result = $this->_checkZugangscodePerson($this->session->userdata()["zugangscode"]);
 		if (($this->PersonModel->isResultValid() === true) && (count($result) == 1)) {
 			$person_id = $result[0]->person_id;
-			$this->_data["zugangscode"] = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
-			$this->session->set_userdata("zugangscode", $this->_data["zugangscode"]);
-
 //			if ($this->Kontakt_model->getKontakt($person_id)) {
 //				foreach($this->Kontakt_model->result->retval as $kontakt)
 //				{
@@ -233,6 +230,8 @@ class Registration extends MY_Controller {
 					$person = $result;
 					//check if timestamp code is not older than now
 					if (strtotime(date('Y-m-d H:i:s')) < strtotime($person->zugangscode_timestamp)) {
+						$this->_data["zugangscode"] = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
+						$this->session->set_userdata("zugangscode", $this->_data["zugangscode"]);
 						$person->zugangscode =  $this->_data["zugangscode"];
 						$this->PersonModel->updatePerson($person);
 //						$this->load->view('templates/header');
@@ -241,9 +240,9 @@ class Registration extends MY_Controller {
 					}
 					else {
 						$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
-						$this->load->view('templates/header');
+//						$this->load->view('templates/header');
 						$this->load->view('login/confirm_error',  $this->_data);
-						$this->load->view('templates/footer');
+//						$this->load->view('templates/footer');
 					}
 				}
 				else {
@@ -255,9 +254,9 @@ class Registration extends MY_Controller {
 			$this->_data["zugangscode"] = "";
 			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 			$this->_data["email"] = "";
-			$this->load->view('templates/header');
+//			$this->load->view('templates/header');
 			$this->load->view('login/confirm_login',  $this->_data);
-			$this->load->view('templates/footer');
+//			$this->load->view('templates/footer');
 		}
 	}
 

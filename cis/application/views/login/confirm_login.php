@@ -7,24 +7,28 @@
 
 
 $this->load->view('templates/header');
+$this->load->view('templates/metaHeader');
 $this->lang->load(array('aufnahme', 'login'), $sprache);
 ?>
 
 <div class="container">
-    <?php $this->load->view('templates/iconHeader'); ?>
+	<?php $this->load->view('templates/iconHeader', array("header" => $this->getPhrase("Registration/HeaderConfirmation", $sprache))); ?>
     <div class="row">
-		<div id="confirm">
-			<ol class="breadcrumb">
-			<li class="active"><a href="<?php echo base_url($this->config->config["index_page"]."/Registration") ?>">Registration</a></li>
-			</ol>
+		<div id="confirm" class="col-sm-12">
+<!--			<ol class="breadcrumb">
+				<li class="active"><a href="<?php echo base_url($this->config->config["index_page"]."/Registration") ?>">Registration</a></li>
+			</ol>-->
 			<?php echo form_open("Registration/code_login?studiengang_kz=".((isset($studiengang_kz)) ? $studiengang_kz : ""), array("id" => "ChangePasswordForm", "name" => "ChangePasswordForm", "class" => "form-horizontal")); ?>
-			<div class="row">
+<!--			<div class="row">
 				<div class="col-sm-12">
 					<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/logo.png'); ?>">
 				</div>
-			</div>
+			</div>-->
 			<div class="row">
-				<div class="col-sm-12">
+				<div class="col-sm-1">
+					&nbsp;
+				</div>
+				<div class="col-sm-7">
 					<p class="infotext">
 						<?php 
 						if($zugangscode !== "")
