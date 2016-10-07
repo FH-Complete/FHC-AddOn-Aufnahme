@@ -134,7 +134,7 @@
 		<div class="col-lg-6 col-sm-6">
 			<div class="form-group">
 				<div class="col-lg-6 col-sm-6">
-					<?php echo form_button(array("id"=>"registration_button", "content"=>$this->lang->line("aufnahme/registrieren"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit", "disabled"=>"disabled")); ?>
+					<?php echo form_button(array("id"=>"registration_button", "content"=>$this->lang->line("aufnahme/registrieren"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
 				</div>
 			</div>
 		</div>
@@ -149,11 +149,6 @@ if (isset($error) && ($error->error === true))
 
 <script type="text/javascript">
     $(document).ready(function(){
-		toggleButton();
-		
-		$("#datenschutz").on("change", function(){
-			toggleButton();
-		});
 
 		$(".datepicker").datepicker({
 			dateFormat: "dd.mm.yy",
@@ -179,16 +174,4 @@ if (isset($error) && ($error->error === true))
 		
 		
     });
-	
-	function toggleButton()
-	{
-		if($("#datenschutz").prop("checked"))
-		{
-		$("#registration_button").prop("disabled", false)
-		}
-		else
-		{
-		$("#registration_button").prop("disabled", true)
-		}
-	}
 </script>
