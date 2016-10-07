@@ -7,6 +7,7 @@
 
 
 $this->load->view('templates/header');
+$this->load->view('templates/metaHeader');
 $this->lang->load(array('aufnahme', 'login'), $sprache);
 ?>
 
@@ -14,16 +15,16 @@ $this->lang->load(array('aufnahme', 'login'), $sprache);
     <?php $this->load->view('templates/iconHeader'); ?>
     <div class="row">
 		<div id="resendCode">
-			<ol class="breadcrumb">
+<!--			<ol class="breadcrumb">
 				<li class="active"><a href="<?php echo base_url($this->config->config["index_page"]."/Registration") ?>">Registration</a></li>
-			</ol>
+			</ol>-->
 			<?php echo form_open("Registration/resendCode", array("id" => "ResendCodeForm", "name" => "ResendCodeForm", "class" => "form-horizontal")); ?>
-			<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">
+			<!--<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">-->
 
 			<div class="form-group <?php echo (form_error("email") != "") ? 'has-error' : '' ?>">
 			<?php echo form_label("E-Mail Adresse", "email", array("name" => "email", "for" => "email", "class" => "col-sm-3 control-label")) ?>
 			<div class="col-sm-4">
-				<?php echo form_input(array('id' => 'email', 'name' => 'email', 'maxlength' => 128, "type" => "email", "class" => "form-control")); ?>
+				<?php echo form_input(array('id' => 'email', 'name' => 'email', 'maxlength' => 128, "type" => "email", "class" => "form-control", "value" => set_value("email", isset($email) ? $email : "" ))); ?>
 				<?php echo form_error("email"); ?>
 			</div>
 			</div>

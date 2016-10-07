@@ -154,7 +154,7 @@ class Registration extends MY_Controller {
 		$this->_data = array(
 			"sprache" => $this->get_language()
 		);
-
+		
 		if (($this->input->post("email") != null) && ($this->input->post("email") != "")) {
 			$this->_data["email"] = $this->input->post("email");
 			$bewerbung = $this->_checkBewerbung($this->_data["email"]);
@@ -174,6 +174,10 @@ class Registration extends MY_Controller {
 			else {
 				$this->_setError(true, $this->lang->line("aufnahme/eMailAdresseNichtEindeutig"));
 			}
+		}
+		elseif(isset($this->input->get()["email"]))
+		{
+			$this->_data["email"] = $this->input->get()["email"];
 		}
 		else {
 			if (!empty($this->input->post())) {
@@ -282,7 +286,7 @@ class Registration extends MY_Controller {
 		if ($this->PersonModel->isResultValid() === true) {
 			if (count($bewerbung) > 0) {
 				$data["message"] = '<p class="alert alert-danger" id="danger-alert">' . sprintf($this->lang->line('aufnahme/mailadresseBereitsGenutzt'), $data["email"]) . '</p>'
-					. '<a href="' . base_url("index.dist.php/Registration/resendCode") . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button></a>';
+					. '<a href="' . base_url("index.dist.php/Registration/resendCode?email=".$this->_data["email"]) . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button></a>';
 				$this->load->view('registration', $data);
 			}
 			else {
