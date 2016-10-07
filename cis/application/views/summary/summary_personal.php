@@ -119,32 +119,32 @@
     </div>
     <div class="col-sm-6"></div>
 </div>
-<div class="row">
+<!--<div class="row">
     <div class="col-sm-6">
         <div class="col-sm-6"><?php echo $this->lang->line("summary_geschlecht"); ?></div>
         <div class="col-sm-6 <?php echo ($person->geschlecht != null) ? "" : "incomplete"; ?>">
             <?php
-if ($person->geschlecht != null) {
-	switch ($person->geschlecht) {
-	case "m":
-		echo $this->lang->line("summary_geschlecht_m");
-		break;
-	case "m":
-		echo $this->lang->line("summary_geschlecht_m");
-		break;
-	default:
-		echo $this->lang->line("summary_unvollstaendig");
-		break;
-	}
-}
-else {
-	echo $this->lang->line("summary_unvollstaendig");
-}
-?>
+//				if ($person->geschlecht != null) {
+//					switch ($person->geschlecht) {
+//					case "m":
+//						echo $this->lang->line("summary_geschlecht_m");
+//						break;
+//					case "m":
+//						echo $this->lang->line("summary_geschlecht_m");
+//						break;
+//					default:
+//						echo $this->lang->line("summary_unvollstaendig");
+//						break;
+//					}
+//				}
+//				else {
+//					echo $this->lang->line("summary_unvollstaendig");
+//				}
+				?>
         </div>
     </div>
     <div class="col-sm-6"></div>
-</div>
+</div>-->
 
 <div class="personal_documents">
 	<hr>

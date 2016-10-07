@@ -254,7 +254,7 @@ class Send extends MY_Controller {
 	private function _loadPrestudentStatus($prestudent_id)
 	{
 		//$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
-		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>'', "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
+		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
 		if($this->PrestudentStatusModel->isResultValid() === true)
 		{
 			return $this->PrestudentStatusModel->result->retval[0];

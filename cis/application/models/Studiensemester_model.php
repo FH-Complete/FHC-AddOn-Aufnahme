@@ -29,7 +29,7 @@ class Studiensemester_model extends MY_Model
 			return true;
 		}
 		else {
-			if ($restquery = $this->rest->get('organisation/studiensemester/nextstudiensemester', $art)) {
+			if ($restquery = $this->rest->get('organisation/studiensemester/nextstudiensemester', array("art"=>$art))) {
 				$this->result = $restquery;
 				$this->session->set_userdata("studiensemester", $this->result);
 				return true;

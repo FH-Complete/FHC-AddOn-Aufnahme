@@ -506,6 +506,7 @@ class Bewerbung extends MY_Controller
 			}
 		}
 		
+		$this->_data["complete"] = $this->_checkDataCompleteness();
 		$this->load->view('bewerbung', $this->_data);
 	}
 
@@ -732,7 +733,7 @@ class Bewerbung extends MY_Controller
 	private function _loadPrestudentStatus($prestudent_id)
 	{
 		//$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1));
-		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>'', "ausbildungssemester"=>1));
+		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1));
 		if($this->PrestudentStatusModel->isResultValid() === true)
 		{
 			if (($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))

@@ -87,25 +87,33 @@
 				$logo = "docx.gif";
 				break;
 			default:
-				if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "docx") !== false)
+				if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument))
 				{
-					$logo = "docx.gif";
-					break;
-				}
-				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "doc") !== false)
-				{
-					$logo = "docx.gif";
-					break;
-				}
-				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "pdf") !== false)
-				{
-					$logo = "document-pdf.svg";
-					break;
-				}
-				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "jpg") !== false)
-				{
-					$logo = "document-picture.svg";
-					break;
+					if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "docx") !== false)
+					{
+						$logo = "docx.gif";
+						break;
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "doc") !== false)
+					{
+						$logo = "docx.gif";
+						break;
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "pdf") !== false)
+					{
+						$logo = "document-pdf.svg";
+						break;
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, "jpg") !== false)
+					{
+						$logo = "document-picture.svg";
+						break;
+					}
+					else
+					{
+						$logo = false;
+						break;
+					}
 				}
 				else
 				{
