@@ -729,5 +729,27 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'Registration Confirmation',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'Registration/RegistrationGreetingText',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Herzlich willkommen!',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Registration/RegistrationGreetingText',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Welcome!',
+			'description' => ''
+		)
 	)
 );
+
+

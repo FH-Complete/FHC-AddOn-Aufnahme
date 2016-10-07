@@ -10,7 +10,7 @@
 <div id="registration">
     <?php echo form_open("Registration?studiengang_kz=".$studiengang_kz, array("id"=>"RegistrationLoginForm", "name"=>"RegistrationLoginForm", "class"=>"form-horizontal")); ?>
     <!--<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">	-->
-    <h1 class="text-center"><?php echo $this->lang->line('aufnahme/login_greeting_text'); ?></h1>
+    <h1 class="text-center"><?php echo $this->getPhrase("Registration/RegistrationGreetingText", $sprache); ?></h1>
     <p class="infotext">
 	    <?php echo $this->getPhrase("Registration/RegistrationForm", $sprache); ?>
     </p>
@@ -95,9 +95,8 @@
 		    <div class="checkbox">
 			<label>
 			    <?php echo form_checkbox(array('id' => 'datenschutz', 'name' => 'datenschutz', "checked" => isset($this->input->post()["datenschutz"]) ? TRUE : FALSE, "class"=>"datenschutz"));
-echo $this->getPhrase("Registration/Datenschutz", $sprache);
-
-?>
+					echo $this->getPhrase("Registration/Datenschutz", $sprache);
+				?>
 			</label>
 			<!--<a href="<?php echo $this->config->item('LinkDatenschutz') ? $this->config->item('LinkDatenschutz') : ''; ?>" target="_blank">Link</a>-->
 		    </div>
@@ -135,7 +134,7 @@ echo $this->getPhrase("Registration/Datenschutz", $sprache);
 		<div class="col-lg-6 col-sm-6">
 			<div class="form-group">
 				<div class="col-lg-6 col-sm-6">
-					<?php echo form_button(array("id"=>"registration_button", "content"=>$this->lang->line("aufnahme/abschicken"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit", "disabled"=>"disabled")); ?>
+					<?php echo form_button(array("id"=>"registration_button", "content"=>$this->lang->line("aufnahme/registrieren"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit", "disabled"=>"disabled")); ?>
 				</div>
 			</div>
 		</div>
