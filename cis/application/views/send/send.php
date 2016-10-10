@@ -12,7 +12,7 @@
     <h1 id="sendHeader"><?php echo $this->lang->line("send_header"); ?></h1>
     <!--<fieldset><?php echo $this->lang->line("send_einleitung").'!'; ?></fieldset>-->
     <fieldset><?php
-if (empty($completenessError)) {
+if ((empty($completenessError["person"])) && (empty($completenessError["adresse"])) && (empty($completenessError["kontakt"])) && (empty($completenessError["dokumente"][$studiengang->studiengang_kz])) && (empty($completenessError["doks"]))) {
 	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz)."</p>";
 }
 else {
@@ -43,15 +43,16 @@ else {
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
-		    <?php if(($prestudentStatus[$studiengang->studiengang_kz]->bewerbung_abgeschicktamum != null) ||(!empty($completenessError)))
-{
-	echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden button-absenden", "type"=>"submit", "disabled"=>"disabled"));
-}
-else
-{
-	echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden button-absenden", "type"=>"submit"));
-}
-?>
+				<?php
+				if(($prestudentStatus[$studiengang->studiengang_kz]->bewerbung_abgeschicktamum != null) || (!empty($completenessError["person"])) || (!empty($completenessError["adresse"])) || (!empty($completenessError["kontakt"])) || (!empty($completenessError["dokumente"][$studiengang->studiengang_kz])) || (!empty($completenessError["doks"])))
+				{
+					echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden button-absenden", "type"=>"submit", "disabled"=>"disabled"));
+				}
+				else
+				{
+					echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden button-absenden", "type"=>"submit"));
+				}
+				?>
                 </div>
             </div>
         </div>

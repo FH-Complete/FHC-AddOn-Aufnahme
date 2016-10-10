@@ -174,7 +174,11 @@ class Send extends MY_Controller {
 				$this->_data["studiengang"]->studienplan = $studienplan;
 //				$this->_data["prestudentStatus"] = $prestudentStatus;
 
-				if(!empty($this->_data["completenessError"]))
+				if((!empty($this->_data["completenessError"]["person"]))
+						|| (!empty($this->_data["completenessError"]["adresse"]))
+						|| (!empty($this->_data["completenessError"]["kontakt"]))
+						|| (!empty($this->_data["completenessError"]["dokumente"][$prestudent->studiengang_kz]))
+						|| (!empty($this->_data["completenessError"]["doks"])))
 				{
 					$this->_setError(true, $this->lang->line("send_datenUnvollstaendig"));
 					$this->load->view('send', $this->_data);
@@ -470,91 +474,8 @@ class Send extends MY_Controller {
 
 	private function _checkDataCompleteness()
 	{
-		$error = array();
-
-		//check personal data
-		$person = $this->_data["person"];
-
-		if($person->vorname == "")
-		{
-			$error["vorname"] = true;
-		}
-
-		if($person->nachname == "")
-		{
-			$error["nachname"] = true;
-		}
-
-		if($person->gebdatum == null)
-		{
-			$error["geburtsdatum"] = true;
-		}
-
-		if(($person->gebort == null) || ($person->gebort== ""))
-		{
-			$error["geburtsort"] = true;
-		}
-
-		if(($person->geburtsnation == null) || ($person->geburtsnation== ""))
-		{
-			$error["geburtsnation"] = true;
-		}
-
-		if(($person->staatsbuergerschaft == null) || ($person->staatsbuergerschaft== ""))
-		{
-			$error["staatsbuergerschaft"] = true;
-		}
-
-		if((($person->svnr == null) || ($person->svnr== "")) && ($person->geburtsnation == "A"))
-		{
-			$error["svnr"] = true;
-		}
-
-		if(($person->geschlecht == null) || ($person->geschlecht == ""))
-		{
-			$error["geschlecht"] = true;
-		}
-
-		//check adress data
-		if(isset($this->_data["adresse"]))
-		{
-			$adresse = $this->_data["adresse"];
-
-			if(($adresse->strasse == null) || ($adresse->strasse == ""))
-			{
-				$error["strasse"] = true;
-			}
-
-			if(($adresse->plz == null) || ($adresse->plz == ""))
-			{
-				$error["plz"] = true;
-			}
-
-			if(($adresse->ort == null) || ($adresse->ort == ""))
-			{
-				$error["ort"] = true;
-			}
-		}
-		else
-		{
-			$error['strasse']=true;
-			$error['plz']=true;
-			$error['ort']=true;
-		}
-
-		//check contact data
-		$kontakt = $this->_data["kontakt"];
-
-		if((!isset($kontakt["telefon"])) || ($kontakt["telefon"]->kontakt == ""))
-		{
-			$error["telefon"] = true;
-		}
-
-		if((!isset($kontakt["email"])) || ($kontakt["email"]->kontakt == ""))
-		{
-			$error["email"] = true;
-		}
-
+		$error = array("dokumente"=>array(), "person"=>array(), "adresse"=>array(), "kontakt"=>array(), "doks"=>array());
+		
 		//check documents
 		foreach($this->_data["dokumenteStudiengang"] as $key=>$doks)
 		{
@@ -567,14 +488,97 @@ class Send extends MY_Controller {
 			}
 		}
 
+		//check personal data
+		$person = $this->_data["person"];
+
+		if($person->vorname == "")
+		{
+			$error["person"]["vorname"] = true;
+		}
+
+		if($person->nachname == "")
+		{
+			$error["person"]["nachname"] = true;
+		}
+
+		if($person->gebdatum == null)
+		{
+			$error["person"]["geburtsdatum"] = true;
+		}
+
+		if(($person->gebort == null) || ($person->gebort== ""))
+		{
+			$error["person"]["geburtsort"] = true;
+		}
+
+		if(($person->geburtsnation == null) || ($person->geburtsnation== ""))
+		{
+			$error["person"]["geburtsnation"] = true;
+		}
+
+		if(($person->staatsbuergerschaft == null) || ($person->staatsbuergerschaft== ""))
+		{
+			$error["person"]["staatsbuergerschaft"] = true;
+		}
+
+		if((($person->svnr == null) || ($person->svnr== "")) && ($person->geburtsnation == "A"))
+		{
+			$error["person"]["svnr"] = true;
+		}
+
+		if(($person->geschlecht == null) || ($person->geschlecht == ""))
+		{
+			$error["person"]["geschlecht"] = true;
+		}
+
+		//check adress data
+		if(isset($this->_data["adresse"]))
+		{
+			$adresse = $this->_data["adresse"];
+
+			if(($adresse->strasse == null) || ($adresse->strasse == ""))
+			{
+				$error["adresse"]["strasse"] = true;
+			}
+
+			if(($adresse->plz == null) || ($adresse->plz == ""))
+			{
+				$error["adresse"]["plz"] = true;
+			}
+
+			if(($adresse->ort == null) || ($adresse->ort == ""))
+			{
+				$error["adresse"]["ort"] = true;
+			}
+		}
+		else
+		{
+			$error["adresse"]['strasse']=true;
+			$error["adresse"]['plz']=true;
+			$error["adresse"]['ort']=true;
+		}
+
+		//check contact data
+		$kontakt = $this->_data["kontakt"];
+
+		if((!isset($kontakt["telefon"])) || ($kontakt["telefon"]->kontakt == ""))
+		{
+			$error["kontakt"]["telefon"] = true;
+		}
+
+		if((!isset($kontakt["email"])) || ($kontakt["email"]->kontakt == ""))
+		{
+			$error["kontakt"]["email"] = true;
+		}
+
 		if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
 		{
-			$error["lebenslauf"] = true;
+			$error["doks"]["lebenslauf"] = true;
 		}
 
 		if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
 		{
-			$error["reisepass"] = true;
+			$error["doks"]["reisepass"] = true;
 		}
 
 		return $error;

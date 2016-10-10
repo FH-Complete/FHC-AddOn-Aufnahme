@@ -44,25 +44,33 @@
 						$logo = "docx.gif";
 						break;
 					default:
-						if(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "docx") !== false)
+						if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument))
 						{
-							$logo = "docx.gif";
-							break;
-						}
-						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "doc") !== false)
-						{
-							$logo = "docx.gif";
-							break;
-						}
-						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "pdf") !== false)
-						{
-							$logo = "document-pdf.svg";
-							break;
-						}
-						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "jpg") !== false)
-						{
-							$logo = "document-picture.svg";
-							break;
+							if(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "docx") !== false)
+							{
+								$logo = "docx.gif";
+								break;
+							}
+							elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "doc") !== false)
+							{
+								$logo = "docx.gif";
+								break;
+							}
+							elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "pdf") !== false)
+							{
+								$logo = "document-pdf.svg";
+								break;
+							}
+							elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, "jpg") !== false)
+							{
+								$logo = "document-picture.svg";
+								break;
+							}
+							else
+							{
+								$logo = false;
+								break;
+							}
 						}
 						else
 						{
