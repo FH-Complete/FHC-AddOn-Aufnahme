@@ -7,8 +7,8 @@
 
 
 $this->load->view('templates/header');
-//$this->load->view('menu', 'person');
 $this->lang->load(array('aufnahme', 'messages'), $sprache);
+$this->load->view('templates/cookieHeader');
 $this->load->view('templates/metaHeader');
 ?>
 

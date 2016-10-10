@@ -8,6 +8,7 @@
 
 $this->load->view('templates/header');
 $this->lang->load(array('aufnahme', 'termine'), $sprache);
+$this->load->view('templates/cookieHeader');
 $this->load->view('templates/metaHeader');
 
 

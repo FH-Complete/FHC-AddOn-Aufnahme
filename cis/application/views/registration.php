@@ -7,8 +7,10 @@
 
 
 $this->load->view('templates/header');
-$this->load->view('templates/metaHeader');
 $this->lang->load(array('aufnahme', 'login'), $sprache);
+$this->load->view('templates/cookieHeader');
+$this->load->view('templates/metaHeader');
+
 ?>
 
 <div class="container">

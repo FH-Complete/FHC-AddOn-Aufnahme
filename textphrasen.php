@@ -749,7 +749,30 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'Welcome!',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'Aufnahme/CookieWarning',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Diese Seite verwendet Cookies. Wenn Sie weiter diese Seite lesen, stimmen Sie unserer Verwendung von Cookies zu.',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Aufnahme/CookieWarning',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Diese Seite verwendet Cookies. Wenn Sie weiter diese Seite lesen, stimmen Sie unserer Verwendung von Cookies zu.',
+			'description' => ''
+		)
 	)
 );
+
+
+
 
 
