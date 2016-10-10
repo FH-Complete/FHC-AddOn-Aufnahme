@@ -5,7 +5,7 @@
  * @package default
  */
 ?>
-<?php if((isset($dokumenteStudiengang[$studiengang->studiengang_kz])) && (!empty($dokumenteStudiengang))) { ?>
+<?php if((isset($dokumenteStudiengang[$studiengang->studiengang_kz])) && (!empty($dokumenteStudiengang[$studiengang->studiengang_kz]))) { ?>
 <legend><?php echo $this->lang->line("requirements_specific_header"); ?></legend>
 <div class="row">
     <div class="col-sm-12">
