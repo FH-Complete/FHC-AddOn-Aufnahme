@@ -205,7 +205,21 @@ class Registration extends MY_Controller {
 			$this->session->set_userdata("zugangscode", $this->input->get("code"));
 		}
 		
-		$result = $this->_checkZugangscodePerson($this->session->userdata()["zugangscode"]);
+		if(isset($this->input->get()["email"]))
+		{
+			$this->_data["email"] = $this->input->get()["email"];
+		}
+		else
+		{
+			$this->session->sess_destroy();
+			$this->_data["zugangscode"] = "";
+			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+			$this->_data["email"] = "";
+			$this->load->view('login/confirm_login',  $this->_data);
+		}
+		
+		$this->PersonModel->getPersonFromCode($this->session->userdata()["zugangscode"], $this->_data["email"]);
+		$result = $this->PersonModel->result->retval;
 		if (($this->PersonModel->isResultValid() === true) && (count($result) == 1)) {
 			$person_id = $result[0]->person_id;
 //			if ($this->Kontakt_model->getKontakt($person_id)) {
@@ -216,15 +230,6 @@ class Registration extends MY_Controller {
 //						$this->_data["email"] = $kontakt->kontakt;
 //					}
 //				}
-				
-				if(isset($this->input->get()["email"]))
-				{
-					$this->_data["email"] = $this->input->get()["email"];
-				}
-				else
-				{
-					$this->_data["email"] = "";
-				}
 				
 				$person = new stdClass();
 				$person->person_id = $person_id;
@@ -255,6 +260,7 @@ class Registration extends MY_Controller {
 //			}
 		}
 		elseif (empty($this->PersonModel->result->data)) {
+			$this->session->sess_destroy();
 			$this->_data["zugangscode"] = "";
 			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 			$this->_data["email"] = "";
