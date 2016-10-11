@@ -358,20 +358,30 @@ class Registration extends MY_Controller {
 		$this->PersonModel->getPersonFromCode($code, $email);
 
 		if ($this->PersonModel->isResultValid() === true) {
-			$data['person'] = $this->PersonModel->result->retval[0];
-			if (isset($data['person']->person_id))
+			if((isset($this->PersonModel->result->retval)) && (count($this->PersonModel->result->retval) == 1))
 			{
-				$this->session->set_userdata("person_id", $data['person']->person_id);
-				if((isset($studiengang_kz)) && ($studiengang_kz != ""))
+				$data['person'] = $this->PersonModel->result->retval[0];
+				if (isset($data['person']->person_id))
 				{
-					redirect('/Studiengaenge/?studiengang_kz='.$studiengang_kz);
-				}
+					$this->session->set_userdata("person_id", $data['person']->person_id);
+					if((isset($studiengang_kz)) && ($studiengang_kz != ""))
+					{
+						redirect('/Studiengaenge/?studiengang_kz='.$studiengang_kz);
+					}
+					else
+					{
+						redirect('/Studiengaenge');
+					}
+				} 
 				else
 				{
-					redirect('/Studiengaenge');
+					$data['wrong_code'] = true;
 				}
-			} else
+			}
+			else
+			{
 				$data['wrong_code'] = true;
+			}
 		}
 		else {
 			$this->_setError(true, $this->PersonModel->getErrorMessage());
@@ -463,7 +473,7 @@ class Registration extends MY_Controller {
 
 		if($this->MessageModel->isResultValid() === true)
 		{
-			if($this->MessageModel->result->msg === "Success")
+			if((isset($this->MessageModel->result->error)) && ($this->MessageModel->result->error === 0))
 			{
 				$this->_data["message"] = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache']), $email) . '<br><br><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 			}
@@ -535,17 +545,4 @@ class Registration extends MY_Controller {
 		}
 	}
 
-
-	//    private function _saveAdresse($adresse)
-	//    {
-	// $this->AdresseModel->saveAdresse($adresse);
-	// if($this->AdresseModel->isResultValid() === true)
-	// {
-	//     //TODO Daten erfolgreich gespeichert
-	// }
-	// else
-	// {
-	//     $this->_setError(true, $this->AdresseModel->getErrorMessage());
-	// }
-	//    }
 }
