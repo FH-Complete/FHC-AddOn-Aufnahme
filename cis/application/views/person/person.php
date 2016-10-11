@@ -646,7 +646,8 @@ if (!isset($plz)) $plz = null;
 					$('.ui-datepicker').css('z-index', 10);
 				}, 0);
 			},
-			changeYear: true
+			changeYear: true,
+			yearRange: '1900:c'
 			<?php
 			if(ucfirst($sprache) === "German")
 			{
