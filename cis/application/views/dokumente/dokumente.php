@@ -134,12 +134,16 @@
 					{
 						echo $this->lang->line("dokumente_formNachgereicht");
 					}
+					elseif((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->accepted === 't'))
+					{
+						echo $this->lang->line("dokumente_formAkzeptiert");
+					}
 				?>
 			</div>
 			<div class="col-sm-1">
 				<div id="<?php echo $dok->dokument_kurzbz;?>_delete">
-				<?php 
-				if((isset($dok->dokument)) && ($dok->dokument->dms_id != null))
+				<?php
+				if((isset($dok->dokument)) && ($dok->dokument->dms_id != null) && ($dokumente[$dok->dokument_kurzbz]->accepted=='f'))
 				{
 				?>
 					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dok->dokument->dms_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>

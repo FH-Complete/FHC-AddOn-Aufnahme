@@ -996,7 +996,7 @@ class Bewerbung extends MY_Controller
 	private function _loadDokumente($person_id, $dokumenttyp_kurzbz=null)
 	{
 		$this->_data["dokumente"] = array();
-		$this->AkteModel->getAkten($person_id, $dokumenttyp_kurzbz);
+		$this->AkteModel->getAktenAccepted($person_id, $dokumenttyp_kurzbz);
 
 		if ($this->AkteModel->isResultValid() === true)
 		{

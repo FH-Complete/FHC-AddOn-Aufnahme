@@ -604,7 +604,7 @@ if (!isset($plz)) $plz = null;
 
 				<!-- The fileinput-button span is used to style the file input field as button -->
 				<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
-					<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id != null)) { ?>
+					<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->accepted == "f")) { ?>
 					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true)) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
 					<?php
 					}
