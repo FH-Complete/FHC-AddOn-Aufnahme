@@ -211,7 +211,10 @@ class Registration extends MY_Controller {
 		}
 		else
 		{
-			$this->session->sess_destroy();
+			if(isset($this->session->userdata()["zugangscode"]))
+			{
+				$this->session->sess_destroy();
+			}
 			$this->_data["zugangscode"] = "";
 			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 			$this->_data["email"] = "";
@@ -260,7 +263,10 @@ class Registration extends MY_Controller {
 //			}
 		}
 		elseif (empty($this->PersonModel->result->data)) {
-			$this->session->sess_destroy();
+			if(isset($this->session->userdata()["zugangscode"]))
+			{
+				$this->session->sess_destroy();
+			}
 			$this->_data["zugangscode"] = "";
 			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 			$this->_data["email"] = "";

@@ -101,7 +101,7 @@
 						{
 							echo $this->lang->line('requirements_keinDokHochgeladen');
 						}
-						else
+						elseif($dokumente[$dok->dokument_kurzbz]->dms_id !== null)
 						{
 							echo $dokumente[$dok->dokument_kurzbz]->dokument->name."</br>";
 							echo $this->lang->line('requirements_DokHochgeladen');

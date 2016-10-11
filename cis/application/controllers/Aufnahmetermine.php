@@ -141,7 +141,7 @@ class Aufnahmetermine extends MY_Controller {
 		{
 			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
 
-			if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+			if((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null))
 			{
 				//load studiengaenge der prestudenten
 				$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);

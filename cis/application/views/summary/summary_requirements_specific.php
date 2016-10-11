@@ -74,7 +74,7 @@
 						{
 							echo $this->lang->line('summary_nachgereicht');
 						}
-						else
+						elseif(isset($dokumente[$dok->dokument_kurzbz]->dokument))
 						{
 							echo $dokumente[$dok->dokument_kurzbz]->dokument->name;
 						}

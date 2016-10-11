@@ -314,22 +314,59 @@ class Bewerbung extends MY_Controller
 					$this->_saveAdresse($zustell_adresse);
 				}
 			}
-
-			if (($post["telefon"] != "") && !(isset($this->_data["kontakt"]["telefon"])))
+			
+//			var_dump($post);
+//			var_dump($this->_data["kontakt"]);
+			
+			if (($post["email"] != ""))
 			{
-				$kontakt = new stdClass();
-				$kontakt->person_id = $this->_data["person"]->person_id;
-				$kontakt->kontakttyp = "telefon";
-				$kontakt->kontakt = $post["telefon"];
+				if(!(isset($this->_data["kontakt"]["email"])))
+				{
+					$kontakt = new stdClass();
+					$kontakt->person_id = $this->_data["person"]->person_id;
+					$kontakt->kontakttyp = "email";
+					$kontakt->kontakt = $post["email"];
+					$kontakt->zustellung = true;
+				}
+				else
+				{
+					$kontakt = $this->_data["kontakt"]["email"];
+					$kontakt->kontakt = $post["email"];
+				}
 				$this->_saveKontakt($kontakt);
 			}
 
-			if (($post["fax"] != "") && !(isset($this->_data["kontakt"]["fax"])))
+			if (($post["telefon"] != ""))
 			{
-				$kontakt = new stdClass();
-				$kontakt->person_id = $this->_data["person"]->person_id;
-				$kontakt->kontakttyp = "fax";
-				$kontakt->kontakt = $post["fax"];
+				if(!(isset($this->_data["kontakt"]["telefon"])))
+				{
+					$kontakt = new stdClass();
+					$kontakt->person_id = $this->_data["person"]->person_id;
+					$kontakt->kontakttyp = "telefon";
+					$kontakt->kontakt = $post["telefon"];
+				}
+				else
+				{
+					$kontakt = $this->_data["kontakt"]["telefon"];
+					$kontakt->kontakt = $post["telefon"];
+				}
+				$this->_saveKontakt($kontakt);
+			}
+
+			if (($post["fax"] != ""))
+			{
+				if(!(isset($this->_data["kontakt"]["fax"])))
+				{
+					$kontakt = new stdClass();
+					$kontakt->person_id = $this->_data["person"]->person_id;
+					$kontakt->kontakttyp = "fax";
+					$kontakt->kontakt = $post["fax"];
+				}
+				else
+				{
+					$kontakt = $this->_data["kontakt"]["fax"];
+					$kontakt->kontakt = $post["fax"];
+				}
 				$this->_saveKontakt($kontakt);
 			}
 
@@ -356,7 +393,7 @@ class Bewerbung extends MY_Controller
 				}
 			}
 			
-			if(!isset($this->_data["error"]) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
+			if((!isset($this->_data["error"])) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
 			{
 				redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
 			}
@@ -500,7 +537,7 @@ class Bewerbung extends MY_Controller
 				array_push($this->_data["studiengaenge"], $studiengang);
 			}
 			
-			if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+			if((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null))
 			{
 				$this->_data["bewerbung_abgeschickt"] = true;
 			}

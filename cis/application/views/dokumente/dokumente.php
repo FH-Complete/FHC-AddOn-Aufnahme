@@ -165,7 +165,14 @@
 				{
 					foreach($dok->studiengaenge as $stg)
 					{
-						echo $stg->bezeichnung." (".$stg->studienplan->orgform_kurzbz.")</br>";
+						if(isset($stg->studienplan))
+						{
+							echo $stg->bezeichnung." (".$stg->studienplan->orgform_kurzbz.")</br>";
+						}
+						else
+						{
+							echo $stg->bezeichnung."</br>";
+						}
 					}
 				}
 				

@@ -192,8 +192,11 @@ class Dokumente extends MY_Controller {
 			//load studiengaenge der prestudenten
 			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
 			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-			$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-			$studiengang->studienplan = $studienplan;
+			if(isset($prestudent->prestudentStatus->studienplan_id))
+			{
+				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+				$studiengang->studienplan = $studienplan;
+			}
 			$studiengang->dokumente = $this->_loadDokumentByStudiengang($prestudent->studiengang_kz);
 			array_push($this->_data["studiengaenge"], $studiengang);
 		}
@@ -722,7 +725,7 @@ class Dokumente extends MY_Controller {
 			foreach($this->_data["prestudent"] as $prestudent)
 			{
 				$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-				if($prestudent->prestudentStatus->status_kurzbz == "Interessent")
+				if((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz == "Interessent"))
 				{
 					$doks = $this->_loadDokumentByStudiengang($prestudent->studiengang_kz);
 					foreach($doks as $dok)
