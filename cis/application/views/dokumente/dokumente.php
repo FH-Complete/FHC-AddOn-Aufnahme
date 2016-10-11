@@ -34,7 +34,14 @@
 	?>
 		<div class="row document-row">
 			<div class="col-sm-5">
-				<?php echo $dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1].$p;
+				<?php echo $dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1].$p;?>
+				<?php
+				if((isset($dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1])) && ($dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1]!='null'))
+				{
+				?>
+					<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1];?>"></span>
+				<?php
+					}
 				?>
 				<!-- The global progress bar -->
 				<div id="<?php echo $dok->dokument_kurzbz; ?>Progress" class="progress">

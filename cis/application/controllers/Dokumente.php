@@ -591,13 +591,6 @@ class Dokumente extends MY_Controller {
 		$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($studiengang_kz, true, null);
 		if ($this->DokumentStudiengangModel->isResultValid() === true)
 		{
-			foreach($this->DokumentStudiengangModel->result->retval as $dok)
-			{
-				$dok->bezeichnung_mehrsprachig = str_replace("\"","", $dok->bezeichnung_mehrsprachig);
-				$dok->bezeichnung_mehrsprachig = str_replace("{","", $dok->bezeichnung_mehrsprachig);
-				$dok->bezeichnung_mehrsprachig = str_replace("}","", $dok->bezeichnung_mehrsprachig);
-				$dok->bezeichnung_mehrsprachig = explode(",", $dok->bezeichnung_mehrsprachig);
-			}
 			return $this->DokumentStudiengangModel->result->retval;
 		}
 		else
@@ -680,16 +673,8 @@ class Dokumente extends MY_Controller {
 		$this->DokumentModel->getDokument($dokument_kurzbz);
 		if($this->DokumentModel->isResultValid() === true)
 		{
-			
 			if(count($this->DokumentModel->result->retval) == 1)
 			{
-				foreach($this->DokumentModel->result->retval as $dok)
-				{
-					$dok->bezeichnung_mehrsprachig = str_replace("\"","", $dok->bezeichnung_mehrsprachig);
-					$dok->bezeichnung_mehrsprachig = str_replace("{","", $dok->bezeichnung_mehrsprachig);
-					$dok->bezeichnung_mehrsprachig = str_replace("}","", $dok->bezeichnung_mehrsprachig);
-					$dok->bezeichnung_mehrsprachig = explode(",", $dok->bezeichnung_mehrsprachig);
-				}
 				return $this->DokumentModel->result->retval[0];
 			}
 			else

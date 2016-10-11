@@ -21,13 +21,13 @@
 					echo form_label($dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1].$p, $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
 				?>
 				<?php
-//				if((isset($dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1])) && ($dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1]!='null'))
-//				{
-//				?>
-					<!--<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="//<?php echo $dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1];?>"></span>-->
+				if((isset($dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1])) && ($dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1]!='null'))
+				{
+				?>
+					<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $dok->dokumentbeschreibung_mehrsprachig[$this->session->sprache->index-1];?>"></span>
 				<?php
-//					}
-//				?>
+					}
+				?>
 			</div>
 			<?php
 			if((isset($dokumente[$dok->dokument_kurzbz]->mimetype)) && ($dokumente[$dok->dokument_kurzbz]->mimetype !== null))
