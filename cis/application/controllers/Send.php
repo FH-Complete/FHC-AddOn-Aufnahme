@@ -338,7 +338,7 @@ class Send extends MY_Controller {
 
 		if($this->MessageModel->isResultValid() === true)
 		{
-			if($this->MessageModel->result->msg === "Success")
+			if((isset($this->MessageModel->result->error)) && ($this->MessageModel->result->error === 0))
 			{
 				//success
 			}
@@ -374,7 +374,7 @@ class Send extends MY_Controller {
 
 		if($this->MessageModel->isResultValid() === true)
 		{
-			if($this->MessageModel->result->msg === "Success")
+			if((isset($this->MessageModel->result->error)) && ($this->MessageModel->result->error === 0))
 			{
 				//success
 			}
