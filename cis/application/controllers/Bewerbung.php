@@ -1129,7 +1129,7 @@ class Bewerbung extends MY_Controller
 
 			foreach($this->_data["dokumente"] as $dok)
 			{
-				if(($dok->dms_id === $dms_id))
+				if(($dok->dms_id === $dms_id) && ($dok->accepted =='f'))
 				{
 					$result = $this->_deleteDms($dms_id);
 					$result->dokument_kurzbz = $dok->dokument_kurzbz;

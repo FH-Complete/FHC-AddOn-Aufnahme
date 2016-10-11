@@ -202,7 +202,7 @@ if (!isset($plz)) $plz = null;
 					<?php echo form_error("plz"); ?>
 				</div>
 			</div>
-			<div id="ort_input" class="col-sm-6" style="display: none;">
+			<div id="ort_input" class="col-sm-6 ort_input" style="display: none;">
 				<div class="form-group <?php echo (form_error("ort") != "") ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formOrt'), "ort", array("name" => "ort", "for" => "ort", "class" => "control-label")) ?>
 					<?php 
@@ -212,7 +212,7 @@ if (!isset($plz)) $plz = null;
 					<?php echo form_error("ort"); ?>
 				</div>
 			</div>
-			<div id="ort_dropdown" class="col-sm-6" style="display: none;">
+			<div id="ort_dropdown" class="col-sm-6 ort_dropdown" style="display: none;">
 				<div class="form-group <?php echo (form_error("ort") != "") ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formOrt'), "ort", array("name" => "ort", "for" => "ort", "class" => "control-label")) ?>
 					<?php 
@@ -927,15 +927,15 @@ if (!isset($plz)) $plz = null;
 		var code = $("#adresse_nation option:selected").val();
 		if(code === "A")
 		{
-			hideElement($("#ort_input"));
-			showElement($("#ort_dropdown"));
+			hideElement($(".ort_input"));
+			showElement($(".ort_dropdown"));
 			var plz = $("#plz").val();
-			loadOrtData(plz, $("#ort_dropdown"));
+			loadOrtData(plz, $(".ort_dropdown"));
 		}
 		else
 		{
-			showElement($("#ort_input"));
-			hideElement($("#ort_dropdown"));
+			showElement($(".ort_input"));
+			hideElement($(".ort_dropdown"));
 		}
     }
 
@@ -944,15 +944,15 @@ if (!isset($plz)) $plz = null;
 		var code = $("#zustelladresse_nation option:selected").val();
 		if(code === "A")
 		{
-			hideElement($("#zustell_ort_input"));
-			showElement($("#zustell_ort_dropdown"));
+			hideElement($(".zustell_ort_input"));
+			showElement($(".zustell_ort_dropdown"));
 			var plz = $("#zustell_plz").val();
-			loadOrtData(plz, $("#zustell_ort_dropdown"));
+			loadOrtData(plz, $(".zustell_ort_dropdown"));
 		}
 		else
 		{
-			showElement($("#zustell_ort_input"));
-			hideElement($("#zustell_ort_dropdown"));
+			showElement($(".zustell_ort_input"));
+			hideElement($(".zustell_ort_dropdown"));
 		}
     }
 
