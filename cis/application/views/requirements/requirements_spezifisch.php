@@ -44,7 +44,7 @@
 						$logo = "docx.gif";
 						break;
 					default:
-						if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument))
+						if(isset($dokumente[$dok->dokument_kurzbz]->dokument))
 						{
 							if(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".docx") !== false)
 							{

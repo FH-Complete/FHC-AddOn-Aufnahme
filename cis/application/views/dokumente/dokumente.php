@@ -7,6 +7,9 @@
 ?>
 <div id="dokumente">
 	<div class="row document-header">
+		<div class="col-sm-1">
+			&nbsp;
+		</div>
 		<div class="col-sm-5">
 			<?php echo $this->lang->line("dokumente_name"); ?>
 		</div>
@@ -16,7 +19,7 @@
 		<div class="col-sm-1">
 			<?php echo $this->lang->line("dokumente_aktion"); ?>
 		</div>
-		<div class="col-sm-4">
+		<div class="col-sm-3">
 			<?php echo $this->lang->line("dokumente_benoetigt"); ?>
 		</div>
 	</div>
@@ -33,6 +36,71 @@
 		}
 	?>
 		<div class="row document-row">
+			<?php
+			if((isset($dokumente[$dok->dokument_kurzbz]->mimetype)) && ($dokumente[$dok->dokument_kurzbz]->mimetype !== null))
+			{
+				switch($dokumente[$dok->dokument_kurzbz]->mimetype)
+				{
+					case "application/pdf":
+						$logo = "document-pdf.svg";
+						break;
+					case "image/jpeg":
+						$logo = "document-picture.svg";
+						break;
+					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+						$logo = "docx.gif";
+						break;
+					default:
+						if(isset($dokumente[$dok->dokument_kurzbz]->dokument))
+						{
+							if(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".docx") !== false)
+							{
+								$logo = "docx.gif";
+								break;
+							}
+							elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".doc") !== false)
+							{
+								$logo = "docx.gif";
+								break;
+							}
+							elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".pdf") !== false)
+							{
+								$logo = "document-pdf.svg";
+								break;
+							}
+							elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".jpg") !== false)
+							{
+								$logo = "document-picture.svg";
+								break;
+							}
+							else
+							{
+								$logo = false;
+								break;
+							}
+						}
+						else
+						{
+							$logo = false;
+							break;
+						}
+				}
+			}
+			else
+			{
+				$logo = "";
+			}
+			?>
+			<div id="<?php echo $dok->dokument_kurzbz; ?>_logo" class="col-sm-1">
+				<?php 
+				if(isset($logo) && ($logo != false))
+				{
+				?>
+					<img class="document_logo center-block" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'.$logo); ?>"/>
+				<?php
+				}
+				?>
+			</div>
 			<div class="col-sm-5">
 				<?php echo $dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1].$p;?>
 				<?php
@@ -43,10 +111,22 @@
 				<?php
 					}
 				?>
+				<div id="<?php echo $dok->dokument_kurzbz; ?>_name"></div>
+				<?php 
+				if(isset($logo) && ($logo != false))
+				{
+					echo '<div>'.$dokumente[$dok->dokument_kurzbz]->dokument->name.'</div>';
+				}
+				else
+				{
+				?>
 				<!-- The global progress bar -->
-				<div id="<?php echo $dok->dokument_kurzbz; ?>Progress" class="progress">
+				<div id="<?php echo $dok->dokument_kurzbz; ?>Progress" class="progress" style="display:none;">
 					<div class="progress-bar progress-bar-success"></div>
 				</div>
+				<?php
+				}
+				?>
 			</div>
 			<div class="col-sm-2">
 				<?php
@@ -75,7 +155,7 @@
 					</span>
 				</div>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-3">
 				<?php
 				if(isset($dok->studiengaenge))
 				{
@@ -114,6 +194,7 @@
 				else
 				{
 					data.originalFiles['<?php echo $dok->dokument_kurzbz; ?>'] = data.originalFiles[0];
+					$('#<?php echo $dok->dokument_kurzbz; ?>Progress').show();
 					data.submit();
 				}
 			},
@@ -127,10 +208,51 @@
 					$('#<?php echo $dok->dokument_kurzbz; ?>_Upload').hide();
 					
 
-					$('#<?php echo $dok->dokument_kurzbz; ?>Progress .progress-bar').css(
-						'width',
-						'0%'
-					);
+					$('#<?php echo $dok->dokument_kurzbz; ?>Progress').hide();
+					$('#<?php echo $dok->dokument_kurzbz; ?>_logo').show();
+					var logo = "";
+					switch(data.result.mimetype)
+					{
+						case "application/pdf":
+							logo = "document-pdf.svg";
+							break;
+						case "image/jpeg":
+							logo = "document-picture.svg";
+							break;
+						case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+							logo = "docx.gif";
+							break;
+						default:
+							if(data.result.bezeichnung.indexOf(".docx") !== false)
+							{
+								logo = "docx.gif";
+								break;
+							}
+							else if(data.result.bezeichnung.indexOf(".doc") !== false)
+							{
+								logo = "docx.gif";
+								break;
+							}
+							else if(data.result.bezeichnung.indexOf(".pdf") !== false)
+							{
+								logo = "document-pdf.svg";
+								break;
+							}
+							else if(data.result.bezeichnung.indexOf(".jpg") !== false)
+							{
+								logo = "document-picture.svg";
+								break;
+							}
+							else
+							{
+								logo = false;
+								break;
+							}
+					}
+
+					$("#<?php echo $dok->dokument_kurzbz; ?>_logo").append('<img class="document_logo center-block" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
+					$("#<?php echo $dok->dokument_kurzbz; ?>_name").append(data.result.bezeichnung);
+
 					msg += "</br>"+data.result.bezeichnung;
 				}
 				else
@@ -180,6 +302,9 @@
 				{
 					$('#'+data.dokument_kurzbz+'_Upload').show();
 					$('#'+data.dokument_kurzbz+'_delete').html("");
+					$('#'+data.dokument_kurzbz+'_name').html('');
+					$('#'+data.dokument_kurzbz+'Progress').hide();
+					$('#'+data.dokument_kurzbz+'_logo').html('');
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
