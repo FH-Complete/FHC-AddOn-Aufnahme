@@ -395,22 +395,22 @@ if (!isset($plz)) $plz = null;
 						$logo = "docx.gif";
 						break;
 					default:
-						if(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, "docx") !== false)
+						if(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".docx") !== false)
 						{
 							$logo = "docx.gif";
 							break;
 						}
-						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, "doc") !== false)
+						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".doc") !== false)
 						{
 							$logo = "docx.gif";
 							break;
 						}
-						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, "pdf") !== false)
+						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".pdf") !== false)
 						{
 							$logo = "document-pdf.svg";
 							break;
 						}
-						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, "jpg") !== false)
+						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".jpg") !== false)
 						{
 							$logo = "document-picture.svg";
 							break;
@@ -517,22 +517,22 @@ if (!isset($plz)) $plz = null;
 						$logo = "docx.gif";
 						break;
 					default:
-						if(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, "docx") !== false)
+						if(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".docx") !== false)
 						{
 							$logo = "docx.gif";
 							break;
 						}
-						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, "doc") !== false)
+						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".doc") !== false)
 						{
 							$logo = "docx.gif";
 							break;
 						}
-						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, "pdf") !== false)
+						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".pdf") !== false)
 						{
 							$logo = "document-pdf.svg";
 							break;
 						}
-						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, "jpg") !== false)
+						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".jpg") !== false)
 						{
 							$logo = "document-picture.svg";
 							break;
@@ -760,22 +760,22 @@ if (!isset($plz)) $plz = null;
 							logo = "docx.gif";
 							break;
 						default:
-							if(data.result.bezeichnung.indexOf("docx") !== false)
+							if(data.result.bezeichnung.indexOf(".docx") !== false)
 							{
 								logo = "docx.gif";
 								break;
 							}
-							else if(data.result.bezeichnung.indexOf("doc") !== false)
+							else if(data.result.bezeichnung.indexOf(".doc") !== false)
 							{
 								logo = "docx.gif";
 								break;
 							}
-							else if(data.result.bezeichnung.indexOf("pdf") !== false)
+							else if(data.result.bezeichnung.indexOf(".pdf") !== false)
 							{
 								logo = "document-pdf.svg";
 								break;
 							}
-							else if(data.result.bezeichnung.indexOf("jpg") !== false)
+							else if(data.result.bezeichnung.indexOf(".jpg") !== false)
 							{
 								logo = "document-picture.svg";
 								break;
@@ -867,22 +867,22 @@ if (!isset($plz)) $plz = null;
 							logo = "docx.gif";
 							break;
 						default:
-							if(data.result.bezeichnung.indexOf("docx") !== false)
+							if(data.result.bezeichnung.indexOf(".docx") !== false)
 							{
 								logo = "docx.gif";
 								break;
 							}
-							else if(data.result.bezeichnung.indexOf("doc") !== false)
+							else if(data.result.bezeichnung.indexOf(".doc") !== false)
 							{
 								logo = "docx.gif";
 								break;
 							}
-							else if(data.result.bezeichnung.indexOf("pdf") !== false)
+							else if(data.result.bezeichnung.indexOf(".pdf") !== false)
 							{
 								logo = "document-pdf.svg";
 								break;
 							}
-							else if(data.result.bezeichnung.indexOf("jpg") !== false)
+							else if(data.result.bezeichnung.indexOf(".jpg") !== false)
 							{
 								logo = "document-picture.svg";
 								break;
