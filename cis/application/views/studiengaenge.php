@@ -39,7 +39,7 @@ $this->load->view('templates/footer');
 //	       $("#button_"+id).tooltip();
 //	   }
 //	});
-//
-	$(".icon-bewerben").tooltip();
+//	
+		$(".icon-bewerben").tooltip();
     });
 </script>
