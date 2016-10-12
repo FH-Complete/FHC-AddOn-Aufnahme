@@ -14,4 +14,7 @@
 <button class="btn btn-sm btn-primary btn-background" type="button" onclick="confirmStorno(<?php echo $studiengang->studiengang_kz; ?>)">
 	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 </button>
+<span id="infotext_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="infotext" studienplan_id="<?php echo $studiengang->studienplan->studienplan_id; ?>" studiengang_kz="<?php echo $studiengang->studiengang_kz; ?>">
+	
+</span>
 </br>

@@ -90,56 +90,6 @@ if (isset($error) && ($error->error === true))
     {
 		files = event.target.files;
     }
-
-    // Catch the form submit and upload the files
-    /*function uploadFiles(document_kurzbz, studienplan_id, submit)
-    {
-	// START A LOADING SPINNER HERE
-
-		// Create a formdata object and add the files
-		var data = new FormData();
-		$.each(files, function(key, value) {
-			data.append(document_kurzbz, value);
-		});
-
-		$.ajax({
-			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/uploadFiles"); ?>',
-			type: 'POST',
-			data: data,
-			cache: false,
-			dataType: 'json',
-			processData: false, // Don't process the files
-			contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-			success: function(data, textStatus, jqXHR) {
-			
-				if(data.success === true)
-				{
-					// Success
-					$("#"+document_kurzbz+'_'+studienplan_id).after("<span><?php echo $this->lang->line('requirements_UploadErfolgreich');?></span>");
-					$("#"+document_kurzbz+'_hochgeladen').html("<span><?php echo $this->lang->line('requirements_DokHochgeladen'); ?></span>");
-					$("#"+document_kurzbz+"_nachgereicht").prop("checked", false);
-					$("#"+document_kurzbz+"_nachgereicht").prop("disabled", true);
-					$("#"+document_kurzbz+"_nachreichenAnmerkung").parent().hide();
-					$("#"+document_kurzbz+"_nachreichenDatum").parent().hide();
-					if(submit === true)
-					{
-						$("#"+document_kurzbz+'_'+studienplan_id).closest("form").submit();
-					}
-				}
-				else
-				{
-					// Handle errors here
-					$("#"+document_kurzbz+'_'+studienplan_id).after("<span><?php echo $this->lang->line('requirements_UploadError');?></span>");
-					console.log('ERRORS: ' + data.error);
-				}
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-				// Handle errors here
-				console.log('ERRORS: ' + textStatus);
-				// STOP LOADING SPINNER
-			}
-		});
-    }*/
 	
 	function deleteDocument(dms_id, studienplan_id)
 	{	
@@ -167,6 +117,72 @@ if (isset($error) && ($error->error === true))
 					$("#"+data.dokument_kurzbz+"_nachgereicht_"+studienplan_id).prop("disabled", false);
 					$("#"+data.dokument_kurzbz+"_logo_"+studienplan_id).children().hide();
 					toggleDateField(studienplan_id);
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				// Handle errors here
+				console.log('ERRORS: ' + textStatus);
+				// STOP LOADING SPINNER
+			}
+		});
+	}
+	
+	$(document).ready(function(){
+		$(".infotext").each(function(i,v){
+			var studiengang_kz = $(v).attr("studiengang_kz");
+			var studienplan_id = $(v).attr("studienplan_id");
+			checkDataCompleteness(studiengang_kz, studienplan_id);
+		});
+	});
+	
+	function checkDataCompleteness(studiengang_kz, studienplan_id)
+	{
+		$.ajax({
+			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/checkDataCompleteness"); ?>',
+			type: 'GET',
+			cache: false,
+			dataType: 'json',
+			success: function(data, textStatus, jqXHR)
+			{
+				if((data.person==false) ||(data.adresse==false) ||(data.dokumente==false) ||(data.kontakt==false) ||(data.zustelladresse==false))
+				{
+					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
+				}
+				else
+				{
+					checkDocuments(studiengang_kz, studienplan_id);
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				// Handle errors here
+				console.log('ERRORS: ' + textStatus);
+				// STOP LOADING SPINNER
+			}
+		});
+	}
+	
+	function checkDocuments(studiengang_kz, studienplan_id)
+	{
+		$.ajax({
+			url: '<?php echo base_url($this->config->config["index_page"]."/Dokumente/areDocumentsComplete"); ?>',
+			type: 'POST',
+			data: {
+				studiengang_kz: studiengang_kz
+			},
+			cache: false,
+			dataType: 'json',
+			success: function(data, textStatus, jqXHR)
+			{
+				if((data.complete !== undefined) && (data.complete == false))
+				{
+					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
+				}
+				else
+				{
+					if(data.abgeschickt == false)
+					{
+						$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/nochNichtAbgeschickt'); ?>");
+					}
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {

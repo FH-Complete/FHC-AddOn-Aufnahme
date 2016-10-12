@@ -231,4 +231,6 @@ $lang['aufnahme/Weiblich']='weiblich';
 $lang["aufnahme/loginEmailAdresse"] = "E-Mail oder FH-BenutzerInnenname";
 $lang['aufnahme/anredeUnknown']='geehrte/r Frau/Herr';
 $lang['aufnahme/emailFehlt']='E-Mail Adresse fehlt';
+$lang['aufnahme/nochNichtAbgeschickt']='Noch nicht abgesandt';
+$lang['aufnahme/unvollständig']='Bewerbung unvollständig';
 ?>

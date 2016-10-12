@@ -102,4 +102,70 @@ $this->load->view('templates/footer');
 			}
 		});
 	}
+	
+	$(document).ready(function(){
+		$(".infotext").each(function(i,v){
+			var studiengang_kz = $(v).attr("studiengang_kz");
+			var studienplan_id = $(v).attr("studienplan_id");
+			checkDataCompleteness(studiengang_kz, studienplan_id);
+		});
+	});
+	
+	function checkDataCompleteness(studiengang_kz, studienplan_id)
+	{
+		$.ajax({
+			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/checkDataCompleteness"); ?>',
+			type: 'GET',
+			cache: false,
+			dataType: 'json',
+			success: function(data, textStatus, jqXHR)
+			{
+				if((data.person==false) ||(data.adresse==false) ||(data.dokumente==false) ||(data.kontakt==false) ||(data.zustelladresse==false))
+				{
+					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
+				}
+				else
+				{
+					checkDocuments(studiengang_kz, studienplan_id);
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				// Handle errors here
+				console.log('ERRORS: ' + textStatus);
+				// STOP LOADING SPINNER
+			}
+		});
+	}
+	
+	function checkDocuments(studiengang_kz, studienplan_id)
+	{
+		$.ajax({
+			url: '<?php echo base_url($this->config->config["index_page"]."/Dokumente/areDocumentsComplete"); ?>',
+			type: 'POST',
+			data: {
+				studiengang_kz: studiengang_kz
+			},
+			cache: false,
+			dataType: 'json',
+			success: function(data, textStatus, jqXHR)
+			{
+				if((data.complete !== undefined) && (data.complete == false))
+				{
+					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
+				}
+				else
+				{
+					if(data.abgeschickt == false)
+					{
+						$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/nochNichtAbgeschickt'); ?>");
+					}
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				// Handle errors here
+				console.log('ERRORS: ' + textStatus);
+				// STOP LOADING SPINNER
+			}
+		});
+	}
 </script>

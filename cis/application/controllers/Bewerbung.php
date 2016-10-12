@@ -1227,6 +1227,35 @@ class Bewerbung extends MY_Controller
 		echo json_encode($this->_loadGemeindeByPlz($plz));
 	}
 	
+	public function checkDataCompleteness()
+	{
+		//$this->StudiensemesterModel->getNextStudiensemester("WS");
+		$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
+
+		//load person data
+		$this->_data["person"] = $this->_loadPerson();
+
+		//load kontakt data
+		$this->_loadKontakt();
+		
+		//load adress data
+		$this->_loadAdresse();
+
+		//load dokumente
+		$this->_loadDokumente($this->session->userdata()["person_id"]);
+
+		foreach($this->_data["dokumente"] as $akte)
+		{
+			if ($akte->dms_id != null)
+			{
+				$dms = $this->_loadDms($akte->dms_id);
+				$akte->dokument = $dms;
+			}
+		}
+		
+		echo json_encode($this->_checkDataCompleteness());
+	}
+	
 	private function _checkDataCompleteness()
 	{
 		$complete = array("person"=>true, "adresse"=>true, "kontakt"=>true, "zustelladresse"=>true, "dokumente"=>true);
@@ -1342,5 +1371,44 @@ class Bewerbung extends MY_Controller
 		}
 
 		return $complete;
+	}
+	
+	private function _getSpecialization($prestudent_id)
+	{
+		$this->PrestudentModel->getSpecialization($prestudent_id, "aufnahme/spezialisierung");
+		if ($this->PrestudentModel->isResultValid() === true)
+		{
+			return $this->PrestudentModel->result;
+		}
+		else
+		{
+			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
+		}
+	}
+	
+	private function _removeSpecialization($notiz_id)
+	{
+		$this->PrestudentModel->removeSpecialization($notiz_id);
+		if ($this->PrestudentModel->isResultValid() === true)
+		{
+			return $this->PrestudentModel->result;
+		}
+		else
+		{
+			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
+		}
+	}
+	
+	private function _saveSpecialization($prestudent_id, $text)
+	{
+		$this->PrestudentModel->saveSpecialization($prestudent_id, "aufnahme/spezialisierung", $text);
+		if ($this->PrestudentModel->isResultValid() === true)
+		{
+			return $this->PrestudentModel->result;
+		}
+		else
+		{
+			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
+		}
 	}
 }

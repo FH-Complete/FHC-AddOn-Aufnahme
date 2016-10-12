@@ -122,4 +122,55 @@ class Prestudent_model extends MY_Model
 			return false;
 		}
 	}
+	
+	/**
+	 * 
+	 * @param type $prestudent_id
+	 * @param type $titel
+	 * @return boolean
+	 */
+	public function getSpecialization($prestudent_id, $titel)
+	{
+		if ($restquery = $this->rest->get('crm/prestudent/specialization', array("prestudent_id" => $prestudent_id, "titel" => $titel)))
+		{
+			$this->result = $restquery;
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param type $notiz_id
+	 * @return boolean
+	 */
+	public function removeSpecialization($notiz_id)
+	{
+		if ($restquery = $this->rest->post('crm/prestudent/rmspecialization', array("notiz_id" => $notiz_id)))
+		{
+			$this->result = $restquery;
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param type $prestudent_id
+	 * @param type $titel
+	 * @param type $text
+	 * @return boolean
+	 */
+	public function saveSpecialization($prestudent_id, $titel, $text)
+	{
+		if ($restquery = $this->rest->post('crm/prestudent/specialization', array("prestudent_id" => $prestudent_id, "titel" => $titel, "text" => $text)))
+		{
+			$this->result = $restquery;
+			return true;
+		}
+		
+		return false;
+	}
 }
