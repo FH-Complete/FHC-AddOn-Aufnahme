@@ -213,10 +213,10 @@ class Registration extends MY_Controller {
 		{
 			if(isset($this->session->userdata()["zugangscode"]))
 			{
-				$this->session->sess_destroy();
+				$this->session->unset_userdata("zugangscode");
 			}
 			$this->_data["zugangscode"] = "";
-			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/emailFehlt') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 			$this->_data["email"] = "";
 			$this->load->view('login/confirm_login',  $this->_data);
 		}
@@ -265,7 +265,7 @@ class Registration extends MY_Controller {
 		elseif (empty($this->PersonModel->result->data)) {
 			if(isset($this->session->userdata()["zugangscode"]))
 			{
-				$this->session->sess_destroy();
+				$this->session->unset_userdata("zugangscode");
 			}
 			$this->_data["zugangscode"] = "";
 			$this->_data["message"] = '<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
@@ -321,7 +321,7 @@ class Registration extends MY_Controller {
 
 						if ($this->PersonModel->isResultValid() === true)
 						{
-							$this->_sendMessageVorlage($this->_data["person"], $zugangscode, base_url($this->config->config["index_page"]."/Registration/confirm?code=".$zugangscode."&studiengang_kz=".$data['studiengang_kz']), $data["email"]);
+							$this->_sendMessageVorlage($this->_data["person"], $zugangscode, base_url($this->config->config["index_page"]."/Registration/confirm?code=".$zugangscode."&studiengang_kz=".$data['studiengang_kz'])."&email=".$data["email"], $data["email"]);
 
 							//$data["message"] = $message;
 							//       $this->load->view('templates/header');
