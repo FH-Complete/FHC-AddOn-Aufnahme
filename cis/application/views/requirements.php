@@ -23,7 +23,7 @@ if (isset($error) && ($error->error === true))
 		$data["studiengang"] = $studiengang;
 
 ?>
-    <div class="row">
+    <div class="row stg-row">
         <div class="col-sm-12">
             <?php $this->load_views('view_bewerbung_studiengang', $data); ?>
         </div>
