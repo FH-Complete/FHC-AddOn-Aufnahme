@@ -192,13 +192,18 @@ class Dokumente extends MY_Controller {
 			//load studiengaenge der prestudenten
 			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
 			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-			if(isset($prestudent->prestudentStatus->studienplan_id))
+			
+			if((isset($prestudent->prestudentStatus->studienplan_id)))
 			{
 				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 				$studiengang->studienplan = $studienplan;
 			}
-			$studiengang->dokumente = $this->_loadDokumentByStudiengang($prestudent->studiengang_kz);
-			array_push($this->_data["studiengaenge"], $studiengang);
+			if((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz == "Interessent"))
+			{
+				$studiengang->dokumente = $this->_loadDokumentByStudiengang($prestudent->studiengang_kz);
+				array_push($this->_data["studiengaenge"], $studiengang);
+			}
+			
 		}
 		
 		foreach($this->_data["studiengaenge"] as $stg)
@@ -215,7 +220,7 @@ class Dokumente extends MY_Controller {
 				{
 					$this->_data["docs"][$dok->dokument_kurzbz]->dokument = $this->_data["dokumente"][$dok->dokument_kurzbz];
 				}
-				array_push($this->_data["docs"][$dok->dokument_kurzbz]->studiengaenge, $stg);
+				$this->_data["docs"][$dok->dokument_kurzbz]->studiengaenge[$stg->studiengang_kz] = $stg;
 			}
 			
 			if((!isset($this->_data["docs"][$this->config->config["dokumentTypen"]["reisepass"]])) || ($this->_data["docs"][$this->config->config["dokumentTypen"]["reisepass"]] ==null))
@@ -228,7 +233,7 @@ class Dokumente extends MY_Controller {
 			{
 				$this->_data["docs"][$this->config->config["dokumentTypen"]["reisepass"]]->dokument = $this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]];
 			}
-			array_push($this->_data["docs"][$this->config->config["dokumentTypen"]["reisepass"]]->studiengaenge, $stg);
+			$this->_data["docs"][$this->config->config["dokumentTypen"]["reisepass"]]->studiengaenge[$stg->studiengang_kz] = $stg;
 			
 			if((!isset($this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]])) || ($this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]] ==null))
 			{
@@ -240,7 +245,7 @@ class Dokumente extends MY_Controller {
 			{
 				$this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument = $this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]];
 			}
-			array_push($this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]]->studiengaenge, $stg);
+			$this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]]->studiengaenge[$stg->studiengang_kz] = $stg;
 			
 			if((!isset($this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]])) || ($this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]] ==null))
 			{
@@ -252,8 +257,7 @@ class Dokumente extends MY_Controller {
 			{
 				$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument = $this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]];
 			}
-			array_push($this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->studiengaenge, $stg);
-
+			$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->studiengaenge[$stg->studiengang_kz] = $stg;
 		}
 	}
 	
