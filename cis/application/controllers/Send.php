@@ -26,6 +26,7 @@ class Send extends MY_Controller {
 		$this->load->model('dms_model', "DmsModel");
 		$this->load->model('akte_model', "AkteModel");
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
+		$this->load->model('Dokumentprestudent_model', "DokumentPrestudentModel");
 		$this->load->helper("form");
 		$this->load->library("form_validation");
 		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
@@ -106,7 +107,8 @@ class Send extends MY_Controller {
 	 * @param unknown $studiengang_kz
 	 * @param unknown $studienplan_id
 	 */
-	public function send($studiengang_kz, $studienplan_id) {
+	public function send($studiengang_kz, $studienplan_id)
+	{
 		$this->checkLogin();
 		$this->_data['sprache'] = $this->get_language();
 		
@@ -185,17 +187,40 @@ class Send extends MY_Controller {
 				}
 				else
 				{
+					$dokument_kurzbz_array = array();
+					if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
+					{
+						array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["reisepass"]);
+					}
+					
+					if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
+					{
+						array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["lebenslauf"]);
+					}					
+					
+					if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]))
+					{
+						array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]);
+					}
+					
+					if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]))
+					{
+						array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["abschlusszeugnis"]);
+					}
 					if(is_null($prestudentStatus->bewerbung_abgeschicktamum))
 					{
-						$prestudentStatus->bewerbung_abgeschicktamum=date('Y-m-d H:i:s');
-						unset($prestudentStatus->studienplan_bezeichnung);
-						unset($prestudentStatus->bezeichnung_mehrsprachig);
-						
-						$this->_savePrestudentStatus($prestudentStatus);
-						$this->_sendMessageMailApplicationConfirmation($this->_data["person"], $this->_data["studiengang"]);
-						//TODO vorlage fehlt in DB
-						$this->_sendMessageMailNewApplicationInfo($this->_data["person"], $this->_data["studiengang"]);
-						redirect("/Aufnahmetermine");
+						if(($this->_setAccepted($prestudent->prestudent_id, $prestudent->studiengang_kz) === true) && ($this->_setAcceptedDocuments($prestudent->prestudent_id, $prestudent->studiengang_kz, $dokument_kurzbz_array) === true))
+						{
+							$prestudentStatus->bewerbung_abgeschicktamum=date('Y-m-d H:i:s');
+							unset($prestudentStatus->studienplan_bezeichnung);
+							unset($prestudentStatus->bezeichnung_mehrsprachig);
+
+							$this->_savePrestudentStatus($prestudentStatus);
+							$this->_sendMessageMailApplicationConfirmation($this->_data["person"], $this->_data["studiengang"]);
+							//TODO vorlage fehlt in DB
+							$this->_sendMessageMailNewApplicationInfo($this->_data["person"], $this->_data["studiengang"]);
+							redirect("/Aufnahmetermine");
+						}
 					}
 					else
 					{
@@ -584,5 +609,31 @@ class Send extends MY_Controller {
 		return $error;
 	}
 
-
+	private function _setAccepted($prestudent_id, $studiengang_kz)
+	{
+		$this->DokumentPrestudentModel->setAccepted($prestudent_id, $studiengang_kz);
+		if($this->DokumentPrestudentModel->isResultValid() === true)
+		{
+			return $this->DokumentPrestudentModel->result->retval;
+		}
+		else
+		{
+			$this->_setError(true, $this->DokumentPrestudentModel->getErrorMessage());
+			return false;
+		}
+	}
+	
+	private function _setAcceptedDocuments($prestudent_id, $studiengang_kz, $dokument_kurzbz_array)
+	{
+		$this->DokumentPrestudentModel->setAcceptedDocuments($prestudent_id, $studiengang_kz, $dokument_kurzbz_array);
+		if($this->DokumentPrestudentModel->isResultValid() === true)
+		{
+			return $this->DokumentPrestudentModel->result->retval;
+		}
+		else
+		{
+			$this->_setError(true, $this->DokumentPrestudentModel->getErrorMessage());
+			return false;
+		}
+	}
 }

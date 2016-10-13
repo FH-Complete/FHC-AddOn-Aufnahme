@@ -6,7 +6,7 @@
  */
 
 
-class DokumentStudiengang_model extends MY_Model
+class Dokumentprestudent_model extends MY_Model
 {
 
 	/**
@@ -17,16 +17,14 @@ class DokumentStudiengang_model extends MY_Model
 		//$this->load->database();
 	}
 
-
 	/**
-	 *
-	 * @param unknown $studiengang_kz
-	 * @param unknown $onlinebewerbung
-	 * @param unknown $pflicht
-	 * @return unknown
+	 * 
+	 * @param type $prestudent_id
+	 * @param type $studiengang_kz
+	 * @return boolean
 	 */
-	public function getDokumentstudiengangByStudiengang_kz($studiengang_kz, $onlinebewerbung, $pflicht) {
-		if ($restquery = $this->rest->get('crm/dokumentstudiengang/DokumentstudiengangByStudiengang_kz', array("studiengang_kz"=>$studiengang_kz, "onlinebewerbung"=>$onlinebewerbung, "pflicht"=>$pflicht))) {
+	public function setAccepted($prestudent_id, $studiengang_kz) {
+		if ($restquery = $this->rest->post('crm/Dokumentprestudent/SetAccepted', array("prestudent_id"=>$prestudent_id, "studiengang_kz"=>$studiengang_kz))) {
 			$this->result = $restquery;
 			return true;
 		}
@@ -34,5 +32,20 @@ class DokumentStudiengang_model extends MY_Model
 			return false;
 	}
 
+	/**
+	 * 
+	 * @param type $prestudent_id
+	 * @param type $studiengang_kz
+	 * @param array $dokument_kurzbz_array
+	 * @return boolean
+	 */
+	public function setAcceptedDocuments($prestudent_id, $studiengang_kz, $dokument_kurzbz_array) {
+		if ($restquery = $this->rest->post('crm/Dokumentprestudent/SetAcceptedDocuments', array("prestudent_id"=>$prestudent_id, "studiengang_kz"=>$studiengang_kz, "dokument_kurzbz"=>$dokument_kurzbz_array))) {
+			$this->result = $restquery;
+			return true;
+		}
+		else
+			return false;
+	}
 
 }

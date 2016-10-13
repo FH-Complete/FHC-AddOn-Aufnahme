@@ -181,6 +181,8 @@
 		</div>
 	<script type="text/javascript">
 	$(document).ready(function() {
+		$(".fhc-tooltip").tooltip();
+		
 		// File upload
 		$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload').fileupload({
 			url: '<?php echo base_url($this->config->config["index_page"]."/Dokumente/uploadFiles/".$dok->dokument_kurzbz); ?>',

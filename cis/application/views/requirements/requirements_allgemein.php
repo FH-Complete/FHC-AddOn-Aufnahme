@@ -192,7 +192,7 @@
 			<!-- The fileinput-button span is used to style the file input field as button -->
 			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
 				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]])) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->accepted === 'f')) { ?>
-					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>
+					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->accepted ==='t')) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
 				<?php
 				}
 				?>
@@ -311,8 +311,8 @@
 
 				<!-- The fileinput-button span is used to style the file input field as button -->
 				<div id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
-					<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]])) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id != null)) { ?>
-						<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>
+					<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]])) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->accepted == "f")) { ?>
+						<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->accepted ==='t')) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
 					<?php
 					}
 					?>
