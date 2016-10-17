@@ -39,7 +39,7 @@
 	    <div class="form-group <?php echo (form_error("geb_datum")!="")? 'has-error': '' ?>">
 		<?php echo form_label($this->lang->line('aufnahme/geburtsdatum'), "geb_datum", array("name"=>"geb_datum", "for"=>"geb_datum", "class"=>"col-sm-11 control-label")) ?>
 		<div class="col-sm-11">
-		    <?php echo form_input(array('id' => 'geb_datum', 'name' => 'geb_datum', 'placeholder'=>'', "type"=>"text", "value"=>(isset($success) && $success == true) ? "" : set_value("geb_datum"), "class"=>"form-control datepicker")); ?>
+		    <?php echo form_input(array('id' => 'geb_datum', 'name' => 'geb_datum', 'placeholder'=>'', "type"=>"text", "value"=>(isset($success) && $success == true) ? "" : set_value("geb_datum"), "class"=>"form-control datepicker", "placeholder"=>"DD.MM.YYYY")); ?>
 		    <?php echo form_error("geb_datum");?>
 		</div>
 	    </div>

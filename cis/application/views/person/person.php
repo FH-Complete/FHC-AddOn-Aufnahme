@@ -469,7 +469,7 @@ if (!isset($plz)) $plz = null;
 			<div class="form-group <?php echo (form_error("gebdatum") != "") ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_geburtsdatum'), "gebdatum", array("name" => "gebdatum", "for" => "gebdatum", "class" => "control-label")) ?>
 				<?php
-				$data = array('id' => 'gebdatum'.$studiengang->studiengang_kz.$studiengang->studienplan->studienplan_id, 'name' => 'gebdatum', 'maxlength' => 64, "type" => "date", "value" => set_value("gebdatum", isset($person->gebdatum) ? date("d.m.Y", strtotime($person->gebdatum)) : ""), "class" => "form-control datepicker");
+				$data = array('id' => 'gebdatum'.$studiengang->studiengang_kz.$studiengang->studienplan->studienplan_id, 'name' => 'gebdatum', 'maxlength' => 64, "type" => "date", "value" => set_value("gebdatum", isset($person->gebdatum) ? date("d.m.Y", strtotime($person->gebdatum)) : ""), "class" => "form-control datepicker", "placeholder"=>"DD.MM.YYYY");
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 				echo form_input($data); ?>
 				<?php echo form_error("gebdatum"); ?>

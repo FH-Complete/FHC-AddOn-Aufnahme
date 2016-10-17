@@ -128,7 +128,7 @@
 						<div id="<?php echo $dok->dokument_kurzbz; ?>_nachreichenDatum_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="nachreichenDatum">
 							<?php echo form_label($this->lang->line('requirements_nachreichenDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
 							<?php 
-							$data = array('id' => $dok->dokument_kurzbz.'_nachreichenDatum'.$studiengang->studiengang_kz.$studiengang->studienplan->studienplan_id, 'name' => $dok->dokument_kurzbz.'_nachreichenDatum', 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($dokumente[$dok->dokument_kurzbz]) ? date("d.m.Y", strtotime($dokumente[$dok->dokument_kurzbz]->nachgereicht_am)) : ""), "class" => "form-control datepicker");
+							$data = array('id' => $dok->dokument_kurzbz.'_nachreichenDatum'.$studiengang->studiengang_kz.$studiengang->studienplan->studienplan_id, 'name' => $dok->dokument_kurzbz.'_nachreichenDatum', 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($dokumente[$dok->dokument_kurzbz]) ? date("d.m.Y", strtotime($dokumente[$dok->dokument_kurzbz]->nachgereicht_am)) : ""), "class" => "form-control datepicker", "placeholder"=>"DD.MM.YYYY");
 							(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
 							echo form_input($data); ?>
 						</div>

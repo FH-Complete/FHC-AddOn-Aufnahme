@@ -173,7 +173,7 @@
 			<div class="form-group">
 				<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id.'_div'; ?>" class="">
 					<?php echo form_label($this->lang->line('requirements_nachreichenAbschlussGeplantDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
-					<?php echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($geplanter_abschluss) ? date("d.m.Y", strtotime($geplanter_abschluss)) : ""), "class" => "form-control datepicker")); ?>
+					<?php echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($geplanter_abschluss) ? date("d.m.Y", strtotime($geplanter_abschluss)) : ""), "class" => "form-control datepicker", "placeholder"=>"DD.MM.YYYY")); ?>
 				</div>
 			</div>
 		</div>
