@@ -75,7 +75,7 @@ if (!isset($plz)) $plz = null;
 
 		$("#zustell_plz").on("change", function(event) {
 			var plz = $("#zustell_plz").val();
-			loadOrtData(plz, $("#zustell_ort_dropdown"));
+			loadOrtData(plz, $(".zustell_ort_dropdown"));
 		});
 		
 		// File upload
@@ -691,7 +691,7 @@ if (!isset($plz)) $plz = null;
 					<?php echo form_error("zustell_plz"); ?>
 				</div>
 			</div>
-			<div id="zustell_ort_input" class="col-sm-6" style="display: none;">
+			<div id="zustell_ort_input" class="col-sm-6 zustell_ort_input" style="display: none;">
 				<div class="form-group <?php echo (form_error("zustell_ort") != "") ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("name" => "zustell_ort", "for" => "zustell_ort", "class" => "control-label")) ?>
 					<?php 
@@ -701,7 +701,7 @@ if (!isset($plz)) $plz = null;
 					<?php echo form_error("zustell_ort"); ?>
 				</div>
 			</div>
-			<div id="zustell_ort_dropdown" class="col-sm-6" style="display: none;">
+			<div id="zustell_ort_dropdown" class="col-sm-6 zustell_ort_dropdown" style="display: none;">
 				<div class="form-group <?php echo (form_error("zustell_ort") != "") ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("name" => "zustell_ort", "for" => "zustell_ort", "class" => "control-label")) ?>
 					<?php 
@@ -730,7 +730,7 @@ if (!isset($plz)) $plz = null;
 				<?php echo form_error("telefon"); ?>
 			</div>
 		</div>
-		<div class="col-sm-6">
+<!--		<div class="col-sm-6">
 			<div class="form-group <?php echo (form_error("fax") != "") ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_fax'), "fax", array("name" => "fax", "for" => "fax", "class" => "control-label")) ?>
 				<?php 
@@ -739,9 +739,7 @@ if (!isset($plz)) $plz = null;
 				echo form_input($data); ?>
 				<?php echo form_error("fax"); ?>
 			</div>
-		</div>
-	</div>
-	<div class="row form-row">
+		</div>-->
 		<div class="col-sm-6">
 			<div class="form-group <?php echo (form_error("email") != "") ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_emailAdresse'), "email", array("name" => "email", "for" => "email", "class" => "control-label")) ?>
@@ -769,7 +767,7 @@ if (!isset($plz)) $plz = null;
 	<hr>
 	<div class="row form-upload">
 		<div class="col-sm-2">
-			<?php echo form_label($this->lang->line('person_formDokumentupload_reisepass'), "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
+			<?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["reisepass"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]."*", "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
 		</div>
 		<?php
 		if(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype))
@@ -891,7 +889,7 @@ if (!isset($plz)) $plz = null;
 	<hr>
 	<div class="row form-upload">
 		<div class="col-sm-2">
-			<?php echo form_label($this->lang->line('person_formDokumentupload_lebenslauf')."&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?><span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="inklusive Foto"></span>
+			<?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["lebenslauf"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]."*"."&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?><span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="inklusive Foto"></span>
 		</div>
 		<?php
 		if((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype !== null))

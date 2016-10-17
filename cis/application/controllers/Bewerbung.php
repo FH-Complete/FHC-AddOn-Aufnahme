@@ -27,6 +27,7 @@ class Bewerbung extends MY_Controller
 		$this->load->model('akte_model', "AkteModel");
 		$this->load->model('gemeinde_model', "GemeindeModel");
 		$this->load->model('Bewerbungstermine_model', 'BewerbungstermineModel');
+		$this->load->model('dokument_model', "DokumentModel");
 		$this->load->helper("form");
 		$this->load->library("form_validation");
 		$this->_data["sprache"] = $this->get_language();
@@ -132,6 +133,10 @@ class Bewerbung extends MY_Controller
 		$this->form_validation->set_rules("nachname", "Nachname", "required|max_length[64]");
 		$this->form_validation->set_rules("gebdatum", "Geburtsdatum", "callback_check_date");
 		$this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
+		
+		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
+		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
+		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"]=>$reisepass, $this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf);
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -576,6 +581,10 @@ class Bewerbung extends MY_Controller
 				$akte->dokument = $dms;
 			}
 		}
+		
+		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
+		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
+		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"]=>$reisepass, $this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf);
 		
 		$this->_data["complete"] = $this->_checkDataCompleteness();
 		$this->load->view('bewerbung', $this->_data);
@@ -1468,6 +1477,19 @@ class Bewerbung extends MY_Controller
 		else
 		{
 			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
+		}
+	}
+	
+	private function _loadDokument($dokument_kurzbz)
+	{
+		$this->DokumentModel->getDokument($dokument_kurzbz);
+		if($this->DokumentModel->isResultValid() === true)
+		{
+			return $this->DokumentModel->result->retval[0];
+		}
+		else
+		{
+			$this->_setError(true, $this->DokumentModel->getErrorMessage());
 		}
 	}
 }

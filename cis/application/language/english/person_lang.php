@@ -7,7 +7,7 @@
 
 
 $lang['person_staatsbuergerschaft'] = "Citizenship*";
-$lang["person_formAnrede"] = "Salutation";
+$lang["person_formAnrede*"] = "Salutation";
 $lang["person_formAkadgrad"] = "Acad. title";
 $lang['person_formGeburtsnation'] = "Birthnation*";
 $lang['person_formMaennlich'] = "Male";
