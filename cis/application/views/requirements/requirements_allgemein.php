@@ -18,22 +18,22 @@
 		<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->getPhrase("ZGV/introduction_long", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"></span>
 		<div class="radio">
 			<label>
-				<input type="radio" name="doktype" value="österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)" 
-					<?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)") !== false) ? 'checked' : "") : ""; ?>
+				<input type="radio" name="doktype" value="Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)" 
+					<?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)") !== false) ? 'checked' : "") : ""; ?>
 					<?php echo isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true) ? "disabled" : ""; ?>
 				/>
-				österreichische Reifeprüfung (AHS, BHS, Berufsreifeprüfung)
+				Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)
 			</label>
 			&nbsp;
 			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
 		</div>
 		<div class="radio">
 			<label>
-				<input type="radio" name="doktype" value="Studienberechtigungsprüfung" 
-					<?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "Studienberechtigungsprüfung") !== false) ? 'checked' : "") : ""; ?> 
+				<input type="radio" name="doktype" value="Nachweis der Studienberechtigungsprüfung" 
+					<?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "Nachweis der Studienberechtigungsprüfung") !== false) ? 'checked' : "") : ""; ?> 
 					<?php echo isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true) ? "disabled" : ""; ?>
 				/>
-				Studienberechtigungsprüfung
+				Nachweis der Studienberechtigungsprüfung
 			</label>
 			&nbsp;
 			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
@@ -51,11 +51,11 @@
 		</div>
 		<div class="radio">
 			<label>
-				<input type="radio" name="doktype" value="einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen" 
-					<?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen") !== false) ? 'checked' : "") : ""; ?> 
+				<input type="radio" name="doktype" value="Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen" 
+					<?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen") !== false) ? 'checked' : "") : ""; ?> 
 					<?php echo isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true) ? "disabled" : ""; ?> 
 				/>
-				einschlägige berufliche Qualifikation (Lehre, BMS) mit Zusatzprüfungen
+				Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen
 			</label>
 			&nbsp;
 			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
