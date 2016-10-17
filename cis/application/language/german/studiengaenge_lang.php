@@ -16,3 +16,4 @@ $lang['studiengaenge/bis'] = 'bis';
 $lang['studiengaenge/keineBewerbungMoeglich'] = 'Zurzeit ist keine Bewerbung möglich.';
 $lang['studiengaenge/keineAufnahmetermineVorhanden'] = 'Keine Aufnahmetermine vorhanden.';
 $lang['studiengaenge/BewerbungNichtMoeglich'] = "Derzeit keine Bewerbung möglich.";
+$lang['studiengaenge/lehrgaenge'] = "Lehrgänge";
