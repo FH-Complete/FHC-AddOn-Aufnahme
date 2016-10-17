@@ -6,30 +6,26 @@
  */
 
 
+$lang['english'] = 'English';
+$lang['german'] = 'German';
 $lang['send_header'] = 'Absenden der Daten';
-$lang['send_einleitung'] = 'Ihre Daten sind vollständig - Sie können nun Ihre Bewerbung absenden';
 $lang['send_text'] = 'Bewerbung für den Studiengang';
 $lang['send_bereitsAbgeschickt'] = "Sie haben Ihre Bewerbung bereits abgeschickt";
 
-$lang['send_vorname'] = "Vorname";
-$lang['send_nachname'] = "Nachname";
-$lang['send_geburtsdatum'] = "Geburtsdatum";
-$lang['send_geburtsort'] = "Geburtsort";
-$lang['send_geburtsnation'] = "Geburtsnation";
-$lang['send_staatsbuergerschaft'] = "Staatsbürgerschaft";
+$lang['send_vorname'] = "Prename";
+$lang['send_nachname'] = "Surname";
+$lang['send_geburtsdatum'] = "Birthdate";
+$lang['send_geburtsort'] = "Place of birth";
+$lang['send_geburtsnation'] = "Birthnation";
+$lang['send_staatsbuergerschaft'] = "Citizenship";
 $lang['send_svnr'] = "SVNR";
-$lang['send_geschlecht'] = "Geschlecht";
-$lang['send_strasse'] = "Straße";
-$lang['send_plz'] = "PLZ";
-$lang['send_ort'] = "Ort";
-$lang['send_telefon'] = "Telefon";
+$lang['send_geschlecht'] = "Gener";
+$lang['send_strasse'] = "Street";
+$lang['send_plz'] = "ZIP Code";
+$lang['send_ort'] = "Town";
+$lang['send_telefon'] = "Phone";
 $lang['send_fax'] = "Fax";
-$lang['send_email'] = "E-Mail Adresse";
-$lang['send_reisepass'] = "Reisepass";
-$lang['send_lebenslauf'] = "Lebenslauf";
-$lang['send_dokumenteErgaenzen'] = "Bitte laden Sie folgende Dokumente hoch:";
-$lang['send_Geburtsurkunde'] = "Geburtsurkunde";
-$lang['send_Staatsbürgerschaftsnachweis'] = "Staatsbürgerschaftsnachweis";
-$lang['send_Lichtbild'] = "Lichtbild";
-$lang['send_datenUnvollstaendig'] = "Bewerbung kann nicht abgesendet werden. Daten sind noch unvollständig.";
-$lang['send_studiengangkzFehlt'] = "Der Parameter Studiengangkennzahl fehlt.";
+$lang['send_email'] = "E-mail address";
+$lang['send_dokumenteErgaenzen'] = "Please upload the following documents:";
+$lang['send_datenUnvollstaendig'] = "Application can not be sent. Data are still incomplete.";
+$lang['send_studiengangkzFehlt'] = "The parameter Course number is missing.";

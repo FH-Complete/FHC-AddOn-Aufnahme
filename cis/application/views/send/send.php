@@ -10,7 +10,6 @@
 <!-- TODO check if all data is provided -->
 <div role="tabpanel" class="tab-pane" id="send">
     <h1 id="sendHeader"><?php echo $this->lang->line("send_header"); ?></h1>
-    <!--<fieldset><?php echo $this->lang->line("send_einleitung").'!'; ?></fieldset>-->
     <fieldset><?php
 if ((empty($completenessError["person"])) && (empty($completenessError["adresse"])) && (empty($completenessError["kontakt"])) && (empty($completenessError["dokumente"][$studiengang->studiengang_kz])) && (empty($completenessError["doks"]))) {
 	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz)."</p>";

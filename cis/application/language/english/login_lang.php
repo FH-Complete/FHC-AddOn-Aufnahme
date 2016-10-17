@@ -6,9 +6,11 @@
  */
 
 
-$lang['login_Welcome'] = 'Welcome to the Online Application';
-$lang['login_NoAccount'] = 'You don`t have an account or access code?';
-$lang['login_SubscribeHere'] = 'Subscribe here!';
-$lang['login_AlreadyHaveAnAccessCode'] = 'You already have an access code?';
-$lang['login_WrongCode'] = 'The access code or password you have entered is incorrect or you have not yet registered!';
+//$lang['login_Welcome'] = 'Willkommen bei der Online Bewerbung';
+//$lang['login_NoAccount'] = 'Sie haben noch keinen Account oder Zugangscode?';
+//
+//$lang['login_AlreadyHaveAnAccessCode'] = 'Sie haben bereits einen Zugangscode?';
+//$lang['login_WrongCode'] = 'Der eingegebene Zugangscode/Passwort ist falsch oder Sie haben sich noch nicht registriert!';
+
+$lang['login_SubscribeHere'] = 'Sign up for free!';
 $lang['login_LoginButton'] = 'Login';

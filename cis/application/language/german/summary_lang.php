@@ -6,8 +6,9 @@
  */
 
 
+$lang['english'] = 'English';
+$lang['german'] = 'German';
 $lang['summary_header'] = 'Zusammenfassung';
-$lang['summary_einleitung'] = 'Bitte vervollständigen Sie Ihre Daten und prüfen Sie diese Eingaben im Anschluss auf Richtigkeit';
 $lang['summary_persoenlicheDaten'] = 'Persönliche Daten';
 $lang['summary_requirements_header'] = 'Allgemeine Zugangsvoraussetzungen';
 $lang['summary_specific_requirements_header'] = 'Studiengangsspezifische Voraussetzungen';
@@ -31,13 +32,7 @@ $lang['summary_geschlecht'] = 'Geschlecht';
 $lang['summary_geschlecht_m'] = 'männlich';
 $lang['summary_geschlecht_w'] = 'weiblich';
 $lang['summary_unvollstaendig'] = 'unvollständig';
-$lang['summary_pass'] = 'Reisepass';
-$lang['summary_lebenslauf'] = 'Lebenslauf';
 $lang['summary_dokumentVorhanden'] = 'Dokument vorhanden';
 $lang['summary_Abschlusszeugnis'] = 'Abschlusszeugnis';
 $lang['summary_next'] = 'Weiter';
-$lang["summary_Geburtsu"] = "Geburtsurkunde";
-$lang["summary_Maturaze"] = "Schul- bzw. Lehrabschlusszeugnis";
-$lang["summary_Staatsbn"] = "Staatsbürgerschaftsnachweis";
-$lang["summary_Lichtbil"] = "Lichtbild";
 $lang["summary_nachgereicht"] = "wird nachgereicht";

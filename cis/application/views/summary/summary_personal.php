@@ -151,7 +151,7 @@
     <div class="row">
 		<div class="col-sm-12">
 			<div class="col-sm-4">
-				<?php echo $this->lang->line("summary_pass"); ?>
+				<?php echo $personalDocuments[$this->config->config["dokumentTypen"]["reisepass"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]; ?>
 			</div>
 			<?php
 			if((isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype !== null))
@@ -219,7 +219,7 @@
     <div class="row">
 		<div class="col-sm-12">
 			<div class="col-sm-4">
-				<?php echo $this->lang->line("summary_lebenslauf"); ?>
+				<?php echo $personalDocuments[$this->config->config["dokumentTypen"]["lebenslauf"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]; ?>
 			</div>
 			<?php
 			if((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype !== null))

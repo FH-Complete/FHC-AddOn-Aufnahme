@@ -219,7 +219,7 @@
 	</div>
     <div class="row form-upload">
 		<div class="col-sm-2">
-			<?php echo form_label($this->lang->line('requirements_letztesZeugnis'), "maturazeugnis", array("name" => "Sonst", "for" => "Sonst", "class" => "control-label")) ?>
+			<?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1], "maturazeugnis", array("name" => "Sonst", "for" => "Sonst", "class" => "control-label")) ?>
 		</div>
 		<?php
 		if((isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->mimetype !== null))

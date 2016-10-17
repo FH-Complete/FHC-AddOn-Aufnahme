@@ -24,6 +24,7 @@ class Requirements extends MY_Controller
 		$this->load->model('akte_model', "AkteModel");
 		$this->load->model('person_model', "PersonModel");
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
+		$this->load->model('dokument_model', "DokumentModel");
 		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
@@ -165,6 +166,9 @@ class Requirements extends MY_Controller
 				$akte->dokument = $dms;
 			}
 		}
+		
+		$letztGueltigesZeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["letztGueltigesZeugnis"]);
+		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["letztGueltigesZeugnis"]=>$letztGueltigesZeugnis);
 
 		if(!isset($this->_data["error"]) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])) && (!empty($this->input->post())))
 		{
@@ -600,6 +604,19 @@ class Requirements extends MY_Controller
 		else
 		{
 			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
+		}
+	}
+	
+	private function _loadDokument($dokument_kurzbz)
+	{
+		$this->DokumentModel->getDokument($dokument_kurzbz);
+		if($this->DokumentModel->isResultValid() === true)
+		{
+			return $this->DokumentModel->result->retval[0];
+		}
+		else
+		{
+			$this->_setError(true, $this->DokumentModel->getErrorMessage());
 		}
 	}
 }

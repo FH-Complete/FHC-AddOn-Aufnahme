@@ -542,9 +542,9 @@ if (!isset($plz)) $plz = null;
 			<div class="form-group <?php echo (form_error("heimatadresse") != "") ? 'has-error' : '' ?>">
 				<fieldset><?php //echo $this->lang->line('person_heimatadresse'); ?></fieldset>
 				<?php echo form_radio(array("id" => "heimatadresse", "name" => "heimatadresse", "checked"=>"checked"), null, null); ?>
-				<span><?php echo sprintf($this->lang->line("person_formHeimatadresse"), "Inland"); ?></span>
+				<span><?php echo $this->lang->line("person_formHeimatadresseInland"); ?></span>
 				<?php echo form_radio(array("id" => "heimatadresse", "name" => "heimatadresse"), null, null); ?>
-				<span><?php echo sprintf($this->lang->line("person_formHeimatadresse"), "Ausland"); ?></span>
+				<span><?php echo $this->lang->line("person_formHeimatadresseAusland"); ?></span>
 				<?php echo form_error("heimatadresse"); ?>
 			</div>
 		</div>

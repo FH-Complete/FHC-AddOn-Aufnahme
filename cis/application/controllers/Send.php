@@ -27,6 +27,7 @@ class Send extends MY_Controller {
 		$this->load->model('akte_model', "AkteModel");
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
 		$this->load->model('Dokumentprestudent_model', "DokumentPrestudentModel");
+		$this->load->model('dokument_model', "DokumentModel");
 		$this->load->helper("form");
 		$this->load->library("form_validation");
 		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
@@ -95,6 +96,10 @@ class Send extends MY_Controller {
 
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
+		
+		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
+		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
+		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"]=>$reisepass, $this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf);
 
 		$this->_data["completenessError"] = $this->_checkDataCompleteness();
 
@@ -634,6 +639,19 @@ class Send extends MY_Controller {
 		{
 			$this->_setError(true, $this->DokumentPrestudentModel->getErrorMessage());
 			return false;
+		}
+	}
+	
+	private function _loadDokument($dokument_kurzbz)
+	{
+		$this->DokumentModel->getDokument($dokument_kurzbz);
+		if($this->DokumentModel->isResultValid() === true)
+		{
+			return $this->DokumentModel->result->retval[0];
+		}
+		else
+		{
+			$this->_setError(true, $this->DokumentModel->getErrorMessage());
 		}
 	}
 }

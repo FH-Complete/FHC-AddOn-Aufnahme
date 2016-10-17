@@ -25,6 +25,7 @@ class Summary extends MY_Controller {
 		$this->load->model('studienplan_model', "StudienplanModel");
 		$this->load->model('dms_model', "DmsModel");
 		$this->load->model('akte_model', "AkteModel");
+		$this->load->model('dokument_model', "DokumentModel");
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
 		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
@@ -99,6 +100,10 @@ class Summary extends MY_Controller {
 				$akte->dokument = $dms;
 			}
 		}
+		
+		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
+		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
+		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"]=>$reisepass, $this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf);
 
 		$this->load->view('summary', $this->_data);
 	}
@@ -360,5 +365,16 @@ class Summary extends MY_Controller {
 		}
 	}
 
-
+	private function _loadDokument($dokument_kurzbz)
+	{
+		$this->DokumentModel->getDokument($dokument_kurzbz);
+		if($this->DokumentModel->isResultValid() === true)
+		{
+			return $this->DokumentModel->result->retval[0];
+		}
+		else
+		{
+			$this->_setError(true, $this->DokumentModel->getErrorMessage());
+		}
+	}
 }
