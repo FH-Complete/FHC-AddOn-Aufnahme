@@ -117,6 +117,7 @@ $config['view_login'][] = 'login/uid_login';
 
 $config['view_bewerbung_studiengang'][] = 'bewerbung/studiengang';
 $config['view_bewerbung'][] = 'person/person';
+$config['view_bewerbung'][] = 'bewerbung/spezialisierung';
 
 $config['view_contact'][] = 'person/contact';
 
