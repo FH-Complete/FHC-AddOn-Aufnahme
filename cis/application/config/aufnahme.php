@@ -97,12 +97,12 @@ $config['profiler'] = false;
 |
 */
 
-$config['menu'][] = array('href' => site_url('Studiengaenge'), 'name' => 'Studiengänge', 'id' => 'Studiengänge');
-$config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => 'meine Bewerbungen', 'id' => 'Bewerbung');
-$config['menu'][] = array('href' => site_url('Aufnahmetermine'), 'name' => 'Aufnahmetermine', 'id' => 'Aufnahmetermine');
-$config['menu'][] = array('href' => site_url('Dokumente'), 'name' => 'Dokumente', 'id' => 'Dokumente');
-$config['menu'][] = array('href' => site_url('Messages'), 'name' => 'Nachrichten', 'id' => 'Nachrichten');
-$config['menu'][] = array('href' => site_url('Downloads'), 'name' => 'Downloads', 'id' => 'Downloads');
+$config['menu'][] = array('href' => site_url('Studiengaenge'), 'name' => array('Studiengänge', 'Study Programs'), 'id' => 'Studiengänge');
+$config['menu'][] = array('href' => site_url('Bewerbung'), 'name' => array('Meine Bewerbungen', "My Applications"), 'id' => 'Bewerbung');
+$config['menu'][] = array('href' => site_url('Aufnahmetermine'), 'name' => array('Aufnahmetermine','Admission Appointments'), 'id' => 'Aufnahmetermine');
+$config['menu'][] = array('href' => site_url('Dokumente'), 'name' => array('Dokumente','Dokumente'), 'id' => 'Documents');
+$config['menu'][] = array('href' => site_url('Messages'), 'name' => array('Nachrichten','Nachrichten'), 'id' => 'Messages');
+$config['menu'][] = array('href' => site_url('Downloads'), 'name' => array('Downloads','Downloads'), 'id' => 'Downloads');
 
 /*
 |--------------------------------------------------------------------------

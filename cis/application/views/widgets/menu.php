@@ -26,7 +26,7 @@
                     <li class="<?php if (isset($data['aktiv']) && $data["aktiv"] === $item["id"]) echo 'active'; ?>">
                         <a href="<?php echo $item['href']; ?>">
                             <?php 
-								echo $item['name']." "; 
+								echo $item['name'][$this->session->sprache->index-1]." "; 
 								if(isset($data["numberOfUnreadMessages"]) && ($data["numberOfUnreadMessages"] > 0) &&($item["id"] == "Nachrichten"))
 								{
 									echo "<span class='glyphicon glyphicon-exclamation-sign red'></span>";	
