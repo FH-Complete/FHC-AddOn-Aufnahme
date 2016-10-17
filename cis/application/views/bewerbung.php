@@ -46,8 +46,20 @@ foreach ($studiengaenge as $studiengang) {
 	); ?>
                 </div>
                 <div class="col-sm-8">
-
-                    <?php $this->load_views('view_bewerbung', $data); ?>
+					<div role="tabpanel" class="tab-pane" id="daten">
+						<?php $this->load_views('view_bewerbung', $data); ?>
+						<div class="row form-row">
+							<div class="col-sm-4">
+								<div class="form-group">
+									<?php 
+									$data = array("content"=>$this->lang->line("person_speichern"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit");
+									(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
+									echo form_button($data); ?>
+								</div>
+							</div>
+						</div>
+						<?php echo form_close(); ?>
+					</div>
                 </div>
             </div>
         </div>

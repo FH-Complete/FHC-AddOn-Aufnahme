@@ -98,69 +98,55 @@ class MY_Controller extends CI_Controller
 		}
 	}
 
-	protected function getPhrase($phrase, $sprache, $oe_kurzbz = "", $orgform_kurzbz = "")
-	{
-		if (isset($this->session->userdata()["phrasen"]))
-		{
+	/**
+	 *
+	 * @param unknown $phrase
+	 * @param unknown $sprache
+	 * @param unknown $oe_kurzbz      (optional)
+	 * @param unknown $orgform_kurzbz (optional)
+	 * @return unknown
+	 */
+	function getPhrase($phrase, $sprache, $oe_kurzbz = null, $orgform_kurzbz = null) {
+		if (isset($this->session->userdata()["phrasen"])) {
 			$phrasen = $this->session->userdata()["phrasen"];
-			if (is_array($phrasen))
-			{
-				foreach ($phrasen as $p)
-				{
-					if (($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) &&
-						($p->orgform_kurzbz == $orgform_kurzbz) && ($p->sprache == $sprache))
+			if (is_array($phrasen)) {
+				$text = "";
+				$sprache = ucfirst($sprache);
+				foreach ($phrasen as $p) {
+					if (($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz) && ($p->sprache == $sprache))
 					{
 						if ($this->config->item('display_phrase_name'))
-							return $p->text . " <i>[$p->phrase]</i>";
+							$text = $p->text . " <i>[$p->phrase]</i>";
 						else
-							return $p->text;
+							$text = $p->text;
+					}
+					elseif (($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+					{
+						if ($this->config->item('display_phrase_name'))
+							$text = $p->text . " <i>[$p->phrase]</i>";
+						else
+							$text = $p->text;
+					}
+					elseif (($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == null) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+					{
+						if ($this->config->item('display_phrase_name'))
+							$text = $p->text . " <i>[$p->phrase]</i>";
+						else
+							$text = $p->text;
 					}
 				}
 
-				foreach ($phrasen as $p)
-				{
-					if (($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) &&
-						($p->sprache == $sprache))
-					{
-						if ($this->config->item('display_phrase_name'))
-							return $p->text . " <i>[$p->phrase]</i>";
-						else
-							return $p->text;
-					}
-				}
-
-				foreach ($phrasen as $p)
-				{
-					if (($p->phrase == $phrase) && ($p->sprache == $sprache))
-					{
-						if ($this->config->item('display_phrase_name'))
-							return $p->text . " <i>[$p->phrase]</i>";
-						else
-							return $p->text;
-					}
-				}
-
-				foreach ($phrasen as $p)
-				{
-					if (($p->phrase == $phrase))
-					{
-						if ($this->config->item('display_phrase_name'))
-							return $p->text . " <i>[$p->phrase]</i>";
-						else
-							return $p->text;
-					}
-				}
+				if($text != "")
+					return $text;
 				
 				if ($this->config->item('display_phrase_name'))
 					return "<i>[$phrase]</i>";
 			}
-			else
-			{
+			else {
 				return $phrasen;
 			}
 		}
-		else
-		{
+		else {
 			return "please load phrases first";
 		}
 	}
@@ -211,7 +197,6 @@ class MY_Controller extends CI_Controller
 		$this->MessageModel->getMessagesByPersonId($person_id);
 		if($this->MessageModel->isResultValid() === true)
 		{
-			//     var_dump($this->MessageModel->result);
 			return $this->MessageModel->result->retval;
 		}
 		else

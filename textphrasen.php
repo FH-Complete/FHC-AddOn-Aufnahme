@@ -769,6 +769,108 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => 'Diese Seite verwendet Cookies. Wenn Sie weiter diese Seite lesen, stimmen Sie unserer Verwendung von Cookies zu.',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'Aufnahme/Spezialisierung',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => '<div class="row form-row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="control-label">Spezialisierung 1</label>
+						<select class="form-control" name="spezialisierung[]">
+							<option value="Spez 1">Spez 1</option>
+							<option value="Spez 2">Spez 2</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row form-row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="control-label">Spezialisierung 2</label>
+						<select class="form-control" name="spezialisierung[]">
+							<option value="Spez 1">Spez 1</option>
+							<option value="Spez 2">Spez 2</option>
+						</select>
+					</div>
+				</div>
+			</div>',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Aufnahme/Spezialisierung',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '<div class="row form-row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="control-label">Spezialisierung 1</label>
+						<select class="form-control" name="spezialisierung[]">
+							<option value="Spez 1">Spez 1</option>
+							<option value="Spez 2">Spez 2</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row form-row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="control-label">Spezialisierung 2</label>
+						<select class="form-control" name="spezialisierung[]">
+							<option value="Spez 1">Spez 1</option>
+							<option value="Spez 2">Spez 2</option>
+						</select>
+					</div>
+				</div>
+			</div>',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Personal/SpezialisierungHeader',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => 'Spezialisierung',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Personal/SpezialisierungHeader',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => 'Specialzation',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Personal/SpezialisierungText',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => '',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'Personal/SpezialisierungText',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '',
+			'description' => ''
+		)
 	)
 );
 

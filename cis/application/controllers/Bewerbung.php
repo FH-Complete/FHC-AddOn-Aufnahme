@@ -73,6 +73,9 @@ class Bewerbung extends MY_Controller
 				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 				$studiengang->studienplan = $studienplan;
 				
+				$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+				$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+				
 				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
 				{
 					$this->_data["bewerbung_abgeschickt"] = true;
@@ -315,9 +318,6 @@ class Bewerbung extends MY_Controller
 				}
 			}
 			
-//			var_dump($post);
-//			var_dump($this->_data["kontakt"]);
-			
 			if (($post["email"] != ""))
 			{
 				if(!(isset($this->_data["kontakt"]["email"])))
@@ -370,11 +370,29 @@ class Bewerbung extends MY_Controller
 				$this->_saveKontakt($kontakt);
 			}
 
-//			foreach($this->_data["kontakt"] as $key=>$kontakt)
-//			{
-//				$kontakt->kontakt = $post[$key];
-//				$this->_saveKontakt($kontakt);
-//			}
+			if((isset($post["spezialisierung"])) && (is_array($post["spezialisierung"])))
+			{
+				foreach ($this->_data["prestudent"] as $prestudent)
+				{
+					if(($prestudent->studiengang_kz === $this->input->get("studiengang_kz")) &&(empty($prestudent->spezialisierung)))
+					{
+						if ((!empty($prestudent->prestudentStatus))
+							&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+								|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) 
+						{
+							$text = "";
+							foreach($post["spezialisierung"] as $spez)
+							{
+								$text .= $spez.";";
+							}
+							$text = substr($text, 0, -1);
+							$this->_saveSpecialization($prestudent->prestudent_id, $text);
+							$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+							$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+						}
+					}
+				}
+			}
 
 			$this->_loadPerson();
 			$this->_loadKontakt();
@@ -395,7 +413,9 @@ class Bewerbung extends MY_Controller
 			
 			if((!isset($this->_data["error"])) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
 			{
-				redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+//				redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+				$this->_data["complete"] = $this->_checkDataCompleteness();
+				$this->load->view('bewerbung', $this->_data);
 			}
 			else
 			{
@@ -534,6 +554,8 @@ class Bewerbung extends MY_Controller
 			{
 				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 				$studiengang->studienplan = $studienplan;
+				$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+				$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
 				array_push($this->_data["studiengaenge"], $studiengang);
 			}
 			
@@ -740,6 +762,37 @@ class Bewerbung extends MY_Controller
 					if (unlink($file["tmp_name"][0]))
 					{
 						//removing tmp file successful
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param type $notiz_id
+	 */
+	public function deleteSpezialisierung($notiz_id, $studiengang_kz)
+	{
+		$this->_data["prestudent"] = $this->_loadPrestudent();
+
+		$this->_data["studiengaenge"] = array();
+		foreach ($this->_data["prestudent"] as $prestudent)
+		{
+			if($prestudent->studiengang_kz === $studiengang_kz)
+			{
+				$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+
+				if ((!empty($prestudent->prestudentStatus))
+					&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+						|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
+				{
+					$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+
+					if((!empty($prestudent->spezialisierung)) && ($prestudent->spezialisierung->notiz_id === $notiz_id))
+					{
+						$this->_removeSpecialization($notiz_id);
+						redirect("/Bewerbung?studiengang_kz=".$studiengang_kz."&tudienplan_id=".$prestudent->prestudentStatus->studienplan_id);
 					}
 				}
 			}
@@ -1183,7 +1236,6 @@ class Bewerbung extends MY_Controller
 					$result = $this->_deleteDms($dms_id);
 					$result->dokument_kurzbz = $dok->dokument_kurzbz;
 				}
-//				var_dump($result);
 			}
 		}
 		else
@@ -1378,7 +1430,14 @@ class Bewerbung extends MY_Controller
 		$this->PrestudentModel->getSpecialization($prestudent_id, "aufnahme/spezialisierung");
 		if ($this->PrestudentModel->isResultValid() === true)
 		{
-			return $this->PrestudentModel->result;
+			if(count($this->PrestudentModel->result->retval) === 1)
+			{
+				return $this->PrestudentModel->result->retval[0];
+			}
+			else
+			{
+				return array();
+			}
 		}
 		else
 		{
