@@ -36,7 +36,15 @@
 		<script src="<?php echo base_url('../vendor/blueimp/jquery-file-upload/js/jquery.fileupload-process.js') ?>"></script>
 		<script src="<?php echo base_url('../vendor/blueimp/jquery-file-upload/js/jquery.fileupload-validate.js') ?>"></script>
 		<script src="<?php echo base_url('../vendor/tinymce/tinymce/tinymce.min.js') ?>"></script>
-	
+		<?php
+		//Code for Google Tag Manager from configuration file
+//		echo $this->config->item('GoogleTagManagerScriptHead');
+		?>
+
 	</head>
 	
 	<body>
+		<?php
+		//Code for Google Tag Manager from configuration file
+//		echo $this->config->item('GoogleTagManagerScriptBody');
+		?>
