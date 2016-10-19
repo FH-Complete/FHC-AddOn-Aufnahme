@@ -462,8 +462,17 @@ class REST {
 		// Pass these attributes on to the curl library
 		call_user_func_array(array($this->_ci->curl, 'http_header'), $params);
 	}
-
-
+	
+	/**
+	 * 
+	 * @param type $uri
+	 * @param type $params
+	 * @return type
+	 */
+	public function postJson($uri, $params = array()) {
+		return $this->post($uri, json_encode($params), 'json');
+	} 
+	
 	/**
 	 * _format_response
 	 *
