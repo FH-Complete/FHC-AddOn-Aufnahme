@@ -24,7 +24,7 @@ class Akte_model extends MY_Model
 	 * @return unknown
 	 */
 	public function saveAkte($data) {
-		if ($restquery = $this->rest->post('crm/akte/akte', $data)) {
+		if ($restquery = $this->rest->postJson('crm/akte/akte', $data)) {
 			$this->result = $restquery;
 			return true;
 		}

@@ -113,7 +113,7 @@ class CheckSystem extends MY_Controller
 				$this->benchmark->mark('foreach_start');
 				foreach($studiengaenge as $stg)
 				{
-					if($stg->onlinebewerbung === "t")
+					if($stg->onlinebewerbung === true)
 					{
 						$this->benchmark->mark('codepart_start');
 						$stg->fristen = $this->_getBewerbungstermine($stg->studiengang_kz, $data["studiensemester"]->studiensemester_kurzbz);

@@ -49,7 +49,7 @@ class Prestudent_model extends MY_Model
 	 */
 	public function savePrestudent($data)
 	{
-		if ($restquery = $this->rest->post('crm/prestudent/prestudent', $data))
+		if ($restquery = $this->rest->postJson('crm/prestudent/prestudent', $data))
 		{
 			$this->result = $restquery;
 			return true;
@@ -76,7 +76,7 @@ class Prestudent_model extends MY_Model
 		$data->anmeldedatum = date('Y-m-d');
 		$data->studienplan_id = $studienplan_id;
 
-		if ($restquery = $this->rest->post('crm/prestudent/addReihungstest', $data))
+		if ($restquery = $this->rest->postJson('crm/prestudent/addReihungstest', $data))
 		{
 			$this->result = $restquery;
 			return true;
@@ -89,7 +89,7 @@ class Prestudent_model extends MY_Model
 
 	public function deleteRegistrationToReihungstest($reihungstest)
 	{
-		if ($restquery = $this->rest->post('crm/prestudent/delReihungstest', $reihungstest))
+		if ($restquery = $this->rest->postJson('crm/prestudent/delReihungstest', $reihungstest))
 		{
 			$this->result = $restquery;
 			return true;
@@ -147,7 +147,7 @@ class Prestudent_model extends MY_Model
 	 */
 	public function removeSpecialization($notiz_id)
 	{
-		if ($restquery = $this->rest->post('crm/prestudent/rmspecialization', array("notiz_id" => $notiz_id)))
+		if ($restquery = $this->rest->postJson('crm/prestudent/rmspecialization', array("notiz_id" => $notiz_id)))
 		{
 			$this->result = $restquery;
 			return true;
@@ -165,7 +165,7 @@ class Prestudent_model extends MY_Model
 	 */
 	public function saveSpecialization($prestudent_id, $titel, $text)
 	{
-		if ($restquery = $this->rest->post('crm/prestudent/specialization', array("prestudent_id" => $prestudent_id, "titel" => $titel, "text" => $text)))
+		if ($restquery = $this->rest->postJson('crm/prestudent/specialization', array("prestudent_id" => $prestudent_id, "titel" => $titel, "text" => $text)))
 		{
 			$this->result = $restquery;
 			return true;

@@ -50,7 +50,7 @@
 		<div class="col-sm-11">
 		    <?php echo form_radio(array("id" => "geschlecht_m", "name" => "geschlecht"), "m" , (isset($person->geschlecht) && $person->geschlecht=="m") ? true : false); ?>
 		    <span><?php echo $this->lang->line("aufnahme/Maennlich"); ?></span>
-		    <?php echo form_radio(array("id" => "geschlecht_f", "name" => "geschlecht"), "f", (isset($person->geschlecht) && $person->geschlecht=="f") ? true : false); ?>
+		    <?php echo form_radio(array("id" => "geschlecht_f", "name" => "geschlecht"), 'f', (isset($person->geschlecht) && $person->geschlecht=='f') ? true : false); ?>
 		    <span><?php echo $this->lang->line("aufnahme/Weiblich"); ?></span>
 		    <?php echo form_error("geschlecht"); ?>
 		</div>

@@ -24,7 +24,7 @@ class Dokumentprestudent_model extends MY_Model
 	 * @return boolean
 	 */
 	public function setAccepted($prestudent_id, $studiengang_kz) {
-		if ($restquery = $this->rest->post('crm/Dokumentprestudent/SetAccepted', array("prestudent_id"=>$prestudent_id, "studiengang_kz"=>$studiengang_kz))) {
+		if ($restquery = $this->rest->postJson('crm/Dokumentprestudent/SetAccepted', array("prestudent_id"=>$prestudent_id, "studiengang_kz"=>$studiengang_kz))) {
 			$this->result = $restquery;
 			return true;
 		}
@@ -40,7 +40,7 @@ class Dokumentprestudent_model extends MY_Model
 	 * @return boolean
 	 */
 	public function setAcceptedDocuments($prestudent_id, $studiengang_kz, $dokument_kurzbz_array) {
-		if ($restquery = $this->rest->post('crm/Dokumentprestudent/SetAcceptedDocuments', array("prestudent_id"=>$prestudent_id, "studiengang_kz"=>$studiengang_kz, "dokument_kurzbz"=>$dokument_kurzbz_array))) {
+		if ($restquery = $this->rest->postJson('crm/Dokumentprestudent/SetAcceptedDocuments', array("prestudent_id"=>$prestudent_id, "studiengang_kz"=>$studiengang_kz, "dokument_kurzbz"=>$dokument_kurzbz_array))) {
 			$this->result = $restquery;
 			return true;
 		}

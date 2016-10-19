@@ -52,7 +52,7 @@ class Message_model extends MY_Model
 	 * @return unknown
 	 */
 	public function sendMessage($data) {
-		if ($restquery = $this->rest->post('system/message/message', $data)) {
+		if ($restquery = $this->rest->postJson('system/message/message', $data)) {
 			$this->result = $restquery;
 			return true;
 		}
@@ -92,7 +92,7 @@ class Message_model extends MY_Model
 			$message["sender_id"] = $sender_id;
 		}
 
-		if ($restquery = $this->rest->post('system/message/messageVorlage', $message)) {
+		if ($restquery = $this->rest->postJson('system/message/messageVorlage', $message)) {
 			$this->result = $restquery;
 			return true;
 		}
@@ -102,7 +102,7 @@ class Message_model extends MY_Model
 
 
 	public function changeMessageStatus($person_id, $message_id, $status) {
-		if ($restquery = $this->rest->post('system/message/changeStatus', array("person_id" => $person_id, "message_id"=>$message_id, "status"=>$status))) {
+		if ($restquery = $this->rest->postJson('system/message/changeStatus', array("person_id" => $person_id, "message_id"=>$message_id, "status"=>$status))) {
 			$this->result = $restquery;
 			return true;
 		}

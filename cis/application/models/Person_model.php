@@ -65,7 +65,7 @@ class Person_model extends MY_Model
 	 * @return unknown
 	 */
 	public function savePerson($data) {
-		if ($restquery = $this->rest->post('person/person/person', $data)) {
+		if ($restquery = $this->rest->postJson('person/person/person', $data)) {
 			$this->result = $restquery;
 			return true;
 		}
@@ -76,7 +76,7 @@ class Person_model extends MY_Model
 
 
 	public function updatePerson($data) {
-		if ($restquery = $this->rest->post('person/person/person', $data)) {
+		if ($restquery = $this->rest->postJson('person/person/person', $data)) {
 			$this->result = $restquery;
 			return true;
 		}

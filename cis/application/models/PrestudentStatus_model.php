@@ -38,7 +38,7 @@ class PrestudentStatus_model extends MY_Model
 	 */
 	public function savePrestudentStatus($data)
 	{
-		if ($restquery = $this->rest->post('crm/prestudentstatus/prestudentstatus', $data))
+		if ($restquery = $this->rest->postJson('crm/prestudentstatus/prestudentstatus', $data))
 		{
 			$this->result = $restquery;
 			return true;

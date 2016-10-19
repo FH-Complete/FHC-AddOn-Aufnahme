@@ -252,11 +252,11 @@ class Summary extends MY_Controller {
 		{
 			foreach($this->AdresseModel->result->retval as $adresse)
 			{
-				if($adresse->heimatadresse == "t")
+				if($adresse->heimatadresse == true)
 				{
 					$this->_data["adresse"] = $adresse;
 				}
-				else if(($adresse->heimatadresse == "f") && ($adresse->zustelladresse == "t"))
+				else if(($adresse->heimatadresse == false) && ($adresse->zustelladresse == true))
 				{
 					$this->_data["zustell_adresse"] = $adresse;
 				}

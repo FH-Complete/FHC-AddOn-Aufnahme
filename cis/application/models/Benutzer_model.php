@@ -23,7 +23,7 @@ class Benutzer_model extends MY_Model
 	 * @return unknown
 	 */
 	public function getBenutzer($uid) {
-		if ($restquery = $this->rest->get('person/benutzer/benutzer', array("uid" => $uid, 'json'))) {
+		if ($restquery = $this->rest->get('person/benutzer/benutzer', array("uid" => $uid))) {
 			$this->result = $restquery;
 			return true;
 		}

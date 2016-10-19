@@ -114,7 +114,7 @@ class Dokumente extends MY_Controller {
 						$akte->dokument_kurzbz = $obj->dokument_kurzbz;
 						$akte->titel = $key;
 						$akte->insertvon = 'online';
-						$akte->nachgereicht = 'f';
+						$akte->nachgereicht = false;
 
 						unset($akte->uid);
 						unset($akte->inhalt_vorhanden);
@@ -275,7 +275,7 @@ class Dokumente extends MY_Controller {
 
 			foreach($this->_data["dokumente"] as $dok)
 			{
-				if(($dok->dms_id === $dms_id) && ($dok->accepted =='f'))
+				if(($dok->dms_id === $dms_id) && ($dok->accepted ==false))
 				{
 					$result = $this->_deleteDms($dms_id);
 					$result->dokument_kurzbz = $dok->dokument_kurzbz;
@@ -379,7 +379,7 @@ class Dokumente extends MY_Controller {
 							$akte->dokument_kurzbz = $obj->dokument_kurzbz;
 							$akte->titel = $key;
 							$akte->insertvon = 'online';
-							$akte->nachgereicht = 'f';
+							$akte->nachgereicht = false;
 
 							unset($akte->uid);
 							unset($akte->inhalt_vorhanden);
@@ -736,7 +736,7 @@ class Dokumente extends MY_Controller {
 						$doks = $this->_loadDokumentByStudiengang($prestudent->studiengang_kz);
 						foreach($doks as $dok)
 						{
-							if((!isset($this->_data["dokumente"][$dok->dokument_kurzbz])) && ($dok->pflicht == "t"))
+							if((!isset($this->_data["dokumente"][$dok->dokument_kurzbz])) && ($dok->pflicht == true))
 							{
 								$result->complete = false;
 							}
@@ -768,7 +768,7 @@ class Dokumente extends MY_Controller {
 							$doks = $this->_loadDokumentByStudiengang($prestudent->studiengang_kz);
 							foreach($doks as $dok)
 							{
-								if((!isset($this->_data["dokumente"][$dok->dokument_kurzbz])) && ($dok->pflicht == "t"))
+								if((!isset($this->_data["dokumente"][$dok->dokument_kurzbz])) && ($dok->pflicht == true))
 								{
 									$result->complete = false;
 								}

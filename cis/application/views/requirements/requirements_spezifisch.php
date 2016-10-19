@@ -16,7 +16,7 @@
 			<div class="col-sm-4">
 				<?php
 					//echo form_label($this->lang->line('requirements_'.$dok->dokument_kurzbz), $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
-					$p = ($dok->pflicht == 't') ? ' *' : '';
+					$p = ($dok->pflicht == true) ? ' *' : '';
 
 					echo form_label($dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1].$p, $dok->dokument_kurzbz, array("name" => $dok->dokument_kurzbz, "for" => $dok->dokument_kurzbz, "class" => "control-label"));
 				?>
@@ -97,7 +97,7 @@
 			<div class="col-sm-5">
 				<div class="form-group" id="<?php echo $dok->dokument_kurzbz.'_hochgeladen'; ?>">
 					<?php
-						if ((!isset($dokumente[$dok->dokument_kurzbz])) || ($dokumente[$dok->dokument_kurzbz]->nachgereicht === "t"))
+						if ((!isset($dokumente[$dok->dokument_kurzbz])) || ($dokumente[$dok->dokument_kurzbz]->nachgereicht === true))
 						{
 							echo $this->lang->line('requirements_keinDokHochgeladen');
 						}
@@ -112,10 +112,10 @@
 						<div class="progress-bar progress-bar-success"></div>
 					</div>
 				</div>
-				<div class="checkbox" style="<?php echo ($dok->pflicht == 'f') ? 'visibility: hidden;' : ''; ?>">
+				<div class="checkbox" style="<?php echo ($dok->pflicht == false) ? 'visibility: hidden;' : ''; ?>">
 					<label>
 						<?php
-							$data = array('id' => $dok->dokument_kurzbz.'_nachgereicht_'.$studiengang->studienplan->studienplan_id, 'class'=>'nachreichen_checkbox', 'name' => $dok->dokument_kurzbz.'_nachgereicht', "checked" => (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+							$data = array('id' => $dok->dokument_kurzbz.'_nachgereicht_'.$studiengang->studienplan->studienplan_id, 'class'=>'nachreichen_checkbox', 'name' => $dok->dokument_kurzbz.'_nachgereicht', "checked" => (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht === true)) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
 							(isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 							(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
 							echo form_checkbox($data);
@@ -158,13 +158,13 @@
 
 					<!-- The fileinput-button span is used to style the file input field as button -->
 					<div id="<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
-						<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f") && ($dokumente[$dok->dokument_kurzbz]->dms_id != null) && ($dokumente[$dok->dokument_kurzbz]->accepted ==='f')) { ?>
-							<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$dok->dokument_kurzbz]->accepted ==='t')) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
+						<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == false) && ($dokumente[$dok->dokument_kurzbz]->dms_id != null) && ($dokumente[$dok->dokument_kurzbz]->accepted ===false)) { ?>
+							<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$dok->dokument_kurzbz]->accepted ===true)) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
 						<?php
 						}
 						?>
 					</div>
-					<div id="<?php echo $dok->dokument_kurzbz; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
+					<div id="<?php echo $dok->dokument_kurzbz; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == false)) ? 'display: none;' : ''; ?>">
 						<span class="btn btn-success fileinput-button">
 							<i class="glyphicon glyphicon-plus"></i>
 							<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
@@ -288,7 +288,7 @@
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
 		
-		<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == "f"))
+		<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == false))
 		{
 		?>
 			//$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload().prop("disabled", true);

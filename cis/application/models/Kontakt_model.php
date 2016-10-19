@@ -24,7 +24,7 @@ class Kontakt_model extends MY_Model
 	 * @return unknown
 	 */
 	public function saveKontakt($data) {
-		if ($restquery = $this->rest->post('person/kontakt/kontakt', $data)) {
+		if ($restquery = $this->rest->postJson('person/kontakt/kontakt', $data)) {
 			$this->result = $restquery;
 			return true;
 		}

@@ -24,7 +24,7 @@ class Dms_model extends MY_Model
 	 * @return unknown
 	 */
 	public function saveDms($data) {
-		if ($restquery = $this->rest->post('content/dms/dms', $data)) {
+		if ($restquery = $this->rest->postJson('content/dms/dms', $data)) {
 			$this->result = $restquery;
 			return true;
 		}
@@ -55,7 +55,7 @@ class Dms_model extends MY_Model
 	 * @return unknown
 	 */
 	public function deleteDms($person_id, $dms_id) {
-		if ($restquery = $this->rest->post('content/dms/deldms', array("person_id"=>$person_id, "dms_id"=>$dms_id))) {
+		if ($restquery = $this->rest->postJson('content/dms/deldms', array("person_id"=>$person_id, "dms_id"=>$dms_id))) {
 			$this->result = $restquery;
 			return true;
 		}

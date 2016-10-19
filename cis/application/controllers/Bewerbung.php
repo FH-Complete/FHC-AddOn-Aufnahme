@@ -85,11 +85,6 @@ class Bewerbung extends MY_Controller
 			}
 		}
 
-//		if (count($this->_data["studiengaenge"]) == 0)
-//		{
-//			redirect("/Studiengaenge");
-//		}
-
 		//load adress data
 		$this->_loadAdresse();
 
@@ -148,6 +143,8 @@ class Bewerbung extends MY_Controller
 			$post = $this->input->post();
 			$person = $this->_data["person"];
 			$person->anrede = $post["anrede"];
+			$person->vorname = $post["vorname"];
+			$person->nachname = $post["nachname"];
 			//$person->bundesland_code = $post["bundesland"];
 			
 			if (isset($post["gebdatum"]))
@@ -183,7 +180,7 @@ class Bewerbung extends MY_Controller
 			$person->titelpost = $post["titelpost"];
 
 			$this->_savePerson($person);
-
+			
 			$adresse = new stdClass();
 			$zustell_adresse = new stdClass();
 
@@ -203,7 +200,7 @@ class Bewerbung extends MY_Controller
 
 					if (($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
 					{
-						$adresse->zustelladresse = "f";
+						$adresse->zustelladresse = false;
 					}
 					else
 					{
@@ -244,7 +241,7 @@ class Bewerbung extends MY_Controller
 
 					if (($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
 					{
-						$adresse->zustelladresse = "f";
+						$adresse->zustelladresse = false;
 					}
 					else
 					{
@@ -271,8 +268,8 @@ class Bewerbung extends MY_Controller
 					else
 					{
 						$zustell_adresse->person_id = $this->_data["person"]->person_id;
-						$zustell_adresse->heimatadresse = "f";
-						$zustell_adresse->zustelladresse = "t";
+						$zustell_adresse->heimatadresse = false;
+						$zustell_adresse->zustelladresse = true;
 					}
 
 					$zustell_adresse->strasse = $post["zustell_strasse"];
@@ -310,8 +307,8 @@ class Bewerbung extends MY_Controller
 					else
 					{
 						$zustell_adresse->person_id = $this->_data["person"]->person_id;
-						$zustell_adresse->heimatadresse = "f";
-						$zustell_adresse->zustelladresse = "t";
+						$zustell_adresse->heimatadresse = false;
+						$zustell_adresse->zustelladresse = true;
 					}
 
 					$zustell_adresse->strasse = $post["zustell_strasse"];
@@ -341,7 +338,7 @@ class Bewerbung extends MY_Controller
 				$this->_saveKontakt($kontakt);
 			}
 
-			if (($post["telefon"] != ""))
+			if ((isset($post["telefon"])) && ($post["telefon"] != ""))
 			{
 				if(!(isset($this->_data["kontakt"]["telefon"])))
 				{
@@ -358,7 +355,7 @@ class Bewerbung extends MY_Controller
 				$this->_saveKontakt($kontakt);
 			}
 
-			if (($post["fax"] != ""))
+			if ((isset($post["fax"])) && ($post["fax"] != ""))
 			{
 				if(!(isset($this->_data["kontakt"]["fax"])))
 				{
@@ -717,7 +714,7 @@ class Bewerbung extends MY_Controller
 							$akte->dokument_kurzbz = $obj->dokument_kurzbz;
 							$akte->titel = $key;
 							$akte->insertvon = 'online';
-							$akte->nachgereicht = 'f';
+							$akte->nachgereicht = false;
 
 							unset($akte->uid);
 							unset($akte->inhalt_vorhanden);
@@ -885,11 +882,11 @@ class Bewerbung extends MY_Controller
 		{
 			foreach($this->AdresseModel->result->retval as $adresse)
 			{
-				if ($adresse->heimatadresse == "t")
+				if ($adresse->heimatadresse == true)
 				{
 					$this->_data["adresse"] = $adresse;
 				}
-				else if (($adresse->heimatadresse == "f") && ($adresse->zustelladresse == "t"))
+				else if (($adresse->heimatadresse == false) && ($adresse->zustelladresse == true))
 				{
 					$this->_data["zustell_adresse"] = $adresse;
 				}
@@ -1240,7 +1237,7 @@ class Bewerbung extends MY_Controller
 
 			foreach($this->_data["dokumente"] as $dok)
 			{
-				if(($dok->dms_id === $dms_id) && ($dok->accepted =='f'))
+				if(($dok->dms_id === $dms_id) && ($dok->accepted ==false))
 				{
 					$result = $this->_deleteDms($dms_id);
 					$result->dokument_kurzbz = $dok->dokument_kurzbz;

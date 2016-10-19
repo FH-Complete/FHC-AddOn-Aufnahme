@@ -28,7 +28,7 @@
 	{
 		if(isset($dok->pflicht))
 		{
-			$p = ($dok->pflicht == 't') ? ' *' : '';
+			$p = ($dok->pflicht == true) ? ' *' : '';
 		}
 		else
 		{
@@ -130,11 +130,11 @@
 			</div>
 			<div class="col-sm-2">
 				<?php
-					if((isset($dok->dokument->nachgereicht)) && ($dok->dokument->nachgereicht == "t"))
+					if((isset($dok->dokument->nachgereicht)) && ($dok->dokument->nachgereicht == true))
 					{
 						echo $this->lang->line("dokumente_formNachgereicht");
 					}
-					elseif((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->accepted === 't'))
+					elseif((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->accepted === true))
 					{
 						echo $this->lang->line("dokumente_formAkzeptiert");
 					}
@@ -143,7 +143,7 @@
 			<div class="col-sm-1">
 				<div id="<?php echo $dok->dokument_kurzbz;?>_delete">
 				<?php
-				if((isset($dok->dokument)) && ($dok->dokument->dms_id != null) && ($dokumente[$dok->dokument_kurzbz]->accepted=='f'))
+				if((isset($dok->dokument)) && ($dok->dokument->dms_id != null) && ($dokumente[$dok->dokument_kurzbz]->accepted == false))
 				{
 				?>
 					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dok->dokument->dms_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>

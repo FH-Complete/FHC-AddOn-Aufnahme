@@ -24,7 +24,7 @@ class Adresse_model extends MY_Model
 	 * @return unknown
 	 */
 	public function saveAdresse($data) {
-		if ($restquery = $this->rest->post('person/adresse/adresse', $data)) {
+		if ($restquery = $this->rest->postJson('person/adresse/adresse', $data)) {
 			$this->result = $restquery;
 			return true;
 		}

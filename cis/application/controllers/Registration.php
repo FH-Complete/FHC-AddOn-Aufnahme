@@ -288,7 +288,7 @@ class Registration extends MY_Controller {
 		$person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . " +".$this->config->item('invalidateRegistrationTimestampAfter')." hours"));
 		$person->insertvon = 'online';
 		$person->vornamen = "";
-		$person->aktiv = "t";
+		$person->aktiv = true;
 		$person->geschlecht = "u";
 		$person->sprache = ucfirst($this->_data["sprache"]);
 
@@ -341,8 +341,8 @@ class Registration extends MY_Controller {
 
 					//      $adresse = new stdClass();
 					//      $adresse->person_id =$person_id;
-					//      $adresse->heimatadresse = "t";
-					//      $adresse->zustelladresse = "f";
+					//      $adresse->heimatadresse = true;
+					//      $adresse->zustelladresse = false;
 					////      $adresse->ort = $data["wohnort"];
 					//
 					//      $this->_saveAdresse($adresse);
