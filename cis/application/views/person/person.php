@@ -9,9 +9,25 @@ if (!isset($plz)) $plz = null;
 
 ?>
 <script type="text/javascript">
-
+	function toggleSVNR()
+	{
+		var code = $('#staatsbuergerschaft option:selected').val();
+		if(code === 'A')
+		{
+			$(".svnr_row").show();
+		}
+		else
+		{
+			$(".svnr_row").hide();
+		}
+	}
     $(document).ready(function() {
-
+		$('#staatsbuergerschaft').on("change", function(){
+			toggleSVNR();
+		});
+		
+		toggleSVNR();
+		
 		$(".datepicker").datepicker({
 			dateFormat: "dd.mm.yy",
 			maxDate: new Date(),
@@ -508,13 +524,13 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 	</div>
-	<div class="row form-row">
+	<div class="row form-row svnr_row">
 		<div class="col-sm-6">
 			<div class="form-group <?php echo (form_error("svnr") != "") ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formSvn'), "svnr", array("name" => "svnr", "for" => "svnr", "class" => "control-label")) ?>
 				<?php echo form_input(array('id' => 'svnr_orig', 'name' => 'svnr_orig', "type" => "hidden", "value" => set_value("svnr", (isset($person->svnr) ? $person->svnr : "")), "class" => "form-control")); ?>
 				<?php 
-				$data = array('id' => 'svnr', 'name' => 'svnr', "type" => "text", "value" => set_value("svnr", (isset($person->svnr) ? mb_substr($person->svnr, 0, 10) : "")), "class" => "form-control");
+				$data = array('id' => 'svnr', 'name' => 'svnr', "type" => "text", "value" => set_value("svnr", (isset($person->svnr) ? mb_substr($person->svnr, 0, 10) : "")), "class" => "form-control", 'placeholder'=>'XXXXTTMMJJ');
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 				echo form_input($data); ?>
 				<?php echo form_error("svnr"); ?>
@@ -525,7 +541,7 @@ if (!isset($plz)) $plz = null;
 				<fieldset><?php echo $this->lang->line('person_geschlecht'); ?></fieldset>
 				<?php echo form_radio(array("id" => "geschlecht_m", "name" => "geschlecht"), "m" , (isset($person->geschlecht) && $person->geschlecht=="m") ? true : false); ?>
 				<span><?php echo $this->lang->line("person_formMaennlich"); ?></span>
-				<?php echo form_radio(array("id" => "geschlecht_f", "name" => "geschlecht"), "f", (isset($person->geschlecht) && $person->geschlecht=="f") ? true : false); ?>
+				<?php echo form_radio(array("id" => "geschlecht_f", "name" => "geschlecht"), 'f', (isset($person->geschlecht) && $person->geschlecht=='f') ? true : false); ?>
 				<span><?php echo $this->lang->line("person_formWeiblich"); ?></span>
 				<?php echo form_error("geschlecht"); ?>
 			</div>
@@ -724,7 +740,7 @@ if (!isset($plz)) $plz = null;
 			<div class="form-group <?php echo (form_error("telefon") != "") ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_telefon'), "telefon", array("name" => "telefon", "for" => "telefon", "class" => "control-label")) ?>
 				<?php 
-				$data = array('id' => 'telefon', 'name' => 'telefon', "type" => "text", "value" => set_value("telefon", isset($kontakt["telefon"]) ? $kontakt["telefon"]->kontakt : "" ), "class" => "form-control");
+				$data = array('id' => 'telefon', 'name' => 'telefon', "type" => "text", "value" => set_value("telefon", isset($kontakt["telefon"]) ? $kontakt["telefon"]->kontakt : "" ), "class" => "form-control", "placeholder"=>"0664 1234213");
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 				echo form_input($data); ?>
 				<?php echo form_error("telefon"); ?>
@@ -829,7 +845,7 @@ if (!isset($plz)) $plz = null;
 		<div class="col-sm-6">
 			<div class="form-group" id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_hochgeladen_<?php echo $studiengang->studienplan->studienplan_id; ?>">
 				<?php
-					if ((!isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]])) || ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === "t"))
+					if ((!isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]])) || ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === true))
 					{
 						echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
 					}
@@ -847,7 +863,7 @@ if (!isset($plz)) $plz = null;
 		<!--<div class="checkbox">
 		<label>
 			<?php
-				$data = array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+				$data = array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === true)) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
 				(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 				echo form_checkbox($data);
 				echo $this->lang->line('person_formNachgereicht')
@@ -870,13 +886,13 @@ if (!isset($plz)) $plz = null;
 
 			<!-- The fileinput-button span is used to style the file input field as button -->
 			<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
-				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]])) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->accepted == "f")) { ?>
-					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->accepted ==='t')) ? "disabled='disabled'":"";?> ><span class="glyphicon glyphicon-trash"></span></button>
+				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]])) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht == false) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->accepted == false)) { ?>
+					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->accepted === true)) ? "disabled='disabled'":"";?> ><span class="glyphicon glyphicon-trash"></span></button>
 				<?php
 				}
 				?>
 			</div>
-			<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
+			<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht == false)) ? 'display: none;' : ''; ?>">
 				<span class="btn btn-success fileinput-button">
 					<i class="glyphicon glyphicon-plus"></i>
 					<span><?php echo $this->lang->line("aufnahme_dateiAuswahl"); ?></span>
@@ -952,7 +968,7 @@ if (!isset($plz)) $plz = null;
 
 			<div class="form-group" id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_hochgeladen_<?php echo $studiengang->studienplan->studienplan_id; ?>">
 				<?php
-					if ((!isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) || ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === "t"))
+					if ((!isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) || ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === true))
 					{
 						echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen');
 					}
@@ -970,7 +986,7 @@ if (!isset($plz)) $plz = null;
 		<!--<div class="checkbox">
 		<label>
 			<?php
-				$data = array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === "t")) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+				$data = array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === true)) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
 				(isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 				echo form_checkbox($data);
 				echo $this->lang->line('person_formNachgereicht')
@@ -993,13 +1009,13 @@ if (!isset($plz)) $plz = null;
 
 			<!-- The fileinput-button span is used to style the file input field as button -->
 			<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
-				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht == "f") && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->accepted == "f")) { ?>
-				<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->accepted ==='t')) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
+				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht == false) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->accepted == false)) { ?>
+				<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->accepted === true)) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
 				<?php
 				}
 				?>
 			</div>
-			<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht == "f")) ? 'display: none;' : ''; ?>">
+			<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht == false)) ? 'display: none;' : ''; ?>">
 				<span class="btn btn-success fileinput-button">
 					<i class="glyphicon glyphicon-plus"></i>
 					<span><?php echo $this->lang->line("aufnahme_dateiAuswahl"); ?></span>
