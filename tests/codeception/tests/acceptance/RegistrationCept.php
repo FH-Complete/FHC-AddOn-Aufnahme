@@ -65,4 +65,4 @@ $I->seeInCurrentUrl("/aufnahme/cis/index.dist.php/Studiengaenge");
 
 // Checks if elements are present in login page
 $I->seeElement("h2[class=\"stg_header\"]");
-$I->see("Studiengänge Auswahl:");
+$I->see("Studiengang Auswahl:");
