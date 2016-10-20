@@ -11,6 +11,14 @@ $this->lang->load(array('aufnahme', 'termine'), $sprache);
 $this->load->view('templates/cookieHeader');
 $this->load->view('templates/metaHeader');
 
+if((($this->config->item("GoogleTagManager") === true) && (isset($gtm)) && ($gtm === true)))
+{
+?>
+	<script>
+		dataLayer.push({'event': 'Bewerbung', 'eventCategory': 'Bewerbung', 'eventAction': 'Erfolgreich abgeschickt'});
+	</script>
+<?php
+}
 
 if (isset($error) && ($error->error === true))
 	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';

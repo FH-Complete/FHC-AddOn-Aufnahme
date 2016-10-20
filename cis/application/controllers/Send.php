@@ -224,7 +224,8 @@ class Send extends MY_Controller {
 							$this->_sendMessageMailApplicationConfirmation($this->_data["person"], $this->_data["studiengang"]);
 							//TODO vorlage fehlt in DB
 							$this->_sendMessageMailNewApplicationInfo($this->_data["person"], $this->_data["studiengang"]);
-							redirect("/Aufnahmetermine");
+							$time = time();
+							redirect("/Aufnahmetermine?send=".$time);
 						}
 					}
 					else

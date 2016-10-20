@@ -129,12 +129,10 @@ $config['view_studiengaenge'][] = 'studiengaenge/master';
 
 $config['view_requirements'][] = 'requirements/requirements_allgemein';
 $config['view_requirements'][] = 'requirements/requirements_spezifisch';
-//$config['view_requirements'][] = 'requirements/requirements_motivation';
 
 $config['view_summary'][] = 'summary/summary_personal';
 $config['view_summary'][] = 'summary/summary_requirements';
 $config['view_summary'][] = 'summary/summary_requirements_specific';
-//$config['view_summary'][] = 'summary/summary_motivation';
 
 $config['view_send'][] = 'send/send';
 
@@ -251,3 +249,33 @@ $config['invalidateResendTimestampAfter']  = 1;
 |--------------------------------------------------------------------------
 */
 $config['LinkDatenschutz'] = "https://www.fhstp.ac.at/de/anmeldung/datenschutz";
+
+/*
+|--------------------------------------------------------------------------
+| Aktiviert/Deaktiviert den Google Tag Manager
+|--------------------------------------------------------------------------
+*/
+$config['GoogleTagManager'] = false;
+
+/*
+|--------------------------------------------------------------------------
+| Skript des DataLayer für den GoogleTagManager
+|--------------------------------------------------------------------------
+*/
+$config['GoogleTagManagerDataLayer'] = "<script>
+			dataLayer = [];
+		  </script>";
+
+/*
+|--------------------------------------------------------------------------
+| Skript des Google Tag Managers im Html-Head
+|--------------------------------------------------------------------------
+*/
+$config['GoogleTagManagerScriptHead'] = "";
+
+/*
+|--------------------------------------------------------------------------
+| Skript des Google Tag Managers im Html-Body
+|--------------------------------------------------------------------------
+*/
+$config['GoogleTagManagerScriptBody'] = '';

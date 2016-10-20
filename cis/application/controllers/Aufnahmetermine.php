@@ -48,6 +48,16 @@ class Aufnahmetermine extends MY_Controller {
 	 */
 	public function index() {
 		$this->checkLogin();
+		
+		//workaround for inserting code for Google Tag Manager
+		if(isset($this->input->get()["send"]))
+		{
+			$time = time();
+			if(!(($time - $this->input->get()["send"]) > 5))
+			{
+				$this->_data["gtm"] = true;
+			}
+		}
 
 		$this->_data["sprache"] = $this->get_language();
 
