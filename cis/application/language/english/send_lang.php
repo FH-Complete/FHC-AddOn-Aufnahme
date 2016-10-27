@@ -29,3 +29,4 @@ $lang['send_email'] = "E-mail address";
 $lang['send_dokumenteErgaenzen'] = "Please upload the following documents:";
 $lang['send_datenUnvollstaendig'] = "Application can not be sent. Data are still incomplete.";
 $lang['send_studiengangkzFehlt'] = "The parameter Course number is missing.";
+$lang['send_FehlerDokumente'] = "An error occured sending the documents.";

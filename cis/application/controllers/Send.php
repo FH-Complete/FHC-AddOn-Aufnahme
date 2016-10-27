@@ -227,6 +227,11 @@ class Send extends MY_Controller {
 							$time = time();
 							redirect("/Aufnahmetermine?send=".$time);
 						}
+						else
+						{
+							//$this->_setError(true, $this->lang->line("send_FehlerDokumente"));
+							$this->load->view('send', $this->_data);
+						}
 					}
 					else
 					{

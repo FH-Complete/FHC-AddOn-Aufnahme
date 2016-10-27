@@ -29,3 +29,4 @@ $lang['send_email'] = "E-Mail Adresse";
 $lang['send_dokumenteErgaenzen'] = "Bitte laden Sie folgende Dokumente hoch:";
 $lang['send_datenUnvollstaendig'] = "Bewerbung kann nicht abgesendet werden. Daten sind noch unvollständig.";
 $lang['send_studiengangkzFehlt'] = "Der Parameter Studiengangkennzahl fehlt.";
+$lang['send_FehlerDokumente'] = "Beim senden der Dokumente ist ein Fehler aufgetreten.";
