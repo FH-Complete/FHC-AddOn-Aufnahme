@@ -13,7 +13,7 @@ $I->wantTo("Register me, log me and get data from DB");
 $I->amOnPage("cis/index.php");
 
 // Registration
-$I->see("Willkommen bei der Online Bewerbung");
+$I->see("Herzlich willkommen!");
 
 // Checks if elements are present
 $I->seeElement("#RegistrationLoginForm #vorname");
@@ -46,7 +46,7 @@ else {
 $I->amOnPage("cis/index.php");
 
 // Login
-$I->see("Willkommen bei der Online Bewerbung");
+$I->see("Herzlich willkommen!");
 
 // Checks if elements are present
 $I->seeElement("#LoginForm input[name=\"email\"]");
@@ -65,4 +65,4 @@ $I->seeInCurrentUrl("/aufnahme/cis/index.dist.php/Studiengaenge");
 
 // Checks if elements are present in login page
 $I->seeElement("h2[class=\"stg_header\"]");
-$I->see("Studiengänge Auswahl:");
+$I->see("Studiengang Auswahl:");
