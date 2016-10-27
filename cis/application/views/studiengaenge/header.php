@@ -8,5 +8,5 @@
 ?>
 
 <h2 class="stg_header">
-	<?php echo $this->getPhrase("Studiengaenge/Header", $sprache);?>
+	<?php echo $this->getPhrase("Studiengaenge/Header", $sprache, $this->config->item('root_oe'));?>
 </h2>

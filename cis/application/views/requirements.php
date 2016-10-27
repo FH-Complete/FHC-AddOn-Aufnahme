@@ -49,7 +49,7 @@ if (isset($error) && ($error->error === true))
             <div role="tabpanel" class="tab-pane" id="requirements">
                 <div class="row">
                     <div class="col-sm-12">
-                        <?php echo $this->getPhrase("ZGV/AdmissionRequirements", $sprache); ?>
+                        <?php echo $this->getPhrase("ZGV/AdmissionRequirements", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
                     </div>
                 </div>
 				<?php $this->load_views('view_requirements'); ?>
@@ -78,7 +78,7 @@ if (isset($error) && ($error->error === true))
 	
 	function confirmStorno(studiengang_kz)
     {
-		if(confirm("<?php echo $this->getPhrase("Bewerbung/StornoConfirmation", $sprache); ?>"))
+		if(confirm("<?php echo $this->getPhrase("Bewerbung/StornoConfirmation", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"))
 		{
 			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + "/"+ studiengang_kz;
 		}

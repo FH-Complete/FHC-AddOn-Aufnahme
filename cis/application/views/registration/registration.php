@@ -10,9 +10,9 @@
 <div id="registration">
     <?php echo form_open("Registration?studiengang_kz=".$studiengang_kz, array("id"=>"RegistrationLoginForm", "name"=>"RegistrationLoginForm", "class"=>"form-horizontal")); ?>
     <!--<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">	-->
-    <h1 class="text-center"><?php echo $this->getPhrase("Registration/RegistrationGreetingText", $sprache); ?></h1>
+    <h1 class="text-center"><?php echo $this->getPhrase("Registration/RegistrationGreetingText", $sprache, $this->config->item('root_oe')); ?></h1>
     <p class="infotext">
-	    <?php echo $this->getPhrase("Registration/RegistrationForm", $sprache); ?>
+	    <?php echo $this->getPhrase("Registration/RegistrationForm", $sprache, $sprache, $this->config->item('root_oe')); ?>
     </p>
     <div class="row">
 	<div class="col-lg-6 col-sm-6">
@@ -95,7 +95,7 @@
 		    <div class="checkbox">
 			<label>
 			    <?php echo form_checkbox(array('id' => 'datenschutz', 'name' => 'datenschutz', "checked" => isset($this->input->post()["datenschutz"]) ? TRUE : FALSE, "class"=>"datenschutz"));
-					echo $this->getPhrase("Registration/Datenschutz", $sprache);
+					echo $this->getPhrase("Registration/Datenschutz", $sprache, $this->config->item('root_oe'));
 				?>
 			</label>
 			<!--<a href="<?php echo $this->config->item('LinkDatenschutz') ? $this->config->item('LinkDatenschutz') : ''; ?>" target="_blank">Link</a>-->
@@ -122,7 +122,7 @@
 		<div class="col-sm-8 <?php echo (form_error("captcha_code") != "") ? 'has-error' : '' ?>">
 			<div class="form-group">
 				<div class="col-sm-12">
-					<?php echo $this->getPhrase("Registration/SpamProtection", $sprache); ?>
+					<?php echo $this->getPhrase("Registration/SpamProtection", $sprache, $this->config->item('root_oe')); ?>
 					<?php echo form_input(array('id' => 'captcha', 'name' => 'captcha_code', 'maxlength' => 6, "type" => "text", "class" => "form-control")); ?>
 					<?php echo form_input(array('id' => 'zugangscode', 'name' => 'zugangscode', "type" => "hidden", "value" => set_value(uniqid()))); ?>
 					<?php echo form_error("captcha_code"); ?>

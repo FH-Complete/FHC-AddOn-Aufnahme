@@ -425,9 +425,9 @@ class Registration extends MY_Controller {
 		$this->mail->setHTMLContent($text);
 		if (!$this->mail->send())
 
-			$msg = '<span class="error">' . $this->getPhrase('Registration/EmailAddressTaken', $this->_data['sprache']) . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+			$msg = '<span class="error">' . $this->getPhrase('Registration/EmailAddressTaken', $this->_data['sprache'], $this->config->item('root_oe')) . '</span><br /><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 		else
-			$msg = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache']), $email) . "<br><br><a href=" . base_url("index.dist.php") . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
+			$msg = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache'], $this->config->item('root_oe')), $email) . "<br><br><a href=" . base_url("index.dist.php") . ">" . $this->lang->line('aufnahme/zurueckZurAnmeldung') . "</a>";
 
 		return $msg;
 	}
@@ -487,7 +487,7 @@ class Registration extends MY_Controller {
 		{
 			if((isset($this->MessageModel->result->error)) && ($this->MessageModel->result->error === 0))
 			{
-				$this->_data["message"] = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache']), $email) . '<br><br><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+				$this->_data["message"] = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache'], $this->config->item('root_oe')), $email) . '<br><br><a href=' . base_url("index.dist.php") . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
 			}
 			else
 			{

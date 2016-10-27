@@ -9,10 +9,10 @@
 ?>
 <div class="panel panel-info">
     <div class="panel-heading text-center">
-	<h3 class="panel-title"><?php echo $this->getPhrase("Home/AccessCodeAvailable", $sprache); ?></h3>
+	<h3 class="panel-title"><?php echo $this->getPhrase("Home/AccessCodeAvailable", $sprache, $this->config->item('root_oe')); ?></h3>
     </div>
     <div class="panel-body text-center">
-	<p><?php echo $this->getPhrase("Home/Login", $sprache); ?></p>
+	<p><?php echo $this->getPhrase("Home/Login", $sprache, $this->config->item('root_oe')); ?></p>
 	<div class="form-group">
 	    <div class="input-group col-sm-6 col-sm-offset-3">
 		<p class="text-center"><input class="form-control" type="text" placeholder="E-Mail" name="email" autofocus="autofocus" value=""></p>

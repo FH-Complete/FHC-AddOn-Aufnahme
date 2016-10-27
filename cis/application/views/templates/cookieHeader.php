@@ -1,6 +1,6 @@
 <section id="cookie-container" style="display: block;">
 	<div class="container-fluid">
-		<p><?php echo $this->getPhrase("Aufnahme/CookieWarning", $sprache); ?></p>
+		<p><?php echo $this->getPhrase("Aufnahme/CookieWarning", $sprache, $this->config->item('root_oe')); ?></p>
 		<a class="btn" href="javascript:confirmCookies();" id="cookie-disclaimer">Ok</a>
 	</div>
 </section>

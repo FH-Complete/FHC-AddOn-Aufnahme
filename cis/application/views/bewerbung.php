@@ -73,7 +73,7 @@ $this->load->view('templates/footer');
 <script type="text/javascript">
     function confirmStorno(studiengang_kz)
     {
-		if(confirm("<?php echo $this->getPhrase("Bewerbung/StornoConfirmation", $sprache); ?>"))
+		if(confirm("<?php echo $this->getPhrase("Bewerbung/StornoConfirmation", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"))
 		{
 			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + "/"+ studiengang_kz;
 		}

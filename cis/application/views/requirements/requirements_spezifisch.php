@@ -9,7 +9,7 @@
 <legend><?php echo $this->lang->line("requirements_specific_header"); ?></legend>
 <div class="row">
     <div class="col-sm-12">
-		<fieldset><?php echo $this->getPhrase("ZGV/SpecificAdmissionRequirements", $sprache); ?></fieldset>
+		<fieldset><?php echo $this->getPhrase("ZGV/SpecificAdmissionRequirements", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></fieldset>
 		<hr>
 <?php foreach ($dokumenteStudiengang[$studiengang->studiengang_kz] as $dok) { ?>
 		<div class="row form-upload">

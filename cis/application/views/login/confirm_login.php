@@ -12,7 +12,7 @@ $this->lang->load(array('aufnahme', 'login'), $sprache);
 ?>
 
 <div class="container">
-	<?php $this->load->view('templates/iconHeader', array("header" => $this->getPhrase("Registration/HeaderConfirmation", $sprache))); ?>
+	<?php $this->load->view('templates/iconHeader', array("header" => $this->getPhrase("Registration/HeaderConfirmation", $sprache, $this->config->item('root_oe')))); ?>
     <div class="row">
 		<div id="confirm" class="col-sm-12">
 <!--			<ol class="breadcrumb">
@@ -33,7 +33,7 @@ $this->lang->load(array('aufnahme', 'login'), $sprache);
 						<?php 
 						if($zugangscode !== "")
 						{
-							echo sprintf($this->getPhrase('Home/NewPassword', $sprache), $zugangscode);
+							echo sprintf($this->getPhrase('Home/NewPassword', $sprache, $this->config->item('root_oe')), $zugangscode);
 						}
 						?>
 					</p>

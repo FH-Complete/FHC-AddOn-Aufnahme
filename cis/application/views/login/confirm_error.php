@@ -10,7 +10,7 @@ $this->load->view('templates/metaHeader');
 $this->lang->load(array('aufnahme', 'login', 'registration'), $sprache); ?>
 
 <div class="container">
-    <?php $this->load->view('templates/iconHeader', array("header" => $this->getPhrase("Registration/HeaderConfirmation", $sprache))); ?>
+    <?php $this->load->view('templates/iconHeader', array("header" => $this->getPhrase("Registration/HeaderConfirmation", $sprache, $this->config->item('root_oe')))); ?>
 	<div class="row">
 		<div id="confirm">
 			<div class="row">

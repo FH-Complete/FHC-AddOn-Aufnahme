@@ -10,10 +10,10 @@
 <div id="login">
     <div class="panel panel-info">
 	<div class="panel-heading">
-	    <h3 class="panel-title"><?php echo $this->getPhrase("Home/AccessCodeAvailable", $sprache); ?></h3>
+	    <h3 class="panel-title"><?php echo $this->getPhrase("Home/AccessCodeAvailable", $sprache, $this->config->item('root_oe')); ?></h3>
 	</div>
 	<div class="panel-body">
-	    <p><?php echo $this->getPhrase("Home/Login", $sprache); ?></p>
+	    <p><?php echo $this->getPhrase("Home/Login", $sprache, $this->config->item('root_oe')); ?></p>
 	    <form id="LoginForm" action="<?php echo base_url($this->config->config["index_page"] . '/Login'); ?>" method="POST">
 		<div class="form-group">
 		    <label><?php echo $this->lang->line('aufnahme/loginEmailAdresse'); ?></label>
