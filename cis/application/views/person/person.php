@@ -780,7 +780,6 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 	</div>
-	<hr>
 	<div class="row form-upload">
 		<div class="col-sm-2">
 			<?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["reisepass"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]."*", "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
@@ -902,7 +901,6 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 	</div>
-	<hr>
 	<div class="row form-upload">
 		<div class="col-sm-2">
 			<?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["lebenslauf"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]."*"."&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?><span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="inklusive Foto"></span>
@@ -1025,4 +1023,3 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 	</div>
-	<hr>
