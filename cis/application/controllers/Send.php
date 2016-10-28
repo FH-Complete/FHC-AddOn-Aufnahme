@@ -146,7 +146,8 @@ class Send extends MY_Controller {
 
 			if ((!empty($prestudent->prestudentStatus))
 				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
-					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) {
+				|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
+			{
 				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 				$studiengang->studienplan = $studienplan;
 				
@@ -177,66 +178,74 @@ class Send extends MY_Controller {
 			if($prestudent->studiengang_kz == $studiengang_kz)
 			{
 				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-				$studienplan = $this->_loadStudienplan($prestudentStatus->studienplan_id);
-				$this->_data["studiengang"]->studienplan = $studienplan;
-//				$this->_data["prestudentStatus"] = $prestudentStatus;
-
-				if((!empty($this->_data["completenessError"]["person"]))
-						|| (!empty($this->_data["completenessError"]["adresse"]))
-						|| (!empty($this->_data["completenessError"]["kontakt"]))
-						|| (!empty($this->_data["completenessError"]["dokumente"][$prestudent->studiengang_kz]))
-						|| (!empty($this->_data["completenessError"]["doks"])))
+				if ((!empty($prestudent->prestudentStatus))
+					&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
 				{
-					$this->_setError(true, $this->lang->line("send_datenUnvollstaendig"));
-					$this->load->view('send', $this->_data);
-				}
-				else
-				{
-					$dokument_kurzbz_array = array();
-					if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
-					{
-						array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["reisepass"]);
-					}
-					
-					if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
-					{
-						array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["lebenslauf"]);
-					}					
-					
-					if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]))
-					{
-						array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]);
-					}
-					
-					if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]))
-					{
-						array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["abschlusszeugnis"]);
-					}
-					if(is_null($prestudentStatus->bewerbung_abgeschicktamum))
-					{
-						if(($this->_setAccepted($prestudent->prestudent_id, $prestudent->studiengang_kz) === true) && ($this->_setAcceptedDocuments($prestudent->prestudent_id, $prestudent->studiengang_kz, $dokument_kurzbz_array) === true))
-						{
-							$prestudentStatus->bewerbung_abgeschicktamum=date('Y-m-d H:i:s');
-							unset($prestudentStatus->studienplan_bezeichnung);
-							unset($prestudentStatus->bezeichnung_mehrsprachig);
+					$studienplan = $this->_loadStudienplan($prestudentStatus->studienplan_id);
+					$this->_data["studiengang"]->studienplan = $studienplan;
 
-							$this->_savePrestudentStatus($prestudentStatus);
-							$this->_sendMessageMailApplicationConfirmation($this->_data["person"], $this->_data["studiengang"]);
-							//TODO vorlage fehlt in DB
-							$this->_sendMessageMailNewApplicationInfo($this->_data["person"], $this->_data["studiengang"]);
-							$time = time();
-							redirect("/Aufnahmetermine?send=".$time);
-						}
-						else
-						{
-							//$this->_setError(true, $this->lang->line("send_FehlerDokumente"));
-							$this->load->view('send', $this->_data);
-						}
+
+					if((!empty($this->_data["completenessError"]["person"]))
+							|| (!empty($this->_data["completenessError"]["adresse"]))
+							|| (!empty($this->_data["completenessError"]["kontakt"]))
+							|| (!empty($this->_data["completenessError"]["dokumente"][$prestudent->studiengang_kz]))
+							|| (!empty($this->_data["completenessError"]["doks"])))
+					{
+						$this->_setError(true, $this->lang->line("send_datenUnvollstaendig"));
+						$this->load->view('send', $this->_data);
 					}
 					else
 					{
-						$this->_setError(true, $this->lang->line("send_bereitsAbgeschickt"));
-						$this->load->view('send', $this->_data);
+						$dokument_kurzbz_array = array();
+						if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
+						{
+							array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["reisepass"]);
+						}
+
+						if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
+						{
+							array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["lebenslauf"]);
+						}					
+
+						if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]))
+						{
+							array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]);
+						}
+
+						if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]))
+						{
+							array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["abschlusszeugnis"]);
+						}
+
+
+
+						if(is_null($prestudentStatus->bewerbung_abgeschicktamum))
+						{
+							//if(($this->_setAccepted($prestudent->prestudent_id, $prestudent->studiengang_kz) === true) && ($this->_setAcceptedDocuments($prestudent->prestudent_id, $prestudent->studiengang_kz, $dokument_kurzbz_array) === true))
+							{
+								$prestudentStatus->bewerbung_abgeschicktamum=date('Y-m-d H:i:s');
+								unset($prestudentStatus->studienplan_bezeichnung);
+								unset($prestudentStatus->bezeichnung_mehrsprachig);
+
+								$this->_savePrestudentStatus($prestudentStatus);
+								$this->_sendMessageMailApplicationConfirmation($this->_data["person"], $this->_data["studiengang"]);
+								//TODO vorlage fehlt in DB
+								$this->_sendMessageMailNewApplicationInfo($this->_data["person"], $this->_data["studiengang"]);
+								$time = time();
+								redirect("/Aufnahmetermine?send=".$time);
+							}
+//							else
+//							{
+//								//$this->_setError(true, $this->lang->line("send_FehlerDokumente"));
+//								$this->load->view('send', $this->_data);
+//							}
+						}
+						else
+						{
+							$this->_setError(true, $this->lang->line("send_bereitsAbgeschickt"));
+							$this->load->view('send', $this->_data);
+						}
 					}
 				}
 			}
