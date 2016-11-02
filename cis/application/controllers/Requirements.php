@@ -51,6 +51,7 @@ class Requirements extends MY_Controller
 		$this->_data["prestudent"] = $this->_loadPrestudent();
 		
 		$this->_data["studiengaenge"] = array();
+		$this->_data["geplanter_abschluss"] = array();
 		foreach ($this->_data["prestudent"] as $prestudent)
 		{
 			if(isset($this->input->post()["studiengang_kz"]))
@@ -67,7 +68,8 @@ class Requirements extends MY_Controller
 			//load studiengaenge der prestudenten
 			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
 			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-			$this->_data["geplanter_abschluss"] = $prestudent->zgvdatum;
+			
+			$this->_data["geplanter_abschluss"][$prestudent->studiengang_kz] = $prestudent->zgvdatum; 
 
 			if ((!empty($prestudent->prestudentStatus))
 				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
@@ -177,7 +179,8 @@ class Requirements extends MY_Controller
 
 		if(!isset($this->_data["error"]) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])) && (!empty($this->input->post())))
 		{
-			redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+//			redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+			$this->load->view('requirements', $this->_data);
 		}
 		else
 		{
