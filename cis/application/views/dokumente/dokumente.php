@@ -39,51 +39,32 @@
 			<?php
 			if((isset($dokumente[$dok->dokument_kurzbz]->mimetype)) && ($dokumente[$dok->dokument_kurzbz]->mimetype !== null))
 			{
-				switch($dokumente[$dok->dokument_kurzbz]->mimetype)
+				if(isset($dokumente[$dok->dokument_kurzbz]->dokument))
 				{
-					case "application/pdf":
-						$logo = "document-pdf.svg";
-						break;
-					case "image/jpeg":
-						$logo = "document-picture.svg";
-						break;
-					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+					if(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".docx") !== false)
+					{
 						$logo = "docx.gif";
-						break;
-					default:
-						if(isset($dokumente[$dok->dokument_kurzbz]->dokument))
-						{
-							if(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".docx") !== false)
-							{
-								$logo = "docx.gif";
-								break;
-							}
-							elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".doc") !== false)
-							{
-								$logo = "docx.gif";
-								break;
-							}
-							elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".pdf") !== false)
-							{
-								$logo = "document-pdf.svg";
-								break;
-							}
-							elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".jpg") !== false)
-							{
-								$logo = "document-picture.svg";
-								break;
-							}
-							else
-							{
-								$logo = false;
-								break;
-							}
-						}
-						else
-						{
-							$logo = false;
-							break;
-						}
+					}
+					elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".doc") !== false)
+					{
+						$logo = "docx.gif";
+					}
+					elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".pdf") !== false)
+					{
+						$logo = "document-pdf.svg";
+					}
+					elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".jpg") !== false)
+					{
+						$logo = "document-picture.svg";
+					}
+					else
+					{
+						$logo = false;
+					}
+				}
+				else
+				{
+					$logo = false;
 				}
 			}
 			else
@@ -224,43 +205,25 @@
 					$('#<?php echo $dok->dokument_kurzbz; ?>Progress').hide();
 					$('#<?php echo $dok->dokument_kurzbz; ?>_logo').show();
 					var logo = "";
-					switch(data.result.mimetype)
+					if(data.result.bezeichnung.indexOf(".docx") !== false)
 					{
-						case "application/pdf":
-							logo = "document-pdf.svg";
-							break;
-						case "image/jpeg":
-							logo = "document-picture.svg";
-							break;
-						case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-							logo = "docx.gif";
-							break;
-						default:
-							if(data.result.bezeichnung.indexOf(".docx") !== false)
-							{
-								logo = "docx.gif";
-								break;
-							}
-							else if(data.result.bezeichnung.indexOf(".doc") !== false)
-							{
-								logo = "docx.gif";
-								break;
-							}
-							else if(data.result.bezeichnung.indexOf(".pdf") !== false)
-							{
-								logo = "document-pdf.svg";
-								break;
-							}
-							else if(data.result.bezeichnung.indexOf(".jpg") !== false)
-							{
-								logo = "document-picture.svg";
-								break;
-							}
-							else
-							{
-								logo = false;
-								break;
-							}
+						logo = "docx.gif";
+					}
+					else if(data.result.bezeichnung.indexOf(".doc") !== false)
+					{
+						logo = "docx.gif";
+					}
+					else if(data.result.bezeichnung.indexOf(".pdf") !== false)
+					{
+						logo = "document-pdf.svg";
+					}
+					else if(data.result.bezeichnung.indexOf(".jpg") !== false)
+					{
+						logo = "document-picture.svg";
+					}
+					else
+					{
+						logo = false;
 					}
 
 					$("#<?php echo $dok->dokument_kurzbz; ?>_logo").append('<img class="document_logo center-block" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
