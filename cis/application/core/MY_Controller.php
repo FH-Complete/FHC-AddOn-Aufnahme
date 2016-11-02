@@ -151,7 +151,7 @@ class MY_Controller extends CI_Controller
 		}
 	}
 
-	protected function _setError($bool, $msg)
+	protected function _setError($bool, $msg = null)
 	{
 		$this->_data["error"] = new stdClass();
 		$this->_data["error"]->error = $bool;

@@ -99,7 +99,6 @@ class Requirements extends MY_Controller
 	
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
-		
 		if(($this->input->post("doktype") != null) && ($this->input->post("doktype") !== ""))
 		{
 			if(isset($this->_data["dokumente"][$this->config->item('dokumentTypen')["abschlusszeugnis"]]))
@@ -137,6 +136,13 @@ class Requirements extends MY_Controller
 			}
 			
 			$this->_saveAkte($akte);
+		}
+		else
+		{
+			if(!empty($this->input->post()))
+			{
+				$this->_setError(true);
+			}
 		}
 		
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
@@ -179,8 +185,8 @@ class Requirements extends MY_Controller
 
 		if(!isset($this->_data["error"]) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])) && (!empty($this->input->post())))
 		{
-//			redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
-			$this->load->view('requirements', $this->_data);
+			redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+//			$this->load->view('requirements', $this->_data);
 		}
 		else
 		{

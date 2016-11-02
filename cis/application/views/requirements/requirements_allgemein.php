@@ -16,6 +16,18 @@
     <div class="col-sm-12">
 		<span><?php echo $this->getPhrase("ZGV/introduction_short", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></span>
 		<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->getPhrase("ZGV/introduction_long", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"></span>
+		<?php
+			if (isset($error) && ($error->error === true) && (!isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]])))
+			{
+				?>
+					<div class="alert alert-danger" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span class="sr-only">Error:</span>
+						<?php echo $this->lang->line("requirements_selectOption"); ?>
+					  </div>
+				<?php
+			}
+		?>
 		<div class="radio">
 			<label>
 				<input type="radio" name="doktype" value="Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)" 

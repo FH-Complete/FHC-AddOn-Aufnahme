@@ -21,3 +21,4 @@ $lang["requirements_nachreichenAbschlussGeplantDatum"] = "Finished on*";
 $lang["requirements_dateiAuswahl"] = "Select file";
 $lang["requirements_delete"] = "delete";
 $lang["requirements_speichern"] = "Save & Next";
+$lang["requirements_selectOption"] = "Please make a selection.";
