@@ -222,7 +222,7 @@ class Send extends MY_Controller {
 
 						if(is_null($prestudentStatus->bewerbung_abgeschicktamum))
 						{
-							//if(($this->_setAccepted($prestudent->prestudent_id, $prestudent->studiengang_kz) === true) && ($this->_setAcceptedDocuments($prestudent->prestudent_id, $prestudent->studiengang_kz, $dokument_kurzbz_array) === true))
+							if(($this->_setAccepted($prestudent->prestudent_id, $prestudent->studiengang_kz) === true) && ($this->_setAcceptedDocuments($prestudent->prestudent_id, $prestudent->studiengang_kz, $dokument_kurzbz_array) === true))
 							{
 								$prestudentStatus->bewerbung_abgeschicktamum=date('Y-m-d H:i:s');
 								unset($prestudentStatus->studienplan_bezeichnung);
@@ -235,11 +235,11 @@ class Send extends MY_Controller {
 								$time = time();
 								redirect("/Aufnahmetermine?send=".$time);
 							}
-//							else
-//							{
-//								//$this->_setError(true, $this->lang->line("send_FehlerDokumente"));
-//								$this->load->view('send', $this->_data);
-//							}
+							else
+							{
+								$this->_setError(true, $this->lang->line("send_FehlerDokumente"));
+								$this->load->view('send', $this->_data);
+							}
 						}
 						else
 						{
