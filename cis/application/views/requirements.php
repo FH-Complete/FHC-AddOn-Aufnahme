@@ -10,7 +10,7 @@ $this->lang->load(array('aufnahme', 'requirements'), $sprache);
 $this->load->view('templates/cookieHeader');
 $this->load->view('templates/metaHeader');
 
-if (isset($error) && ($error->error === true))
+if (isset($error) && ($error->error === true) && ($error->msg !== null))
 	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
 ?>
 

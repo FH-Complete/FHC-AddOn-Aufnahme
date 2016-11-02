@@ -147,6 +147,7 @@ class Requirements extends MY_Controller
 		
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
 
+		$temp_doks = array();
 		if(isset($this->input->post()["studiengang_kz"]))
 		{
 			$studiengang_kz = $this->input->post()["studiengang_kz"];
@@ -160,10 +161,22 @@ class Requirements extends MY_Controller
 					$akte->dokument_kurzbz = $dok->dokument_kurzbz;
 					$akte->insertvon = 'online';
 					$akte->nachgereicht = true;
-					$akte->anmerkung = $this->input->post($dok->dokument_kurzbz."_nachreichenAnmerkung");
-					$akte->nachgereicht_am = date("Y-m-d", strtotime($this->input->post($dok->dokument_kurzbz."_nachreichenDatum")));
-
-					$this->_saveAkte($akte);
+					$akte->anmerkung = null;
+					$akte->nachgereicht_am = null;
+					
+					if(($this->input->post($dok->dokument_kurzbz."_nachreichenAnmerkung") == '') || ($this->input->post($dok->dokument_kurzbz."_nachreichenDatum") == ''))
+					{
+						$this->_setError(true);
+						$akte->dms_id = null;
+						$temp_doks[$dok->dokument_kurzbz] = $akte;
+						$this->_data["dokError"][$dok->dokument_kurzbz] = true;
+					}
+					else
+					{
+						$akte->anmerkung = $this->input->post($dok->dokument_kurzbz."_nachreichenAnmerkung");
+						$akte->nachgereicht_am = date("Y-m-d", strtotime($this->input->post($dok->dokument_kurzbz."_nachreichenDatum")));
+						$this->_saveAkte($akte);
+					}
 				}
 			}
 		}
@@ -180,13 +193,15 @@ class Requirements extends MY_Controller
 			}
 		}
 		
+		$this->_data["dokumente"] = array_merge($this->_data["dokumente"], $temp_doks);
+		
 		$letztGueltigesZeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["letztGueltigesZeugnis"]);
 		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["letztGueltigesZeugnis"]=>$letztGueltigesZeugnis);
 
 		if(!isset($this->_data["error"]) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])) && (!empty($this->input->post())))
 		{
-			redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
-//			$this->load->view('requirements', $this->_data);
+//			redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+			$this->load->view('requirements', $this->_data);
 		}
 		else
 		{
@@ -395,7 +410,7 @@ class Requirements extends MY_Controller
 
 			foreach($this->_data["dokumente"] as $dok)
 			{
-				if(($dok->dms_id === $dms_id) && ($dok->accepted =='f'))
+				if(($dok->dms_id === $dms_id) && ($dok->accepted == false))
 				{
 					$result = $this->_deleteDms($dms_id);
 					$result->dokument_kurzbz = $dok->dokument_kurzbz;
