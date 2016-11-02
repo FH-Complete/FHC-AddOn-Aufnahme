@@ -67,7 +67,7 @@
         <?php echo $this->getPhrase("ZGV/UploadDiploma", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
     </div>
 </div>
-<hr>
+
 <div class="row form-upload">
 	<div class="col-sm-2">
 		&nbsp;
@@ -189,7 +189,7 @@
 		</div>
     </div>
 </div>
-<hr>
+
 <div id="letztesZeugnis_<?php echo $studiengang->studienplan->studienplan_id;?>" class="row" style="display: none;">
 	<div class="row">
 		<div class="col-sm-12">
@@ -298,7 +298,7 @@
 		</div>
 	</div>
 </div>
-<hr>
+
 <script type="text/javascript">
     $(document).ready(function() {
 		$(".fhc-tooltip").tooltip();

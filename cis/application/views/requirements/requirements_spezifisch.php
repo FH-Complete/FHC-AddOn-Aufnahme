@@ -10,7 +10,6 @@
 <div class="row">
     <div class="col-sm-12">
 		<fieldset><?php echo $this->getPhrase("ZGV/SpecificAdmissionRequirements", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></fieldset>
-		<hr>
 <?php foreach ($dokumenteStudiengang[$studiengang->studiengang_kz] as $dok) { ?>
 		<div class="row form-upload">
 			<div class="col-sm-4">
@@ -156,7 +155,6 @@
 				</div>
 			</div>
 		</div>
-<hr>
 <script type="text/javascript">
 	$(document).ready(function() {
 		// File upload
