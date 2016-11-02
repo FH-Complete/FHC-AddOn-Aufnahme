@@ -204,4 +204,9 @@ class MY_Controller extends CI_Controller
 			$this->_setError(true, $this->MessageModel->getErrorMessage());
 		}
 	}
+	
+	protected function cmpStg($a, $b)
+	{
+		return strcmp ($a->bezeichnung, $b->bezeichnung);
+	}
 }

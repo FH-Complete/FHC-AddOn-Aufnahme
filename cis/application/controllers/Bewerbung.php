@@ -84,6 +84,11 @@ class Bewerbung extends MY_Controller
 				array_push($this->_data["studiengaenge"], $studiengang);
 			}
 		}
+		
+		if(count($this->_data["studiengaenge"]) > 1)
+		{
+			usort($this->_data["studiengaenge"], array($this, "cmpStg"));
+		}
 
 		//load adress data
 		$this->_loadAdresse();
@@ -567,6 +572,11 @@ class Bewerbung extends MY_Controller
 			}
 		}
 		
+		if(count($this->_data["studiengaenge"]) > 1)
+		{
+			usort($this->_data["studiengaenge"], array($this, "cmpStg"));
+		}
+		
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
 
@@ -782,7 +792,7 @@ class Bewerbung extends MY_Controller
 	{
 		$this->_data["prestudent"] = $this->_loadPrestudent();
 
-		$this->_data["studiengaenge"] = array();
+//		$this->_data["studiengaenge"] = array();
 		foreach ($this->_data["prestudent"] as $prestudent)
 		{
 			if($prestudent->studiengang_kz === $studiengang_kz)
@@ -830,6 +840,10 @@ class Bewerbung extends MY_Controller
 		$this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"]));
 		if ($this->PrestudentModel->isResultValid() === true)
 		{
+			if(count($this->PrestudentModel->result->retval) > 1)
+			{
+				
+			}
 			return $this->PrestudentModel->result->retval;
 		}
 		else

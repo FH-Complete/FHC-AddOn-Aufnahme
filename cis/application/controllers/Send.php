@@ -86,6 +86,11 @@ class Send extends MY_Controller {
 				array_push($this->_data["studiengaenge"], $studiengang);
 			}
 		}
+		
+		if(count($this->_data["studiengaenge"]) > 1)
+		{
+			usort($this->_data["studiengaenge"], array($this, "cmpStg"));
+		}
 
 		//load Dokumente from Studiengang
 		$this->_data["dokumenteStudiengang"] = array();
@@ -157,6 +162,11 @@ class Send extends MY_Controller {
 				}
 				array_push($this->_data["studiengaenge"], $studiengang);
 			}
+		}
+		
+		if(count($this->_data["studiengaenge"]) > 1)
+		{
+			usort($this->_data["studiengaenge"], array($this, "cmpStg"));
 		}
 
 		//load Dokumente from Studiengang
