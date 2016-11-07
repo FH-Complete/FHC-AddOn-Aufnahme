@@ -48,9 +48,10 @@ class Studiengaenge extends MY_Controller
 			$this->_data["orgform"] = $this->OrgformModel->result->retval;
 		else
 			$this->_setError(true, $this->OrgformModel->getErrorMessage());
-
+		
 		$studiensemester = $this->_getNextStudiensemester("WS");
-
+		$this->session->set_userdata("studiensemester_kurzbz", $studiensemester->studiensemester_kurzbz);
+		
 		if (($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
 		{
 			$this->benchmark->mark('codepart_start');
