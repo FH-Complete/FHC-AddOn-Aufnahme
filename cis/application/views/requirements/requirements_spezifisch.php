@@ -278,6 +278,10 @@
 				setTimeout(function(){
 					$('.ui-datepicker').css('z-index', 10);
 				}, 0);
+			},
+			onChangeMonthYear: function(year, month, inst)
+			{
+				$(this).datepicker("setDate", inst.currentDay+"."+month+"."+year);
 			}
 			<?php
 			if(ucfirst($sprache) === "German")

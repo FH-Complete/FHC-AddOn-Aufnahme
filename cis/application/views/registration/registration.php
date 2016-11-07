@@ -158,6 +158,10 @@ if (isset($error) && ($error->error === true))
 					$('.ui-datepicker').css('z-index', 10);
 				}, 0);
 			},
+			onChangeMonthYear: function(year, month, inst)
+			{
+				$(this).datepicker("setDate", inst.currentDay+"."+month+"."+year);
+			},
 			changeYear: true,
 			yearRange: '1900:c'
 			<?php
