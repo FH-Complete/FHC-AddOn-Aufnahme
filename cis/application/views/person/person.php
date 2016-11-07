@@ -142,20 +142,20 @@ if (!isset($plz)) $plz = null;
 						'0%'
 					);
 					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>').show();
-					var logo = "";
-					if(data.result.bezeichnung.indexOf(".docx") !== false)
+					var logo = "";	
+					if(data.result.bezeichnung.indexOf(".docx") !== -1)
 					{
 						logo = "docx.gif";
 					}
-					else if(data.result.bezeichnung.indexOf(".doc") !== false)
+					else if(data.result.bezeichnung.indexOf(".doc") !== -1)
 					{
 						logo = "docx.gif";
 					}
-					else if(data.result.bezeichnung.indexOf(".pdf") !== false)
+					else if(data.result.bezeichnung.indexOf(".pdf") !== -1)
 					{
 						logo = "document-pdf.svg";
 					}
-					else if(data.result.bezeichnung.indexOf(".jpg") !== false)
+					else if(data.result.bezeichnung.indexOf(".jpg") !== -1)
 					{
 						logo = "document-picture.svg";
 					}
@@ -163,7 +163,7 @@ if (!isset($plz)) $plz = null;
 					{
 						logo = false;
 					}
-
+					
 					$("#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
 					msg += "</br>"+data.result.bezeichnung;
 					toggleDocumentsComplete(<?php echo $studiengang->studienplan->studienplan_id; ?>);
@@ -231,20 +231,20 @@ if (!isset($plz)) $plz = null;
 						'0%'
 					);
 			$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>').show();
-					var logo = "";
-					if(data.result.bezeichnung.indexOf(".docx") !== false)
+					var logo = "";	
+					if(data.result.bezeichnung.indexOf(".docx") !== -1)
 					{
 						logo = "docx.gif";
 					}
-					else if(data.result.bezeichnung.indexOf(".doc") !== false)
+					else if(data.result.bezeichnung.indexOf(".doc") !== -1)
 					{
 						logo = "docx.gif";
 					}
-					else if(data.result.bezeichnung.indexOf(".pdf") !== false)
+					else if(data.result.bezeichnung.indexOf(".pdf") !== -1)
 					{
 						logo = "document-pdf.svg";
 					}
-					else if(data.result.bezeichnung.indexOf(".jpg") !== false)
+					else if(data.result.bezeichnung.indexOf(".jpg") !== -1)
 					{
 						logo = "document-picture.svg";
 					}

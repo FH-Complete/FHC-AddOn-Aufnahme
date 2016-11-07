@@ -387,20 +387,20 @@
 					);
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>').show();
-					var logo = "";
-					if(data.result.bezeichnung.indexOf(".docx") !== false)
+					var logo = "";	
+					if(data.result.bezeichnung.indexOf(".docx") !== -1)
 					{
 						logo = "docx.gif";
 					}
-					else if(data.result.bezeichnung.indexOf(".doc") !== false)
+					else if(data.result.bezeichnung.indexOf(".doc") !== -1)
 					{
 						logo = "docx.gif";
 					}
-					else if(data.result.bezeichnung.indexOf(".pdf") !== false)
+					else if(data.result.bezeichnung.indexOf(".pdf") !== -1)
 					{
 						logo = "document-pdf.svg";
 					}
-					else if(data.result.bezeichnung.indexOf(".jpg") !== false)
+					else if(data.result.bezeichnung.indexOf(".jpg") !== -1)
 					{
 						logo = "document-picture.svg";
 					}
@@ -477,20 +477,20 @@
 						'0%'
 					);
 			$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>').show();
-					var logo = "";
-					if(data.result.bezeichnung.indexOf(".docx") !== false)
+					var logo = "";	
+					if(data.result.bezeichnung.indexOf(".docx") !== -1)
 					{
 						logo = "docx.gif";
 					}
-					else if(data.result.bezeichnung.indexOf(".doc") !== false)
+					else if(data.result.bezeichnung.indexOf(".doc") !== -1)
 					{
 						logo = "docx.gif";
 					}
-					else if(data.result.bezeichnung.indexOf(".pdf") !== false)
+					else if(data.result.bezeichnung.indexOf(".pdf") !== -1)
 					{
 						logo = "document-pdf.svg";
 					}
-					else if(data.result.bezeichnung.indexOf(".jpg") !== false)
+					else if(data.result.bezeichnung.indexOf(".jpg") !== -1)
 					{
 						logo = "document-picture.svg";
 					}
