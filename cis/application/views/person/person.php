@@ -399,7 +399,7 @@ if (!isset($plz)) $plz = null;
 				<?php 
 				$data = array('id' => 'anrede', 'name' => 'anrede', "class" => "form-control");
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
-				echo form_dropdown("anrede", array("Herr" => "Herr", "Frau" => "Frau"), isset($person->anrede) ? $person->anrede : "Herr", $data); ?>
+				echo form_dropdown("anrede", array("null" => "", "Herr" => "Herr", "Frau" => "Frau"), isset($person->anrede) ? $person->anrede : "null", $data); ?>
 				<?php echo form_error("anrede"); ?>
 			</div>
 		</div>

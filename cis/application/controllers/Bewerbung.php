@@ -147,7 +147,6 @@ class Bewerbung extends MY_Controller
 		{
 			$post = $this->input->post();
 			$person = $this->_data["person"];
-			$person->anrede = $post["anrede"];
 			$person->vorname = $post["vorname"];
 			$person->nachname = $post["nachname"];
 			//$person->bundesland_code = $post["bundesland"];
@@ -158,13 +157,16 @@ class Bewerbung extends MY_Controller
 			}
 			$person->gebort = $post["geburtsort"];
 			$person->geburtsnation = $post["nation"];
-			if ($person->anrede === "Herr")
+			
+			if ($post["anrede"] === "Herr")
 			{
 				$person->geschlecht = "m";
+				$person->anrede = $post["anrede"];
 			}
-			elseif ($person->anrede === "Frau")
+			elseif ($post["anrede"] === "Frau")
 			{
 				$person->geschlecht = "w";
+				$person->anrede = $post["anrede"];
 			}
 			else
 			{
@@ -420,7 +422,7 @@ class Bewerbung extends MY_Controller
 			
 			if((!isset($this->_data["error"])) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
 			{
-//				redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+				redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
 				$this->_data["complete"] = $this->_checkDataCompleteness();
 				$this->load->view('bewerbung', $this->_data);
 			}
