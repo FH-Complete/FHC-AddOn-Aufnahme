@@ -141,7 +141,7 @@ class Registration extends MY_Controller {
 	 */
 	public function check_date() {
 		$date = explode(".", $this->input->post("geb_datum"));
-		if (!checkdate($date[1], $date[0], $date[2])) {
+		if ((is_array($date)) && (count($date) == 3) && (!checkdate($date[1], $date[0], $date[2]))) {
 			//$this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
 			$this->form_validation->set_message("check_date", "Bitte geben Sie ein gültiges Datum an.");
 			return false;
