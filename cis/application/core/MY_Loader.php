@@ -46,27 +46,32 @@ class MY_Loader extends CI_Loader {
 			if (is_array($phrasen)) {
 				$text = "";
 				$sprache = ucfirst($sprache);
-				foreach ($phrasen as $p) {
-					if (($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz) && ($p->sprache == $sprache))
+				
+				foreach ($phrasen as $p) 
+				{	
+					if($p->phrase == $phrase)
 					{
-						if ($this->config->item('display_phrase_name'))
-							$text = $p->text . " <i>[$p->phrase]</i>";
-						else
-							$text = $p->text;
-					}
-					elseif (($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
-					{
-						if ($this->config->item('display_phrase_name'))
-							$text = $p->text . " <i>[$p->phrase]</i>";
-						else
-							$text = $p->text;
-					}
-					elseif (($p->phrase == $phrase) && ($p->orgeinheit_kurzbz == null) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
-					{
-						if ($this->config->item('display_phrase_name'))
-							$text = $p->text . " <i>[$p->phrase]</i>";
-						else
-							$text = $p->text;
+						if (($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz) && ($p->sprache == $sprache))
+						{
+							if ($this->config->item('display_phrase_name'))
+								$text = $p->text . " <i>[$p->phrase]</i>";
+							else
+								$text = $p->text;
+						}
+						elseif (($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+						{
+							if ($this->config->item('display_phrase_name'))
+								$text = $p->text . " <i>[$p->phrase]</i>";
+							else
+								$text = $p->text;
+						}
+						elseif (($p->orgeinheit_kurzbz == null) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+						{
+							if ($this->config->item('display_phrase_name'))
+								$text = $p->text . " <i>[$p->phrase]</i>";
+							else
+								$text = $p->text;
+						}
 					}
 				}
 

@@ -12,7 +12,8 @@
     <!--<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">	-->
     <h1 class="text-center"><?php echo $this->getPhrase("Registration/RegistrationGreetingText", $sprache, $this->config->item('root_oe')); ?></h1>
     <p class="infotext">
-	    <?php echo $this->getPhrase("Registration/RegistrationForm", $sprache, $sprache, $this->config->item('root_oe')); ?>
+	    <?php
+		echo $this->getPhrase("Registration/RegistrationForm", $sprache, $this->config->item('root_oe'), null, null); ?>
     </p>
     <div class="row">
 	<div class="col-lg-6 col-sm-6">
