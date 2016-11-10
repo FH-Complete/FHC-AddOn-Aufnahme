@@ -18,6 +18,11 @@ if (isset($error) && ($error->error === true))
     <?php
 $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
 echo $this->template->widget("menu", array('aktiv' => 'Bewerbung', 'numberOfUnreadMessages'=>$numberOfUnreadMessages));
+?>
+<div id="backToApplication">
+	<span class="arrowLeft"></span><span><a href="<?php  echo base_url($this->config->config["index_page"]."/Bewerbung");?>"><?php echo $this->lang->line("aufnahme/backToApplications"); ?></a></span>
+</div>
+<?php
 
 foreach ($studiengaenge as $studiengang) {
 	$data["studiengang"] = $studiengang;

@@ -233,5 +233,6 @@ $lang['aufnahme/Weiblich']='weiblich';
 $lang['aufnahme/registrieren']='Anmelden';
 $lang['aufnahme/nochNichtAbgeschickt']='Noch nicht abgesandt';
 $lang['aufnahme/unvollständig']='Bewerbung unvollständig';
+$lang['aufnahme/backToApplications']='Zurück zur Bewerbungsübersicht';
 
 ?>

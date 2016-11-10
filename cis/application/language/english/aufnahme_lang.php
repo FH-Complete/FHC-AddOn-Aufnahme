@@ -223,6 +223,7 @@ $lang['aufnahme/Weiblich']='female';
 $lang['aufnahme/registrieren']='Log in';
 $lang['aufnahme/nochNichtAbgeschickt']='Not yet sent';
 $lang['aufnahme/unvollständig']='Application incomplete';
+$lang['aufnahme/backToApplications']='back to applications overview';
 
 //TODO translate
 $lang['aufnahme/anredeUnknown']='geehrte/r Frau/Herr';
