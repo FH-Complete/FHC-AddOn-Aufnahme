@@ -200,7 +200,7 @@ class Requirements extends MY_Controller
 
 		if(!isset($this->_data["error"]) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])) && (!empty($this->input->post())))
 		{
-//			redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+			redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
 			$this->load->view('requirements', $this->_data);
 		}
 		else

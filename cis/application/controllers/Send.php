@@ -531,6 +531,16 @@ class Send extends MY_Controller {
 	{
 		$error = array("dokumente"=>array(), "person"=>array(), "adresse"=>array(), "kontakt"=>array(), "doks"=>array());
 		
+		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
+		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
+		$this->_data["personalDocuments"] = array(
+			$this->config->item("dokumentTypen")["reisepass"]=>$reisepass,
+			$this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf
+		);
+		
+		$abschlusszeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["abschlusszeugnis"]);
+		$letztesZeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["letztGueltigesZeugnis"]);
+		
 		//check documents
 		foreach($this->_data["dokumenteStudiengang"] as $key=>$doks)
 		{
@@ -540,6 +550,23 @@ class Send extends MY_Controller {
 				{
 					$error["dokumente"][$key][$dokType->bezeichnung] = $dokType;
 				}
+			}
+			
+			foreach($this->_data["personalDocuments"] as $dokType)
+			{
+				if((!isset($this->_data["dokumente"][$dokType->dokument_kurzbz])))
+				{
+					$error["dokumente"][$key][$dokType->bezeichnung] = $dokType;
+				}
+			}
+			
+			if((!isset($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz])))
+			{
+				$error["dokumente"][$key][$abschlusszeugnis->bezeichnung] = $abschlusszeugnis;
+			}
+			elseif((!isset($this->_data["dokumente"][$letztesZeugnis->dokument_kurzbz])))
+			{
+				$error["dokumente"][$key][$letztesZeugnis->bezeichnung] = $letztesZeugnis;
 			}
 		}
 

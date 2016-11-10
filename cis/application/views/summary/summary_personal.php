@@ -276,7 +276,7 @@
 						}
 						else
 						{
-							echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name;
+							echo $dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name;
 						}
 						?>
 				</div>
