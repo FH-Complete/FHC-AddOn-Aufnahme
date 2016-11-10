@@ -156,34 +156,32 @@
 			<?php
 			if((isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype !== null))
 			{
-				switch($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype)
+				if(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument))
 				{
-					case "application/pdf":
-						$logo = "pdf.jpg";
-						break;
-							
-					case "image/jpeg":
-						$logo = "";
-						break;
-					
-					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+					if(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".docx") !== false)
+					{
 						$logo = "docx.gif";
-					default:
-						if(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->titel, "docx") !== false)
-						{
-							$logo = "docx.gif";
-							break;
-						}
-						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->titel, "doc") !== false)
-						{
-							$logo = "docx.gif";
-							break;
-						}
-						else
-						{
-							$logo = false;
-							break;
-						}
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".doc") !== false)
+					{
+						$logo = "docx.gif";
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".pdf") !== false)
+					{
+						$logo = "document-pdf.svg";
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".jpg") !== false)
+					{
+						$logo = "document-picture.svg";
+					}
+					else
+					{
+						$logo = false;
+					}
+				}
+				else
+				{
+					$logo = false;
 				}
 			}
 			else
@@ -224,34 +222,32 @@
 			<?php
 			if((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype !== null))
 			{
-				switch($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype)
+				if(isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument))
 				{
-					case "application/pdf":
-						$logo = "pdf.jpg";
-						break;
-							
-					case "image/jpeg":
-						$logo = "";
-						break;
-					
-					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+					if(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".docx") !== false)
+					{
 						$logo = "docx.gif";
-					default:
-						if(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->titel, "docx") !== false)
-						{
-							$logo = "docx.gif";
-							break;
-						}
-						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->titel, "doc") !== false)
-						{
-							$logo = "docx.gif";
-							break;
-						}
-						else
-						{
-							$logo = false;
-							break;
-						}
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".doc") !== false)
+					{
+						$logo = "docx.gif";
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".pdf") !== false)
+					{
+						$logo = "document-pdf.svg";
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".jpg") !== false)
+					{
+						$logo = "document-picture.svg";
+					}
+					else
+					{
+						$logo = false;
+					}
+				}
+				else
+				{
+					$logo = false;
 				}
 			}
 			else

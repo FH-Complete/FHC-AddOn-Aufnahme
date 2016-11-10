@@ -19,34 +19,32 @@
 			<?php
 				if((isset($dokumente[$dok->dokument_kurzbz]->mimetype)) && ($dokumente[$dok->dokument_kurzbz]->mimetype !== null))
 				{
-					switch($dokumente[$dok->dokument_kurzbz]->mimetype)
+					if(isset($dokumente[$dok->dokument_kurzbz]->dokument))
 					{
-						case "application/pdf":
-							$logo = "pdf.jpg";
-							break;
-
-						case "image/jpeg":
-							$logo = "";
-							break;
-
-						case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+						if(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".docx") !== false)
+						{
 							$logo = "docx.gif";
-						default:
-							if(strpos($dokumente[$dok->dokument_kurzbz]->titel, "docx") !== false)
-							{
-								$logo = "docx.gif";
-								break;
-							}
-							elseif(strpos($dokumente[$dok->dokument_kurzbz]->titel, "doc") !== false)
-							{
-								$logo = "docx.gif";
-								break;
-							}
-							else
-							{
-								$logo = false;
-								break;
-							}
+						}
+						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".doc") !== false)
+						{
+							$logo = "docx.gif";
+						}
+						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".pdf") !== false)
+						{
+							$logo = "document-pdf.svg";
+						}
+						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".jpg") !== false)
+						{
+							$logo = "document-picture.svg";
+						}
+						else
+						{
+							$logo = false;
+						}
+					}
+					else
+					{
+						$logo = false;
 					}
 				}
 				else

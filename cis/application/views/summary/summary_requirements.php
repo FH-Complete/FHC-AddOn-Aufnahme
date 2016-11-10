@@ -29,66 +29,62 @@
 		<?php
 			if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->mimetype !== null))
 			{
-				switch($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->mimetype)
+				if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument))
 				{
-					case "application/pdf":
-						$logo = "pdf.jpg";
-						break;
-							
-					case "image/jpeg":
-						$logo = "";
-						break;
-					
-					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+					if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".docx") !== false)
+					{
 						$logo = "docx.gif";
-					default:
-						if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->titel, "docx") !== false)
-						{
-							$logo = "docx.gif";
-							break;
-						}
-						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->titel, "doc") !== false)
-						{
-							$logo = "docx.gif";
-							break;
-						}
-						else
-						{
-							$logo = false;
-							break;
-						}
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".doc") !== false)
+					{
+						$logo = "docx.gif";
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".pdf") !== false)
+					{
+						$logo = "document-pdf.svg";
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".jpg") !== false)
+					{
+						$logo = "document-picture.svg";
+					}
+					else
+					{
+						$logo = false;
+					}
+				}
+				else
+				{
+					$logo = false;
 				}
 			}
 			elseif((isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->mimetype !== null))
 			{
-				switch($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->mimetype)
+				if(isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument))
 				{
-					case "application/pdf":
-						$logo = "pdf.jpg";
-						break;
-							
-					case "image/jpeg":
-						$logo = "";
-						break;
-					
-					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+					if(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, ".docx") !== false)
+					{
 						$logo = "docx.gif";
-					default:
-						if(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->titel, "docx") !== false)
-						{
-							$logo = "docx.gif";
-							break;
-						}
-						elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->titel, "doc") !== false)
-						{
-							$logo = "docx.gif";
-							break;
-						}
-						else
-						{
-							$logo = false;
-							break;
-						}
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, ".doc") !== false)
+					{
+						$logo = "docx.gif";
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, ".pdf") !== false)
+					{
+						$logo = "document-pdf.svg";
+					}
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, ".jpg") !== false)
+					{
+						$logo = "document-picture.svg";
+					}
+					else
+					{
+						$logo = false;
+					}
+				}
+				else
+				{
+					$logo = false;
 				}
 			}
 			else
