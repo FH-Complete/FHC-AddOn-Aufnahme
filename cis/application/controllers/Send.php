@@ -564,7 +564,7 @@ class Send extends MY_Controller {
 			{
 				$error["dokumente"][$key][$abschlusszeugnis->bezeichnung] = $abschlusszeugnis;
 			}
-			elseif((!isset($this->_data["dokumente"][$letztesZeugnis->dokument_kurzbz])))
+			elseif((!isset($this->_data["dokumente"][$letztesZeugnis->dokument_kurzbz])) && ($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->nachgereicht))
 			{
 				$error["dokumente"][$key][$letztesZeugnis->bezeichnung] = $letztesZeugnis;
 			}
