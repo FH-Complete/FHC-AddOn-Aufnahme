@@ -111,8 +111,14 @@ class Messages extends MY_Controller {
 				$this->input->post()["msg_oe_kurzbz"],
 				$relationMessage_id);
 			
-//			$this->load->view('messages', $this->_data);
-			redirect("/Messages");
+			if(!isset($this->_data["error"]))
+			{
+				redirect("/Messages");
+			}
+			else
+			{
+				$this->load->view('messages', $this->_data);
+			}
 		}
 	}
 
