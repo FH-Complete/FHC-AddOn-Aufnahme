@@ -90,6 +90,19 @@ class MY_Model extends CI_Model {
 						$msg = $this->result->retval;
 						return "Error Code: ".$this->result->error."; ".$msg."; ". (isset($this->result->msg) ? $this->result->msg : "");
 					}
+					elseif(is_string($this->result->msg))
+					{
+						$msg = $this->result->msg;
+						return "Error Code: ".$this->result->error."; ". (isset($this->result->msg) ? $this->result->msg : "");
+					}
+				}
+				elseif(isset($this->result->msg))
+				{
+					if(is_string($this->result->msg))
+					{
+						$msg = $this->result->msg;
+						return "Error Code: ".$this->result->error."; ".$msg."; ". (isset($this->result->msg) ? $this->result->msg : "");
+					}
 				}
 				else
 				{
