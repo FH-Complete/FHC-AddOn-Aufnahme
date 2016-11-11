@@ -31,7 +31,7 @@
 				<date>
 					<?php
 						$time = strtotime($msg->insertamum);
-						echo date("d.m.Y H:m", $time);
+						echo date("d.m.Y H:i", $time);
 					?>
 				</date>
 				<a href=""><span class="glyphicon glyphicon-paperclip"></span></a>
