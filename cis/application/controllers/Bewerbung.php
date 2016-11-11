@@ -155,8 +155,8 @@ class Bewerbung extends MY_Controller
 			{
 				$person->gebdatum = date('Y-m-d', strtotime($post["gebdatum"]));
 			}
-			$person->gebort = $post["geburtsort"];
-			$person->geburtsnation = $post["nation"];
+			$person->gebort = $post["geburtsort"] != '' ? $post["geburtsort"] : null;
+			$person->geburtsnation = $post["nation"] != '' ? $post["nation"] : null;
 			
 			if ($post["anrede"] === "Herr")
 			{
@@ -173,18 +173,25 @@ class Bewerbung extends MY_Controller
 				$person->geschlecht = "u";
 			}
 
-			$person->staatsbuergerschaft = $post["staatsbuergerschaft"];
+			$person->staatsbuergerschaft = $post["staatsbuergerschaft"] != '' ? $post["staatsbuergerschaft"] : null;
 
 			// An die SVNR wird v1, v2, v3, etc hinzugefuegt wenn die SVNR bereits vorhanden ist
 			// In der Anzeige wird dies herausgefiltert. Deshalb muss beim Speichern der Daten
 			// wieder die SVNR mit v1 etc geschickt werden wenn diese nicht geaendert wurde
 			if ($post["svnr_orig"]!='' && mb_substr($post["svnr_orig"], 0, 10)==$post["svnr"])
+			{
 				$person->svnr = $post["svnr_orig"];
+			}
 			else
-				$person->svnr = $post["svnr"];
+			{
+				if($post["svnr"] != '')
+				{
+					$person->svnr = $post["svnr"];
+				}
+			}
 
-			$person->titelpre = $post["titelpre"];
-			$person->titelpost = $post["titelpost"];
+			$person->titelpre = $post["titelpre"] != '' ? $post["titelpre"] : null;
+			$person->titelpost = $post["titelpost"] != '' ? $post["titelpost"] : null;
 
 			$this->_savePerson($person);
 			
@@ -422,7 +429,7 @@ class Bewerbung extends MY_Controller
 			
 			if((!isset($this->_data["error"])) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
 			{
-				redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+//				redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
 				$this->_data["complete"] = $this->_checkDataCompleteness();
 				$this->load->view('bewerbung', $this->_data);
 			}
