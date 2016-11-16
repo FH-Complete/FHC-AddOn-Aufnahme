@@ -1,6 +1,6 @@
-<?php 
-if(($this->getPhrase("Aufnahme/Spezialisierung", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz) != null) 
-		&& (substr($this->getPhrase("Aufnahme/Spezialisierung", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz),0,3) !== "<i>"))
+<?php
+$spez_phrase = $this->getPhrase("Aufnahme/Spezialisierung", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
+if(($spez_phrase != null) && (substr($spez_phrase,0,3) !== "<i>"))
 {
 ?>
 	<legend>
@@ -19,7 +19,7 @@ if(($this->getPhrase("Aufnahme/Spezialisierung", $sprache, $studiengang->oe_kurz
 	<div class="row form-row">
 		<div class="col-sm-10">
 			<?php
-				if(!empty($spezialisierung[$studiengang->studiengang_kz]))	
+				if(!empty($spezialisierung[$studiengang->studiengang_kz]))
 				{
 					?>
 					<a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung/deleteSpezialisierung/".$spezialisierung[$studiengang->studiengang_kz]->notiz_id."/".$studiengang->studiengang_kz); ?>"><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-trash"></span></button></a>
@@ -34,7 +34,7 @@ if(($this->getPhrase("Aufnahme/Spezialisierung", $sprache, $studiengang->oe_kurz
 				}
 				else
 				{
-					echo $this->getPhrase("Aufnahme/Spezialisierung", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
+					echo $spez_phrase;
 				}
 			?>
 		</div>
@@ -42,4 +42,3 @@ if(($this->getPhrase("Aufnahme/Spezialisierung", $sprache, $studiengang->oe_kurz
 <?php
 }
 ?>
-

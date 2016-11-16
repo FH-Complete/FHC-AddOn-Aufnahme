@@ -43,7 +43,7 @@ class Bewerbung extends MY_Controller
 		$this->checkLogin();
 
 		$this->_data['title'] = 'Personendaten';
-		
+
 		if($this->input->get("studiengang_kz") != null)
 		{
 			$this->_data["studiengang_kz"] = $this->input->get("studiengang_kz");
@@ -73,10 +73,10 @@ class Bewerbung extends MY_Controller
 					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) {
 				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 				$studiengang->studienplan = $studienplan;
-				
+
 				$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
 				$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
-				
+
 				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
 				{
 					$this->_data["bewerbung_abgeschickt"] = true;
@@ -84,7 +84,7 @@ class Bewerbung extends MY_Controller
 				array_push($this->_data["studiengaenge"], $studiengang);
 			}
 		}
-		
+
 		if(count($this->_data["studiengaenge"]) > 1)
 		{
 			usort($this->_data["studiengaenge"], array($this, "cmpStg"));
@@ -133,7 +133,7 @@ class Bewerbung extends MY_Controller
 		$this->form_validation->set_rules("nachname", "Nachname", "required|max_length[64]");
 		$this->form_validation->set_rules("gebdatum", "Geburtsdatum", "callback_check_date");
 		$this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
-		
+
 		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
 		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
 		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"]=>$reisepass, $this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf);
@@ -150,14 +150,14 @@ class Bewerbung extends MY_Controller
 			$person->vorname = $post["vorname"];
 			$person->nachname = $post["nachname"];
 			//$person->bundesland_code = $post["bundesland"];
-			
+
 			if (isset($post["gebdatum"]))
 			{
 				$person->gebdatum = date('Y-m-d', strtotime($post["gebdatum"]));
 			}
 			$person->gebort = $post["geburtsort"] != '' ? $post["geburtsort"] : null;
 			$person->geburtsnation = $post["nation"] != '' ? $post["nation"] : null;
-			
+
 			if ($post["anrede"] === "Herr")
 			{
 				$person->geschlecht = "m";
@@ -194,7 +194,7 @@ class Bewerbung extends MY_Controller
 			$person->titelpost = $post["titelpost"] != '' ? $post["titelpost"] : null;
 
 			$this->_savePerson($person);
-			
+
 			$adresse = new stdClass();
 			$zustell_adresse = new stdClass();
 
@@ -333,7 +333,7 @@ class Bewerbung extends MY_Controller
 					$this->_saveAdresse($zustell_adresse);
 				}
 			}
-			
+
 			if (($post["email"] != ""))
 			{
 				if(!(isset($this->_data["kontakt"]["email"])))
@@ -394,7 +394,7 @@ class Bewerbung extends MY_Controller
 					{
 						if ((!empty($prestudent->prestudentStatus))
 							&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
-								|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) 
+								|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
 						{
 							$text = "";
 							foreach($post["spezialisierung"] as $spez)
@@ -402,9 +402,12 @@ class Bewerbung extends MY_Controller
 								$text .= $spez.";";
 							}
 							$text = substr($text, 0, -1);
-							$this->_saveSpecialization($prestudent->prestudent_id, $text);
-							$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
-							$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+							if (substr_count($text, ';') !== strlen($text))
+							{
+								$this->_saveSpecialization($prestudent->prestudent_id, $text);
+								$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+								$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+							}
 						}
 					}
 				}
@@ -426,7 +429,7 @@ class Bewerbung extends MY_Controller
 					$this->_data["zustell_ort_dd"] = $gemeinde->gemeinde_id;
 				}
 			}
-			
+
 			if((!isset($this->_data["error"])) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
 			{
 				redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
@@ -440,7 +443,7 @@ class Bewerbung extends MY_Controller
 			}
 		}
 	}
-	
+
 	/**
 	 *
 	 * @return unknown
@@ -467,7 +470,7 @@ class Bewerbung extends MY_Controller
 		$this->session->set_userdata("studiengang_kz", $studiengang_kz);
 
 		$this->session->set_userdata("studiensemester_kurzbz", $studiensemester_kurzbz);
-		
+
 		$this->_data["studiengang_kz"] = $studiengang_kz;
 
 		//load person data
@@ -528,7 +531,7 @@ class Bewerbung extends MY_Controller
 		{
 			redirect("/Studiengaenge");
 		}
-		
+
 		//load adress data
 		$this->_loadAdresse();
 
@@ -574,18 +577,18 @@ class Bewerbung extends MY_Controller
 				$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
 				array_push($this->_data["studiengaenge"], $studiengang);
 			}
-			
+
 			if((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null))
 			{
 				$this->_data["bewerbung_abgeschickt"] = true;
 			}
 		}
-		
+
 		if(count($this->_data["studiengaenge"]) > 1)
 		{
 			usort($this->_data["studiengaenge"], array($this, "cmpStg"));
 		}
-		
+
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
 
@@ -597,11 +600,11 @@ class Bewerbung extends MY_Controller
 				$akte->dokument = $dms;
 			}
 		}
-		
+
 		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
 		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
 		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"]=>$reisepass, $this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf);
-		
+
 		$this->_data["complete"] = $this->_checkDataCompleteness();
 		$this->load->view('bewerbung', $this->_data);
 	}
@@ -631,14 +634,14 @@ class Bewerbung extends MY_Controller
 			if ($prestudent->studiengang_kz === $studiengang_kz)
 			{
 				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-				
+
 				if ($prestudentStatus !== null)
 				{
 					$this->_deletePrestudentStatus(get_object_vars($prestudentStatus));
 				}
-				
+
 				$this->_deletePrestudent(get_object_vars($prestudent));
-				
+
 				redirect("/Bewerbung");
 			}
 		}
@@ -688,7 +691,7 @@ class Bewerbung extends MY_Controller
 						default:
 							$obj->dokument_kurzbz = $this->config->item('dokumentTypen')["sonstiges"];
 					}
-					
+
 					if ($typ)
 						$obj->dokument_kurzbz = $this->config->item('dokumentTypen')[$typ];
 
@@ -792,9 +795,9 @@ class Bewerbung extends MY_Controller
 			}
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param type $notiz_id
 	 */
 	public function deleteSpezialisierung($notiz_id, $studiengang_kz)
@@ -851,7 +854,7 @@ class Bewerbung extends MY_Controller
 		{
 			if(count($this->PrestudentModel->result->retval) > 1)
 			{
-				
+
 			}
 			return $this->PrestudentModel->result->retval;
 		}
@@ -1071,7 +1074,7 @@ class Bewerbung extends MY_Controller
 			$this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
 		}*/
 	}
-	
+
 	private function _deletePrestudentStatus($prestudentStatus)
 	{
 		$this->PrestudentStatusModel->deletePrestudentStatus($prestudentStatus);
@@ -1084,7 +1087,7 @@ class Bewerbung extends MY_Controller
 			$this->_setError(true, $this->PrestudentStatusModel->getErrorMessage());
 		}
 	}
-	
+
 	private function _deletePrestudent($prestudent)
 	{
 		$this->PrestudentModel->deletePrestudent($prestudent);
@@ -1245,9 +1248,9 @@ class Bewerbung extends MY_Controller
 			$this->_setError(true, $this->BewerbungstermineModel->getErrorMessage());
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return unknown
 	 */
 	public function deleteDocument()
@@ -1276,7 +1279,7 @@ class Bewerbung extends MY_Controller
 
 		echo json_encode($result);
 	}
-	
+
 	private function _deleteDms($dms_id)
 	{
 		$this->DmsModel->deleteDms($this->session->userdata("person_id"), $dms_id);
@@ -1289,7 +1292,7 @@ class Bewerbung extends MY_Controller
 			$this->_setError(true, $this->DmsModel->getErrorMessage());
 		}
 	}
-	
+
 	private function _loadGemeindeByPlz($plz)
 	{
 		$this->GemeindeModel->getGemeindeByPlz($plz);
@@ -1302,12 +1305,12 @@ class Bewerbung extends MY_Controller
 			$this->_setError(true, $this->GemeindeModel->getErrorMessage());
 		}
 	}
-	
+
 	public function ort($plz)
 	{
 		echo json_encode($this->_loadGemeindeByPlz($plz));
 	}
-	
+
 	public function checkDataCompleteness()
 	{
 		//$this->StudiensemesterModel->getNextStudiensemester("WS");
@@ -1318,7 +1321,7 @@ class Bewerbung extends MY_Controller
 
 		//load kontakt data
 		$this->_loadKontakt();
-		
+
 		//load adress data
 		$this->_loadAdresse();
 
@@ -1333,10 +1336,10 @@ class Bewerbung extends MY_Controller
 				$akte->dokument = $dms;
 			}
 		}
-		
+
 		echo json_encode($this->_checkDataCompleteness());
 	}
-	
+
 	private function _checkDataCompleteness()
 	{
 		$complete = array("person"=>true, "adresse"=>true, "kontakt"=>true, "zustelladresse"=>true, "dokumente"=>true);
@@ -1403,7 +1406,7 @@ class Bewerbung extends MY_Controller
 		{
 			$complete['adresse'] = false;
 		}
-		
+
 		//check adress data
 		if(isset($this->_data["zustell_adresse"]))
 		{
@@ -1424,7 +1427,7 @@ class Bewerbung extends MY_Controller
 				$complete["zustelladresse"] = false;
 			}
 		}
-		
+
 
 		//check contact data
 		$kontakt = $this->_data["kontakt"];
@@ -1453,7 +1456,7 @@ class Bewerbung extends MY_Controller
 
 		return $complete;
 	}
-	
+
 	private function _getSpecialization($prestudent_id)
 	{
 		$this->PrestudentModel->getSpecialization($prestudent_id, "aufnahme/spezialisierung");
@@ -1473,7 +1476,7 @@ class Bewerbung extends MY_Controller
 			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
 		}
 	}
-	
+
 	private function _removeSpecialization($notiz_id)
 	{
 		$this->PrestudentModel->removeSpecialization($notiz_id);
@@ -1486,7 +1489,7 @@ class Bewerbung extends MY_Controller
 			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
 		}
 	}
-	
+
 	private function _saveSpecialization($prestudent_id, $text)
 	{
 		$this->PrestudentModel->saveSpecialization($prestudent_id, "aufnahme/spezialisierung", $text);
@@ -1499,7 +1502,7 @@ class Bewerbung extends MY_Controller
 			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
 		}
 	}
-	
+
 	private function _loadDokument($dokument_kurzbz)
 	{
 		$this->DokumentModel->getDokument($dokument_kurzbz);
