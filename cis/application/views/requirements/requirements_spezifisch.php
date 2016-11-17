@@ -92,7 +92,7 @@
 						<div class="progress-bar progress-bar-success"></div>
 					</div>
 				</div>
-				<div class="checkbox" style="<?php echo ($dok->pflicht == false) ? 'visibility: hidden;' : ''; ?>">
+				<div class="checkbox" style="<?php echo ($dok->nachreichbar == false) ? 'visibility: hidden;' : ''; ?>">
 					<label>
 						<?php
 							$data = array('id' => $dok->dokument_kurzbz.'_nachgereicht_'.$studiengang->studienplan->studienplan_id, 'class'=>'nachreichen_checkbox', 'name' => $dok->dokument_kurzbz.'_nachgereicht', "checked" => (isset($dokumente[$dok->dokument_kurzbz]) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht === true)) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
