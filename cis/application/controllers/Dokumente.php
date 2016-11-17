@@ -712,55 +712,25 @@ class Dokumente extends MY_Controller {
 			$result->complete = true;
 			//load dokumente
 			$this->_loadDokumente($this->session->userdata()["person_id"]);
-
-			if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
-			{
-				$result->complete = false;
-			}
-
-			if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
-			{
-				$result->complete = false;
-			}
 			
-			if(!isset($this->input->post()["studiengang_kz"]))
+			if(!empty($this->_data["dokumente"]))
 			{
-				//load preinteressent data
-				$this->_data["prestudent"] = $this->_loadPrestudent();
-
-				foreach($this->_data["prestudent"] as $prestudent)
+				if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
 				{
-					$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-					if((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz == "Interessent"))
-					{
-						$doks = $this->_loadDokumentByStudiengang($prestudent->studiengang_kz);
-						foreach($doks as $dok)
-						{
-							if((!isset($this->_data["dokumente"][$dok->dokument_kurzbz])) && ($dok->pflicht == true))
-							{
-								$result->complete = false;
-							}
-						}
-
-						if($prestudent->prestudentStatus->bewerbung_abgeschicktamum !== null)
-						{
-							$result->abgeschickt = true;
-						}
-						else
-						{
-							$result->abgeschickt = false;
-						}
-					}
+					$result->complete = false;
 				}
-			}
-			else
-			{
-				//load preinteressent data
-				$this->_data["prestudent"] = $this->_loadPrestudent();
 
-				foreach($this->_data["prestudent"] as $prestudent)
+				if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
 				{
-					if($prestudent->studiengang_kz === $this->input->post("studiengang_kz"))
+					$result->complete = false;
+				}
+
+				if(!isset($this->input->post()["studiengang_kz"]))
+				{
+					//load preinteressent data
+					$this->_data["prestudent"] = $this->_loadPrestudent();
+
+					foreach($this->_data["prestudent"] as $prestudent)
 					{
 						$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
 						if((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz == "Interessent"))
@@ -785,6 +755,43 @@ class Dokumente extends MY_Controller {
 						}
 					}
 				}
+				else
+				{
+					//load preinteressent data
+					$this->_data["prestudent"] = $this->_loadPrestudent();
+
+					foreach($this->_data["prestudent"] as $prestudent)
+					{
+						if($prestudent->studiengang_kz === $this->input->post("studiengang_kz"))
+						{
+							$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+							if((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz == "Interessent"))
+							{
+								$doks = $this->_loadDokumentByStudiengang($prestudent->studiengang_kz);
+								foreach($doks as $dok)
+								{
+									if((!isset($this->_data["dokumente"][$dok->dokument_kurzbz])) && ($dok->pflicht == true))
+									{
+										$result->complete = false;
+									}
+								}
+
+								if($prestudent->prestudentStatus->bewerbung_abgeschicktamum !== null)
+								{
+									$result->abgeschickt = true;
+								}
+								else
+								{
+									$result->abgeschickt = false;
+								}
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				$result->complete = true;
 			}
 			echo json_encode($result);
 		}
