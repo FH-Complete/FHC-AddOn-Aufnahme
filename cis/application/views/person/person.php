@@ -460,7 +460,7 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 		<div class="col-sm-6">
-			<div class="form-group <?php echo (form_error("geburtsort") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("geburtsort") != "") || (!isset($person->gebort) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_geburtsort'), "geburtsort", array("name" => "geburtsort", "for" => "geburtsort", "class" => "control-label")) ?>
 				<?php
 				$data = array('id' => 'geburtsort', 'name' => 'geburtsort', "type" => "text", "value" => set_value("geburtsort", (isset($person->gebort) ? $person->gebort : "")), "class" => "form-control");
@@ -472,7 +472,7 @@ if (!isset($plz)) $plz = null;
 	</div>
 	<div class="row form-row">
 		<div class="col-sm-6">
-			<div class="form-group <?php echo (form_error("staatsbuergerschaft") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("staatsbuergerschaft") != "") || (!isset($person->staatsbuergerschaft) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_staatsbuergerschaft'), "staatsbuergerschaft", array("name" => "staatsbuergerschaft", "for" => "staatsbuergerschaft", "class" => "control-label")) ?>
 				<?php
 				$data = array('id' => 'staatsbuergerschaft', 'name' => 'staatsbuergerschaft', "class" => "form-control");
@@ -482,7 +482,7 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 		<div class="col-sm-6">
-			<div class="form-group <?php echo (form_error("nation") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("nation") != "") || (!isset($person->geburtsnation) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formGeburtsnation'), "nation", array("name" => "nation", "for" => "nation", "class" => "control-label")) ?>
 				<?php 
 				$data = array('id' => 'nation', 'name' => 'nation', "value" => set_value("nation"), "class" => "form-control");
@@ -494,7 +494,7 @@ if (!isset($plz)) $plz = null;
 	</div>
 	<div class="row form-row svnr_row">
 		<div class="col-sm-6">
-			<div class="form-group <?php echo (form_error("svnr") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("svnr") != "") || (!isset($person->svnr) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formSvn'), "svnr", array("name" => "svnr", "for" => "svnr", "class" => "control-label")) ?>
 				<?php echo form_input(array('id' => 'svnr_orig', 'name' => 'svnr_orig', "type" => "hidden", "value" => set_value("svnr", (isset($person->svnr) ? $person->svnr : "")), "class" => "form-control")); ?>
 				<?php 
@@ -535,7 +535,7 @@ if (!isset($plz)) $plz = null;
 	</div>-->
 	<div class="row form-row">
 		<div class="col-sm-6">
-			<div class="form-group <?php echo (form_error("adresse_nation") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("adresse_nation") != "") || (!isset($adresse->nation) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formAdresseNation'), "adresse_nation", array("name" => "adresse_nation", "for" => "adresse_nation", "class" => "control-label")) ?>
 				<?php 
 				$data = array('id' => 'adresse_nation', 'name' => 'adresse_nation', "value" => set_value("adresse_nation"), "class" => "form-control");
@@ -547,7 +547,7 @@ if (!isset($plz)) $plz = null;
 	</div>
 	<!--<div class="row">
 	<div class="col-sm-6">
-			<div class="form-group <?php echo (form_error("plzOrt") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("plzOrt") != "") || (!isset($gemeinde_id) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formPlzOrt'), "plzOrt", array("name" => "plzOrt", "for" => "plzOrt", "class" => "control-label")) ?>
 				<?php echo form_dropdown("plzOrt", $plz, (isset($gemeinde_id) ? $gemeinde_id : null), array('id' => 'plzOrt', 'name' => 'plzOrt', "value" => set_value("plzOrt"), "class" => "form-control")); ?>
 				<?php echo form_error("plzOrt"); ?>
@@ -556,7 +556,7 @@ if (!isset($plz)) $plz = null;
 	</div>-->
 	<div class="row form-row">
 		<div class="col-sm-6">
-			<div class="form-group <?php echo (form_error("strasse") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("strasse") != "") || (!isset($adresse->strasse) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_strasse'), "strasse", array("name" => "strasse", "for" => "strasse", "class" => "control-label")) ?>
 				<?php
 				$data = array('id' => 'strasse', 'name' => 'strasse', "type" => "text", "value" => set_value("strasse", (isset($adresse->strasse) ? $adresse->strasse : NULL)), "class" => "form-control");
@@ -568,7 +568,7 @@ if (!isset($plz)) $plz = null;
 	</div>
 	<div class="row form-row">
 		<div class="col-sm-3">
-			<div class="form-group <?php echo (form_error("plz") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("plz") != "") || (!isset($adresse->plz) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formPlz'), "plz", array("name" => "plz", "for" => "plz", "class" => "control-label")) ?>
 				<?php 
 				$data = array('id' => 'plz', 'name' => 'plz', "type" => "text", "value" => set_value("plz", (isset($adresse->plz) ? $adresse->plz : NULL)), "class" => "form-control");
@@ -578,7 +578,7 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 		<div id="ort_input" class="col-sm-6 ort_input" style="display: none;">
-			<div class="form-group <?php echo (form_error("ort") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("ort") != "") || (!isset($adresse->ort) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formOrt'), "ort", array("name" => "ort", "for" => "ort", "class" => "control-label")) ?>
 				<?php 
 				$data = array('id' => 'ort', 'name' => 'ort', "type" => "text", "value" => set_value("ort", (isset($adresse->ort) ? $adresse->ort : NULL)), "class" => "form-control");
@@ -588,7 +588,7 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 		<div id="ort_dropdown" class="col-sm-6 ort_dropdown" style="display: none;">
-			<div class="form-group <?php echo (form_error("ort") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("ort") != "" ) || (!isset($adresse->ort) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formOrt'), "ort", array("name" => "ort", "for" => "ort", "class" => "control-label")) ?>
 				<?php 
 				$data = array('id' => 'ort', 'name' => 'ort_dd', "class" => "form-control");
@@ -633,7 +633,7 @@ if (!isset($plz)) $plz = null;
 		</legend>
 		<div class="row form-row">
 			<div class="col-sm-6">
-				<div class="form-group <?php echo (form_error("zustelladresse_nation") != "") ? 'has-error' : '' ?>">
+				<div class="form-group <?php echo ((form_error("zustelladresse_nation") != "") || (!isset($zustell_adresse->nation) && $incomplete)) ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formAdresseNation'), "zustelladresse_nation", array("name" => "zustelladresse_nation", "for" => "zustelladresse_nation", "class" => "control-label")) ?>
 					<?php 
 					$data = array('id' => 'zustelladresse_nation', 'name' => 'zustelladresse_nation', "value" => set_value("zustelladresse_nation"), "class" => "form-control");
@@ -645,7 +645,7 @@ if (!isset($plz)) $plz = null;
 		</div>
 		<!--<div class="row">
 			<div class="col-sm-6">
-			<div class="form-group <?php echo (form_error("zustell_plzOrt") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("zustell_plzOrt") != "") || (!isset($zustell_gemeinde_id) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formPlzOrt'), "zustell_plzOrt", array("name" => "zustell_plzOrt", "for" => "zustell_plzOrt", "class" => "control-label")) ?>
 				<?php echo form_dropdown("zustell_plzOrt", $plz, (isset($zustell_gemeinde_id) ? $zustell_gemeinde_id : null), array('id' => 'zustell_plzOrt', 'name' => 'zustell_plzOrt', "value" => set_value("zustell_plzOrt"), "class" => "form-control")); ?>
 				<?php echo form_error("zustell_plzOrt"); ?>
@@ -654,7 +654,7 @@ if (!isset($plz)) $plz = null;
 		</div>-->
 		<div class="row form-row">
 			<div class="col-sm-8">
-				<div class="form-group <?php echo (form_error("zustell_strasse") != "") ? 'has-error' : '' ?>">
+				<div class="form-group <?php echo ((form_error("zustell_strasse") != "") || (!isset($zustell_adresse->strasse) && $incomplete)) ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_strasse'), "zustell_strasse", array("name" => "zustell_strasse", "for" => "zustell_strasse", "class" => "control-label")) ?>
 					<?php 
 					$data = array('id' => 'zustell_strasse', 'name' => 'zustell_strasse', "type" => "text", "value" => set_value("zustell_strasse", (isset($zustell_adresse->strasse) ? $zustell_adresse->strasse : NULL)), "class" => "form-control");
@@ -666,7 +666,7 @@ if (!isset($plz)) $plz = null;
 		</div>
 		<div class="row form-row">
 			<div class="col-sm-3">
-				<div class="form-group <?php echo (form_error("zustell_plz") != "") ? 'has-error' : '' ?>">
+				<div class="form-group <?php echo ((form_error("zustell_plz") != "") || (!isset($zustell_adresse->plz) && $incomplete)) ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formPlz'), "zustell_plz", array("name" => "zustell_plz", "for" => "zustell_plz", "class" => "control-label")) ?>
 					<?php
 					$data = array('id' => 'zustell_plz', 'name' => 'zustell_plz', "type" => "text", "value" => set_value("zustell_plz", (isset($zustell_adresse->plz) ? $zustell_adresse->plz : NULL)), "class" => "form-control");
@@ -676,7 +676,7 @@ if (!isset($plz)) $plz = null;
 				</div>
 			</div>
 			<div id="zustell_ort_input" class="col-sm-6 zustell_ort_input" style="display: none;">
-				<div class="form-group <?php echo (form_error("zustell_ort") != "") ? 'has-error' : '' ?>">
+				<div class="form-group <?php echo ((form_error("zustell_ort") != "")  || (!isset($zustell_adresse->ort) && $incomplete)) ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("name" => "zustell_ort", "for" => "zustell_ort", "class" => "control-label")) ?>
 					<?php 
 					$data = array('id' => 'zustell_ort', 'name' => 'zustell_ort', "type" => "text", "value" => set_value("zustell_ort", (isset($zustell_adresse->ort) ? $zustell_adresse->ort : NULL)), "class" => "form-control");
@@ -686,7 +686,7 @@ if (!isset($plz)) $plz = null;
 				</div>
 			</div>
 			<div id="zustell_ort_dropdown" class="col-sm-6 zustell_ort_dropdown" style="display: none;">
-				<div class="form-group <?php echo (form_error("zustell_ort") != "") ? 'has-error' : '' ?>">
+				<div class="form-group <?php echo ((form_error("zustell_ort") != "") || (!isset($zustell_adresse->ort) && $incomplete)) ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("name" => "zustell_ort", "for" => "zustell_ort", "class" => "control-label")) ?>
 					<?php 
 					$data = array('id' => 'zustell_ort', 'name' => 'zustell_ort_dd', "value" => set_value("zustell_ort"), "class" => "form-control");
@@ -705,7 +705,7 @@ if (!isset($plz)) $plz = null;
 	</legend>
 	<div class="row form-row">
 		<div class="col-sm-6">
-			<div class="form-group <?php echo (form_error("telefon") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("telefon") != "")  || (!isset($kontakt["telefon"]) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_telefon'), "telefon", array("name" => "telefon", "for" => "telefon", "class" => "control-label")) ?>
 				<?php 
 				$data = array('id' => 'telefon', 'name' => 'telefon', "type" => "text", "value" => set_value("telefon", isset($kontakt["telefon"]) ? $kontakt["telefon"]->kontakt : "" ), "class" => "form-control", "placeholder"=>"0664 1234213");

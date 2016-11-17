@@ -92,6 +92,8 @@ class Bewerbung extends MY_Controller
 
 		//load adress data
 		$this->_loadAdresse();
+		
+		$this->showMissingData();
 
 		//load nationen
 		$this->_loadNationen();
@@ -537,6 +539,8 @@ class Bewerbung extends MY_Controller
 
 		//load kontakt data
 		$this->_loadKontakt();
+		
+		$this->showMissingData();
 
 		//load nationen
 		$this->_loadNationen();
@@ -1303,6 +1307,28 @@ class Bewerbung extends MY_Controller
 		else
 		{
 			$this->_setError(true, $this->GemeindeModel->getErrorMessage());
+		}
+	}
+	
+	private function showMissingData()
+	{
+		if(($this->_data["person"]->anrede != null)
+			||($this->_data["person"]->titelpre != null)
+			||($this->_data["person"]->titelpost != null)
+			||($this->_data["person"]->gebort != null)
+			||($this->_data["person"]->staatsbuergerschaft != null)
+			||($this->_data["person"]->geburtsnation != null)
+			||($this->_data["person"]->svnr != null)
+			||(!isset($this->_data["kontakt"]['telefon']) || $this->_data["kontakt"]['telefon']->kontakt != null)
+			||(!isset($this->_data["adresse"]) || $this->_data["adresse"]->plz != null || $this->_data["adresse"]->strasse != null || $this->_data["adresse"]->ort != null || $this->_data["adresse"]->nation != null)
+			||(!isset($this->_data["zustell_adresse"]) || $this->_data["zustell_adresse"]->plz != null || $this->_data["zustell_adresse"]->strasse != null || $this->_data["zustell_adresse"]->ort != null || $this->_data["zustell_adresse"]->nation != null)
+				)
+		{
+			$this->_data["incomplete"] = true;
+		}
+		else
+		{
+			$this->_data["incomplete"] = false;
 		}
 	}
 
