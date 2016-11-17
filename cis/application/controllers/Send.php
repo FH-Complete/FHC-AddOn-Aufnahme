@@ -560,7 +560,7 @@ class Send extends MY_Controller {
 				}
 			}
 			
-			if((!isset($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz])))
+			if((!isset($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz])) || ((!$this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->nachgereicht) && ($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->dms_id == null )))
 			{
 				$error["dokumente"][$key][$abschlusszeugnis->bezeichnung] = $abschlusszeugnis;
 			}
