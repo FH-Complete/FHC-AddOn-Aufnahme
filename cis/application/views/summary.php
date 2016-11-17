@@ -84,7 +84,7 @@ $this->template->widget(
 	function checkDataCompleteness(studiengang_kz, studienplan_id)
 	{
 		$.ajax({
-			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/checkDataCompleteness"); ?>',
+			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/checkDataCompleteness"); ?>?studiengang_kz='+studiengang_kz,
 			type: 'GET',
 			cache: false,
 			dataType: 'json',

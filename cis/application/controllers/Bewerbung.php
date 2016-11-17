@@ -28,6 +28,7 @@ class Bewerbung extends MY_Controller
 		$this->load->model('gemeinde_model', "GemeindeModel");
 		$this->load->model('Bewerbungstermine_model', 'BewerbungstermineModel');
 		$this->load->model('dokument_model', "DokumentModel");
+		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
 		$this->load->helper("form");
 		$this->load->library("form_validation");
 		$this->_data["sprache"] = $this->get_language();
@@ -1341,6 +1342,9 @@ class Bewerbung extends MY_Controller
 	{
 		//$this->StudiensemesterModel->getNextStudiensemester("WS");
 		$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
+		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
+		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
+		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"]=>$reisepass, $this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf);
 
 		//load person data
 		$this->_data["person"] = $this->_loadPerson();
@@ -1353,6 +1357,10 @@ class Bewerbung extends MY_Controller
 
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
+		
+		$studiengang_kz = $this->input->get("studiengang_kz");
+		
+		$this->_data["dokumenteStudiengang"][$studiengang_kz] = $this->_loadDokumentByStudiengang($studiengang_kz);
 
 		foreach($this->_data["dokumente"] as $akte)
 		{
@@ -1479,8 +1487,56 @@ class Bewerbung extends MY_Controller
 		{
 			$complete["dokumente"] = false;
 		}
+		
+		if(isset($this->_data["dokumenteStudiengang"]))
+		{
+			foreach($this->_data["dokumenteStudiengang"] as $key=>$doks)
+			{
+				foreach($doks as $dokType)
+				{
+					if((!isset($this->_data["dokumente"][$dokType->dokument_kurzbz])) && ($dokType->pflicht == true))
+					{
+						$complete["dokumente"] = false;
+					}
+				}
+
+				foreach($this->_data["personalDocuments"] as $dokType)
+				{
+					if((!isset($this->_data["dokumente"][$dokType->dokument_kurzbz])))
+					{
+						$complete["dokumente"] = false;
+					}
+				}
+				
+				$abschlusszeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["abschlusszeugnis"]);
+				$letztesZeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["letztGueltigesZeugnis"]);
+
+				if((!isset($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz])) || ((!$this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->nachgereicht) && ($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->dms_id == null )))
+				{
+					$complete["dokumente"] = false;
+				}
+				elseif((!isset($this->_data["dokumente"][$letztesZeugnis->dokument_kurzbz])) && ($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->nachgereicht))
+				{
+					$complete["dokumente"] = false;
+				}
+			}
+		}
 
 		return $complete;
+	}
+	
+	private function _loadDokumentByStudiengang($studiengang_kz)
+	{
+		$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($studiengang_kz, true, true);
+		if($this->DokumentStudiengangModel->isResultValid() === true)
+		{
+			
+			return $this->DokumentStudiengangModel->result->retval;
+		}
+		else
+		{
+			$this->_setError(true, $this->DokumentStudiengangModel->getErrorMessage());
+		}
 	}
 
 	private function _getSpecialization($prestudent_id)
