@@ -190,7 +190,7 @@
 				}
 				?>
 			</div>
-			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht == false)) ? 'display: none;' : ''; ?>">
+			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && (($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht == false) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id != null))) ? 'display: none;' : ''; ?>">
 				<span class="btn btn-success fileinput-button">
 					<i class="glyphicon glyphicon-plus"></i>
 					<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
