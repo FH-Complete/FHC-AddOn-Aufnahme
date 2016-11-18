@@ -712,8 +712,11 @@ class Dokumente extends MY_Controller {
 			$result->complete = true;
 			//load dokumente
 			$this->_loadDokumente($this->session->userdata()["person_id"]);
+			$this->_data["prestudent"] = $this->_loadPrestudent();
 			
-			if(!empty($this->_data["dokumente"]))
+			//var_dump($this->_data["prestudent"]);
+			
+			if(!empty($this->_data["prestudent"]))
 			{
 				if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
 				{
