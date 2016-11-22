@@ -83,18 +83,36 @@ class Aufnahmetermine extends MY_Controller {
 
 		if (date("Y-m-d", strtotime($reihungstest->anmeldefrist)) > date("Y-m-d")) {
 			//check if new registration or change
-			if (!empty($this->_data["anmeldungen"][$studiengang_kz])) {
-				foreach ($this->_data["anmeldungen"] as $anmeldung) {
-					if (($anmeldung->studiengang_kz === $studiengang_kz) && ($anmeldung->reihungstest_id !== $this->input->post()["rtTermin"]))
+			if (!empty($this->_data["anmeldungen"][$studiengang_kz]))
+			{
+				foreach ($this->_data["anmeldungen"] as $key=>$anmeldungen) 
+				{	
+					foreach ($anmeldungen as $anmeldung)
 					{
-						$this->_deleteRegistrationToReihungstest($anmeldung);
-						$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"], $studienplan_id);
-						foreach($this->_data["studiengaenge"] as $studiengang)
+						if (($anmeldung->studiengang_kz === $studiengang_kz) && ($anmeldung->studienplan_id === $studienplan_id) && ($anmeldung->reihungstest_id !== $this->input->post()["rtTermin"]))
 						{
-							if($studiengang->studiengang_kz === $studiengang_kz)
+							$this->_deleteRegistrationToReihungstest($anmeldung);
+							$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"], $studienplan_id);
+							foreach($this->_data["studiengaenge"] as $studiengang)
 							{
-								$studiengang->studiengangstyp = $this->_loadStudiengangstyp($studiengang->typ);
-								$this->_sendMessageMailAppointmentConfirmation($this->_data["person"], $studiengang, $reihungstest);
+								if($studiengang->studiengang_kz === $studiengang_kz)
+								{
+									$studiengang->studiengangstyp = $this->_loadStudiengangstyp($studiengang->typ);
+									$this->_sendMessageMailAppointmentConfirmation($this->_data["person"], $studiengang, $reihungstest);
+								}
+							}
+						}
+						//register if there are existing registrations for other studienplan of same stg
+						elseif(($anmeldung->studiengang_kz === $studiengang_kz) && ($anmeldung->studienplan_id != $studienplan_id) && ($anmeldung->reihungstest_id !== $this->input->post()["rtTermin"]))
+						{
+							$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"], $studienplan_id);
+							foreach($this->_data["studiengaenge"] as $studiengang)
+							{
+								if($studiengang->studiengang_kz === $studiengang_kz)
+								{
+									$studiengang->studiengangstyp = $this->_loadStudiengangstyp($studiengang->typ);
+									$this->_sendMessageMailAppointmentConfirmation($this->_data["person"], $studiengang, $reihungstest);
+								}
 							}
 						}
 					}
