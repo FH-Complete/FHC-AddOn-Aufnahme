@@ -394,7 +394,7 @@ if (!isset($plz)) $plz = null;
 <?php echo form_open_multipart("Bewerbung?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
 	<div class="row form-row">
 		<div class="col-sm-3">
-			<div class="form-group <?php echo (form_error("anrede") != "") ? 'has-error' : '' ?>">
+			<div class="form-group <?php echo ((form_error("anrede") != "") || (!isset($person->anrede) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formAnrede'), "anrede", array("name" => "anrede", "for" => "anrede", "class" => "control-label")) ?>
 				<?php 
 				$data = array('id' => 'anrede', 'name' => 'anrede', "class" => "form-control");
@@ -477,7 +477,7 @@ if (!isset($plz)) $plz = null;
 				<?php
 				$data = array('id' => 'staatsbuergerschaft', 'name' => 'staatsbuergerschaft', "class" => "form-control");
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
-				echo form_dropdown("staatsbuergerschaft", $nationen, (isset($person->staatsbuergerschaft) ? $person->staatsbuergerschaft : "A"), $data); ?>
+				echo form_dropdown("staatsbuergerschaft", $nationen, (isset($person->staatsbuergerschaft) ? $person->staatsbuergerschaft : null), $data); ?>
 				<?php echo form_error("staatsbuergerschaft"); ?>
 			</div>
 		</div>
@@ -487,7 +487,7 @@ if (!isset($plz)) $plz = null;
 				<?php 
 				$data = array('id' => 'nation', 'name' => 'nation', "value" => set_value("nation"), "class" => "form-control");
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
-				echo form_dropdown("nation", $nationen, (isset($person->geburtsnation) ? $person->geburtsnation : "A"), $data); ?>
+				echo form_dropdown("nation", $nationen, (isset($person->geburtsnation) ? $person->geburtsnation : null), $data); ?>
 				<?php echo form_error("nation"); ?>
 			</div>
 		</div>

@@ -934,10 +934,22 @@ class Bewerbung extends MY_Controller
 		$this->nation_model->getNationen();
 		if ($this->nation_model->isResultValid() === true)
 		{
+			$nation_code = "";
+			$kurztext = "";
 			foreach($this->nation_model->result->retval as $n)
 			{
-				$this->_data["nationen"][$n->nation_code] = $n->kurztext;
+				if($n->nation_code == "A")
+				{
+					$nation_code = $n->nation_code;
+					$kurztext = $n->kurztext;
+				}
+				else
+				{
+					$this->_data["nationen"][$n->nation_code] = $n->kurztext;
+				}
 			}
+			
+			$this->_data["nationen"] = array_merge(array("null"=>"", $nation_code => $kurztext), $this->_data["nationen"]);
 		}
 		else
 		{
