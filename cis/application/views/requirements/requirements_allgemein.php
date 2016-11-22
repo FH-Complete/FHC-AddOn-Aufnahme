@@ -28,7 +28,7 @@
 				<?php
 			}
 		?>
-		<?php echo $this->getPhrase("ZGV/Options", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+		<?php echo $this->getPhrase("ZGV/Options", $sprache, $studiengang->oe_kurzbz, null); ?>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$.ajax({
