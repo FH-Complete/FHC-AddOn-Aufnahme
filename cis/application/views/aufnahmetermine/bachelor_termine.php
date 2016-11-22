@@ -58,7 +58,15 @@ if (!empty($studiengaenge)) {
 					</div>
 					<div class="row">
 						<div class="col-sm-8">
-							<span class="selectedTermin"><?php echo $reihungstests[$stg->studiengang_kz][1][$rt_person[$stg->studiengang_kz]]; ?></span>
+							<span class="selectedTermin"><?php
+							foreach($reihungstests[$stg->studiengang_kz][1] as $key=>$reihungstest)
+							{
+								if(in_array($key, $rt_person[$stg->studiengang_kz]))
+								{
+									echo $reihungstest;
+								}
+							}
+							 ?></span>
 						</div>
 					</div>
 					<?php

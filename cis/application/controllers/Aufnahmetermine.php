@@ -83,7 +83,7 @@ class Aufnahmetermine extends MY_Controller {
 
 		if (date("Y-m-d", strtotime($reihungstest->anmeldefrist)) > date("Y-m-d")) {
 			//check if new registration or change
-			if (!empty($this->_data["anmeldungen"])) {
+			if (!empty($this->_data["anmeldungen"][$studiengang_kz])) {
 				foreach ($this->_data["anmeldungen"] as $anmeldung) {
 					if (($anmeldung->studiengang_kz === $studiengang_kz) && ($anmeldung->reihungstest_id !== $this->input->post()["rtTermin"]))
 					{
@@ -137,9 +137,16 @@ class Aufnahmetermine extends MY_Controller {
 		$this->_data["anmeldungen"] = $this->_loadReihungstestsByPersonId($this->_data["person"]->person_id);
 
 		$this->_data["rt_person"] = array();
-		foreach($this->_data["anmeldungen"] as $anmeldung)
+		foreach($this->_data["anmeldungen"] as $studiengang_kz=>$anmeldungen)
 		{
-			$this->_data["rt_person"][$anmeldung->studiengang_kz] = $anmeldung->reihungstest_id;
+			foreach ($anmeldungen as $anmeldung)
+			{
+				if(!isset($this->_data["rt_person"][$studiengang_kz]))
+				{
+					$this->_data["rt_person"][$studiengang_kz] = array();
+				}
+				array_push($this->_data["rt_person"][$studiengang_kz], $anmeldung->reihungstest_id);
+			}
 		}
 
 		//load preinteressent data
@@ -185,6 +192,7 @@ class Aufnahmetermine extends MY_Controller {
 	private function _registerToReihungstest($person_id, $reihungstest_id, $studienplan_id)
 	{
 		$this->PrestudentModel->registerToReihungstest($person_id, $reihungstest_id, $studienplan_id);
+//		var_dump($this->PrestudentModel->result);
 		if($this->PrestudentModel->isResultValid() === true)
 		{
 
@@ -229,7 +237,16 @@ class Aufnahmetermine extends MY_Controller {
 		$this->ReihungstestModel->getReihungstestByPersonID($person_id);
 		if($this->ReihungstestModel->isResultValid() === true)
 		{
-			return $this->ReihungstestModel->result->retval;
+			$anmeldungen = array();
+			foreach ($this->ReihungstestModel->result->retval as $anmeldung)
+			{
+				if(!isset($anmeldungen[$anmeldung->studiengang_kz]))
+				{
+					$anmeldungen[$anmeldung->studiengang_kz] = array();
+				}
+				array_push($anmeldungen[$anmeldung->studiengang_kz], $anmeldung);
+			}
+			return $anmeldungen;
 		}
 		else
 		{
