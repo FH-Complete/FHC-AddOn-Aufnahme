@@ -540,7 +540,7 @@ if (!isset($plz)) $plz = null;
 				<?php 
 				$data = array('id' => 'adresse_nation', 'name' => 'adresse_nation', "value" => set_value("adresse_nation"), "class" => "form-control");
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
-				echo form_dropdown("adresse_nation", $nationen, (isset($adresse->nation) ? $adresse->nation : "A"), $data); ?>
+				echo form_dropdown("adresse_nation", $nationen, (isset($adresse->nation) ? $adresse->nation : null), $data); ?>
 				<?php echo form_error("adresse_nation"); ?>
 			</div>
 		</div>
@@ -638,7 +638,7 @@ if (!isset($plz)) $plz = null;
 					<?php 
 					$data = array('id' => 'zustelladresse_nation', 'name' => 'zustelladresse_nation', "value" => set_value("zustelladresse_nation"), "class" => "form-control");
 					(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
-					echo form_dropdown("zustelladresse_nation", $nationen, (isset($zustell_adresse->nation) ? $zustell_adresse->nation : "A"), $data); ?>
+					echo form_dropdown("zustelladresse_nation", $nationen, (isset($zustell_adresse->nation) ? $zustell_adresse->nation : null), $data); ?>
 					<?php echo form_error("zustelladresse_nation"); ?>
 				</div>
 			</div>

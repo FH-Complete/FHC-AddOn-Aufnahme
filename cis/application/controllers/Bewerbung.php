@@ -158,9 +158,10 @@ class Bewerbung extends MY_Controller
 			{
 				$person->gebdatum = date('Y-m-d', strtotime($post["gebdatum"]));
 			}
-			$person->gebort = $post["geburtsort"] != '' ? $post["geburtsort"] : null;
-			$person->geburtsnation = $post["nation"] != '' ? $post["nation"] : null;
-
+			
+			$person->gebort = (($post["geburtsort"] != '') && ($post["geburtsort"] != 'null')) ? $post["geburtsort"] : null;
+			$person->geburtsnation = (($post["nation"] != '') && ($post["nation"] != 'null')) ? $post["nation"] : null;
+			
 			if ($post["anrede"] === "Herr")
 			{
 				$person->geschlecht = "m";
@@ -176,7 +177,7 @@ class Bewerbung extends MY_Controller
 				$person->geschlecht = "u";
 			}
 
-			$person->staatsbuergerschaft = $post["staatsbuergerschaft"] != '' ? $post["staatsbuergerschaft"] : null;
+			$person->staatsbuergerschaft = (($post["staatsbuergerschaft"] != '') && ($post["staatsbuergerschaft"] != 'null')) ? $post["staatsbuergerschaft"] : null;
 
 			// An die SVNR wird v1, v2, v3, etc hinzugefuegt wenn die SVNR bereits vorhanden ist
 			// In der Anzeige wird dies herausgefiltert. Deshalb muss beim Speichern der Daten
