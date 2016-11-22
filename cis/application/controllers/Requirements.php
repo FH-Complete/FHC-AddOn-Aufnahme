@@ -755,4 +755,20 @@ class Requirements extends MY_Controller
 			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
 		}
 	}
+	
+	public function getOption()
+	{
+		if(isset($this->session->userdata()["person_id"]))
+		{
+			$result = new stdClass();
+			$this->_loadDokumente($this->session->userdata()["person_id"]);
+		
+			if((isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]])) && ($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung != null))
+			{
+				$result->error = 0;
+				$result->result = $this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung;
+			}
+			echo json_encode($result, JSON_UNESCAPED_UNICODE);
+		}
+	}
 }

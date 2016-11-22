@@ -21,9 +21,12 @@ if(($spez_phrase != null) && (substr($spez_phrase,0,3) !== "<i>"))
 			<?php
 				if(!empty($spezialisierung[$studiengang->studiengang_kz]))
 				{
+					if((!isset($bewerbung_abgeschickt)) || ($bewerbung_abgeschickt!=true))
+					{
 					?>
 					<a href="<?php echo base_url($this->config->config["index_page"]."/Requirements/deleteSpezialisierung/".$spezialisierung[$studiengang->studiengang_kz]->notiz_id."/".$studiengang->studiengang_kz); ?>"><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-trash"></span></button></a>
 					<?php
+					}
 					$spez = explode(";",$spezialisierung[$studiengang->studiengang_kz]->text);
 					echo "<ol class='list-group'>";
 					foreach($spez as $key=>$item)

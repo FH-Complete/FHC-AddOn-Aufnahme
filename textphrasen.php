@@ -871,6 +871,88 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'text' => '',
 			'description' => ''
 		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/Options',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => '<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)"/>
+								Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="Nachweis der Studienberechtigungsprüfung"/>
+								Nachweis der Studienberechtigungsprüfung
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="gleichwertiges ausländisches Zeugnis"/>
+								gleichwertiges ausländisches Zeugnis
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen"/>
+								Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/Options',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)"/>
+								Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="Nachweis der Studienberechtigungsprüfung"/>
+								Nachweis der Studienberechtigungsprüfung
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="gleichwertiges ausländisches Zeugnis"/>
+								gleichwertiges ausländisches Zeugnis
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen"/>
+								Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>',
+			'description' => ''
+		)
 	)
 );
 

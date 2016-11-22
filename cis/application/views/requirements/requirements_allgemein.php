@@ -28,7 +28,34 @@
 				<?php
 			}
 		?>
-		<div class="radio">
+		<?php echo $this->getPhrase("ZGV/Options", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$.ajax({
+					url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/getOption"); ?>',
+					type: 'POST',
+					cache: false,
+					dataType: 'json',
+					success: function(data, textStatus, jqXHR)
+					{
+						if(data.error !== 0)
+						{
+							//TODO display error
+						}
+						else
+						{
+							$("input[value='"+data.result+"']").prop("checked", true);
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						// Handle errors here
+						console.log('ERRORS: ' + textStatus);
+						// STOP LOADING SPINNER
+					}
+				});
+			});
+		</script>
+		<!--<div class="radio">
 			<label>
 				<input type="radio" name="doktype" value="Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)" 
 					<?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)") !== false) ? 'checked' : "") : ""; ?>
@@ -71,7 +98,7 @@
 			</label>
 			&nbsp;
 			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
-		</div>
+		</div>-->
     </div>
 </div>
 <div class="row">

@@ -189,6 +189,10 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
 					{
 						$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/nochNichtAbgeschickt'); ?>");
 					}
+					else
+					{
+						$("input[name='doktype']").prop("disabled", true);
+					}
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
