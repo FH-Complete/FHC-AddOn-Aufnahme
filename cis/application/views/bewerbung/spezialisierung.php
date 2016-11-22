@@ -22,7 +22,7 @@ if(($spez_phrase != null) && (substr($spez_phrase,0,3) !== "<i>"))
 				if(!empty($spezialisierung[$studiengang->studiengang_kz]))
 				{
 					?>
-					<a href="<?php echo base_url($this->config->config["index_page"]."/Bewerbung/deleteSpezialisierung/".$spezialisierung[$studiengang->studiengang_kz]->notiz_id."/".$studiengang->studiengang_kz); ?>"><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-trash"></span></button></a>
+					<a href="<?php echo base_url($this->config->config["index_page"]."/Requirements/deleteSpezialisierung/".$spezialisierung[$studiengang->studiengang_kz]->notiz_id."/".$studiengang->studiengang_kz); ?>"><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-trash"></span></button></a>
 					<?php
 					$spez = explode(";",$spezialisierung[$studiengang->studiengang_kz]->text);
 					echo "<ol class='list-group'>";

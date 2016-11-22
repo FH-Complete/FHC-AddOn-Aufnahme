@@ -117,7 +117,6 @@ $config['view_login'][] = 'login/uid_login';
 
 $config['view_bewerbung_studiengang'][] = 'bewerbung/studiengang';
 $config['view_bewerbung'][] = 'person/person';
-$config['view_bewerbung'][] = 'bewerbung/spezialisierung';
 
 $config['view_contact'][] = 'person/contact';
 
@@ -128,6 +127,7 @@ $config['view_studiengaenge'][] = 'studiengaenge/bachelor';
 $config['view_studiengaenge'][] = 'studiengaenge/master';
 
 $config['view_requirements'][] = 'requirements/requirements_allgemein';
+$config['view_requirements'][] = 'bewerbung/spezialisierung';
 $config['view_requirements'][] = 'requirements/requirements_spezifisch';
 
 $config['view_summary'][] = 'summary/summary_personal';

@@ -77,6 +77,9 @@ class Requirements extends MY_Controller
 				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 				$studiengang->studienplan = $studienplan;
 				
+				$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+				$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+				
 				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
 				{
 					$this->_data["bewerbung_abgeschickt"] = true;
@@ -190,6 +193,33 @@ class Requirements extends MY_Controller
 			{
 				$dms = $this->_loadDms($akte->dms_id);
 				$akte->dokument = $dms;
+			}
+		}
+		
+		if((isset($this->input->post()["spezialisierung"])) && (is_array($this->input->post()["spezialisierung"])))
+		{
+			foreach ($this->_data["prestudent"] as $prestudent)
+			{
+				if(($prestudent->studiengang_kz === $this->input->get("studiengang_kz")) &&(empty($prestudent->spezialisierung)))
+				{
+					if ((!empty($prestudent->prestudentStatus))
+						&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+							|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
+					{
+						$text = "";
+						foreach($this->input->post()["spezialisierung"] as $spez)
+						{
+							$text .= $spez.";";
+						}
+						$text = substr($text, 0, -1);
+						if (substr_count($text, ';') !== strlen($text))
+						{
+							$this->_saveSpecialization($prestudent->prestudent_id, $text);
+							$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+							$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+						}
+					}
+				}
 			}
 		}
 		
@@ -427,6 +457,37 @@ class Requirements extends MY_Controller
 
 		echo json_encode($result);
 	}
+	
+	/**
+	 *
+	 * @param type $notiz_id
+	 */
+	public function deleteSpezialisierung($notiz_id, $studiengang_kz)
+	{
+		$this->_data["prestudent"] = $this->_loadPrestudent();
+
+//		$this->_data["studiengaenge"] = array();
+		foreach ($this->_data["prestudent"] as $prestudent)
+		{
+			if($prestudent->studiengang_kz === $studiengang_kz)
+			{
+				$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+
+				if ((!empty($prestudent->prestudentStatus))
+					&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+						|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
+				{
+					$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+
+					if((!empty($prestudent->spezialisierung)) && ($prestudent->spezialisierung->notiz_id === $notiz_id))
+					{
+						$this->_removeSpecialization($notiz_id);
+						redirect("/Requirements?studiengang_kz=".$studiengang_kz."&tudienplan_id=".$prestudent->prestudentStatus->studienplan_id);
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 *
@@ -646,6 +707,52 @@ class Requirements extends MY_Controller
 		else
 		{
 			$this->_setError(true, $this->DokumentModel->getErrorMessage());
+		}
+	}
+	
+	private function _getSpecialization($prestudent_id)
+	{
+		$this->PrestudentModel->getSpecialization($prestudent_id, "aufnahme/spezialisierung");
+		if ($this->PrestudentModel->isResultValid() === true)
+		{
+			if(count($this->PrestudentModel->result->retval) === 1)
+			{
+				return $this->PrestudentModel->result->retval[0];
+			}
+			else
+			{
+				return array();
+			}
+		}
+		else
+		{
+			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
+		}
+	}
+
+	private function _removeSpecialization($notiz_id)
+	{
+		$this->PrestudentModel->removeSpecialization($notiz_id);
+		if ($this->PrestudentModel->isResultValid() === true)
+		{
+			return $this->PrestudentModel->result;
+		}
+		else
+		{
+			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
+		}
+	}
+
+	private function _saveSpecialization($prestudent_id, $text)
+	{
+		$this->PrestudentModel->saveSpecialization($prestudent_id, "aufnahme/spezialisierung", $text);
+		if ($this->PrestudentModel->isResultValid() === true)
+		{
+			return $this->PrestudentModel->result;
+		}
+		else
+		{
+			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
 		}
 	}
 }
