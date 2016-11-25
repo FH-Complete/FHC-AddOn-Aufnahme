@@ -130,6 +130,13 @@ class MY_Controller extends CI_Controller
 							else
 								$text = $p->text;
 						}
+						elseif (($p->orgeinheit_kurzbz == $this->config->item("root_oe")) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+						{
+							if ($this->config->item('display_phrase_name'))
+								$text = $p->text . " <i>[$p->phrase]</i>";
+							else
+								$text = $p->text;
+						}
 						elseif (($p->orgeinheit_kurzbz == null) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
 						{
 							if ($this->config->item('display_phrase_name'))

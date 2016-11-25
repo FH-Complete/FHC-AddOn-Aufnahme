@@ -874,7 +874,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 	),
 	array
 	(
-		'phrase' => 'ZGV/Options',
+		'phrase' => 'ZGV/OptionsBachelor',
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
@@ -915,7 +915,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 	),
 	array
 	(
-		'phrase' => 'ZGV/Options',
+		'phrase' => 'ZGV/OptionsBachelor',
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
@@ -947,6 +947,72 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 							<label>
 								<input type="radio" name="doktype" value="Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen"/>
 								Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/OptionsMaster',
+		'phrasentext' => array
+		(
+			'sprache' => 'German',
+			'text' => '<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="abgeschlossenes, facheinschlägiges Bachelorstudium"/>
+								 abgeschlossenes, facheinschlägiges Bachelorstudium
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="abgeschlossenes, gleichwertiges Studium an einer anerkannten inländischen oder ausländischen postsekundären Bildungseinrichtung im Ausmaß von mindestens 180 ECTS und sechs Semestern"/>
+								abgeschlossenes, gleichwertiges Studium an einer anerkannten inländischen oder ausländischen postsekundären Bildungseinrichtung im Ausmaß von mindestens 180 ECTS und sechs Semestern
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="Nachweis der erworbenen Zugangsvoraussetzungen für das vorangegangene akademische Studium (Allgemeine Universitätsreife, Studienberechtigungsprüfung, Berufsreifeprüfung, Zusatzprüfungen Lehre"/>
+								Nachweis der erworbenen Zugangsvoraussetzungen für das vorangegangene akademische Studium (Allgemeine Universitätsreife, Studienberechtigungsprüfung, Berufsreifeprüfung, Zusatzprüfungen Lehre
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>',
+			'description' => ''
+		)
+	),
+	array
+	(
+		'phrase' => 'ZGV/OptionsMaster',
+		'phrasentext' => array
+		(
+			'sprache' => 'English',
+			'text' => '<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="abgeschlossenes, facheinschlägiges Bachelorstudium"/>
+								 abgeschlossenes, facheinschlägiges Bachelorstudium
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="abgeschlossenes, gleichwertiges Studium an einer anerkannten inländischen oder ausländischen postsekundären Bildungseinrichtung im Ausmaß von mindestens 180 ECTS und sechs Semestern"/>
+								abgeschlossenes, gleichwertiges Studium an einer anerkannten inländischen oder ausländischen postsekundären Bildungseinrichtung im Ausmaß von mindestens 180 ECTS und sechs Semestern
+							</label>
+							&nbsp;
+							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="doktype" value="Nachweis der erworbenen Zugangsvoraussetzungen für das vorangegangene akademische Studium (Allgemeine Universitätsreife, Studienberechtigungsprüfung, Berufsreifeprüfung, Zusatzprüfungen Lehre"/>
+								Nachweis der erworbenen Zugangsvoraussetzungen für das vorangegangene akademische Studium (Allgemeine Universitätsreife, Studienberechtigungsprüfung, Berufsreifeprüfung, Zusatzprüfungen Lehre
 							</label>
 							&nbsp;
 							<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>

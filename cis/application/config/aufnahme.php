@@ -279,3 +279,13 @@ $config['GoogleTagManagerScriptHead'] = "";
 |--------------------------------------------------------------------------
 */
 $config['GoogleTagManagerScriptBody'] = '';
+
+/*
+|--------------------------------------------------------------------------
+| ZGV Options Mapping to STG Typ
+|--------------------------------------------------------------------------
+*/
+$config['ZgvOptionsMapping'] = array(
+	"b" => "ZGV/OptionsBachelor",
+	"m" => "ZGV/OptionsMaster"
+);
