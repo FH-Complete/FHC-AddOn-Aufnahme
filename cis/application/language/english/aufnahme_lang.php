@@ -224,6 +224,7 @@ $lang['aufnahme/registrieren']='Register';
 $lang['aufnahme/nochNichtAbgeschickt']='Not yet sent';
 $lang['aufnahme/unvollständig']='Application incomplete';
 $lang['aufnahme/backToApplications']='back to applications overview';
+$lang['aufnahme/absenden']='Send';
 
 //TODO translate
 $lang['aufnahme/anredeUnknown']='geehrte/r Frau/Herr';

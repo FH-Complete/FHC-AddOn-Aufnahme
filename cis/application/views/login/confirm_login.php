@@ -42,7 +42,7 @@ $this->lang->load(array('aufnahme', 'login'), $sprache);
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="form-group <?php echo (form_error("email") != "") ? 'has-error' : '' ?>">
-						<?php echo form_label("E-Mail Adresse", "email", array("name" => "email", "for" => "email", "class" => "col-sm-3 control-label")) ?>
+						<?php echo form_label($this->lang->line("aufnahme/emailAdresse"), "email", array("name" => "email", "for" => "email", "class" => "col-sm-3 control-label")) ?>
 						<div class="col-sm-4">
 							<?php echo form_input(array('id' => 'email', 'name' => 'email', 'maxlength' => 128, "type" => "email", "value" => $email, "class" => "form-control")); ?>
 							<?php echo form_error("email"); ?>
@@ -53,7 +53,7 @@ $this->lang->load(array('aufnahme', 'login'), $sprache);
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="form-group <?php echo (form_error("password") != "") ? 'has-error' : '' ?>">
-						<?php echo form_label("Passwort", "password", array("name" => "password", "for" => "password", "class" => "col-sm-3 control-label")) ?>
+						<?php echo form_label($this->lang->line('aufnahme/password'), "password", array("name" => "password", "for" => "password", "class" => "col-sm-3 control-label")) ?>
 						<div class="col-sm-4">
 							<?php echo form_input(array('id' => 'password', 'name' => 'password', "type" => "password", "class" => "form-control")); ?>
 							<?php echo form_error("password"); ?>
@@ -65,7 +65,7 @@ $this->lang->load(array('aufnahme', 'login'), $sprache);
 				<div class="col-sm-12">
 					<div class="form-group">
 						<div class="col-sm-4 col-sm-offset-3">
-							<?php echo form_button(array("content"=>"Abschicken", "name"=>"submit_btn", "class"=>"btn btn-primary", "type"=>"submit")); ?>
+							<?php echo form_button(array("content"=>$this->lang->line("aufnahme/absenden"), "name"=>"submit_btn", "class"=>"btn btn-primary", "type"=>"submit")); ?>
 						</div>
 					</div>
 				</div>

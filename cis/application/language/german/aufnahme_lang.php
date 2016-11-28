@@ -234,5 +234,6 @@ $lang['aufnahme/registrieren']='Registrieren';
 $lang['aufnahme/nochNichtAbgeschickt']='Noch nicht abgesandt';
 $lang['aufnahme/unvollständig']='Bewerbung unvollständig';
 $lang['aufnahme/backToApplications']='Zurück zur Bewerbungsübersicht';
+$lang['aufnahme/absenden']='Absenden';
 
 ?>
