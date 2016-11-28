@@ -8,6 +8,9 @@
 
 ?>
 <div id="registration">
+	<?php
+		echo (isset($message))? "<div id='sendSuccessMessage'>".$message."</div>":"";
+	?>
     <?php echo form_open("Registration?studiengang_kz=".$studiengang_kz, array("id"=>"RegistrationLoginForm", "name"=>"RegistrationLoginForm", "class"=>"form-horizontal")); ?>
     <!--<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('/themes/'. $this->config->item('theme').'/images/logo.png'); ?>">	-->
     <h1 class="text-center"><?php echo $this->getPhrase("Registration/RegistrationGreetingText", $sprache, $this->config->item('root_oe')); ?></h1>
@@ -141,8 +144,6 @@
 		</div>
     </div>
     <?php echo form_close();
-//wirtes message if email adress exists
-echo (isset($message))? "<div id='sendSuccessMessage'>".$message."</div>":"";
 if (isset($error) && ($error->error === true))
 	echo '<div class="alert alert-danger" role="alert">'.$error->msg.'</div>';
 ?>
