@@ -88,6 +88,11 @@ class Requirements extends MY_Controller
 			}
 		}
 		
+		if((!empty($this->input->post())) && (isset($this->_data["bewerbung_abgeschickt"])) && ($this->_data["bewerbung_abgeschickt"] == true))
+		{
+			redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+		}
+		
 		if(count($this->_data["studiengaenge"]) > 1)
 		{
 			usort($this->_data["studiengaenge"], array($this, "cmpStg"));

@@ -43,6 +43,7 @@ $lang["person_UploadError"] = "An error occured";
 $lang["aufnahme_dateiAuswahl"] = "Select file";
 $lang["person_delete"] = "delete";
 $lang["person_speichern"] = "Save & Next";
+$lang["person_weiter"] = "Next";
 
 
 //TODO translate

@@ -22,3 +22,4 @@ $lang["requirements_dateiAuswahl"] = "Select file";
 $lang["requirements_delete"] = "delete";
 $lang["requirements_speichern"] = "Save & Next";
 $lang["requirements_selectOption"] = "Please make a selection.";
+$lang["requirements_weiter"] = "Next";

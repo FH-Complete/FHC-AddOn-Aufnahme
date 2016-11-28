@@ -67,7 +67,7 @@ class Bewerbung extends MY_Controller
 		{
 			//load studiengaenge der prestudenten
 			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
 
 			if ((!empty($prestudent->prestudentStatus))
 				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
@@ -129,6 +129,11 @@ class Bewerbung extends MY_Controller
 				$akte->dokument = $dms;
 			}
 		}
+		
+		if((!empty($this->input->post())) && (isset($this->_data["bewerbung_abgeschickt"])) && ($this->_data["bewerbung_abgeschickt"] == true))
+		{
+			redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+		}
 
 		//form validation rules
 		$this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
@@ -148,6 +153,7 @@ class Bewerbung extends MY_Controller
 		}
 		else
 		{
+			
 			$post = $this->input->post();
 			$person = $this->_data["person"];
 			$person->vorname = $post["vorname"];
@@ -454,7 +460,7 @@ class Bewerbung extends MY_Controller
 	 */
 	public function check_date() {
 		$date = explode(".", $this->input->post("gebdatum"));
-		if (!checkdate($date[1], $date[0], $date[2])) {
+		if ((is_array($date)) && (count($date) == 3) && (!checkdate($date[1], $date[0], $date[2]))) {
 			//$this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
 			$this->form_validation->set_message("check_date", "Bitte geben Sie ein gültiges Datum an.");
 			return false;
@@ -504,6 +510,8 @@ class Bewerbung extends MY_Controller
 		{
 			$exists = false;
 			$prestudentStatus = null;
+			$exitingPrestudent = null;
+			
 			foreach($this->_data["prestudent"] as $prestudent)
 			{
 				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
@@ -512,7 +520,16 @@ class Bewerbung extends MY_Controller
 					($prestudentStatus->studiensemester_kurzbz == $this->session->userdata()["studiensemester_kurzbz"]))
 				{
 					$exists = true;
+					//nothing else to do; same prestudent with status exists
 				}
+				elseif(($prestudent->studiengang_kz == $studiengang_kz) && (is_object($prestudentStatus)) &&
+					(($prestudentStatus->status_kurzbz === "Interessent") || ($prestudentStatus->status_kurzbz === "Bewerber") || ($prestudentStatus->status_kurzbz === "Abgewiesener")))
+				{
+					$exists = true;
+					//just adding new status
+					$this->_savePrestudentStatus($prestudent, "Interessent");
+				}
+				
 				$prestudentStatus = null;
 			}
 
@@ -573,7 +590,7 @@ class Bewerbung extends MY_Controller
 		{
 			//load studiengaenge der prestudenten
 			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
 
 			if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent"))
 			{
@@ -639,7 +656,7 @@ class Bewerbung extends MY_Controller
 		{
 			if ($prestudent->studiengang_kz === $studiengang_kz)
 			{
-				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
 
 				if ($prestudentStatus !== null)
 				{
@@ -815,7 +832,7 @@ class Bewerbung extends MY_Controller
 		{
 			if($prestudent->studiengang_kz === $studiengang_kz)
 			{
-				$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+				$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
 
 				if ((!empty($prestudent->prestudentStatus))
 					&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
@@ -870,10 +887,10 @@ class Bewerbung extends MY_Controller
 		}
 	}
 
-	private function _loadPrestudentStatus($prestudent_id)
+	private function _loadPrestudentStatus($prestudent_id, $studiensemester_kurzbz = null)
 	{
 		//$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1));
-		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1));
+		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$studiensemester_kurzbz, "ausbildungssemester"=>1));
 		if($this->PrestudentStatusModel->isResultValid() === true)
 		{
 			if (($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
@@ -1039,6 +1056,8 @@ class Bewerbung extends MY_Controller
 		$prestudent->person_id = $this->session->userdata()["person_id"];
 		$prestudent->studiengang_kz = $studiengang_kz;
 		$prestudent->aufmerksamdurch_kurzbz = 'k.A.';
+		$prestudent->insertamum = date('Y-m-d H:i:s');
+		$prestudent->insertvon = date('aufnahme');
 		$this->PrestudentModel->savePrestudent($prestudent);
 		if ($this->PrestudentModel->isResultValid() === true)
 		{

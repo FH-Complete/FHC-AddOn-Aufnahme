@@ -57,8 +57,8 @@ foreach ($studiengaenge as $studiengang) {
 							<div class="col-sm-4">
 								<div class="form-group">
 									<?php 
-									$data = array("content"=>$this->lang->line("person_speichern"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit");
-									(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
+									$data = array("content"=>(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $this->lang->line("person_weiter"):$this->lang->line("person_speichern"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit");
+									//(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
 									echo form_button($data); ?>
 								</div>
 							</div>

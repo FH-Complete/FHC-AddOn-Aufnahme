@@ -50,3 +50,4 @@ $lang["person_titelPostInfo"] = "Titel der nach dem Namen geschrieben wird – z
 $lang["aufnahme_dateiAuswahl"] = "Datei auswählen";
 $lang["person_delete"] = "löschen";
 $lang["person_speichern"] = "Speichern & Weiter";
+$lang["person_weiter"] = "Weiter";
