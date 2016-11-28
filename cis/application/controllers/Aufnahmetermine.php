@@ -416,7 +416,10 @@ class Aufnahmetermine extends MY_Controller {
 			"typ" => $studiengang->studiengangstyp->bezeichnung,
 			"studiengang" => $studiengang->bezeichnung,
 			"orgform" => $studiengang->orgform_kurzbz,
-			"termin" => date("d.m.Y", strtotime($termin->datum))." ".date("H:i", strtotime($termin->uhrzeit))
+			"termin" => date("d.m.Y", strtotime($termin->datum))." ".date("H:i", strtotime($termin->uhrzeit)),
+			"anrede" => $person->anrede,
+			"vorname" => $person->vorname,
+			"nachname" => $person->nachname
 		);
 
 		$oe = $studiengang->oe_kurzbz;
