@@ -6,32 +6,21 @@
  */
 ?>
 
-<div class="dropdown pull-right">
-    <button class="btn btn-default dropdown-toggle" type="button" id="language-label" data-toggle="dropdown" aria-expanded="true">
-		<?php echo $this->lang->line($sprache); ?>
-		<span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="language-label" id="language-dropdown">
-		<li role="presentation">
-			<a href="#" role="menuitem" tabindex="-1" data-language="english"><?php echo $this->lang->line('english'); ?></a>
-		</li>
-		<li role="presentation">
-			<a href="#" role="menuitem" tabindex="-1" data-language="german"><?php echo $this->lang->line('german'); ?></a>
-		</li>
-    </ul>
-
-    <script type="text/javascript">
-		function changeLanguage(language)
+<div class="language pull-right">
+	<?php 
+		$studiengang_kz = "";
+		if(isset($studiengang))
 		{
-			var method = '';
-			window.location.href = "?language=" + language + "&studiengang_kz=<?php echo (isset($studiengang)) ? $studiengang->studiengang_kz :  ''; ?>";
+			$studiengang_kz = $studiengang->studiengang_kz;
 		}
-		
-		$(function () {
-			$('#language-dropdown a').on('click', function () {
-				var language = $(this).attr('data-language');
-				changeLanguage(language);
-			});
-		});
-    </script>
+	?>
+	<span style="<?php echo ($sprache === "german") ? 'text-decoration: underline' : ''; ?>">
+		<a href="<?php echo base_url($this->config->config["index_page"]."/".uri_string())."/?language=german&studiengang_kz=".$studiengang_kz;?>"><?php echo $this->lang->line('german'); ?></a>
+	</span>
+	<span>
+		 | 
+	</span>
+	<span style="<?php echo ($sprache === "english") ? 'text-decoration: underline' : ''; ?>">
+		<a href="<?php echo base_url($this->config->config["index_page"]."/".uri_string())."/?language=english&studiengang_kz=".$studiengang_kz;?>"><?php echo $this->lang->line('english'); ?></a>
+	</span>
 </div>

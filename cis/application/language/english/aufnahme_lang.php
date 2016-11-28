@@ -194,8 +194,8 @@
 //$lang['aufnahme/nachrichten'] = 'Nachrichten';
 //$lang['aufnahme/downloads'] = 'Downloads';
 
-$lang['english'] = 'English';
-$lang['german'] = 'German';
+$lang['english'] = 'en';
+$lang['german'] = 'de';
 $lang['aufnahme/fehlerBeimSenden']='An error occurred while sending the email.';
 $lang['aufnahme/codeNichtMehrGueltig']='The entered access code is no longer valid.';
 $lang['aufnahme/eMailAdresseFehlt'] = 'E-mail address not specified.';

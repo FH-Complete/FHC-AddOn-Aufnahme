@@ -6,6 +6,5 @@
  */
 
 
-$lang['english'] = 'English';
-$lang['german'] = 'German';
+
 ?>
