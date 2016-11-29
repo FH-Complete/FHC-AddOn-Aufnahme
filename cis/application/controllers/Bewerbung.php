@@ -1,12 +1,13 @@
 <?php
+
 /**
  * ./cis/application/controllers/Bewerbung.php
  *
  * @package default
  */
-
 class Bewerbung extends MY_Controller
 {
+
 	/**
 	 *
 	 */
@@ -31,6 +32,7 @@ class Bewerbung extends MY_Controller
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
 		$this->load->helper("form");
 		$this->load->library("form_validation");
+		$this->lang->load('aufnahme', $this->get_language());
 		$this->_data["sprache"] = $this->get_language();
 		$this->_loadLanguage($this->_data["sprache"]);
 		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
@@ -45,7 +47,7 @@ class Bewerbung extends MY_Controller
 
 		$this->_data['title'] = 'Personendaten';
 
-		if($this->input->get("studiengang_kz") != null)
+		if ($this->input->get("studiengang_kz") != null)
 		{
 			$this->_data["studiengang_kz"] = $this->input->get("studiengang_kz");
 		}
@@ -56,83 +58,14 @@ class Bewerbung extends MY_Controller
 		//load person data
 		$this->_data["person"] = $this->_loadPerson();
 
-		//load kontakt data
-		$this->_loadKontakt();
-
 		//load preinteressent data
 		$this->_data["prestudent"] = $this->_loadPrestudent();
-
-		$this->_data["studiengaenge"] = array();
-		foreach ($this->_data["prestudent"] as $prestudent)
-		{
-			//load studiengaenge der prestudenten
-			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
-
-			if ((!empty($prestudent->prestudentStatus))
-				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
-					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) {
-				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-				$studiengang->studienplan = $studienplan;
-
-				$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
-				$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
-
-				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
-				{
-					$this->_data["bewerbung_abgeschickt"] = true;
-				}
-				array_push($this->_data["studiengaenge"], $studiengang);
-			}
-		}
-
-		if(count($this->_data["studiengaenge"]) > 1)
-		{
-			usort($this->_data["studiengaenge"], array($this, "cmpStg"));
-		}
-
-		//load adress data
-		$this->_loadAdresse();
 		
-		$this->showMissingData();
+		$this->_loadData();
 
-		//load nationen
-		$this->_loadNationen();
-
-		//load bundeslaender
-		$this->_loadBundeslaender();
-
-		//load gemeinden
-		$this->_getGemeinde();
-
-		foreach ($this->_data["gemeinden"] as $gemeinde)
+		if ((!empty($this->input->post())) && (isset($this->_data["bewerbung_abgeschickt"])) && ($this->_data["bewerbung_abgeschickt"] == true))
 		{
-			if ((isset($this->_data["adresse"])) && ($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
-			{
-				$this->_data["ort_dd"] = $gemeinde->gemeinde_id;
-			}
-
-			if ((isset($this->_data["zustell_adresse"])) && ($gemeinde->plz == $this->_data["zustell_adresse"]->plz) && ($gemeinde->name == $this->_data["zustell_adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["zustell_adresse"]->ort))
-			{
-				$this->_data["zustell_ort_dd"] = $gemeinde->gemeinde_id;
-			}
-		}
-
-		//load dokumente
-		$this->_loadDokumente($this->session->userdata()["person_id"]);
-
-		foreach($this->_data["dokumente"] as $akte)
-		{
-			if ($akte->dms_id != null)
-			{
-				$dms = $this->_loadDms($akte->dms_id);
-				$akte->dokument = $dms;
-			}
-		}
-		
-		if((!empty($this->input->post())) && (isset($this->_data["bewerbung_abgeschickt"])) && ($this->_data["bewerbung_abgeschickt"] == true))
-		{
-			redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+			redirect("/Requirements?studiengang_kz=" . $this->input->get()["studiengang_kz"] . "&studienplan_id=" . $this->input->get()["studienplan_id"]);
 		}
 
 		//form validation rules
@@ -142,10 +75,6 @@ class Bewerbung extends MY_Controller
 		$this->form_validation->set_rules("gebdatum", "Geburtsdatum", "callback_check_date");
 		$this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
 
-		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
-		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
-		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"]=>$reisepass, $this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf);
-
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->_data["complete"] = $this->_checkDataCompleteness();
@@ -153,7 +82,7 @@ class Bewerbung extends MY_Controller
 		}
 		else
 		{
-			
+
 			$post = $this->input->post();
 			$person = $this->_data["person"];
 			$person->vorname = $post["vorname"];
@@ -164,10 +93,10 @@ class Bewerbung extends MY_Controller
 			{
 				$person->gebdatum = date('Y-m-d', strtotime($post["gebdatum"]));
 			}
-			
+
 			$person->gebort = (($post["geburtsort"] != '') && ($post["geburtsort"] != 'null')) ? $post["geburtsort"] : null;
 			$person->geburtsnation = (($post["nation"] != '') && ($post["nation"] != 'null')) ? $post["nation"] : null;
-			
+
 			if ($post["anrede"] === "Herr")
 			{
 				$person->geschlecht = "m";
@@ -188,13 +117,13 @@ class Bewerbung extends MY_Controller
 			// An die SVNR wird v1, v2, v3, etc hinzugefuegt wenn die SVNR bereits vorhanden ist
 			// In der Anzeige wird dies herausgefiltert. Deshalb muss beim Speichern der Daten
 			// wieder die SVNR mit v1 etc geschickt werden wenn diese nicht geaendert wurde
-			if ($post["svnr_orig"]!='' && mb_substr($post["svnr_orig"], 0, 10)==$post["svnr"])
+			if ($post["svnr_orig"] != '' && mb_substr($post["svnr_orig"], 0, 10) == $post["svnr"])
 			{
 				$person->svnr = $post["svnr_orig"];
 			}
 			else
 			{
-				if($post["svnr"] != '')
+				if ($post["svnr"] != '')
 				{
 					$person->svnr = $post["svnr"];
 				}
@@ -235,7 +164,7 @@ class Bewerbung extends MY_Controller
 					$adresse->nation = $post["adresse_nation"];
 					$adresse->plz = $post["plz"];
 
-					foreach($this->_data["gemeinden"] as $gemeinde)
+					foreach ($this->_data["gemeinden"] as $gemeinde)
 					{
 						if ($gemeinde->gemeinde_id === $post["ort_dd"])
 						{
@@ -300,7 +229,7 @@ class Bewerbung extends MY_Controller
 					$zustell_adresse->nation = $post["zustelladresse_nation"];
 					$zustell_adresse->plz = $post["zustell_plz"];
 
-					foreach($this->_data["gemeinden"] as $gemeinde)
+					foreach ($this->_data["gemeinden"] as $gemeinde)
 					{
 						if ($gemeinde->gemeinde_id === $post["zustell_ort_dd"])
 						{
@@ -309,7 +238,7 @@ class Bewerbung extends MY_Controller
 						}
 					}
 
-					foreach($this->_data["bundesland"] as $bundesland)
+					foreach ($this->_data["bundesland"] as $bundesland)
 					{
 						if ($bundesland->bundesland_code === $gemeinde->bulacode)
 						{
@@ -346,7 +275,7 @@ class Bewerbung extends MY_Controller
 
 			if (($post["email"] != ""))
 			{
-				if(!(isset($this->_data["kontakt"]["email"])))
+				if (!(isset($this->_data["kontakt"]["email"])))
 				{
 					$kontakt = new stdClass();
 					$kontakt->person_id = $this->_data["person"]->person_id;
@@ -364,7 +293,7 @@ class Bewerbung extends MY_Controller
 
 			if ((isset($post["telefon"])) && ($post["telefon"] != ""))
 			{
-				if(!(isset($this->_data["kontakt"]["telefon"])))
+				if (!(isset($this->_data["kontakt"]["telefon"])))
 				{
 					$kontakt = new stdClass();
 					$kontakt->person_id = $this->_data["person"]->person_id;
@@ -381,7 +310,7 @@ class Bewerbung extends MY_Controller
 
 			if ((isset($post["fax"])) && ($post["fax"] != ""))
 			{
-				if(!(isset($this->_data["kontakt"]["fax"])))
+				if (!(isset($this->_data["kontakt"]["fax"])))
 				{
 					$kontakt = new stdClass();
 					$kontakt->person_id = $this->_data["person"]->person_id;
@@ -396,20 +325,18 @@ class Bewerbung extends MY_Controller
 				$this->_saveKontakt($kontakt);
 			}
 
-			if((isset($post["spezialisierung"])) && (is_array($post["spezialisierung"])))
+			if ((isset($post["spezialisierung"])) && (is_array($post["spezialisierung"])))
 			{
 				foreach ($this->_data["prestudent"] as $prestudent)
 				{
-					if(($prestudent->studiengang_kz === $this->input->get("studiengang_kz")) &&(empty($prestudent->spezialisierung)))
+					if (($prestudent->studiengang_kz === $this->input->get("studiengang_kz")) && (empty($prestudent->spezialisierung)))
 					{
-						if ((!empty($prestudent->prestudentStatus))
-							&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
-								|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
+						if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent" || $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
 						{
 							$text = "";
-							foreach($post["spezialisierung"] as $spez)
+							foreach ($post["spezialisierung"] as $spez)
 							{
-								$text .= $spez.";";
+								$text .= $spez . ";";
 							}
 							$text = substr($text, 0, -1);
 							if (substr_count($text, ';') !== strlen($text))
@@ -427,7 +354,7 @@ class Bewerbung extends MY_Controller
 			$this->_loadKontakt();
 			$this->_loadAdresse();
 
-			foreach($this->_data["gemeinden"] as $gemeinde)
+			foreach ($this->_data["gemeinden"] as $gemeinde)
 			{
 				if ((isset($this->_data["adresse"])) && ($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
 				{
@@ -440,9 +367,9 @@ class Bewerbung extends MY_Controller
 				}
 			}
 
-			if((!isset($this->_data["error"])) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
+			if ((!isset($this->_data["error"])) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
 			{
-				redirect("/Requirements?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+				redirect("/Requirements?studiengang_kz=" . $this->input->get()["studiengang_kz"] . "&studienplan_id=" . $this->input->get()["studienplan_id"]);
 				$this->_data["complete"] = $this->_checkDataCompleteness();
 				$this->load->view('bewerbung', $this->_data);
 			}
@@ -458,9 +385,11 @@ class Bewerbung extends MY_Controller
 	 *
 	 * @return unknown
 	 */
-	public function check_date() {
+	public function check_date()
+	{
 		$date = explode(".", $this->input->post("gebdatum"));
-		if ((is_array($date)) && (count($date) == 3) && (!checkdate($date[1], $date[0], $date[2]))) {
+		if ((is_array($date)) && (count($date) == 3) && (!checkdate($date[1], $date[0], $date[2])))
+		{
 			//$this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
 			$this->form_validation->set_message("check_date", "Bitte geben Sie ein gültiges Datum an.");
 			return false;
@@ -497,7 +426,7 @@ class Bewerbung extends MY_Controller
 		$bewerbungMoeglich = false;
 		if (!empty($fristen))
 		{
-			foreach($fristen as $frist)
+			foreach ($fristen as $frist)
 			{
 				if ((date("Y-m-d", strtotime($frist->beginn)) < date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) > date("Y-m-d")))
 				{
@@ -511,25 +440,25 @@ class Bewerbung extends MY_Controller
 			$exists = false;
 			$prestudentStatus = null;
 			$exitingPrestudent = null;
-			
-			foreach($this->_data["prestudent"] as $prestudent)
+
+			foreach ($this->_data["prestudent"] as $prestudent)
 			{
 				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
 				if (($prestudent->studiengang_kz == $studiengang_kz) && (is_object($prestudentStatus)) &&
-					($prestudentStatus->studienplan_id == $studienplan_id) &&
-					($prestudentStatus->studiensemester_kurzbz == $this->session->userdata()["studiensemester_kurzbz"]))
+						($prestudentStatus->studienplan_id == $studienplan_id) &&
+						($prestudentStatus->studiensemester_kurzbz == $this->session->userdata()["studiensemester_kurzbz"]))
 				{
 					$exists = true;
 					//nothing else to do; same prestudent with status exists
 				}
-				elseif(($prestudent->studiengang_kz == $studiengang_kz) && (is_object($prestudentStatus)) &&
-					(($prestudentStatus->status_kurzbz === "Interessent") || ($prestudentStatus->status_kurzbz === "Bewerber") || ($prestudentStatus->status_kurzbz === "Abgewiesener")))
+				elseif (($prestudent->studiengang_kz == $studiengang_kz) && (is_object($prestudentStatus)) &&
+						(($prestudentStatus->status_kurzbz === "Interessent") || ($prestudentStatus->status_kurzbz === "Bewerber") || ($prestudentStatus->status_kurzbz === "Abgewiesener")))
 				{
 					$exists = true;
 					//just adding new status
 					$this->_savePrestudentStatus($prestudent, "Interessent");
 				}
-				
+
 				$prestudentStatus = null;
 			}
 
@@ -558,7 +487,7 @@ class Bewerbung extends MY_Controller
 
 		//load kontakt data
 		$this->_loadKontakt();
-		
+
 		$this->showMissingData();
 
 		//load nationen
@@ -569,7 +498,7 @@ class Bewerbung extends MY_Controller
 
 		//load gemeinden
 		$this->_data["gemeinden"] = $this->_loadGemeinde();
-		foreach($this->_data["gemeinden"] as $gemeinde)
+		foreach ($this->_data["gemeinden"] as $gemeinde)
 		{
 			if ((isset($this->_data["adresse"])) && ($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
 			{
@@ -586,7 +515,7 @@ class Bewerbung extends MY_Controller
 		$this->_data["studiengang"] = $this->_loadStudiengang($studiengang_kz);
 
 		$this->_data["studiengaenge"] = array();
-		foreach($this->_data["prestudent"] as $prestudent)
+		foreach ($this->_data["prestudent"] as $prestudent)
 		{
 			//load studiengaenge der prestudenten
 			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
@@ -601,13 +530,13 @@ class Bewerbung extends MY_Controller
 				array_push($this->_data["studiengaenge"], $studiengang);
 			}
 
-			if((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null))
+			if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null))
 			{
 				$this->_data["bewerbung_abgeschickt"] = true;
 			}
 		}
 
-		if(count($this->_data["studiengaenge"]) > 1)
+		if (count($this->_data["studiengaenge"]) > 1)
 		{
 			usort($this->_data["studiengaenge"], array($this, "cmpStg"));
 		}
@@ -615,7 +544,7 @@ class Bewerbung extends MY_Controller
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
 
-		foreach($this->_data["dokumente"] as $akte)
+		foreach ($this->_data["dokumente"] as $akte)
 		{
 			if ($akte->dms_id != null)
 			{
@@ -626,7 +555,7 @@ class Bewerbung extends MY_Controller
 
 		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
 		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
-		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"]=>$reisepass, $this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf);
+		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"] => $reisepass, $this->config->item("dokumentTypen")["lebenslauf"] => $lebenslauf);
 
 		$this->_data["complete"] = $this->_checkDataCompleteness();
 		$this->load->view('bewerbung', $this->_data);
@@ -652,20 +581,26 @@ class Bewerbung extends MY_Controller
 		$this->_data["prestudent"] = $this->_loadPrestudent();
 
 		$prestudentStatus = null;
-		foreach($this->_data["prestudent"] as $prestudent)
+		foreach ($this->_data["prestudent"] as $prestudent)
 		{
 			if ($prestudent->studiengang_kz === $studiengang_kz)
 			{
 				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
 
-				if ($prestudentStatus !== null)
+				if (($prestudentStatus !== null) && ($prestudentStatus->bewerbung_abgeschicktamum == null))
 				{
 					$this->_deletePrestudentStatus(get_object_vars($prestudentStatus));
+					redirect("/Bewerbung");
+				}
+				else
+				{
+					$this->_loadData();
+
+					$this->_setError(true, $this->lang->line("aufnahme/bewerbungKannNichtGeloeschtWerden"));
+					$this->load->view('bewerbung', $this->_data);
 				}
 
-				$this->_deletePrestudent(get_object_vars($prestudent));
-
-				redirect("/Bewerbung");
+				//$this->_deletePrestudent(get_object_vars($prestudent));
 			}
 		}
 	}
@@ -682,7 +617,7 @@ class Bewerbung extends MY_Controller
 			//load dokumente
 			$this->_loadDokumente($this->session->userdata()["person_id"]);
 
-			foreach($this->_data["dokumente"] as $akte)
+			foreach ($this->_data["dokumente"] as $akte)
 			{
 				if ($akte->dms_id != null)
 				{
@@ -691,7 +626,7 @@ class Bewerbung extends MY_Controller
 				}
 			}
 
-			foreach($files as $key => $file)
+			foreach ($files as $key => $file)
 			{
 				if (is_uploaded_file($file["tmp_name"][0]))
 				{
@@ -703,7 +638,7 @@ class Bewerbung extends MY_Controller
 					$obj->name = $file["name"][0];
 					$obj->oe_kurzbz = null;
 
-					switch($key)
+					switch ($key)
 					{
 						case "reisepass":
 							$obj->dokument_kurzbz = $this->config->item('dokumentTypen')["reisepass"];
@@ -718,7 +653,7 @@ class Bewerbung extends MY_Controller
 					if ($typ)
 						$obj->dokument_kurzbz = $this->config->item('dokumentTypen')[$typ];
 
-					foreach($this->_data["dokumente"] as $akte_temp)
+					foreach ($this->_data["dokumente"] as $akte_temp)
 					{
 						if (($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != $this->config->item('dokumentTypen')["sonstiges"]))
 						{
@@ -830,20 +765,18 @@ class Bewerbung extends MY_Controller
 //		$this->_data["studiengaenge"] = array();
 		foreach ($this->_data["prestudent"] as $prestudent)
 		{
-			if($prestudent->studiengang_kz === $studiengang_kz)
+			if ($prestudent->studiengang_kz === $studiengang_kz)
 			{
 				$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
 
-				if ((!empty($prestudent->prestudentStatus))
-					&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
-						|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
+				if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent" || $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
 				{
 					$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
 
-					if((!empty($prestudent->spezialisierung)) && ($prestudent->spezialisierung->notiz_id === $notiz_id))
+					if ((!empty($prestudent->spezialisierung)) && ($prestudent->spezialisierung->notiz_id === $notiz_id))
 					{
 						$this->_removeSpecialization($notiz_id);
-						redirect("/Bewerbung?studiengang_kz=".$studiengang_kz."&tudienplan_id=".$prestudent->prestudentStatus->studienplan_id);
+						redirect("/Bewerbung?studiengang_kz=" . $studiengang_kz . "&tudienplan_id=" . $prestudent->prestudentStatus->studienplan_id);
 					}
 				}
 			}
@@ -852,7 +785,7 @@ class Bewerbung extends MY_Controller
 
 	private function _loadPerson()
 	{
-		$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
+		$this->PersonModel->getPersonen(array("person_id" => $this->session->userdata()["person_id"]));
 		if ($this->PersonModel->isResultValid() === true)
 		{
 			if (count($this->PersonModel->result->retval) == 1)
@@ -872,12 +805,12 @@ class Bewerbung extends MY_Controller
 
 	private function _loadPrestudent()
 	{
-		$this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"]));
+		$this->PrestudentModel->getPrestudent(array("person_id" => $this->session->userdata()["person_id"]));
 		if ($this->PrestudentModel->isResultValid() === true)
 		{
-			if(count($this->PrestudentModel->result->retval) > 1)
+			if (count($this->PrestudentModel->result->retval) > 1)
 			{
-
+				
 			}
 			return $this->PrestudentModel->result->retval;
 		}
@@ -890,8 +823,8 @@ class Bewerbung extends MY_Controller
 	private function _loadPrestudentStatus($prestudent_id, $studiensemester_kurzbz = null)
 	{
 		//$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1));
-		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$studiensemester_kurzbz, "ausbildungssemester"=>1));
-		if($this->PrestudentStatusModel->isResultValid() === true)
+		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id" => $prestudent_id, "studiensemester_kurzbz" => $studiensemester_kurzbz, "ausbildungssemester" => 1));
+		if ($this->PrestudentStatusModel->isResultValid() === true)
 		{
 			if (($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
 			{
@@ -913,7 +846,7 @@ class Bewerbung extends MY_Controller
 		$this->KontaktModel->getKontakt($this->session->userdata()["person_id"]);
 		if ($this->KontaktModel->isResultValid() === true)
 		{
-			foreach($this->KontaktModel->result->retval as $value)
+			foreach ($this->KontaktModel->result->retval as $value)
 			{
 				$this->_data["kontakt"][$value->kontakttyp] = $value;
 			}
@@ -929,7 +862,7 @@ class Bewerbung extends MY_Controller
 		$this->AdresseModel->getAdresse($this->session->userdata()["person_id"]);
 		if ($this->AdresseModel->isResultValid() === true)
 		{
-			foreach($this->AdresseModel->result->retval as $adresse)
+			foreach ($this->AdresseModel->result->retval as $adresse)
 			{
 				if ($adresse->heimatadresse == true)
 				{
@@ -954,9 +887,9 @@ class Bewerbung extends MY_Controller
 		{
 			$nation_code = "";
 			$kurztext = "";
-			foreach($this->nation_model->result->retval as $n)
+			foreach ($this->nation_model->result->retval as $n)
 			{
-				if($n->nation_code == "A")
+				if ($n->nation_code == "A")
 				{
 					$nation_code = $n->nation_code;
 					$kurztext = $n->kurztext;
@@ -966,8 +899,8 @@ class Bewerbung extends MY_Controller
 					$this->_data["nationen"][$n->nation_code] = $n->kurztext;
 				}
 			}
-			
-			$this->_data["nationen"] = array_merge(array("null"=>"", $nation_code => $kurztext), $this->_data["nationen"]);
+
+			$this->_data["nationen"] = array_merge(array("null" => "", $nation_code => $kurztext), $this->_data["nationen"]);
 		}
 		else
 		{
@@ -981,7 +914,7 @@ class Bewerbung extends MY_Controller
 		if ($this->bundesland_model->isResultValid() === true)
 		{
 			$this->_data["bundesland"] = $this->bundesland_model->result->retval;
-			foreach($this->bundesland_model->result->retval as $b)
+			foreach ($this->bundesland_model->result->retval as $b)
 			{
 				$this->_data["bundeslaender"][$b->bundesland_code] = $b->bezeichnung;
 			}
@@ -1081,35 +1014,35 @@ class Bewerbung extends MY_Controller
 
 		//if(($this->StudiensemesterModel->result->error == 0) && (count($this->StudiensemesterModel->result->retval) > 0))
 		//{
-			$prestudentStatus->studiensemester_kurzbz = $this->session->userdata()["studiensemester_kurzbz"];
-			//nicht notwendig da defaultwert 1
-			//$prestudentStatus->ausbildungssemester = "1";
-			$prestudentStatus->orgform_kurzbz = $this->_data["studienplan"]->orgform_kurzbz;
-			$prestudentStatus->studienplan_id = $this->_data["studienplan"]->studienplan_id;
-			$prestudentStatus->datum = date("Y-m-d");
+		$prestudentStatus->studiensemester_kurzbz = $this->session->userdata()["studiensemester_kurzbz"];
+		//nicht notwendig da defaultwert 1
+		//$prestudentStatus->ausbildungssemester = "1";
+		$prestudentStatus->orgform_kurzbz = $this->_data["studienplan"]->orgform_kurzbz;
+		$prestudentStatus->studienplan_id = $this->_data["studienplan"]->studienplan_id;
+		$prestudentStatus->datum = date("Y-m-d");
 
-			$this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
-			if ($this->PrestudentStatusModel->isResultValid() === true)
+		$this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
+		if ($this->PrestudentStatusModel->isResultValid() === true)
+		{
+			//TODO Daten erfolgreich gespeichert
+			foreach ($this->_data["prestudent"] as $key => $value)
 			{
-				//TODO Daten erfolgreich gespeichert
-				foreach($this->_data["prestudent"] as $key=>$value)
+				if ($value->prestudent_id == $prestudent->prestudent_id)
 				{
-					if ($value->prestudent_id == $prestudent->prestudent_id)
-					{
-						$this->_data["prestudent"][$key]->prestudentstatus = $prestudentStatus;
-					}
+					$this->_data["prestudent"][$key]->prestudentstatus = $prestudentStatus;
 				}
 			}
-			else
-			{
-				$this->_setError(true, $this->PrestudentStatusModel->getErrorMessage());
-			}
-		/*}
+		}
 		else
 		{
-			//studiensemester not found
-			$this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
-		}*/
+			$this->_setError(true, $this->PrestudentStatusModel->getErrorMessage());
+		}
+		/* }
+		  else
+		  {
+		  //studiensemester not found
+		  $this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
+		  } */
 	}
 
 	private function _deletePrestudentStatus($prestudentStatus)
@@ -1164,14 +1097,14 @@ class Bewerbung extends MY_Controller
 		}
 	}
 
-	private function _loadDokumente($person_id, $dokumenttyp_kurzbz=null)
+	private function _loadDokumente($person_id, $dokumenttyp_kurzbz = null)
 	{
 		$this->_data["dokumente"] = array();
 		$this->AkteModel->getAktenAccepted($person_id, $dokumenttyp_kurzbz);
 
 		if ($this->AkteModel->isResultValid() === true)
 		{
-			foreach($this->AkteModel->result->retval as $akte)
+			foreach ($this->AkteModel->result->retval as $akte)
 			{
 				$this->_data["dokumente"][$akte->dokument_kurzbz] = $akte;
 			}
@@ -1263,20 +1196,19 @@ class Bewerbung extends MY_Controller
 		}
 		if (isset($this->_data["adresse"]))
 		{
-			$this->_data["gemeinde"] = $this->_data["adresse"]->plz." ".$this->_data["adresse"]->gemeinde.", ".$this->_data["adresse"]->ort;
+			$this->_data["gemeinde"] = $this->_data["adresse"]->plz . " " . $this->_data["adresse"]->gemeinde . ", " . $this->_data["adresse"]->ort;
 		}
 
 		if (isset($this->_data["zustell_adresse"]))
 		{
-			$this->_data["zustell_gemeinde"] = $this->_data["zustell_adresse"]->plz." ".$this->_data["zustell_adresse"]->gemeinde.", ".$this->_data["zustell_adresse"]->ort;
+			$this->_data["zustell_gemeinde"] = $this->_data["zustell_adresse"]->plz . " " . $this->_data["zustell_adresse"]->gemeinde . ", " . $this->_data["zustell_adresse"]->ort;
 		}
 	}
-
 
 	private function _getBewerbungstermineStudienplan($studienplan_id)
 	{
 		$this->BewerbungstermineModel->getByStudienplan($studienplan_id);
-		if($this->BewerbungstermineModel->isResultValid() === true)
+		if ($this->BewerbungstermineModel->isResultValid() === true)
 		{
 			return $this->BewerbungstermineModel->result->retval;
 		}
@@ -1293,14 +1225,14 @@ class Bewerbung extends MY_Controller
 	public function deleteDocument()
 	{
 		$result = new stdClass();
-		if((isset($this->input->post()["dms_id"])))
+		if ((isset($this->input->post()["dms_id"])))
 		{
 			$dms_id = $this->input->post()["dms_id"];
 			$this->_loadDokumente($this->session->userdata()["person_id"]);
 
-			foreach($this->_data["dokumente"] as $dok)
+			foreach ($this->_data["dokumente"] as $dok)
 			{
-				if(($dok->dms_id === $dms_id) && ($dok->accepted ==false))
+				if (($dok->dms_id === $dms_id) && ($dok->accepted == false))
 				{
 					$result = $this->_deleteDms($dms_id);
 					$result->dokument_kurzbz = $dok->dokument_kurzbz;
@@ -1342,20 +1274,11 @@ class Bewerbung extends MY_Controller
 			$this->_setError(true, $this->GemeindeModel->getErrorMessage());
 		}
 	}
-	
+
 	private function showMissingData()
 	{
-		if(($this->_data["person"]->anrede != null)
-			||($this->_data["person"]->titelpre != null)
-			||($this->_data["person"]->titelpost != null)
-			||($this->_data["person"]->gebort != null)
-			||($this->_data["person"]->staatsbuergerschaft != null)
-			||($this->_data["person"]->geburtsnation != null)
-			||($this->_data["person"]->svnr != null)
-			||(!isset($this->_data["kontakt"]['telefon']) || $this->_data["kontakt"]['telefon']->kontakt != null)
-			||(!isset($this->_data["adresse"]) || $this->_data["adresse"]->plz != null || $this->_data["adresse"]->strasse != null || $this->_data["adresse"]->ort != null || $this->_data["adresse"]->nation != null)
-			||(!isset($this->_data["zustell_adresse"]) || $this->_data["zustell_adresse"]->plz != null || $this->_data["zustell_adresse"]->strasse != null || $this->_data["zustell_adresse"]->ort != null || $this->_data["zustell_adresse"]->nation != null)
-				)
+		if (($this->_data["person"]->anrede != null) || ($this->_data["person"]->titelpre != null) || ($this->_data["person"]->titelpost != null) || ($this->_data["person"]->gebort != null) || ($this->_data["person"]->staatsbuergerschaft != null) || ($this->_data["person"]->geburtsnation != null) || ($this->_data["person"]->svnr != null) || (!isset($this->_data["kontakt"]['telefon']) || $this->_data["kontakt"]['telefon']->kontakt != null) || (!isset($this->_data["adresse"]) || $this->_data["adresse"]->plz != null || $this->_data["adresse"]->strasse != null || $this->_data["adresse"]->ort != null || $this->_data["adresse"]->nation != null) || (!isset($this->_data["zustell_adresse"]) || $this->_data["zustell_adresse"]->plz != null || $this->_data["zustell_adresse"]->strasse != null || $this->_data["zustell_adresse"]->ort != null || $this->_data["zustell_adresse"]->nation != null)
+		)
 		{
 			$this->_data["incomplete"] = true;
 		}
@@ -1376,7 +1299,7 @@ class Bewerbung extends MY_Controller
 		$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
 		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
 		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
-		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"]=>$reisepass, $this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf);
+		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"] => $reisepass, $this->config->item("dokumentTypen")["lebenslauf"] => $lebenslauf);
 
 		//load person data
 		$this->_data["person"] = $this->_loadPerson();
@@ -1389,12 +1312,12 @@ class Bewerbung extends MY_Controller
 
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
-		
+
 		$studiengang_kz = $this->input->get("studiengang_kz");
-		
+
 		$this->_data["dokumenteStudiengang"][$studiengang_kz] = $this->_loadDokumentByStudiengang($studiengang_kz);
 
-		foreach($this->_data["dokumente"] as $akte)
+		foreach ($this->_data["dokumente"] as $akte)
 		{
 			if ($akte->dms_id != null)
 			{
@@ -1408,62 +1331,62 @@ class Bewerbung extends MY_Controller
 
 	private function _checkDataCompleteness()
 	{
-		$complete = array("person"=>true, "adresse"=>true, "kontakt"=>true, "zustelladresse"=>true, "dokumente"=>true);
+		$complete = array("person" => true, "adresse" => true, "kontakt" => true, "zustelladresse" => true, "dokumente" => true);
 
 		//check personal data
 		$person = $this->_data["person"];
 
-		if($person->vorname == "")
+		if ($person->vorname == "")
 		{
 			$complete["person"] = false;
 		}
 
-		if($person->nachname == "")
+		if ($person->nachname == "")
 		{
 			$complete["person"] = false;
 		}
 
-		if($person->gebdatum == null)
+		if ($person->gebdatum == null)
 		{
 			$complete["person"] = false;
 		}
 
-		if(($person->gebort == null) || ($person->gebort== ""))
+		if (($person->gebort == null) || ($person->gebort == ""))
 		{
 			$complete["person"] = false;
 		}
 
-		if(($person->geburtsnation == null) || ($person->geburtsnation== ""))
+		if (($person->geburtsnation == null) || ($person->geburtsnation == ""))
 		{
 			$complete["person"] = false;
 		}
 
-		if(($person->staatsbuergerschaft == null) || ($person->staatsbuergerschaft== ""))
+		if (($person->staatsbuergerschaft == null) || ($person->staatsbuergerschaft == ""))
 		{
 			$complete["person"] = false;
 		}
 
-		if((($person->svnr == null) || ($person->svnr== "")) && ($person->geburtsnation == "A"))
+		if ((($person->svnr == null) || ($person->svnr == "")) && ($person->geburtsnation == "A"))
 		{
 			$complete["person"] = false;
 		}
 
 		//check adress data
-		if(isset($this->_data["adresse"]))
+		if (isset($this->_data["adresse"]))
 		{
 			$adresse = $this->_data["adresse"];
 
-			if(($adresse->strasse == null) || ($adresse->strasse == ""))
+			if (($adresse->strasse == null) || ($adresse->strasse == ""))
 			{
 				$complete["adresse"] = false;
 			}
 
-			if(($adresse->plz == null) || ($adresse->plz == ""))
+			if (($adresse->plz == null) || ($adresse->plz == ""))
 			{
 				$complete["adresse"] = false;
 			}
 
-			if(($adresse->ort == null) || ($adresse->ort == ""))
+			if (($adresse->ort == null) || ($adresse->ort == ""))
 			{
 				$complete["adresse"] = false;
 			}
@@ -1474,21 +1397,21 @@ class Bewerbung extends MY_Controller
 		}
 
 		//check adress data
-		if(isset($this->_data["zustell_adresse"]))
+		if (isset($this->_data["zustell_adresse"]))
 		{
 			$adresse = $this->_data["zustell_adresse"];
 
-			if(($adresse->strasse == null) || ($adresse->strasse == ""))
+			if (($adresse->strasse == null) || ($adresse->strasse == ""))
 			{
 				$complete["zustelladresse"] = false;
 			}
 
-			if(($adresse->plz == null) || ($adresse->plz == ""))
+			if (($adresse->plz == null) || ($adresse->plz == ""))
 			{
 				$complete["zustelladresse"] = false;
 			}
 
-			if(($adresse->ort == null) || ($adresse->ort == ""))
+			if (($adresse->ort == null) || ($adresse->ort == ""))
 			{
 				$complete["zustelladresse"] = false;
 			}
@@ -1498,56 +1421,56 @@ class Bewerbung extends MY_Controller
 		//check contact data
 		$kontakt = $this->_data["kontakt"];
 
-		if((!isset($kontakt["telefon"])) || ($kontakt["telefon"]->kontakt == ""))
+		if ((!isset($kontakt["telefon"])) || ($kontakt["telefon"]->kontakt == ""))
 		{
 			$complete["kontakt"] = false;
 		}
 
-		if((!isset($kontakt["email"])) || ($kontakt["email"]->kontakt == ""))
+		if ((!isset($kontakt["email"])) || ($kontakt["email"]->kontakt == ""))
 		{
 			$complete["kontakt"] = false;
 		}
 
 		//check documents
 
-		if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
+		if (!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
 		{
 			$complete["dokumente"] = false;
 		}
 
-		if(!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
+		if (!isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["reisepass"]]))
 		{
 			$complete["dokumente"] = false;
 		}
-		
-		if(isset($this->_data["dokumenteStudiengang"]))
+
+		if (isset($this->_data["dokumenteStudiengang"]))
 		{
-			foreach($this->_data["dokumenteStudiengang"] as $key=>$doks)
+			foreach ($this->_data["dokumenteStudiengang"] as $key => $doks)
 			{
-				foreach($doks as $dokType)
+				foreach ($doks as $dokType)
 				{
-					if((!isset($this->_data["dokumente"][$dokType->dokument_kurzbz])) && ($dokType->pflicht == true))
+					if ((!isset($this->_data["dokumente"][$dokType->dokument_kurzbz])) && ($dokType->pflicht == true))
 					{
 						$complete["dokumente"] = false;
 					}
 				}
 
-				foreach($this->_data["personalDocuments"] as $dokType)
+				foreach ($this->_data["personalDocuments"] as $dokType)
 				{
-					if((!isset($this->_data["dokumente"][$dokType->dokument_kurzbz])))
+					if ((!isset($this->_data["dokumente"][$dokType->dokument_kurzbz])))
 					{
 						$complete["dokumente"] = false;
 					}
 				}
-				
+
 				$abschlusszeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["abschlusszeugnis"]);
 				$letztesZeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["letztGueltigesZeugnis"]);
 
-				if((!isset($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz])) || ((!$this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->nachgereicht) && ($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->dms_id == null )))
+				if ((!isset($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz])) || ((!$this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->nachgereicht) && ($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->dms_id == null )))
 				{
 					$complete["dokumente"] = false;
 				}
-				elseif((!isset($this->_data["dokumente"][$letztesZeugnis->dokument_kurzbz])) && ($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->nachgereicht))
+				elseif ((!isset($this->_data["dokumente"][$letztesZeugnis->dokument_kurzbz])) && ($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->nachgereicht))
 				{
 					$complete["dokumente"] = false;
 				}
@@ -1556,13 +1479,13 @@ class Bewerbung extends MY_Controller
 
 		return $complete;
 	}
-	
+
 	private function _loadDokumentByStudiengang($studiengang_kz)
 	{
 		$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($studiengang_kz, true, true);
-		if($this->DokumentStudiengangModel->isResultValid() === true)
+		if ($this->DokumentStudiengangModel->isResultValid() === true)
 		{
-			
+
 			return $this->DokumentStudiengangModel->result->retval;
 		}
 		else
@@ -1576,7 +1499,7 @@ class Bewerbung extends MY_Controller
 		$this->PrestudentModel->getSpecialization($prestudent_id, "aufnahme/spezialisierung");
 		if ($this->PrestudentModel->isResultValid() === true)
 		{
-			if(count($this->PrestudentModel->result->retval) === 1)
+			if (count($this->PrestudentModel->result->retval) === 1)
 			{
 				return $this->PrestudentModel->result->retval[0];
 			}
@@ -1620,7 +1543,7 @@ class Bewerbung extends MY_Controller
 	private function _loadDokument($dokument_kurzbz)
 	{
 		$this->DokumentModel->getDokument($dokument_kurzbz);
-		if($this->DokumentModel->isResultValid() === true)
+		if ($this->DokumentModel->isResultValid() === true)
 		{
 			return $this->DokumentModel->result->retval[0];
 		}
@@ -1629,4 +1552,82 @@ class Bewerbung extends MY_Controller
 			$this->_setError(true, $this->DokumentModel->getErrorMessage());
 		}
 	}
+
+	private function _loadData()
+	{
+		$this->_data["studiengaenge"] = array();
+		foreach ($this->_data["prestudent"] as $prestudent)
+		{
+			//load studiengaenge der prestudenten
+			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
+
+			if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent" || $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
+			{
+				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+				$studiengang->studienplan = $studienplan;
+
+				$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+				$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+
+				if ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+				{
+					$this->_data["bewerbung_abgeschickt"] = true;
+				}
+				array_push($this->_data["studiengaenge"], $studiengang);
+			}
+		}
+
+		if (count($this->_data["studiengaenge"]) > 1)
+		{
+			usort($this->_data["studiengaenge"], array($this, "cmpStg"));
+		}
+
+		//load kontakt data
+		$this->_loadKontakt();
+
+		//load adress data
+		$this->_loadAdresse();
+
+		$this->showMissingData();
+
+		//load nationen
+		$this->_loadNationen();
+
+		//load bundeslaender
+		$this->_loadBundeslaender();
+
+		//load gemeinden
+		$this->_getGemeinde();
+
+		foreach ($this->_data["gemeinden"] as $gemeinde)
+		{
+			if ((isset($this->_data["adresse"])) && ($gemeinde->plz == $this->_data["adresse"]->plz) && ($gemeinde->name == $this->_data["adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["adresse"]->ort))
+			{
+				$this->_data["ort_dd"] = $gemeinde->gemeinde_id;
+			}
+
+			if ((isset($this->_data["zustell_adresse"])) && ($gemeinde->plz == $this->_data["zustell_adresse"]->plz) && ($gemeinde->name == $this->_data["zustell_adresse"]->gemeinde) && ($gemeinde->ortschaftsname == $this->_data["zustell_adresse"]->ort))
+			{
+				$this->_data["zustell_ort_dd"] = $gemeinde->gemeinde_id;
+			}
+		}
+
+		//load dokumente
+		$this->_loadDokumente($this->session->userdata()["person_id"]);
+
+		foreach ($this->_data["dokumente"] as $akte)
+		{
+			if ($akte->dms_id != null)
+			{
+				$dms = $this->_loadDms($akte->dms_id);
+				$akte->dokument = $dms;
+			}
+		}
+
+		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
+		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
+		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"] => $reisepass, $this->config->item("dokumentTypen")["lebenslauf"] => $lebenslauf);
+	}
+
 }

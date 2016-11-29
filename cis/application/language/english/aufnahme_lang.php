@@ -225,6 +225,7 @@ $lang['aufnahme/nochNichtAbgeschickt']='Not yet sent';
 $lang['aufnahme/unvollständig']='Application incomplete';
 $lang['aufnahme/backToApplications']='back to applications overview';
 $lang['aufnahme/absenden']='Send';
+$lang["aufnahme/bewerbungKannNichtGeloeschtWerden"]='The application can not be deleted because it has already been sent.';
 
 //TODO translate
 $lang['aufnahme/anredeUnknown']='geehrte/r Frau/Herr';
