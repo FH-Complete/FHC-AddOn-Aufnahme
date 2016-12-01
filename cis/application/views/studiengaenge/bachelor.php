@@ -19,7 +19,7 @@ foreach ($studiengaenge as $stg)
 			<div id="<?php echo $studienplan->studienplan_id; ?>" class='collapse collapsePanel'>
 				<div class="stgContent">
 					<div class="row">
-						<div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/abschluss') ?>: </div><div class="col-sm-6"><?php echo $stg->akadgrad[0]->titel." (".$stg->akadgrad[0]->akadgrad_kurzbz.")"; ?></div>
+						<div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/abschluss') ?>: </div><div class="col-sm-6"><?php echo (isset($stg->akadgrad) && ($stg->akadgrad != null)) ?  $stg->akadgrad[0]->titel." (".$stg->akadgrad[0]->akadgrad_kurzbz.")" : ""; ?></div>
 					</div>
 					<div class="row">
 						<div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/dauer'); ?>: </div><div class="col-sm-6"><?php echo $studienplan->regelstudiendauer; ?> Semester</div>
