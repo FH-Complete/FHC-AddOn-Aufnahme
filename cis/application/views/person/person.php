@@ -346,41 +346,36 @@ if (!isset($plz)) $plz = null;
 
     function loadOrtData(plz, ele)
     {
-		$.ajax({
-			method: "GET",
-			url: "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/ort"); ?>/"+plz,
-			dataType: "json"
-		}).done(function(data) {
-			if(data.error === 0)
-			{
-				var select = $(ele).find("select");
-				$(select).empty();
-				$.each(data.retval, function(i, v) {
-					if($(select).attr("name") === "ort_dd")
-					{
-						if(v.gemeinde_id === '<?php echo isset($ort_dd) ? $ort_dd : ""; ?>')
-						{
-							$(ele).find("select").append("<option value='"+v.gemeinde_id+"' selected>"+v.ortschaftsname+"</option>");
-						}
-						else
-						{
-							$(ele).find("select").append("<option value='"+v.gemeinde_id+"'>"+v.ortschaftsname+"</option>");
-						}
-					}
-					else
-					{
-						if(v.gemeinde_id === '<?php echo isset($zustell_ort_dd) ? $zustell_ort_dd : ""; ?>')
-						{
-							$(ele).find("select").append("<option value='"+v.gemeinde_id+"' selected>"+v.ortschaftsname+"</option>");
-						}
-						else
-						{
-							$(ele).find("select").append("<option value='"+v.gemeinde_id+"'>"+v.ortschaftsname+"</option>");
-						}
-					}
-				});
-			}
-		});
+        if($(ele).is(":visible")) {
+            $.ajax({
+                method: "GET",
+                url: "<?php echo base_url($this->config->config["index_page"] . "/Bewerbung/ort"); ?>/" + plz,
+                dataType: "json"
+            }).done(function (data) {
+                if (data.error === 0) {
+                    var select = $(ele).find("select");
+                    $(select).empty();
+                    $.each(data.retval, function (i, v) {
+                        if ($(select).attr("name") === "ort_dd") {
+                            if (v.gemeinde_id === '<?php echo isset($ort_dd) ? $ort_dd : ""; ?>') {
+                                $(ele).find("select").append("<option value='" + v.gemeinde_id + "' selected>" + v.ortschaftsname + "</option>");
+                            }
+                            else {
+                                $(ele).find("select").append("<option value='" + v.gemeinde_id + "'>" + v.ortschaftsname + "</option>");
+                            }
+                        }
+                        else {
+                            if (v.gemeinde_id === '<?php echo isset($zustell_ort_dd) ? $zustell_ort_dd : ""; ?>') {
+                                $(ele).find("select").append("<option value='" + v.gemeinde_id + "' selected>" + v.ortschaftsname + "</option>");
+                            }
+                            else {
+                                $(ele).find("select").append("<option value='" + v.gemeinde_id + "'>" + v.ortschaftsname + "</option>");
+                            }
+                        }
+                    });
+                }
+            });
+        }
     }
 </script>
 
