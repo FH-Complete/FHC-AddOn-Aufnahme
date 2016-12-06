@@ -23,6 +23,14 @@
 				<span id="status_<?php echo $msg->message_id;?>" class='<?php echo ($msg->status == MSG_STATUS_READ) ? "icon-read" : (($msg->status == MSG_STATUS_UNREAD) ? "icon-unread" : "") ;?>'>&nbsp;</span>
 			</div>
 			<div class="col-sm-8 message-title">
+                <?php if($msg->status == MSG_STATUS_READ)
+                {
+                    ?>
+                    <span class="glyphicon glyphicon-exclamation-sign red"></span>
+                <?php
+                }
+                ?>
+
 				<a class="collapsed collapsed_inbox" messageId="<?php echo $msg->message_id; ?>" data-toggle='collapse' data-target='#message_body_<?php echo $msg->message_id; ?>'>
 				<?php echo $msg->subject; ?>
 				</a>
