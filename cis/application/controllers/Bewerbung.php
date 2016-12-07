@@ -30,6 +30,7 @@ class Bewerbung extends MY_Controller
 		$this->load->model('Bewerbungstermine_model', 'BewerbungstermineModel');
 		$this->load->model('dokument_model', "DokumentModel");
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
+        $this->load->model('reihungstest_model', "ReihungstestModel");
 		$this->load->helper("form");
 		$this->load->library("form_validation");
 		$this->lang->load('aufnahme', $this->get_language());
@@ -458,6 +459,12 @@ class Bewerbung extends MY_Controller
 					//just adding new status
 					$this->_savePrestudentStatus($prestudent, "Interessent");
 				}
+				elseif(($prestudent->studiengang_kz == $studiengang_kz) && (empty($prestudentStatus)))
+                {
+                    //adding status if prestudent has no status
+                    $exists = true;
+                    $this->_savePrestudentStatus($prestudent, "Interessent");
+                }
 
 				$prestudentStatus = null;
 			}
@@ -587,9 +594,19 @@ class Bewerbung extends MY_Controller
 			{
 				$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
 
-				if (($prestudentStatus !== null) && ($prestudentStatus->bewerbung_abgeschicktamum == null))
+				if (($prestudentStatus !== null) && (!empty($prestudentStatus)) && ($prestudentStatus->bewerbung_abgeschicktamum == null))
 				{
 					$this->_deletePrestudentStatus(get_object_vars($prestudentStatus));
+
+                    /*$this->_data["anmeldungen"] = $this->_loadReihungstestsByPersonId($this->_data["person"]->person_id);
+                    foreach ($this->_data["anmeldungen"][$studiengang_kz] as $anmeldung)
+                    {
+                        if(($anmeldung->studienplan_id == $prestudentStatus->studienplan_id) && ($anmeldung->teilgenommen == false))
+                        {
+                            $this->_deleteRegistrationToReihungstest($anmeldung);
+                        }
+                    }*/
+
 					redirect("/Bewerbung");
 				}
 				else
@@ -1629,5 +1646,45 @@ class Bewerbung extends MY_Controller
 		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
 		$this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"] => $reisepass, $this->config->item("dokumentTypen")["lebenslauf"] => $lebenslauf);
 	}
+
+    private function _loadReihungstestsByPersonId($person_id)
+    {
+        $this->ReihungstestModel->getReihungstestByPersonID($person_id);
+        if($this->ReihungstestModel->isResultValid() === true)
+        {
+            $anmeldungen = array();
+            foreach ($this->ReihungstestModel->result->retval as $anmeldung)
+            {
+                if(!isset($anmeldungen[$anmeldung->studiengang_kz]))
+                {
+                    $anmeldungen[$anmeldung->studiengang_kz] = array();
+                }
+                array_push($anmeldungen[$anmeldung->studiengang_kz], $anmeldung);
+            }
+            return $anmeldungen;
+        }
+        else
+        {
+            $this->_setError(true, $this->ReihungstestModel->getErrorMessage());
+        }
+    }
+
+    private function _deleteRegistrationToReihungstest($anmeldung)
+    {
+        $reihungstest = new stdClass();
+        $reihungstest->person_id = $anmeldung->person_id;
+        $reihungstest->rt_person_id = $anmeldung->rt_person_id;
+        $reihungstest->rt_id = $anmeldung->rt_id;
+
+        $this->PrestudentModel->deleteRegistrationToReihungstest($reihungstest);
+        if($this->PrestudentModel->isResultValid() === true)
+        {
+
+        }
+        else
+        {
+            $this->_setError(true, $this->PrestudentModel->getErrorMessage());
+        }
+    }
 
 }
