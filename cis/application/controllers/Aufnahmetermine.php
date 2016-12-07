@@ -192,7 +192,7 @@ class Aufnahmetermine extends MY_Controller {
 					{
 						if(isset($rt->stufe) && ($rt->stufe <= $prestudent->prestudentStatus->rt_stufe))
 						{
-							$this->_data["reihungstests"][$prestudent->studiengang_kz][$rt->stufe][$rt->reihungstest_id] = date("d.m.Y", strtotime($rt->datum))." // ".$this->getPhrase("Test/Bewerbungsfrist", $this->_data["sprache"], $this->config->item('root_oe'))." ".date("d.m.Y", strtotime($rt->anmeldefrist));
+							$this->_data["reihungstests"][$prestudent->studiengang_kz][$rt->stufe][$rt->reihungstest_id] = date("d.m.Y", strtotime($rt->datum));//." // ".$this->getPhrase("Test/Bewerbungsfrist", $this->_data["sprache"], $this->config->item('root_oe'))." ".date("d.m.Y", strtotime($rt->anmeldefrist));
 						}
 					}
 				}
