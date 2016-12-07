@@ -7,7 +7,6 @@
 
 class Gemeinde_model extends REST_Model
 {
-	public $result;
 	/**
 	 *
 	 */
@@ -20,8 +19,7 @@ class Gemeinde_model extends REST_Model
 
 	public function getGemeinde()
 	{
-		$this->result = $this->load('codex/gemeinde/Gemeinde', null, true);
-		return $this->result;
+		return $this->load('codex/gemeinde/Gemeinde', null, true);
 	}
 	
 	/**
