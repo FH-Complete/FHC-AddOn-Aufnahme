@@ -167,6 +167,8 @@ if (!isset($plz)) $plz = null;
 					$("#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
 					msg += "</br>"+data.result.bezeichnung;
 					toggleDocumentsComplete(<?php echo $studiengang->studienplan->studienplan_id; ?>);
+
+                    $("#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").parent().removeClass("has-error");
 				}
 				else
 				{
@@ -256,6 +258,8 @@ if (!isset($plz)) $plz = null;
 					$("#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
 					msg += "</br>"+data.result.bezeichnung;
 					toggleDocumentsComplete(<?php echo $studiengang->studienplan->studienplan_id; ?>);
+
+                    $("#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").parent().removeClass("has-error");
 				}
 				else
 				{
@@ -743,7 +747,7 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 	</div>
-	<div class="row form-upload">
+	<div class="row form-upload <?php echo ((!isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && $incomplete)) ? 'has-error' : '' ?>">
 		<div class="col-sm-2">
 			<?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["reisepass"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]."*", "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
 		</div>
@@ -846,7 +850,7 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 	</div>
-	<div class="row form-upload">
+	<div class="row form-upload <?php echo ((!isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && $incomplete)) ? 'has-error' : '' ?>">
 		<div class="col-sm-2">
 			<?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["lebenslauf"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]."*"."&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?><span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="inklusive Foto"></span>
 		</div>
