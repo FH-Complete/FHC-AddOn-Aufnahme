@@ -17,14 +17,13 @@ class MY_Controller extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->config('aufnahme');
-		$this->config->load('message');
+        $this->_loadConfigs(array('aufnahme', "message"));
 		$this->output->enable_profiler($this->config->item('profiler'));
-		$this->load->helper('url');
+		//$this->load->helper('url');
 		$this->load->library('session');
-		$this->load->model("phrase_model", "PhraseModel");
+		/*$this->load->model("phrase_model", "PhraseModel");
 		$this->load->model("sprache_model", "SpracheModel");
-		$this->load->model("message_model", "MessageModel");
+		$this->load->model("message_model", "MessageModel");*/
 		//$this->load->spark('restclient/2.1.0');
 		$this->_data['language'] = $this->get_language();
 		$this->_getSprache($this->_data['language']);
@@ -36,6 +35,8 @@ class MY_Controller extends CI_Controller
 	 */
 	public function get_language()
 	{
+	    $this->_loadModels(array("PhraseModel"=>"phrase_model"));
+
 		$language = null;
 		
 		if (is_null($this->input->get('language')))
@@ -72,6 +73,73 @@ class MY_Controller extends CI_Controller
 		}
 	}
 
+    /**
+     * @param $languages array
+     */
+	protected function _loadCiLanguages($languages)
+    {
+        if((is_array($languages)) && (!empty($languages)))
+        {
+            foreach($languages as $lang)
+            {
+                $this->lang->load($lang, $this->get_language());
+            }
+        }
+    }
+
+    /**
+     * @param $models array
+     */
+    protected function _loadModels($models)
+    {
+        if((is_array($models)) && (!empty($models)))
+        {
+            foreach($models as $key=>$model)
+            {
+                $this->load->model($model, $key);
+            }
+        }
+    }
+
+    /**
+     * @param $libraries array
+     */
+    protected function _loadLibraries($libraries)
+    {
+        if((is_array($libraries)) && (!empty($libraries)))
+        {
+            foreach($libraries as $key=>$library)
+            {
+                $this->load->library($library);
+            }
+        }
+    }
+
+    /**
+     * @param $helpers array
+     */
+    protected function _loadHelpers($helpers)
+    {
+        if((is_array($helpers)) && (!empty($helpers)))
+        {
+            foreach($helpers as $key=>$helper)
+            {
+                $this->load->helper($helper);
+            }
+        }
+    }
+
+    protected function _loadConfigs($configs)
+    {
+        if((is_array($configs)) && (!empty($configs)))
+        {
+            foreach($configs as $key=>$config)
+            {
+                $this->load->config($config);
+            }
+        }
+    }
+
 	/**
 	 *
 	 * @param unknown $sprache
@@ -106,7 +174,10 @@ class MY_Controller extends CI_Controller
 	 * @param unknown $orgform_kurzbz (optional)
 	 * @return unknown
 	 */
-	function getPhrase($phrase, $sprache, $oe_kurzbz = null, $orgform_kurzbz = null) {
+	function getPhrase($phrase, $sprache, $oe_kurzbz = null, $orgform_kurzbz = null)
+    {
+        $this->_loadModels(array("PhraseModel"=>"phrase_model"));
+
 		if (isset($this->session->userdata()["phrasen"])) {
 			$phrasen = $this->session->userdata()["phrasen"];
 			if (is_array($phrasen)) {
@@ -171,6 +242,7 @@ class MY_Controller extends CI_Controller
 	
 	private function _getSprache($sprache)
 	{
+        $this->_loadModels(array("SpracheModel"=>"sprache_model"));
 		if((is_null($this->session->sprache)) || (ucfirst($sprache) != $this->session->sprache->sprache))
 		{
 			$this->SpracheModel->getSprache(ucfirst($sprache));
@@ -187,6 +259,7 @@ class MY_Controller extends CI_Controller
 	
 	protected function _getNumberOfUnreadMessages()
 	{
+        $this->_loadModels(array("MessageModel"=>"message_model"));
 		if(isset($this->session->userdata()["person_id"]))
 		{
 			$this->_data["messages"] = $this->_getMessages($this->session->userdata()["person_id"]);

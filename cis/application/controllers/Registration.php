@@ -28,23 +28,16 @@ class Registration extends MY_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
-		$this->load->helper("form");
-		$this->load->library("form_validation");
-		$this->load->library("securimage/securimage");
-		$this->load->model("Person_model", "PersonModel");
-		$this->load->model("Kontakt_model");
-		$this->load->model("Message_model", "MessageModel");
-		$this->load->model('adresse_model', "AdresseModel");
-		$this->lang->load('aufnahme', $this->get_language());
-		$this->lang->load('login', $this->get_language());
-		$this->lang->load('registration', $this->get_language());
 	}
-
 
 	/**
 	 *
 	 */
-	public function index() {
+	public function index()
+    {
+        $this->_loadLibraries(array("form_validation"));
+        $this->_loadCiLanguages(array("aufnahme", "login", "registration"));
+
 		$this->_data = array(
 			"sprache" => $this->get_language(),
 			"studiengang_kz" => $this->input->get('studiengang_kz'),
@@ -89,8 +82,9 @@ class Registration extends MY_Controller {
 	 *
 	 * @param unknown $random (optional)
 	 */
-	public function securimage($random=null) {
-		$this->load->library('securimage');
+	public function securimage($random=null)
+    {
+        $this->_loadLibraries(array("securimage/securimage"));
 		$img = new Securimage();
 		$img->show(); // alternate use: $img->show('/path/to/background.jpg');
 	}
@@ -100,8 +94,11 @@ class Registration extends MY_Controller {
 	 *
 	 * @return unknown
 	 */
-	public function check_captcha() {
-		if ($this->input->post("email") != $this->config->config["codeception_email"]) {
+	public function check_captcha()
+    {
+		if ($this->input->post("email") != $this->config->config["codeception_email"])
+		{
+            $this->_loadLibraries(array("securimage/securimage", "form_validation"));
 			$securimage = new Securimage();
 			if (!$securimage->check($this->input->post("captcha_code"))) {
 				//$this->form_validation->set_message("check_captcha", "Code does not match.");
@@ -150,7 +147,12 @@ class Registration extends MY_Controller {
 	}
 
 
-	public function resendCode() {
+	public function resendCode()
+    {
+        $this->_loadLibraries(array("form_validation"));
+        $this->_loadModels(array("PersonModel"=>"Person_model","MessageModel"=>"Message_model"));
+        $this->_loadCiLanguages(array("aufnahme", "login", "registration"));
+
 		$this->_data = array(
 			"sprache" => $this->get_language()
 		);
@@ -191,7 +193,11 @@ class Registration extends MY_Controller {
 	}
 
 
-	public function confirm() {
+	public function confirm()
+    {
+        $this->_loadLibraries(array("form_validation"));
+        $this->_loadModels(array("PersonModel"=>"Person_model", "MessageModel"=>"Message_model"));
+        $this->_loadCiLanguages(array("aufnahme", "login", "registration"));
 		$this->_data = array(
 			"sprache" => $this->get_language()
 		);
@@ -277,7 +283,10 @@ class Registration extends MY_Controller {
 	}
 
 
-	private function saveRegistration($data) {
+	private function saveRegistration($data)
+    {
+        $this->_loadModels(array("PersonModel"=>"Person_model","Kontakt_model"=>"Kontakt_model","MessageModel"=>"Message_model", "AdresseModel"=>"adresse_model"));
+
 		$zugangscode = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
 		$person = new stdClass();
 		$person->vorname = $data["vorname"];
@@ -364,6 +373,7 @@ class Registration extends MY_Controller {
 
 	public function code_login()
 	{
+        $this->_loadModels(array("PersonModel"=>"Person_model"));
 		$studiengang_kz = $this->input->get()["studiengang_kz"];
 		$code = $this->input->post("password");
 		$email = $this->input->post("email");
@@ -401,7 +411,8 @@ class Registration extends MY_Controller {
 	}
 
 
-	private function sendMail($zugangscode, $email, $person_id = null, $studiengang_kz = "") {
+	private function sendMail($zugangscode, $email, $person_id = null, $studiengang_kz = "")
+    {
 		if ($person_id != '') {
 			$this->PersonModel->getPersonen($person_id);
 			if ($this->PersonModel->result->error == 0) {
@@ -433,7 +444,8 @@ class Registration extends MY_Controller {
 	}
 
 
-	private function resendMail($zugangscode, $email, $person_id = null) {
+	private function resendMail($zugangscode, $email, $person_id = null)
+    {
 		if ($person_id != '') {
 			$this->PersonModel->getPersonen($person_id);
 			if ($this->PersonModel->result->error == 0) {
