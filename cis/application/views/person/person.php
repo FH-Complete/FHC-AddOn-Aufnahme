@@ -353,7 +353,7 @@ if (!isset($plz)) $plz = null;
         if($(ele).is(":visible")) {
             $.ajax({
                 method: "GET",
-                url: "<?php echo base_url($this->config->config["index_page"] . "/Bewerbung/ort"); ?>/" + plz,
+                url: "<?php echo base_url($this->config->config["index_page"] . "/codex/Gemeinde/ort"); ?>/" + plz,
                 dataType: "json"
             }).done(function (data) {
                 if (data.error === 0) {

@@ -1305,11 +1305,6 @@ class Bewerbung extends MY_Controller
 		}
 	}
 
-	public function ort($plz)
-	{
-		echo json_encode($this->_loadGemeindeByPlz($plz));
-	}
-
 	public function checkDataCompleteness()
 	{
 		//$this->StudiensemesterModel->getNextStudiensemester("WS");
