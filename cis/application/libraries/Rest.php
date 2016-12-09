@@ -130,6 +130,17 @@ class REST
     {
         return $this->_call('post', $uri, $params, $format);
     }
+    
+    /**
+	 * 
+	 * @param type $uri
+	 * @param type $params
+	 * @return type
+	 */
+	public function postJson($uri, $params = array())
+	{
+		return $this->post($uri, json_encode($params), 'json');
+	}
 
     /**
      * put

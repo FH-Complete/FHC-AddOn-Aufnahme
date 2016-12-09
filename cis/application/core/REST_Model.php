@@ -7,10 +7,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class REST_Model extends CI_Model
 {
-	protected $sessionName;
-	
 	/**
-	 *
+	 * 
 	 */
 	function __construct()
 	{
@@ -32,22 +30,51 @@ class REST_Model extends CI_Model
 	/**
 	 * 
 	 */
-	public function load($resource, $parameters = null, $session = false)
+	public function load($resource, $parameters = null, $sessionName = null)
 	{
-		if ($session === true && isset($this->session->{$this->sessionName}))
+		if ($this->_logged())
 		{
-			return $this->session->{$this->sessionName};
+			if (isset($sessionName) && $sessionName != '' && isset($this->session->{$sessionName}))
+			{
+				return $this->session->{$sessionName};
+			}
+			else
+			{
+				$response = $this->_checkResponse($this->rest->get($resource, $parameters));
+				
+				if (isset($sessionName) && $sessionName != '' && isSuccess($response))
+				{
+					$this->session->set_userdata($sessionName, $response);
+				}
+				
+				return $response;
+			}
 		}
 		else
 		{
-			$response = $this->_checkResponse($this->rest->get($resource, $parameters));
-			
-			if ($session === true && isSuccess($response))
+			return error('Not logged in');
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public function save($resource, $parameters)
+	{
+		if ($this->_logged())
+		{
+			if (is_array($parameters) && count($parameters) > 0)
 			{
-				$this->session->set_userdata($this->sessionName, $response);
+				return $this->_checkResponse($this->rest->post($resource, json_encode($parameters), 'json'));
 			}
-			
-			return $response;
+			else
+			{
+				return error('Parameters must be a filled array');
+			}
+		}
+		else
+		{
+			return error('Not logged in');
 		}
 	}
 	
@@ -62,5 +89,18 @@ class REST_Model extends CI_Model
 		}
 		
 		return $response;
+	}
+	
+	/**
+	 *
+	 */
+	private function _logged()
+	{
+		if (!isset($this->session->person_id) || (isset($this->session->person_id) && !is_numeric($this->session->person_id)))
+		{
+			return false;
+		}
+		
+		return true;
 	}
 }
