@@ -61,15 +61,17 @@ class Studiengaenge extends MY_Controller
 			$this->benchmark->mark('codepart_end');
 			log_message('debug', 'Time elapsed for Studiengaenge/index->getStudienplan: ' . $this->benchmark->elapsed_time('codepart_start', 'codepart_end') . 'ms');
 
-			$this->benchmark->mark('foreach_start');
+            $this->benchmark->mark('codepart_start');
 			$bewerbungstermine = $this->_getBewerbungstermine();
+            $this->benchmark->mark('codepart_end');
+            log_message('debug', 'Time elapsed for Studiengaenge/index->getBewerbungstermine: ' . $this->benchmark->elapsed_time('codepart_start', 'codepart_end') . 'ms');
+
+            $this->benchmark->mark('foreach_start');
 			foreach ($this->_data["studiengaenge"] as $stg)
 			{
 				if ($stg->onlinebewerbung === true)
 				{
 					$this->benchmark->mark('codepart_start');
-					//$stg->fristen = $this->_getBewerbungstermine($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
-					//$stg->reihungstests = $this->_loadReihungstests($stg->studiengang_kz, $this->_data["studiensemester"]->studiensemester_kurzbz);
 
 					foreach ($stg->studienplaene as $key_studienplaene => $row_studienplaene)
 					{
@@ -106,7 +108,10 @@ class Studiengaenge extends MY_Controller
 				}
 			}
 
+            $this->benchmark->mark('load_view_start');
 			$this->load->view('studiengaenge', $this->_data);
+            $this->benchmark->mark('load_view_end');
+            log_message('debug', 'Time elapsed for Studiengaenge/index->loadView: ' . $this->benchmark->elapsed_time('load_view_start', 'load_view_end') . 'ms');
 		}
 		else
 		{
