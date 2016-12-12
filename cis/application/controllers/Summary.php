@@ -27,9 +27,7 @@ class Summary extends MY_Controller {
 		$this->load->model('akte_model', "AkteModel");
 		$this->load->model('dokument_model', "DokumentModel");
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
-		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
-
 
 	/**
 	 *
@@ -37,6 +35,7 @@ class Summary extends MY_Controller {
 	public function index() {
 		$this->checkLogin();
 		$this->_data['sprache'] = $this->get_language();
+        $this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 		
 		if($this->input->get("studiengang_kz") != null)
 		{

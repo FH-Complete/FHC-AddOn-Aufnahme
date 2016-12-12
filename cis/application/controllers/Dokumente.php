@@ -29,7 +29,7 @@ class Dokumente extends MY_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->lang->load('dokumente', $this->get_language());
-		$this->load->model('studiengang_model', "StudiengangModel");
+		/*$this->load->model('studiengang_model', "StudiengangModel");
 		$this->load->model('studienplan_model', "StudienplanModel");
 		$this->load->model('studiensemester_model', "StudiensemesterModel");
 		$this->load->model('prestudent_model', "PrestudentModel");
@@ -38,11 +38,10 @@ class Dokumente extends MY_Controller {
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
 		$this->load->model('akte_model', "AkteModel");
 		$this->load->model('dms_model', "DmsModel");
-		$this->load->model('dokument_model', "DokumentModel");
+		$this->load->model('dokument_model', "DokumentModel");*/
 		$this->load->helper("form");
 		$this->_data["sprache"] = $this->get_language();
 		$this->_loadLanguage($this->_data["sprache"]);
-		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
 
@@ -169,6 +168,8 @@ class Dokumente extends MY_Controller {
 
 		//load person data
 		$this->_data["person"] = $this->_loadPerson();
+
+        $this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 
 		//load preinteressent data
 		$this->_data["prestudent"] = $this->_loadPrestudent();
@@ -706,6 +707,13 @@ class Dokumente extends MY_Controller {
 	
 	public function areDocumentsComplete()
 	{
+	    $this->_loadModels(array(
+	        "PrestudentModel"=>"prestudent_model",
+            "PrestudentStatusModel"=>"prestudentStatus_model",
+            "AkteModel"=>"akte_model",
+            "DokumentStudiengangModel" => "dokumentStudiengang_model"
+        ));
+
 		if(isset($this->session->userdata()["person_id"]))
 		{
 			$result = new stdClass();

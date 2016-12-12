@@ -16,15 +16,15 @@ class Requirements extends MY_Controller
 		$this->lang->load('requirements', $this->get_language());
 		$this->load->helper("form");
 		$this->load->library("form_validation");
-		$this->load->model('studiengang_model', "StudiengangModel");
-		$this->load->model('prestudent_model', "PrestudentModel");
-		$this->load->model('prestudentStatus_model', "PrestudentStatusModel");
-		$this->load->model('studienplan_model', "StudienplanModel");
-		$this->load->model('dms_model', "DmsModel");
-		$this->load->model('akte_model', "AkteModel");
-		$this->load->model('person_model', "PersonModel");
-		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
-		$this->load->model('dokument_model', "DokumentModel");
+//		$this->load->model('studiengang_model', "StudiengangModel");
+//		$this->load->model('prestudent_model', "PrestudentModel");
+//		$this->load->model('prestudentStatus_model', "PrestudentStatusModel");
+//		$this->load->model('studienplan_model', "StudienplanModel");
+//		$this->load->model('dms_model', "DmsModel");
+//		$this->load->model('akte_model', "AkteModel");
+//		$this->load->model('person_model', "PersonModel");
+//		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
+//		$this->load->model('dokument_model', "DokumentModel");
 		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
@@ -34,6 +34,22 @@ class Requirements extends MY_Controller
 	public function index()
 	{
 		$this->checkLogin();
+
+		$this->_loadModels(array(
+            "PersonModel" => "person_model",
+            "PrestudentModel" => "prestudent_model",
+        ));
+
+        $this->load->model('studiengang_model', "StudiengangModel");
+        $this->load->model('prestudent_model', "PrestudentModel");
+        $this->load->model('prestudentStatus_model', "PrestudentStatusModel");
+        $this->load->model('studienplan_model', "StudienplanModel");
+        $this->load->model('dms_model', "DmsModel");
+        $this->load->model('akte_model', "AkteModel");
+        $this->load->model('person_model', "PersonModel");
+        $this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
+        $this->load->model('dokument_model', "DokumentModel");
+
 		$this->_data['sprache'] = $this->get_language();
 
 		//load person data
@@ -253,6 +269,12 @@ class Requirements extends MY_Controller
 
 		if (count($files) > 0)
 		{
+            $this->_loadModels(array(
+                "PersonModel" => "person_model",
+                "PrestudentModel" => "prestudent_model",
+                "AkteModel" => "akte_model",
+                "DmsModel" => "dms_model",
+            ));
 			//load person data
 			$this->_data["person"] = $this->_loadPerson();
 			
@@ -440,6 +462,11 @@ class Requirements extends MY_Controller
 		$result = new stdClass();
 		if((isset($this->input->post()["dms_id"])))
 		{
+            $this->_loadModels(array(
+                "AkteModel" => "akte_model",
+                "DmsModel" => "dms_model"
+            ));
+
 			$dms_id = $this->input->post()["dms_id"];
 			$this->_loadDokumente($this->session->userdata()["person_id"]);
 
@@ -469,6 +496,10 @@ class Requirements extends MY_Controller
 	 */
 	public function deleteSpezialisierung($notiz_id, $studiengang_kz)
 	{
+	    $this->_loadModels(array(
+	       "PrestudentModel" => "prestudent_model",
+            "PrestudentStatusModel" => "prestudentStatus_model"
+        ));
 		$this->_data["prestudent"] = $this->_loadPrestudent();
 
 //		$this->_data["studiengaenge"] = array();
@@ -763,6 +794,10 @@ class Requirements extends MY_Controller
 	
 	public function getOption()
 	{
+        $this->_loadModels(array(
+            "AkteModel" => "akte_model"
+        ));
+
 		if(isset($this->session->userdata()["person_id"]))
 		{
 			$result = new stdClass();

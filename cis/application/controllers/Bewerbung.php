@@ -14,23 +14,6 @@ class Bewerbung extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('person_model', 'PersonModel');
-		$this->load->model('kontakt_model', 'KontaktModel');
-		$this->load->model('nation_model');
-		$this->load->model('bundesland_model');
-		$this->load->model('adresse_model', "AdresseModel");
-		$this->load->model('studiengang_model', "StudiengangModel");
-		$this->load->model('prestudent_model', "PrestudentModel");
-		$this->load->model('prestudentStatus_model', "PrestudentStatusModel");
-		$this->load->model('studiensemester_model', "StudiensemesterModel");
-		$this->load->model('studienplan_model', "StudienplanModel");
-		$this->load->model('dms_model', "DmsModel");
-		$this->load->model('akte_model', "AkteModel");
-		$this->load->model('gemeinde_model', "GemeindeModel");
-		$this->load->model('Bewerbungstermine_model', 'BewerbungstermineModel');
-		$this->load->model('dokument_model', "DokumentModel");
-		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
-        $this->load->model('reihungstest_model', "ReihungstestModel");
 		$this->load->helper("form");
 		$this->load->library("form_validation");
 		$this->lang->load('aufnahme', $this->get_language());
@@ -45,6 +28,23 @@ class Bewerbung extends MY_Controller
 	public function index()
 	{
 		$this->checkLogin();
+
+		$this->_loadModels(array(
+		    "StudiensemesterModel" => "studiensemester_model",
+		    "PersonModel" => "person_model",
+            "PrestudentModel" => "prestudent_model",
+            "StudiengangModel" => "studiengang_model",
+            "PrestudentStatusModel" => "prestudentStatus_model",
+            "StudienplanModel" => "studienplan_model",
+            "KontaktModel" => "kontakt_model",
+            "nation_model" => "nation_model",
+            "bundesland_model" => "bundesland_model",
+            "AdresseModel" => "adresse_model",
+            "GemeindeModel" => "gemeinde_model",
+            "AkteModel" => "akte_model",
+            "DmsModel" => "dms_model",
+            "DokumentModel" => "dokument_model"
+        ));
 
 		$this->_data['title'] = 'Personendaten';
 
@@ -407,6 +407,24 @@ class Bewerbung extends MY_Controller
 	{
 		$this->checkLogin();
 
+        $this->_loadModels(array(
+            "StudiensemesterModel" => "studiensemester_model",
+            "PersonModel" => "person_model",
+            "PrestudentModel" => "prestudent_model",
+            "StudiengangModel" => "studiengang_model",
+            "PrestudentStatusModel" => "prestudentStatus_model",
+            "StudienplanModel" => "studienplan_model",
+            "KontaktModel" => "kontakt_model",
+            "nation_model" => "nation_model",
+            "bundesland_model" => "bundesland_model",
+            "AdresseModel" => "adresse_model",
+            "GemeindeModel" => "gemeinde_model",
+            "AkteModel" => "akte_model",
+            "DmsModel" => "dms_model",
+            "DokumentModel" => "dokument_model",
+            "BewerbungstermineModel" => "bewerbungstermine_model"
+        ));
+
 		$this->session->set_userdata("studiengang_kz", $studiengang_kz);
 
 		$this->session->set_userdata("studiensemester_kurzbz", $studiensemester_kurzbz);
@@ -576,6 +594,14 @@ class Bewerbung extends MY_Controller
 	{
 		$this->checkLogin();
 
+        $this->_loadModels(array(
+            "StudiensemesterModel" => "studiensemester_model",
+            "PersonModel" => "person_model",
+            "PrestudentModel" => "prestudent_model",
+            "StudiengangModel" => "studiengang_model",
+            "PrestudentStatusModel" => "prestudentStatus_model"
+        ));
+
 		$this->session->set_userdata("studiengang_kz", $studiengang_kz);
 
 		//$this->StudiensemesterModel->getNextStudiensemester("WS");
@@ -628,6 +654,12 @@ class Bewerbung extends MY_Controller
 
 		if (count($files) > 0)
 		{
+            $this->_loadModels(array(
+                "PersonModel" => "person_model",
+                "AkteModel" => "akte_model",
+                "DmsModel" => "dms_model",
+            ));
+
 			//load person data
 			$this->_data["person"] = $this->_loadPerson();
 
@@ -775,8 +807,13 @@ class Bewerbung extends MY_Controller
 	 *
 	 * @param type $notiz_id
 	 */
-	public function deleteSpezialisierung($notiz_id, $studiengang_kz)
+	/*public function deleteSpezialisierung($notiz_id, $studiengang_kz)
 	{
+        $this->_loadModels(array(
+            "PrestudentModel" => "prestudent_model",
+            "PrestudentStatusModel" => "prestudentStatus_model"
+        ));
+
 		$this->_data["prestudent"] = $this->_loadPrestudent();
 
 //		$this->_data["studiengaenge"] = array();
@@ -798,7 +835,7 @@ class Bewerbung extends MY_Controller
 				}
 			}
 		}
-	}
+	}*/
 
 	private function _loadPerson()
 	{
@@ -1244,6 +1281,11 @@ class Bewerbung extends MY_Controller
 		$result = new stdClass();
 		if ((isset($this->input->post()["dms_id"])))
 		{
+            $this->_loadModels(array(
+                "AkteModel" => "akte_model",
+                "DmsModel" => "dms_model"
+            ));
+
 			$dms_id = $this->input->post()["dms_id"];
 			$this->_loadDokumente($this->session->userdata()["person_id"]);
 
@@ -1307,6 +1349,24 @@ class Bewerbung extends MY_Controller
 
 	public function checkDataCompleteness()
 	{
+        $this->_loadModels(array(
+            "StudiensemesterModel" => "studiensemester_model",
+            "PersonModel" => "person_model",
+            "PrestudentModel" => "prestudent_model",
+            "StudiengangModel" => "studiengang_model",
+            "PrestudentStatusModel" => "prestudentStatus_model",
+            "StudienplanModel" => "studienplan_model",
+            "KontaktModel" => "kontakt_model",
+            "nation_model" => "nation_model",
+            "bundesland_model" => "bundesland_model",
+            "AdresseModel" => "adresse_model",
+            "GemeindeModel" => "gemeinde_model",
+            "AkteModel" => "akte_model",
+            "DmsModel" => "dms_model",
+            "DokumentModel" => "dokument_model",
+            "DokumentStudiengangModel" => "dokumentStudiengang_model"
+        ));
+
 		//$this->StudiensemesterModel->getNextStudiensemester("WS");
 		$this->session->set_userdata("studiensemester_kurzbz", $this->_getNextStudiensemester("WS"));
 		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);

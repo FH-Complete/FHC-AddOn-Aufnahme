@@ -29,8 +29,6 @@ class Send extends MY_Controller {
 		$this->load->model('Dokumentprestudent_model', "DokumentPrestudentModel");
 		$this->load->model('dokument_model', "DokumentModel");
 		$this->load->helper("form");
-		$this->load->library("form_validation");
-		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
 
@@ -40,6 +38,7 @@ class Send extends MY_Controller {
 	public function index()
 	{
 		$this->checkLogin();
+        $this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 		$this->_data['sprache'] = $this->get_language();
 		$this->_loadLanguage($this->_data["sprache"]);
 
@@ -120,6 +119,7 @@ class Send extends MY_Controller {
 	public function send($studiengang_kz, $studienplan_id)
 	{
 		$this->checkLogin();
+        $this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 		$this->_data['sprache'] = $this->get_language();
 		
 		$this->_data["studiengang_kz"] = $studiengang_kz;
