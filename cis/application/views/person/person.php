@@ -83,21 +83,21 @@ if (!isset($plz)) $plz = null;
 			}
 		});
 
-		$("#adresse_nation").on("change", function(event) {
-			toggleAdresse();
+		$(".adresse_nation").on("change", function(event) {
+			toggleAdresse(event.currentTarget);
 		});
 
-		$("#zustelladresse_nation").on("change", function(event) {
-			toggleZustellAdresse();
+		$(".zustelladresse_nation").on("change", function(event) {
+			toggleZustellAdresse(event.currentTarget);
 		});
 
-		$("#plz").on("change", function(event) {
-			var plz = $("#plz").val();
-			loadOrtData(plz, $("#ort_dropdown"));
+		$(".plz").on("change", function(event) {
+			var plz = $(event.currentTarget).val();
+			loadOrtData(plz, $(".ort_dropdown"));
 		});
 
-		$("#zustell_plz").on("change", function(event) {
-			var plz = $("#zustell_plz").val();
+		$(".zustell_plz").on("change", function(event) {
+			var plz = $(event.currentTarget).val();
 			loadOrtData(plz, $(".zustell_ort_dropdown"));
 		});
 		
@@ -284,13 +284,14 @@ if (!isset($plz)) $plz = null;
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
 
-		toggleAdresse();
-		toggleZustellAdresse();
+		toggleAdresse($("#adresse_nation<?php echo $studiengang->studienplan->studienplan_id; ?>"));
+		toggleZustellAdresse($("#zustelladresse_nation<?php echo $studiengang->studienplan->studienplan_id; ?>"));
     });
 
-    function toggleAdresse()
+    function toggleAdresse(target)
     {
-		var code = $("#adresse_nation option:selected").val();
+		//var code = $("#adresse_nation option:selected").val();
+		var code = $(target).val();
 		if(code === "A")
 		{
 			hideElement($(".ort_input"));
@@ -305,9 +306,10 @@ if (!isset($plz)) $plz = null;
 		}
     }
 
-    function toggleZustellAdresse()
+    function toggleZustellAdresse(target)
     {
-		var code = $("#zustelladresse_nation option:selected").val();
+		//var code = $("#zustelladresse_nation option:selected").val();
+        var code = $(target).val();
 		if(code === "A")
 		{
 			hideElement($(".zustell_ort_input"));
@@ -540,7 +542,7 @@ if (!isset($plz)) $plz = null;
 			<div class="form-group <?php echo ((form_error("adresse_nation") != "") || (!isset($adresse->nation) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formAdresseNation'), "adresse_nation", array("name" => "adresse_nation", "for" => "adresse_nation", "class" => "control-label")) ?>
 				<?php 
-				$data = array('id' => 'adresse_nation', 'name' => 'adresse_nation', "value" => set_value("adresse_nation"), "class" => "form-control");
+				$data = array('id' => 'adresse_nation'.$studiengang->studienplan->studienplan_id, 'name' => 'adresse_nation', "value" => set_value("adresse_nation"), "class" => "form-control adresse_nation");
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 				echo form_dropdown("adresse_nation", $nationen, (isset($adresse->nation) ? $adresse->nation : null), $data); ?>
 				<?php echo form_error("adresse_nation"); ?>
@@ -573,7 +575,7 @@ if (!isset($plz)) $plz = null;
 			<div class="form-group <?php echo ((form_error("plz") != "") || (!isset($adresse->plz) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formPlz'), "plz", array("name" => "plz", "for" => "plz", "class" => "control-label")) ?>
 				<?php 
-				$data = array('id' => 'plz', 'name' => 'plz', "type" => "text", "value" => set_value("plz", (isset($adresse->plz) ? $adresse->plz : NULL)), "class" => "form-control");
+				$data = array('id' => 'plz', 'name' => 'plz', "type" => "text", "value" => set_value("plz", (isset($adresse->plz) ? $adresse->plz : NULL)), "class" => "form-control plz");
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 				echo form_input($data); ?>
 				<?php echo form_error("plz"); ?>
@@ -638,7 +640,7 @@ if (!isset($plz)) $plz = null;
 				<div class="form-group <?php echo ((form_error("zustelladresse_nation") != "") || (!isset($zustell_adresse->nation) && $incomplete)) ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formAdresseNation'), "zustelladresse_nation", array("name" => "zustelladresse_nation", "for" => "zustelladresse_nation", "class" => "control-label")) ?>
 					<?php 
-					$data = array('id' => 'zustelladresse_nation', 'name' => 'zustelladresse_nation', "value" => set_value("zustelladresse_nation"), "class" => "form-control");
+					$data = array('id' => 'zustelladresse_nation'.$studiengang->studienplan->studienplan_id, 'name' => 'zustelladresse_nation', "value" => set_value("zustelladresse_nation"), "class" => "form-control zustelladresse_nation");
 					(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 					echo form_dropdown("zustelladresse_nation", $nationen, (isset($zustell_adresse->nation) ? $zustell_adresse->nation : null), $data); ?>
 					<?php echo form_error("zustelladresse_nation"); ?>
@@ -671,7 +673,7 @@ if (!isset($plz)) $plz = null;
 				<div class="form-group <?php echo ((form_error("zustell_plz") != "") || (!isset($zustell_adresse->plz) && $incomplete)) ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formPlz'), "zustell_plz", array("name" => "zustell_plz", "for" => "zustell_plz", "class" => "control-label")) ?>
 					<?php
-					$data = array('id' => 'zustell_plz', 'name' => 'zustell_plz', "type" => "text", "value" => set_value("zustell_plz", (isset($zustell_adresse->plz) ? $zustell_adresse->plz : NULL)), "class" => "form-control");
+					$data = array('id' => 'zustell_plz', 'name' => 'zustell_plz', "type" => "text", "value" => set_value("zustell_plz", (isset($zustell_adresse->plz) ? $zustell_adresse->plz : NULL)), "class" => "form-control zustell_plz");
 					(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 					echo form_input($data); ?>
 					<?php echo form_error("zustell_plz"); ?>
