@@ -305,7 +305,7 @@
     {
 		$(".nachreichenDatum").each(function(i,v) {
 			var id = $(v).attr("id");
-			id = id.substring(0, id.indexOf("_"));
+			id = id.substring(0, id.indexOf("_nachreichenDatum_"));
 			if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked") !== undefined)
 			{
 				if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked"))
@@ -322,7 +322,7 @@
 		$(".nachreichenAnmerkung").each(function(i,v)
 		{
 			var id = $(v).attr("id");
-			id = id.substring(0, id.indexOf("_"));
+			id = id.substring(0, id.indexOf("_nachreichenAnmerkung_"));
 			if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked") !== undefined)
 			{
 				if($("#"+id+"_nachgereicht_"+studienplan_id).prop("checked"))
