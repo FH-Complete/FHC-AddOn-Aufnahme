@@ -38,7 +38,10 @@ if (!isset($plz)) $plz = null;
 			},
 			onChangeMonthYear: function(year, month, inst)
 			{
-				$(this).datepicker("setDate", new Date(inst.selectedYear, month, inst.currentDay));
+			    if((year !== inst.currentYear) || (month !== inst.currentMonth))
+                {
+                    $(this).datepicker("setDate", new Date(inst.selectedYear, month-1, inst.currentDay));
+                }
 			},
 			changeYear: true,
 			yearRange: '1900:c'
