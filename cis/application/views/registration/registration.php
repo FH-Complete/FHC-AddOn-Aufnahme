@@ -162,7 +162,7 @@ if (isset($error) && ($error->error === true))
 			},
 			onChangeMonthYear: function(year, month, inst)
 			{
-				$(this).datepicker("setDate", new Date(inst.selectedYear, month, inst.currentDay));
+				$(this).datepicker("setDate", new Date(inst.selectedYear, month-1, inst.currentDay));
 			},
 			changeYear: true,
 			yearRange: '1900:c'
