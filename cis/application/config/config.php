@@ -509,3 +509,10 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+// To load every other class from the core directory
+spl_autoload_register(function ($class) {
+    if (substr($class,0,3) !== 'CI_' && substr($class,0,4) !== 'FHC_' && substr($class,0,3) !== 'MY_')
+	    if (file_exists($file = APPPATH . 'core/' . $class . '.php')) 
+	        require_once $file;
+});
