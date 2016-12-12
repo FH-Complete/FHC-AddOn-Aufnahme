@@ -281,7 +281,7 @@
 			},
 			onChangeMonthYear: function(year, month, inst)
 			{
-				$(this).datepicker("setDate", new Date(inst.selectedYear, month, inst.currentDay));
+				$(this).datepicker("setDate", new Date(inst.selectedYear, month-1, inst.currentDay));
 			}
 			<?php
 			if(ucfirst($sprache) === "German")
