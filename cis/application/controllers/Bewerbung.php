@@ -14,12 +14,9 @@ class Bewerbung extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->helper("form");
-		$this->load->library("form_validation");
 		$this->lang->load('aufnahme', $this->get_language());
 		$this->_data["sprache"] = $this->get_language();
 		$this->_loadLanguage($this->_data["sprache"]);
-		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 	}
 
 	/**
@@ -45,6 +42,10 @@ class Bewerbung extends MY_Controller
             "DmsModel" => "dms_model",
             "DokumentModel" => "dokument_model"
         ));
+
+        $this->load->helper("form");
+        $this->load->library("form_validation");
+        $this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 
 		$this->_data['title'] = 'Personendaten';
 
@@ -230,6 +231,8 @@ class Bewerbung extends MY_Controller
 					$zustell_adresse->nation = $post["zustelladresse_nation"];
 					$zustell_adresse->plz = $post["zustell_plz"];
 
+                    $this->_loadGemeindeByPlz($zustell_adresse->plz);
+
 					foreach ($this->_data["gemeinden"] as $gemeinde)
 					{
 						if ($gemeinde->gemeinde_id === $post["zustell_ort_dd"])
@@ -370,7 +373,7 @@ class Bewerbung extends MY_Controller
 
 			if ((!isset($this->_data["error"])) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
 			{
-				redirect("/Requirements?studiengang_kz=" . $this->input->get()["studiengang_kz"] . "&studienplan_id=" . $this->input->get()["studienplan_id"]);
+				//redirect("/Requirements?studiengang_kz=" . $this->input->get()["studiengang_kz"] . "&studienplan_id=" . $this->input->get()["studienplan_id"]);
 				$this->_data["complete"] = $this->_checkDataCompleteness();
 				$this->load->view('bewerbung', $this->_data);
 			}
@@ -424,6 +427,10 @@ class Bewerbung extends MY_Controller
             "DokumentModel" => "dokument_model",
             "BewerbungstermineModel" => "bewerbungstermine_model"
         ));
+
+        $this->load->helper("form");
+        $this->load->library("form_validation");
+        $this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 
 		$this->session->set_userdata("studiengang_kz", $studiengang_kz);
 
@@ -599,7 +606,17 @@ class Bewerbung extends MY_Controller
             "PersonModel" => "person_model",
             "PrestudentModel" => "prestudent_model",
             "StudiengangModel" => "studiengang_model",
-            "PrestudentStatusModel" => "prestudentStatus_model"
+            "PrestudentStatusModel" => "prestudentStatus_model",
+            "StudienplanModel" => "studienplan_model",
+            "KontaktModel" => "kontakt_model",
+            "AdresseModel" => "adresse_model",
+            "nation_model" => "nation_model",
+            "bundesland_model" => "bundesland_model",
+            "AdresseModel" => "adresse_model",
+            "GemeindeModel" => "gemeinde_model",
+            "AkteModel" => "akte_model",
+            "DmsModel" => "dms_model",
+            "DokumentModel" => "dokument_model"
         ));
 
 		$this->session->set_userdata("studiengang_kz", $studiengang_kz);
@@ -638,6 +655,9 @@ class Bewerbung extends MY_Controller
 				else
 				{
 					$this->_loadData();
+                    $this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
+
+                    $this->load->helper("form");
 
 					$this->_setError(true, $this->lang->line("aufnahme/bewerbungKannNichtGeloeschtWerden"));
 					$this->load->view('bewerbung', $this->_data);

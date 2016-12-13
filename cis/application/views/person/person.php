@@ -355,7 +355,7 @@ if (!isset($plz)) $plz = null;
 
     function loadOrtData(plz, ele)
     {
-        if($(ele).is(":visible")) {
+        //if($(ele).is(":visible")) {
             $.ajax({
                 method: "GET",
                 url: "<?php echo base_url($this->config->config["index_page"] . "/codex/Gemeinde/ort"); ?>/" + plz,
@@ -384,7 +384,7 @@ if (!isset($plz)) $plz = null;
                     });
                 }
             });
-        }
+        //}
     }
 </script>
 
