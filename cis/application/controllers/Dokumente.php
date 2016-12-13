@@ -51,6 +51,18 @@ class Dokumente extends MY_Controller {
 	public function index() {
 		$this->checkLogin();
 
+        $this->_loadModels(array(
+            "PersonModel" => "person_model",
+            "PrestudentModel"=>"prestudent_model",
+            "PrestudentStatusModel"=>"prestudentStatus_model",
+            "AkteModel"=>"akte_model",
+            "DmsModel" => "dms_model",
+            "StudiengangModel" => "studiengang_model",
+            "StudienplanModel" => "studienplan_model",
+            "DokumentStudiengangModel" => "dokumentStudiengang_model",
+            "DokumentModel" => "dokument_model"
+        ));
+
 		$this->_loadData();
 
 		$this->_handleFileUpload();
@@ -271,6 +283,11 @@ class Dokumente extends MY_Controller {
 		$result = new stdClass();
 		if((isset($this->input->post()["dms_id"])))
 		{
+            $this->_loadModels(array(
+                "AkteModel" => "akte_model",
+                "DmsModel" => "dms_model"
+            ));
+
 			$dms_id = $this->input->post()["dms_id"];
 			$this->_loadDokumente($this->session->userdata()["person_id"]);
 
@@ -302,6 +319,13 @@ class Dokumente extends MY_Controller {
 
 		if (count($files) > 0)
 		{
+            $this->_loadModels(array(
+                "PersonModel" => "person_model",
+                "AkteModel" => "akte_model",
+                "DmsModel" => "dms_model",
+                "PrestudentModel" => "prestudent_model"
+            ));
+
 			//load person data
 			$this->_data["person"] = $this->_loadPerson();
 			
