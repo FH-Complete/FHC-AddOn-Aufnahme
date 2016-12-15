@@ -61,25 +61,27 @@ class Message_model extends MY_Model
 	}
 
 
-	/**
-	 *
-	 * @param unknown $sender_id
-	 * @param unknown $receiver_id
-	 * @param unknown $vorlage_kurzbz
-	 * @param unknown $oe_kurzbz
-	 * @param unknown $data
-	 * @param unknown $sprache
-	 * @param unknown $orgform_kurzbz (optional)
-	 * @return unknown
-	 */
-	public function sendMessageVorlage($vorlage_kurzbz, $oe_kurzbz, $data, $sprache, $orgform_kurzbz = null, $sender_id = null, $receiver_id = null) {
+    /**
+     *
+     * @param unknown $vorlage_kurzbz
+     * @param unknown $oe_kurzbz
+     * @param unknown $data
+     * @param unknown $sprache
+     * @param unknown $orgform_kurzbz (optional)
+     * @param unknown $sender_id
+     * @param unknown $receiver_id
+     * @param bool $multiPartMime
+     * @return unknown
+     */
+	public function sendMessageVorlage($vorlage_kurzbz, $oe_kurzbz, $data, $sprache, $orgform_kurzbz = null, $sender_id = null, $receiver_id = null, $multiPartMime=true) {
 		$message = array(
 			"vorlage_kurzbz" => $vorlage_kurzbz,
 			"oe_kurzbz" => $oe_kurzbz,
 			"data" => $data,
 			"sprache" => ucfirst($sprache),
 			"orgform_kurzbz" => $orgform_kurzbz,
-			"relationmessage_id" => null
+			"relationmessage_id" => null,
+            "mulitPartMime" => $multiPartMime
 		);
 		
 		if($receiver_id !== null)
