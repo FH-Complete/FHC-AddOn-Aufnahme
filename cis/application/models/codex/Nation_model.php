@@ -3,7 +3,7 @@
 /**
  * 
  */
-class Bundesland_model extends REST_Model
+class Nation_model extends REST_Model
 {
 	/**
 	 * 
@@ -18,6 +18,6 @@ class Bundesland_model extends REST_Model
 	 */
 	public function getAll()
 	{
-		return $this->load('codex/Bundesland/All', null, 'Bundesland.getBundeslaender');
+		return $this->load('codex/Nation/All', null, 'Nation.getAll');
 	}
 }

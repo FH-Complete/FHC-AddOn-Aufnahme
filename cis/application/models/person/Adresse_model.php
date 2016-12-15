@@ -16,7 +16,7 @@ class Adresse_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getAdresse($person_id = null)
+	public function getAdresse($person_id)
 	{
 		return $this->load('person/Adresse/Adresse', array('person_id' => $person_id), 'Adresse.getAdresse');
 	}
@@ -26,6 +26,6 @@ class Adresse_model extends REST_Model
 	 */
 	public function saveAdresse($parameters)
 	{
-		return $this->save('person/Adresse/Adresse', $parameters);
+		return $this->save('person/Adresse/Adresse', $parameters, 'Adresse.getAdresse');
 	}
 }
