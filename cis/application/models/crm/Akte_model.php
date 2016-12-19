@@ -16,7 +16,7 @@ class Akte_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getAkten($person_id = null, $dokumenttyp_kurzbz = null)
+	public function getAkten($person_id, $dokumenttyp_kurzbz = null)
 	{
 		return $this->load('crm/Akte/Akten', array('person_id' => $person_id, 'dokumenttyp_kurzbz' => $dokumenttyp_kurzbz));
 	}
@@ -24,7 +24,7 @@ class Akte_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getAktenAccepted($person_id = null, $dokumenttyp_kurzbz = null)
+	public function getAktenAccepted($person_id, $dokumenttyp_kurzbz = null)
 	{
 		return $this->load(
 			'crm/Akte/Aktenaccepted',

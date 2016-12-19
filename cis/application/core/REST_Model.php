@@ -59,13 +59,49 @@ class REST_Model extends CI_Model
 	/**
 	 * 
 	 */
-	public function save($resource, $parameters)
+	public function save($resource, $parameters, $sessionName = null)
 	{
 		if ($this->_logged())
 		{
 			if (is_array($parameters) && count($parameters) > 0)
 			{
-				return $this->_checkResponse($this->rest->post($resource, json_encode($parameters), 'json'));
+				$result = $this->_checkResponse($this->rest->post($resource, json_encode($parameters), 'json'));
+				
+				if (isSuccess($result) && isset($sessionName) && isset($this->session->{$sessionName}))
+				{
+					unset($this->session->{$sessionName});
+				}
+				
+				return $result;
+			}
+			else
+			{
+				return error('Parameters must be a filled array');
+			}
+		}
+		else
+		{
+			return error('Not logged in');
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public function delete($resource, $parameters, $sessionName = null)
+	{
+		if ($this->_logged())
+		{
+			if (is_array($parameters) && count($parameters) > 0)
+			{
+				$result = $this->_checkResponse($this->rest->delete($resource, $parameters));
+				
+				if (isSuccess($result) && isset($sessionName) && isset($this->session->{$sessionName}))
+				{
+					unset($this->session->{$sessionName});
+				}
+				
+				return $result;
 			}
 			else
 			{

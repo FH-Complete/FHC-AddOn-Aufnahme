@@ -81,7 +81,7 @@ class Message_model extends MY_Model
 			"sprache" => ucfirst($sprache),
 			"orgform_kurzbz" => $orgform_kurzbz,
 			"relationmessage_id" => null,
-            "mulitPartMime" => $multiPartMime
+            "multiPartMime" => $multiPartMime
 		);
 		
 		if($receiver_id !== null)
