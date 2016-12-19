@@ -43,12 +43,20 @@ class MY_Controller extends CI_Controller
 		{
 			if (is_null($this->session->language))
 			{
-				$this->_getPhrasen(ucfirst($this->config->item('default_language')));
+                if (((is_null($this->session->phrasen)) || (empty($this->session->phrasen))) ||
+                    (!$this->config->item('store_phrases_in_session')))
+                {
+                    $this->_getPhrasen(ucfirst($this->config->item('default_language')));
+                }
 				$language = $this->config->item('default_language');
 			}
 			else
 			{
-				$this->_getPhrasen(ucfirst($this->session->language));
+                if (((is_null($this->session->phrasen)) || (empty($this->session->phrasen))) ||
+                    (!$this->config->item('store_phrases_in_session')))
+                {
+                    $this->_getPhrasen(ucfirst($this->session->language));
+                }
 				$language =  $this->session->language;
 			}
 		}

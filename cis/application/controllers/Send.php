@@ -13,24 +13,22 @@ class Send extends MY_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
-		$this->lang->load('send', $this->get_language());
+        $this->_data['sprache'] = $this->get_language();
+		$this->lang->load('send', $this->_data['sprache']);
 		$this->load->model('studiengang_model', "StudiengangModel");
 		$this->load->model('studienplan_model', "StudienplanModel");
 		$this->load->model('prestudent_model', "PrestudentModel");
 		$this->load->model('prestudentStatus_model', "PrestudentStatusModel");
 		$this->load->model('person_model', 'PersonModel');
-		$this->load->model('studiengangstyp_model', 'StudiengangstypModel');
 		$this->load->model('message_model', 'MessageModel');
 		$this->load->model('adresse_model', "AdresseModel");
 		$this->load->model('kontakt_model', 'KontaktModel');
-		$this->load->model('dms_model', "DmsModel");
 		$this->load->model('akte_model', "AkteModel");
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
 		$this->load->model('Dokumentprestudent_model', "DokumentPrestudentModel");
 		$this->load->model('dokument_model', "DokumentModel");
 		$this->load->helper("form");
 	}
-
 
 	/**
 	 *
@@ -39,7 +37,7 @@ class Send extends MY_Controller {
 	{
 		$this->checkLogin();
         $this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
-		$this->_data['sprache'] = $this->get_language();
+//		$this->_data['sprache'] = $this->get_language();
 		$this->_loadLanguage($this->_data["sprache"]);
 
 		//load person data
@@ -53,7 +51,7 @@ class Send extends MY_Controller {
 		//load studiengang
 		$this->_data["studiengang"] = $this->_loadStudiengang($this->input->get()["studiengang_kz"]);
 
-		$this->_data["studiengang"]->studiengangstyp = $this->_loadStudiengangstyp($this->_data["studiengang"]->typ);
+		//$this->_data["studiengang"]->studiengangstyp = $this->_loadStudiengangstyp($this->_data["studiengang"]->typ);
 
 		$this->_loadAdresse();
 
@@ -119,8 +117,12 @@ class Send extends MY_Controller {
 	public function send($studiengang_kz, $studienplan_id)
 	{
 		$this->checkLogin();
+
+		$this->_loadModels(array(
+            'StudiengangstypModel'=>'studiengangstyp_model'
+        ));
+
         $this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
-		$this->_data['sprache'] = $this->get_language();
 		
 		$this->_data["studiengang_kz"] = $studiengang_kz;
 
@@ -155,7 +157,7 @@ class Send extends MY_Controller {
 			{
 				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
 				$studiengang->studienplan = $studienplan;
-				
+
 				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
 				{
 					$this->_data["bewerbung_abgeschickt"] = true;
@@ -216,7 +218,7 @@ class Send extends MY_Controller {
 						if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["lebenslauf"]]))
 						{
 							array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["lebenslauf"]);
-						}					
+						}
 
 						if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]))
 						{

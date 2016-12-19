@@ -9,6 +9,7 @@ vendor
 cis/application/config/development
 cis/index.php
 cis/application/config/development/
+cis/application/config/production/
 /cis/application/logs/
 tests/codeception/_output/*
 !/tests/codeception/_output/.placeholder
