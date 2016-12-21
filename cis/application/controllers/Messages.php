@@ -62,6 +62,11 @@ class Messages extends MY_Controller {
 	public function answerMessage($message_id, $oe_kurzbz=null) {
 		$this->checkLogin();
 
+		if(isset($this->session->userdata()["token"]))
+        {
+            $this->session->unset_userdata("token");
+        }
+
 		$this->_loadData();
 
 		foreach ($this->_data["messages"] as $msg) {
