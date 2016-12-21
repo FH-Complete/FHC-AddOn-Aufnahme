@@ -16,20 +16,20 @@ class Akte_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getAkten($person_id, $dokumenttyp_kurzbz = null)
+	public function getAkten($dokumenttyp_kurzbz = null)
 	{
-		return $this->load('crm/Akte/Akten', array('person_id' => $person_id, 'dokumenttyp_kurzbz' => $dokumenttyp_kurzbz));
+		return $this->load('crm/Akte/Akten', array('person_id' => $this->getPersonId(), 'dokumenttyp_kurzbz' => $dokumenttyp_kurzbz));
 	}
 	
 	/**
 	 * 
 	 */
-	public function getAktenAccepted($person_id, $dokumenttyp_kurzbz = null)
+	public function getAktenAccepted($dokumenttyp_kurzbz = null)
 	{
 		return $this->load(
 			'crm/Akte/Aktenaccepted',
 			array(
-				'person_id' => $person_id,
+				'person_id' => $this->getPersonId(),
 				'dokumenttyp_kurzbz' => $dokumenttyp_kurzbz
 			)
 		);

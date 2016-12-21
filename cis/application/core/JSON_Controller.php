@@ -7,6 +7,9 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * 
+ */
 class JSON_Controller extends CI_Controller
 {
 	/**
@@ -20,6 +23,9 @@ class JSON_Controller extends CI_Controller
 		$this->load->config('aufnahme');
 	}
 	
+	/**
+	 * 
+	 */
 	protected function response($data)
 	{
 		$this->output

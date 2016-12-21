@@ -39,11 +39,11 @@ class Reihungstest_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getReihungstestByPersonId($person_id, $available = null)
+	public function getReihungstestByPersonId($available = null)
 	{
 		return $this->load(
 			'crm/Reihungstest/ReihungstestByPersonId',
-			array('person_id' => $person_id, 'available' => $available)
+			array('person_id' => $this->getPersonId(), 'available' => $available)
 		);
 	}
 }

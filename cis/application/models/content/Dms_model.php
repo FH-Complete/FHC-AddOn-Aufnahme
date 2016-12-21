@@ -24,6 +24,17 @@ class Dms_model extends REST_Model
 	/**
 	 * 
 	 */
+	public function getAktenAcceptedDms($dokument_kurzbz = null)
+	{
+		return $this->load(
+			'content/Dms/AktenAcceptedDms',
+			array('person_id' => $this->getPersonId(), 'dokument_kurzbz' => $dokument_kurzbz)
+		);
+	}
+	
+	/**
+	 * 
+	 */
 	public function saveDms($parameters)
 	{
 		return $this->save('content/Dms/Dms', $parameters);

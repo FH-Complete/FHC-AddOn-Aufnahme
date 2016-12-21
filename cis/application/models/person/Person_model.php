@@ -16,13 +16,15 @@ class Person_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getPerson($person_id = null, $code = null, $email = null)
+	public function getPerson($code = null, $email = null)
 	{
-		return $this->load('person/Person/Person', array(
-			'person_id' => $person_id,
+		$person = $this->load('person/Person/Person', array(
+			'person_id' => $this->getPersonId(),
 			'code' => $code,
 			'email' => $email
 		));
+		
+		return $person[0];
 	}
 	
 	/**

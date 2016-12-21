@@ -30,9 +30,9 @@ class REST_Model extends CI_Model
 	/**
 	 * 
 	 */
-	public function load($resource, $parameters = null, $sessionName = null)
+	public function load($resource, $parameters = null, $sessionName = null, $authNotRequired = false)
 	{
-		if ($this->_logged())
+		if ($authNotRequired || $this->_logged())
 		{
 			if (isset($sessionName) && $sessionName != '' && isset($this->session->{$sessionName}))
 			{
@@ -44,10 +44,10 @@ class REST_Model extends CI_Model
 				
 				if (isset($sessionName) && $sessionName != '' && isSuccess($response))
 				{
-					$this->session->set_userdata($sessionName, $response);
+					$this->session->set_userdata($sessionName, $response->retval);
 				}
 				
-				return $response;
+				return $response->retval;
 			}
 		}
 		else
@@ -117,6 +117,14 @@ class REST_Model extends CI_Model
 	/**
 	 * 
 	 */
+	protected function getPersonId()
+	{
+		return $this->session->person_id;
+	}
+	
+	/**
+	 * 
+	 */
 	private function _checkResponse($response)
 	{
 		if (isError($response))
@@ -128,7 +136,7 @@ class REST_Model extends CI_Model
 	}
 	
 	/**
-	 *
+	 * 
 	 */
 	private function _logged()
 	{

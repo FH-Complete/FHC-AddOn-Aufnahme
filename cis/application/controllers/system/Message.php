@@ -31,4 +31,12 @@ class Message extends JSON_Controller
 	{
 		$this->response($this->MessageModel->getSentMessagesByPersonId($person_id));
 	}
+	
+	/**
+	 * 
+	 */
+	public function getCountUnreadMessages($person_id)
+	{
+		$this->response($this->MessageModel->getCountUnreadMessages($person_id));
+	}
 }

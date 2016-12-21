@@ -16,9 +16,9 @@ class Adresse_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getAdresse($person_id)
+	public function getAdresse()
 	{
-		return $this->load('person/Adresse/Adresse', array('person_id' => $person_id), 'Adresse.getAdresse');
+		return $this->load('person/Adresse/Adresse', array('person_id' => $this->getPersonId()), 'Adresse.getAdresse');
 	}
 	
 	/**

@@ -24,9 +24,9 @@ class Prestudent_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getPrestudentByPersonId($person_id)
+	public function getPrestudentByPersonId()
 	{
-		return $this->load('crm/Prestudent/prestudentByPersonId', array('person_id' => $person_id));
+		return $this->load('crm/Prestudent/prestudentByPersonId', array('person_id' => $this->getPersonId()));
 	}
 	
 	/**

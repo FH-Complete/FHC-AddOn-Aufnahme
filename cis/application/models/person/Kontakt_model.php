@@ -16,9 +16,9 @@ class Kontakt_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getOnlyKontaktByPersonId($person_id)
+	public function getOnlyKontaktByPersonId()
 	{
-		return $this->load('person/Kontakt/OnlyKontaktByPersonId', array('person_id' => $person_id), 'Kontakt.getKontakt');
+		return $this->load('person/Kontakt/OnlyKontaktByPersonId', array('person_id' => $this->getPersonId()), 'Kontakt.getKontakt');
 	}
 	
 	/**
