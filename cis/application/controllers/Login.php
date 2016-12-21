@@ -131,6 +131,11 @@ class Login extends MY_Controller {
 						}
 					}
 
+					if(isset($this->session->userdata()["token"]))
+                    {
+                        redirect("/Registration?token=".$this->session->userdata("token"));
+                    }
+
 					if(isset($this->_data["studiengang_kz"]))
 					{
 						$this->session->set_userdata("studiengang_kz", $this->_data["studiengang_kz"]);
@@ -206,6 +211,11 @@ class Login extends MY_Controller {
 									array_push($this->_data["studiengaenge"], $studiengang);
 								}
 							}
+
+                            if(isset($this->session->userdata()["token"]))
+                            {
+                                redirect("/Registration?token=".$this->session->userdata("token"));
+                            }
 
 							if(isset($this->_data["studiengang_kz"]))
 							{

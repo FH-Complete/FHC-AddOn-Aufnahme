@@ -38,6 +38,24 @@ class Registration extends MY_Controller {
         $this->_loadLibraries(array("form_validation"));
         $this->_loadCiLanguages(array("aufnahme", "login", "registration"));
 
+        if(isset($this->input->get()["token"]))
+        {
+            $this->_loadModels(array("MessageModel"=>"message_model"));
+            $this->session->set_userdata("token", $this->input->get()["token"]);
+
+            $this->_data["messages"] = $this->_getMessageByToken($this->input->get()["token"]);
+            if((count($this->_data["messages"]) == 1) && (isset($this->session->userdata()["person_id"])))
+            {
+                if ($this->_data["messages"][0]->receiver_id == $this->session->userdata()["person_id"])
+                {
+                    $messageId = $this->_data["messages"][0]->message_id;
+                    $oe_kurzbz = $this->_data["messages"][0]->oe_kurzbz;;
+                    redirect("/Messages/answerMessage/" . $messageId . "/" . $oe_kurzbz);
+                }
+            }
+        }
+
+
 		$this->_data = array(
 			"sprache" => $this->get_language(),
 			"studiengang_kz" => $this->input->get('studiengang_kz'),
@@ -568,5 +586,19 @@ class Registration extends MY_Controller {
 			$this->_setError(true, $this->PersonModel->getErrorMessage());
 		}
 	}
+
+	private function _getMessageByToken($token)
+    {
+        $this->MessageModel->getMessagesByToken($token);
+
+        if($this->MessageModel->isResultValid() === true)
+        {
+            return $this->MessageModel->result->retval;
+        }
+        else
+        {
+            $this->_setError(true, $this->MessageModel->getErrorMessage());
+        }
+    }
 
 }

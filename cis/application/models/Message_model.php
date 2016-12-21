@@ -112,5 +112,18 @@ class Message_model extends MY_Model
 			return false;
 	}
 
+    /**
+     *
+     */
+    public function getMessagesByToken($token)
+    {
+        if ($restquery = $this->rest->get('system/Message/MessagesByToken', array('token' => $token))) {
+            $this->result = $restquery;
+            return true;
+        }
+        else
+            return false;
+    }
+
 
 }
