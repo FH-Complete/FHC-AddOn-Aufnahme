@@ -51,4 +51,20 @@ class Studiengang_model extends REST_Model
 	{
 		return $this->load('organisation/Studiengang/StudiengangBewerbung', null, 'Studiengang.getStudiengangBewerbung');
 	}
+	
+	/**
+	 * 
+	 */
+	public function getAppliedStudiengang($studiensemester_kurzbz, $titel, $status_kurzbz)
+	{
+		return $this->load(
+			'organisation/Studiengang/AppliedStudiengang',
+			array(
+				'person_id' => $this->getPersonId(),
+				'studiensemester_kurzbz' => $studiensemester_kurzbz,
+				'titel' => $titel,
+				'status_kurzbz' => $status_kurzbz
+			),
+			'Studiengang.getStudiengangBewerbung');
+	}
 }

@@ -44,16 +44,31 @@ class REST_Model extends CI_Model
 				
 				if (isset($sessionName) && $sessionName != '' && isSuccess($response))
 				{
-					$this->session->set_userdata($sessionName, $response->retval);
+					$this->session->set_userdata($sessionName, $response);
 				}
 				
-				return $response->retval;
+				return $response;
 			}
 		}
 		else
 		{
 			return error('Not logged in');
 		}
+	}
+	
+	/**
+	 * 
+	 */
+	public function loadOne($resource, $parameters = null, $sessionName = null, $authNotRequired = false)
+	{
+		$result = $this->load($resource, $parameters, $sessionName, $authNotRequired);
+		
+		if (hasData($result))
+		{
+			$result = success($result->retval[0], $result->fhcCode);
+		}
+		
+		return $result;
 	}
 	
 	/**

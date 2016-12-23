@@ -1669,6 +1669,8 @@ class Bewerbung extends MY_Controller
 				array_push($this->_data["studiengaenge"], $studiengang);
 			}
 		}
+		
+		var_dump($this->_data["studiengaenge"]);
 
 		if (count($this->_data["studiengaenge"]) > 1)
 		{

@@ -12,7 +12,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 class UI_Controller extends CI_Controller
 {
-	private $data;
+	private $_data;
 	
 	/**
 	 * 
@@ -22,7 +22,10 @@ class UI_Controller extends CI_Controller
 		parent::__construct();
 		
 		// 
-		$this->data = array();
+		$this->_data = array();
+		
+		// Load return message helper
+		$this->load->helper('message');
 		
 		// Loading the 
 		$this->load->model('Language_model', 'LanguageModel');
@@ -39,9 +42,16 @@ class UI_Controller extends CI_Controller
 	/**
 	 * 
 	 */
-	protected function setData($name, $val)
+	protected function setData($name, $response)
 	{
-		$this->data[$name] = $val;
+		if (isSuccess($response))
+		{
+			$this->_data[$name] = $response->retval;
+		}
+		else
+		{
+			$this->_data[$name] = null;
+		}
 	}
 	
 	/**
@@ -49,7 +59,7 @@ class UI_Controller extends CI_Controller
 	 */
 	protected function getData($name)
 	{
-		return $this->data[$name];
+		return $this->_data[$name];
 	}
 	
 	/**
@@ -57,7 +67,7 @@ class UI_Controller extends CI_Controller
 	 */
 	protected function getAllData()
 	{
-		return $this->data;
+		return $this->_data;
 	}
 	
 	/**
@@ -65,6 +75,6 @@ class UI_Controller extends CI_Controller
 	 */
 	protected function clearData()
 	{
-		$this->data = array();
+		$this->_data = array();
 	}
 }
