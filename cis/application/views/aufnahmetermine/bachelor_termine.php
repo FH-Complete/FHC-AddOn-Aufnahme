@@ -25,10 +25,16 @@ if (!empty($studiengaenge)) {
 		<?php
 			if (!empty($reihungstests[$stg->studiengang_kz][1]))
 			{
-				if(empty($rt_person[$stg->studiengang_kz]))
-				{
+                $rtId = 0;
+                foreach($reihungstests[$stg->studiengang_kz][1] as $key=>$reihungstest)
+                {
+                    if(isset($rt_person[$stg->studiengang_kz]) && in_array($key, $rt_person[$stg->studiengang_kz]))
+                    {
+                        $rtId = $key;
+                    }
+                }
 				?>
-				<div class="row">
+				<div id="<?php echo $rtId ?>_select" class="row" <?php if(!empty($rt_person[$stg->studiengang_kz])) echo 'style="display: none;"'?>>
 					<?php echo form_open("/Aufnahmetermine/register/".$stg->studiengang_kz."/".$stg->studienplan->studienplan_id, array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin")); ?>
 					<div class="col-sm-4">
 
@@ -47,28 +53,39 @@ if (!empty($studiengaenge)) {
 					?>
 				</div>
 				<?php
-				}
-				else
-				{
+                    if(!empty($rt_person[$stg->studiengang_kz]))
+                    {
+                        $rtId = 0;
+                        $reihungstest = "";
+                        foreach($reihungstests[$stg->studiengang_kz][1] as $key=>$reihungstest)
+                        {
+                            if(in_array($key, $rt_person[$stg->studiengang_kz]))
+                            {
+                                $rtId = $key;
+                            }
+                        }
 					?>
-					<div class="row">
-						<div class="col-sm-8">
-							<span class="selectedTerminHeader"><?php echo $this->lang->line("termine/gewaehlterTermin"); ?></span>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-8">
-							<span class="selectedTermin"><?php
-							foreach($reihungstests[$stg->studiengang_kz][1] as $key=>$reihungstest)
-							{
-								if(in_array($key, $rt_person[$stg->studiengang_kz]))
-								{
-									echo $reihungstest;
-								}
-							}
-							 ?></span>
-						</div>
-					</div>
+                        <div id="<?php echo $rtId?>_termin" class="row">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <span class="selectedTerminHeader"><?php echo $this->lang->line("termine/gewaehlterTermin"); ?></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <span class="selectedTermin"><?php
+                                            echo $reihungstests[$stg->studiengang_kz][1][$rtId];
+                                         ?></span>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary icon-bewerben" onclick="showSelectBox(<?php echo $rtId; ?>);">Ändern</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 					<?php
 				}
 			}
@@ -134,3 +151,12 @@ if (!empty($studiengaenge)) {
 		}
 	}
 }
+?>
+<script type="text/javascript">
+    function showSelectBox(rtId)
+    {
+        $("#"+rtId+'_select').show();
+        $("#"+rtId+'_termin').hide();
+    }
+
+</script>
