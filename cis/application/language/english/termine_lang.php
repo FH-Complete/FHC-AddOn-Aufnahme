@@ -12,3 +12,4 @@ $lang['termine/keineTermineVorhanden'] = "no appointments available";
 $lang["termine/erstesAufnahmeverfahren"] = "Erstes Aufnahmeverfahren";
 $lang["termine/zweitesAufnahmeverfahren"] = "Zweites Aufnahmeverfahren";
 $lang["termine/gewaehlterTermin"] = "Choosen appointment";
+$lang["termine/terminAendern"] = "Change";

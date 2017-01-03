@@ -80,7 +80,7 @@ if (!empty($studiengaenge)) {
                                     </div>
                                     <div class="col-sm-2">
                                         <div class="form-group">
-                                            <button type="button" class="btn btn-primary icon-bewerben" onclick="showSelectBox(<?php echo $rtId; ?>);">Ändern</button>
+                                            <button type="button" class="btn btn-primary icon-bewerben" onclick="showSelectBox(<?php echo $rtId; ?>);"><?php echo $this->lang->line("termine/terminAendern"); ?></button>
                                         </div>
                                     </div>
                                 </div>
