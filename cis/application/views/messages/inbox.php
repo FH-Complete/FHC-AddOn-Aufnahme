@@ -23,10 +23,10 @@
 				<span id="status_<?php echo $msg->message_id;?>" class='<?php echo ($msg->status == MSG_STATUS_READ) ? "icon-read" : (($msg->status == MSG_STATUS_UNREAD) ? "icon-unread" : "") ;?>'>&nbsp;</span>
 			</div>
 			<div class="col-sm-8 message-title">
-                <?php if($msg->status == MSG_STATUS_READ)
+                <?php if($msg->status == MSG_STATUS_UNREAD)
                 {
                     ?>
-                    <span class="glyphicon glyphicon-exclamation-sign red"></span>
+                    <span id="exclamation_<?php echo $msg->message_id; ?>" class="glyphicon glyphicon-exclamation-sign red"></span>
                 <?php
                 }
                 ?>

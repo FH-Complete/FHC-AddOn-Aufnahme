@@ -48,22 +48,22 @@ $this->load->view('templates/footer');
 
 			if($("#status_"+messageId).hasClass("icon-unread"))
 			{
-
-			$.ajax({
-				method: "POST",
-				dataType: 'json',
-				url: '<?php echo base_url($this->config->config["index_page"]."/Messages/changeMessageStatus"); ?>',
-				data: {
-					message_id: messageId,
-					status: "<?php echo MSG_STATUS_READ; ?>"
-				}
-			}).done(function(data){
-				if(data.error === 0)
-				{
-					$("#status_"+messageId).removeClass("icon-unread");
-					$("#status_"+messageId).addClass("icon-read");
-				}
-			});
+                $.ajax({
+                    method: "POST",
+                    dataType: 'json',
+                    url: '<?php echo base_url($this->config->config["index_page"]."/Messages/changeMessageStatus"); ?>',
+                    data: {
+                        message_id: messageId,
+                        status: "<?php echo MSG_STATUS_READ; ?>"
+                    }
+                }).done(function(data){
+                    if(data.error === 0)
+                    {
+                        $("#status_"+messageId).removeClass("icon-unread");
+                        $("#status_"+messageId).addClass("icon-read");
+                        $("#exclamation_"+messageId).hide();
+                    }
+                });
 			}
 		});
     });

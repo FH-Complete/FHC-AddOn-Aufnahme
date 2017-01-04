@@ -182,7 +182,15 @@ class Messages extends MY_Controller {
 				{
 					$status = $this->input->post()["status"];
 					$result = $this->_changeMessageStatus($this->session->userdata("person_id"), $msg, $status);
-					if((count($result) == 1) && (isset($result[0]->message_id)))
+
+					if((is_object($result)) && (isset($result->message_id)))
+                    {
+                        $return = new stdClass();
+                        $return->error = 0;
+                        echo json_encode($return);
+                        return;
+                    }
+					elseif((count($result) == 1) && (isset($result[0]->message_id)))
 					{
 						$return = new stdClass();
 						$return->error = 0;
