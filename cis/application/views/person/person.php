@@ -575,7 +575,7 @@ if (!isset($plz)) $plz = null;
 			<div class="form-group <?php echo ((form_error("plz") != "") || (!isset($adresse->plz) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formPlz'), "plz", array("name" => "plz", "for" => "plz", "class" => "control-label")) ?>
 				<?php 
-				$data = array('id' => 'plz', 'name' => 'plz', "type" => "text", "value" => set_value("plz", (isset($adresse->plz) ? $adresse->plz : NULL)), "class" => "form-control plz");
+				$data = array('id' => 'plz', 'name' => 'plz', "type" => "text", "value" => set_value("plz", (isset($adresse->plz) ? $adresse->plz : NULL)), "class" => "form-control plz", "maxlength"=>16);
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 				echo form_input($data); ?>
 				<?php echo form_error("plz"); ?>
@@ -673,7 +673,7 @@ if (!isset($plz)) $plz = null;
 				<div class="form-group <?php echo ((form_error("zustell_plz") != "") || (!isset($zustell_adresse->plz) && $incomplete)) ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formPlz'), "zustell_plz", array("name" => "zustell_plz", "for" => "zustell_plz", "class" => "control-label")) ?>
 					<?php
-					$data = array('id' => 'zustell_plz', 'name' => 'zustell_plz', "type" => "text", "value" => set_value("zustell_plz", (isset($zustell_adresse->plz) ? $zustell_adresse->plz : NULL)), "class" => "form-control zustell_plz");
+					$data = array('id' => 'zustell_plz', 'name' => 'zustell_plz', "type" => "text", "value" => set_value("zustell_plz", (isset($zustell_adresse->plz) ? $zustell_adresse->plz : NULL)), "class" => "form-control zustell_plz", "maxlength"=>16);
 					(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 					echo form_input($data); ?>
 					<?php echo form_error("zustell_plz"); ?>
