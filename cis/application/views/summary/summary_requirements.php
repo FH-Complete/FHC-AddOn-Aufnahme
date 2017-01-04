@@ -16,7 +16,7 @@
 		</div>
 		<?php
 		$unvollständig = true;
-		if((isset($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis"]])) && ($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis"]]->dms_id !== null))
+		if((isset($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis_".$studiengang->typ]])) && ($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis_".$studiengang->typ]]->dms_id !== null))
 		{
 			$unvollständig = false;
 		}
@@ -27,23 +27,23 @@
 		}
 		?>
 		<?php
-			if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->mimetype !== null))
+			if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->mimetype !== null))
 			{
-				if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument))
+				if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument))
 				{
-					if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".docx") !== false)
+					if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".docx") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".doc") !== false)
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".doc") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".pdf") !== false)
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".pdf") !== false)
 					{
 						$logo = "document-pdf.svg";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".jpg") !== false)
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".jpg") !== false)
 					{
 						$logo = "document-picture.svg";
 					}
@@ -110,9 +110,9 @@
 					}
 					else
 					{
-						if((isset($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis"]])) && ($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis"]]->dms_id !== null))
+						if((isset($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis_".$studiengang->typ]])) && ($dokumente[$this->config->item('dokumentTypen')["abschlusszeugnis_".$studiengang->typ]]->dms_id !== null))
 						{
-							echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name;
+							echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name;
 						}
 						elseif((isset($dokumente[$this->config->item('dokumentTypen')["letztGueltigesZeugnis"]])) && ($dokumente[$this->config->item('dokumentTypen')["letztGueltigesZeugnis"]]->dms_id !== null))
 						{

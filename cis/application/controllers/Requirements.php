@@ -81,27 +81,33 @@ class Requirements extends MY_Controller
 					}
 				}
 			}
-			//load studiengaenge der prestudenten
-			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-			
-			$this->_data["geplanter_abschluss"][$prestudent->studiengang_kz] = $prestudent->zgvdatum; 
 
-			if ((!empty($prestudent->prestudentStatus))
-				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
-					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) {
-				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-				$studiengang->studienplan = $studienplan;
-				
-				$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
-				$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
-				
-				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
-				{
-					$this->_data["bewerbung_abgeschickt"] = true;
-				}
-				array_push($this->_data["studiengaenge"], $studiengang);
-			}
+			if((isset($this->input->get()["studiengang_kz"])) && ($this->input->get()["studiengang_kz"] === $prestudent->studiengang_kz))
+            {
+                //load studiengaenge der prestudenten
+                $this->data["studiengang"] = $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+                $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+
+                $this->_data["geplanter_abschluss"][$prestudent->studiengang_kz] = $prestudent->zgvdatum;
+
+                if ((!empty($prestudent->prestudentStatus))
+                    && ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+                        || $prestudent->prestudentStatus->status_kurzbz === "Bewerber")
+                )
+                {
+                    $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+                    $studiengang->studienplan = $studienplan;
+
+                    $prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+                    $this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+
+                    if ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+                    {
+                        $this->_data["bewerbung_abgeschickt"] = true;
+                    }
+                    array_push($this->_data["studiengaenge"], $studiengang);
+                }
+            }
 		}
 		
 		if((!empty($this->input->post())) && (isset($this->_data["bewerbung_abgeschickt"])) && ($this->_data["bewerbung_abgeschickt"] == true))
@@ -116,18 +122,18 @@ class Requirements extends MY_Controller
 
 		//load Dokumente from Studiengang
 		$this->_data["dokumenteStudiengang"] = array();
-		foreach($this->_data["studiengaenge"] as $stg)
-		{
-			$this->_data["dokumenteStudiengang"][$stg->studiengang_kz] = $this->_loadDokumentByStudiengang($stg->studiengang_kz);
-		}
+		//foreach($this->_data["studiengaenge"] as $stg)
+		//{
+			$this->_data["dokumenteStudiengang"][$this->_data["studiengang_kz"]] = $this->_loadDokumentByStudiengang($this->_data["studiengang_kz"]);
+		//}
 	
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
 		if(($this->input->post("doktype") != null) && ($this->input->post("doktype") !== ""))
 		{
-			if(isset($this->_data["dokumente"][$this->config->item('dokumentTypen')["abschlusszeugnis"]]))
+			if(isset($this->_data["dokumente"][$this->config->item('dokumentTypen')["abschlusszeugnis_".$this->data["studiengang"]->typ]]))
 			{
-				$akte = $this->_data["dokumente"][$this->config->item('dokumentTypen')["abschlusszeugnis"]];
+				$akte = $this->_data["dokumente"][$this->config->item('dokumentTypen')["abschlusszeugnis_".$this->data["studiengang"]->typ]];
 				$akte->anmerkung = $this->input->post("doktype");
 				$akte->updateamum = date('Y-m-d H:i:s');
 				$akte->updatevon = 'online';
@@ -794,21 +800,24 @@ class Requirements extends MY_Controller
 	
 	public function getOption()
 	{
-        $this->_loadModels(array(
-            "AkteModel" => "akte_model"
-        ));
+	    if(isset($this->input->post()["studiengangtyp"]))
+        {
+            $this->_loadModels(array(
+                "AkteModel" => "akte_model"
+            ));
 
-		if(isset($this->session->userdata()["person_id"]))
-		{
-			$result = new stdClass();
-			$this->_loadDokumente($this->session->userdata()["person_id"]);
-		
-			if((isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]])) && ($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung != null))
-			{
-				$result->error = 0;
-				$result->result = $this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung;
-			}
-			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		}
+            if (isset($this->session->userdata()["person_id"]))
+            {
+                $result = new stdClass();
+                $this->_loadDokumente($this->session->userdata()["person_id"]);
+
+                if ((isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$this->input->post()["studiengangtyp"]]])) && ($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$this->input->post()["studiengangtyp"]]]->anmerkung != null))
+                {
+                    $result->error = 0;
+                    $result->result = $this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$this->input->post()["studiengangtyp"]]]->anmerkung;
+                }
+                echo json_encode($result, JSON_UNESCAPED_UNICODE);
+            }
+        }
 	}
 }

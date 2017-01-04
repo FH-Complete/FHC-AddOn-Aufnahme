@@ -49,21 +49,26 @@ class Summary extends MY_Controller {
 		foreach ($this->_data["prestudent"] as $prestudent)
 		{
 			//load studiengaenge der prestudenten
-			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+            if($prestudent->studiengang_kz === $this->input->get("studiengang_kz"))
+            {
+                $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+                $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
 
-			if ((!empty($prestudent->prestudentStatus))
-				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
-					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) {
-				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-				$studiengang->studienplan = $studienplan;
-				
-				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
-				{
-					$this->_data["bewerbung_abgeschickt"] = true;
-				}
-				array_push($this->_data["studiengaenge"], $studiengang);
-			}
+                if ((!empty($prestudent->prestudentStatus))
+                    && ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+                        || $prestudent->prestudentStatus->status_kurzbz === "Bewerber")
+                )
+                {
+                    $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+                    $studiengang->studienplan = $studienplan;
+
+                    if ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+                    {
+                        $this->_data["bewerbung_abgeschickt"] = true;
+                    }
+                    array_push($this->_data["studiengaenge"], $studiengang);
+                }
+            }
 		}
 		
 		if(count($this->_data["studiengaenge"]) > 1)
@@ -73,10 +78,10 @@ class Summary extends MY_Controller {
 
 		//load Dokumente from Studiengang
 		$this->_data["dokumenteStudiengang"] = array();
-		foreach($this->_data["studiengaenge"] as $stg)
-		{
-			$this->_data["dokumenteStudiengang"][$stg->studiengang_kz] = $this->_loadDokumentByStudiengang($stg->studiengang_kz);
-		}
+		//foreach($this->_data["studiengaenge"] as $stg)
+		//{
+			$this->_data["dokumenteStudiengang"][$this->input->get("studiengang_kz")] = $this->_loadDokumentByStudiengang($this->input->get("studiengang_kz"));
+		//}
 
 		//load nationen
 		$this->_loadNationen();

@@ -214,7 +214,8 @@ $config["anfahrtLink"] = "<a href='https://www.fhstp.ac.at/de/anfahrt'>Anfahrt</
 $config['dokumentTypen'] = array(
 	"reisepass" => "pass",
 	"lebenslauf" => "Lebenslf",
-	"abschlusszeugnis" => "Maturaze",
+	"abschlusszeugnis_b" => "DEB2",
+    "abschlusszeugnis_m" => "Maturaze",
 	"letztGueltigesZeugnis" => "Sonst",
 	"sonstiges" => "Sonst"
 );

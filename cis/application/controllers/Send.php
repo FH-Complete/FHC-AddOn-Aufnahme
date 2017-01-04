@@ -66,22 +66,27 @@ class Send extends MY_Controller {
 		foreach ($this->_data["prestudent"] as $prestudent)
 		{
 			//load studiengaenge der prestudenten
-			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-			$this->_data["prestudentStatus"][$prestudent->studiengang_kz] = $prestudent->prestudentStatus;
+            if($prestudent->studiengang_kz == $this->_data["studiengang_kz"])
+            {
+                $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+                $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+                $this->_data["prestudentStatus"][$prestudent->studiengang_kz] = $prestudent->prestudentStatus;
 
-			if ((!empty($prestudent->prestudentStatus))
-				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
-					|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber")) {
-				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-				$studiengang->studienplan = $studienplan;
-				
-				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
-				{
-					$this->_data["bewerbung_abgeschickt"] = true;
-				}
-				array_push($this->_data["studiengaenge"], $studiengang);
-			}
+                if ((!empty($prestudent->prestudentStatus))
+                    && ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+                        || $prestudent->prestudentStatus->status_kurzbz === "Bewerber")
+                )
+                {
+                    $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+                    $studiengang->studienplan = $studienplan;
+
+                    if ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+                    {
+                        $this->_data["bewerbung_abgeschickt"] = true;
+                    }
+                    array_push($this->_data["studiengaenge"], $studiengang);
+                }
+            }
 		}
 		
 		if(count($this->_data["studiengaenge"]) > 1)
@@ -91,10 +96,10 @@ class Send extends MY_Controller {
 
 		//load Dokumente from Studiengang
 		$this->_data["dokumenteStudiengang"] = array();
-		foreach($this->_data["studiengaenge"] as $stg)
-		{
-			$this->_data["dokumenteStudiengang"][$stg->studiengang_kz] = $this->_loadDokumentByStudiengang($stg->studiengang_kz);
-		}
+		//foreach($this->_data["studiengaenge"] as $stg)
+		//{
+			$this->_data["dokumenteStudiengang"][$this->_data["studiengang_kz"]] = $this->_loadDokumentByStudiengang($this->_data["studiengang_kz"]);
+		//}
 
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
@@ -146,24 +151,28 @@ class Send extends MY_Controller {
 		$this->_data["prestudentStatus"] = array();
 		foreach ($this->_data["prestudent"] as $prestudent)
 		{
-			//load studiengaenge der prestudenten
-			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-			$this->_data["prestudentStatus"][$prestudent->studiengang_kz] = $prestudent->prestudentStatus;
+            if($prestudent->studiengang_kz == $studiengang_kz)
+            {
+                //load studiengaenge der prestudenten
+                $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+                $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+                $this->_data["prestudentStatus"][$prestudent->studiengang_kz] = $prestudent->prestudentStatus;
 
-			if ((!empty($prestudent->prestudentStatus))
-				&& ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
-				|| $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
-			{
-				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-				$studiengang->studienplan = $studienplan;
+                if ((!empty($prestudent->prestudentStatus))
+                    && ($prestudent->prestudentStatus->status_kurzbz === "Interessent"
+                        || $prestudent->prestudentStatus->status_kurzbz === "Bewerber")
+                )
+                {
+                    $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+                    $studiengang->studienplan = $studienplan;
 
-				if($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
-				{
-					$this->_data["bewerbung_abgeschickt"] = true;
-				}
-				array_push($this->_data["studiengaenge"], $studiengang);
-			}
+                    if ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+                    {
+                        $this->_data["bewerbung_abgeschickt"] = true;
+                    }
+                    array_push($this->_data["studiengaenge"], $studiengang);
+                }
+            }
 		}
 		
 		if(count($this->_data["studiengaenge"]) > 1)
@@ -173,10 +182,10 @@ class Send extends MY_Controller {
 
 		//load Dokumente from Studiengang
 		$this->_data["dokumenteStudiengang"] = array();
-		foreach($this->_data["studiengaenge"] as $stg)
-		{
-			$this->_data["dokumenteStudiengang"][$stg->studiengang_kz] = $this->_loadDokumentByStudiengang($stg->studiengang_kz);
-		}
+		//foreach($this->_data["studiengaenge"] as $stg)
+		//{
+			$this->_data["dokumenteStudiengang"][$studiengang_kz] = $this->_loadDokumentByStudiengang($studiengang_kz);
+		//}
 
 		//load dokumente
 		$this->_loadDokumente($this->session->userdata()["person_id"]);
@@ -539,8 +548,8 @@ class Send extends MY_Controller {
 			$this->config->item("dokumentTypen")["reisepass"]=>$reisepass,
 			$this->config->item("dokumentTypen")["lebenslauf"]=>$lebenslauf
 		);
-		
-		$abschlusszeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["abschlusszeugnis"]);
+
+        $abschlusszeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["abschlusszeugnis_".$this->_data["studiengang"]->typ]);
 		$letztesZeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["letztGueltigesZeugnis"]);
 		
 		//check documents
@@ -561,7 +570,7 @@ class Send extends MY_Controller {
 					$error["dokumente"][$key][$dokType->bezeichnung] = $dokType;
 				}
 			}
-			
+
 			if((!isset($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz])) || ((!$this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->nachgereicht) && ($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->dms_id == null )))
 			{
 				$error["dokumente"][$key][$abschlusszeugnis->bezeichnung] = $abschlusszeugnis;

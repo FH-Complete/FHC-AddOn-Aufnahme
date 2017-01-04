@@ -547,26 +547,55 @@ class Bewerbung extends MY_Controller
 		$this->_data["studiengang"] = $this->_loadStudiengang($studiengang_kz);
 
 		$this->_data["studiengaenge"] = array();
-		foreach ($this->_data["prestudent"] as $prestudent)
-		{
-			//load studiengaenge der prestudenten
-			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
+        if(isset($this->input->get()["studiengang_kz"]))
+        {
+            foreach ($this->_data["prestudent"] as $prestudent)
+            {
+                if(($this->input->get()["studiengang_kz"] === $prestudent->studiengang_kz))
+                {
+                    //load studiengaenge der prestudenten
+                    $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+                    $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
 
-			if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent"))
-			{
-				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-				$studiengang->studienplan = $studienplan;
-				$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
-				$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
-				array_push($this->_data["studiengaenge"], $studiengang);
-			}
+                    if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent"))
+                    {
+                        $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+                        $studiengang->studienplan = $studienplan;
+                        $prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+                        $this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+                        array_push($this->_data["studiengaenge"], $studiengang);
+                    }
 
-			if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null))
-			{
-				$this->_data["bewerbung_abgeschickt"] = true;
-			}
-		}
+                    if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null))
+                    {
+                        $this->_data["bewerbung_abgeschickt"] = true;
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach ($this->_data["prestudent"] as $prestudent)
+            {
+                //load studiengaenge der prestudenten
+                $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+                $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
+
+                if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent"))
+                {
+                    $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+                    $studiengang->studienplan = $studienplan;
+                    $prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+                    $this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+                    array_push($this->_data["studiengaenge"], $studiengang);
+                }
+
+                if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null))
+                {
+                    $this->_data["bewerbung_abgeschickt"] = true;
+                }
+            }
+        }
 
 		if (count($this->_data["studiengaenge"]) > 1)
 		{
@@ -1409,6 +1438,8 @@ class Bewerbung extends MY_Controller
 
 		$this->_data["dokumenteStudiengang"][$studiengang_kz] = $this->_loadDokumentByStudiengang($studiengang_kz);
 
+        $this->_data["studiengang"] = $this->_loadStudiengang($studiengang_kz);
+
 		foreach ($this->_data["dokumente"] as $akte)
 		{
 			if ($akte->dms_id != null)
@@ -1555,7 +1586,7 @@ class Bewerbung extends MY_Controller
 					}
 				}
 
-				$abschlusszeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["abschlusszeugnis"]);
+				$abschlusszeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["abschlusszeugnis_".$this->_data["studiengang"]->typ]);
 				$letztesZeugnis = $this->_loadDokument($this->config->item("dokumentTypen")["letztGueltigesZeugnis"]);
 
 				if ((!isset($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz])) || ((!$this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->nachgereicht) && ($this->_data["dokumente"][$abschlusszeugnis->dokument_kurzbz]->dms_id == null )))
@@ -1648,27 +1679,58 @@ class Bewerbung extends MY_Controller
 	private function _loadData()
 	{
 		$this->_data["studiengaenge"] = array();
-		foreach ($this->_data["prestudent"] as $prestudent)
-		{
-			//load studiengaenge der prestudenten
-			$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-			$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
 
-			if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent" || $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
-			{
-				$studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-				$studiengang->studienplan = $studienplan;
+        if(isset($this->input->get()["studiengang_kz"]))
+        {
+            foreach ($this->_data["prestudent"] as $prestudent)
+            {
+                if(($this->input->get()["studiengang_kz"] === $prestudent->studiengang_kz))
+                {
+                    //load studiengaenge der prestudenten
+                    $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+                    $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
 
-				$prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
-				$this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+                    if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent" || $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
+                    {
+                        $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+                        $studiengang->studienplan = $studienplan;
 
-				if ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
-				{
-					$this->_data["bewerbung_abgeschickt"] = true;
-				}
-				array_push($this->_data["studiengaenge"], $studiengang);
-			}
-		}
+                        $prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+                        $this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+
+                        if ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+                        {
+                            $this->_data["bewerbung_abgeschickt"] = true;
+                        }
+                        array_push($this->_data["studiengaenge"], $studiengang);
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach ($this->_data["prestudent"] as $prestudent)
+            {
+                //load studiengaenge der prestudenten
+                $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+                $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id, $this->session->userdata()["studiensemester_kurzbz"]);
+
+                if ((!empty($prestudent->prestudentStatus)) && ($prestudent->prestudentStatus->status_kurzbz === "Interessent" || $prestudent->prestudentStatus->status_kurzbz === "Bewerber"))
+                {
+                    $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
+                    $studiengang->studienplan = $studienplan;
+
+                    $prestudent->spezialisierung = $this->_getSpecialization($prestudent->prestudent_id);
+                    $this->_data["spezialisierung"][$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+
+                    if ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
+                    {
+                        $this->_data["bewerbung_abgeschickt"] = true;
+                    }
+                    array_push($this->_data["studiengaenge"], $studiengang);
+                }
+            }
+        }
 
 		if (count($this->_data["studiengaenge"]) > 1)
 		{
@@ -1710,11 +1772,14 @@ class Bewerbung extends MY_Controller
 
 		foreach ($this->_data["dokumente"] as $akte)
 		{
-			if ($akte->dms_id != null)
-			{
-				$dms = $this->_loadDms($akte->dms_id);
-				$akte->dokument = $dms;
-			}
+		    if(($akte->dokument_kurzbz == $this->config->item("dokumentTypen")["lebenslauf"]) || ($akte->dokument_kurzbz == $this->config->item("dokumentTypen")["reisepass"]))
+            {
+                if ($akte->dms_id != null)
+                {
+                    $dms = $this->_loadDms($akte->dms_id);
+                    $akte->dokument = $dms;
+                }
+            }
 		}
 
 		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);

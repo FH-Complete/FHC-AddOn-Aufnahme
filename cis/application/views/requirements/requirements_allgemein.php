@@ -17,7 +17,7 @@
 		<span><?php echo $this->getPhrase("ZGV/introduction_short", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></span>
 		<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->getPhrase("ZGV/introduction_long", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"></span>
 		<?php
-			if (isset($error) && ($error->error === true) && (!isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]])))
+			if (isset($error) && ($error->error === true) && (!isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]])))
 			{
 				?>
 					<div class="alert alert-danger" role="alert">
@@ -39,6 +39,9 @@
 				$.ajax({
 					url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/getOption"); ?>',
 					type: 'POST',
+                    data: {
+					  studiengangtyp:  '<?php echo $studiengang->typ;?>'
+                    },
 					cache: false,
 					dataType: 'json',
 					success: function(data, textStatus, jqXHR)
@@ -60,50 +63,6 @@
 				});
 			});
 		</script>
-		<!--<div class="radio">
-			<label>
-				<input type="radio" name="doktype" value="Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)" 
-					<?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)") !== false) ? 'checked' : "") : ""; ?>
-					<?php echo isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true) ? "disabled" : ""; ?>
-				/>
-				Österreichisches Reifeprüfungszeugnis (AHS, BHS, Berufsreifeprüfung)
-			</label>
-			&nbsp;
-			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
-		</div>
-		<div class="radio">
-			<label>
-				<input type="radio" name="doktype" value="Nachweis der Studienberechtigungsprüfung" 
-					<?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "Nachweis der Studienberechtigungsprüfung") !== false) ? 'checked' : "") : ""; ?> 
-					<?php echo isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true) ? "disabled" : ""; ?>
-				/>
-				Nachweis der Studienberechtigungsprüfung
-			</label>
-			&nbsp;
-			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
-		</div>
-		<div class="radio">
-			<label>
-				<input type="radio" name="doktype" value="gleichwertiges ausländisches Zeugnis" 
-					<?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "gleichwertiges ausländisches Zeugnis") !== false) ? 'checked' : "") : ""; ?> 
-					<?php echo isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true) ? "disabled" : ""; ?>
-				/>
-				gleichwertiges ausländisches Zeugnis
-			</label>
-			&nbsp;
-			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
-		</div>
-		<div class="radio">
-			<label>
-				<input type="radio" name="doktype" value="Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen" 
-					<?php echo isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) ? ((strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->anmerkung, "Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen") !== false) ? 'checked' : "") : ""; ?> 
-					<?php echo isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true) ? "disabled" : ""; ?> 
-				/>
-				Nachweis der einschlägigen beruflichen Qualifikation (Lehre, BMS) mit Zusatzprüfungen
-			</label>
-			&nbsp;
-			<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title=""></span>
-		</div>-->
     </div>
 </div>
 <div class="row">
@@ -117,23 +76,23 @@
 		&nbsp;
 	</div>
 	<?php
-	if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->mimetype !== null))
+	if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->mimetype !== null))
 	{
-		if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument))
+		if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument))
 		{
-			if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".docx") !== false)
+			if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".docx") !== false)
 			{
 				$logo = "docx.gif";
 			}
-			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".doc") !== false)
+			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".doc") !== false)
 			{
 				$logo = "docx.gif";
 			}
-			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".pdf") !== false)
+			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".pdf") !== false)
 			{
 				$logo = "document-pdf.svg";
 			}
-			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name, ".jpg") !== false)
+			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".jpg") !== false)
 			{
 				$logo = "document-picture.svg";
 			}
@@ -152,7 +111,7 @@
 		$logo = "";
 	}
 	?>
-	<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="col-sm-1">
+	<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="col-sm-1">
 		<?php 
 		if(isset($logo) && ($logo != false))
 		{
@@ -164,30 +123,30 @@
 	</div>
     <div class="col-sm-6">
 	<!--<?php echo form_label($this->lang->line('requirements_abschlusszeugnis'), "maturazeugnis", array("name" => "Maturaze", "for" => "Maturaze", "class" => "control-label")) ?>-->
-		<div class="form-group" id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_hochgeladen'; ?>">
+		<div class="form-group" id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ].'_hochgeladen'; ?>">
 			<?php
-				if ((!isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]))
-						|| ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht === true)
-						|| ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id === null))
+				if ((!isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]))
+						|| ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->nachgereicht === true)
+						|| ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dms_id === null))
 				{
 					echo $this->lang->line('requirements_keinDokHochgeladen');
 				}
 				else
 				{
-					echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument->name."</br>";
+					echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name."</br>";
 					echo $this->lang->line('requirements_DokHochgeladen');
 				}
 			?>
 			<!-- The global progress bar -->
-				<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
+				<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
 					<div class="progress-bar progress-bar-success"></div>
 				</div>
 		</div>
 		<div class="checkbox">
 			<label>
 				<?php
-					$data = array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachgereicht_'.$studiengang->studienplan->studienplan_id, 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachgereicht_'.$studiengang->studienplan->studienplan_id, "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht === true)) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id, "class"=>"nachreichen_checkbox_zeugnis");
-					(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
+					$data = array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ].'_nachgereicht_'.$studiengang->studienplan->studienplan_id, 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ].'_nachgereicht_'.$studiengang->studienplan->studienplan_id, "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->nachgereicht === true)) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id, "class"=>"nachreichen_checkbox_zeugnis");
+					(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 					(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
 					echo form_checkbox($data);
 					echo $this->lang->line('requirements_formNachgereicht')
@@ -196,9 +155,9 @@
 		</div>
 		<div class="form-group">
 			<div class="form-group">
-				<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id.'_div'; ?>" class="">
+				<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id.'_div'; ?>" class="">
 					<?php echo form_label($this->lang->line('requirements_nachreichenAbschlussGeplantDatum'), "nachreichenDatum", array("name" => "nachreichenDatum", "for" => "nachreichenDatum", "class" => "control-label")) ?>
-					<?php echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($geplanter_abschluss[$studiengang->studiengang_kz]) ? date("d.m.Y", strtotime($geplanter_abschluss[$studiengang->studiengang_kz])) : ""), "class" => "form-control datepicker", "placeholder"=>"DD.MM.YYYY")); ?>
+					<?php echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ].'_nachreichenDatum_'.$studiengang->studienplan->studienplan_id, 'maxlength' => 64, "type" => "text", "value" => set_value("nachreichenDatum", isset($geplanter_abschluss[$studiengang->studiengang_kz]) ? date("d.m.Y", strtotime($geplanter_abschluss[$studiengang->studiengang_kz])) : ""), "class" => "form-control datepicker", "placeholder"=>"DD.MM.YYYY")); ?>
 				</div>
 			</div>
 		</div>
@@ -207,27 +166,27 @@
 		<div class="form-group">
 			<div class="form-group <?php echo (form_error("Maturaze") != "") ? 'has-error' : '' ?>">
 				<div class="upload">
-					<?php //echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis"].'_'.$studiengang->studienplan->studienplan_id, 'name' => 'Maturaze', "type" => "file")); ?>
+					<?php //echo form_input(array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ].'_'.$studiengang->studienplan->studienplan_id, 'name' => 'Maturaze', "type" => "file")); ?>
 					<?php echo form_error("Maturaze"); ?>
 				</div>
 			</div>
 
-			<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button> -->
+			<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button> -->
 
 			<!-- The fileinput-button span is used to style the file input field as button -->
-			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
-				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]])) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht == false) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->accepted === false)) { ?>
-					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->accepted ===true)) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
+			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
+				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]])) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->nachgereicht == false) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->accepted === false)) { ?>
+					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->accepted ===true)) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
 				<?php
 				}
 				?>
 			</div>
-			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]) && (($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->nachgereicht == false) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dms_id != null))) ? 'display: none;' : ''; ?>">
+			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]) && (($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->nachgereicht == false) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dms_id != null))) ? 'display: none;' : ''; ?>">
 				<span class="btn btn-success fileinput-button">
 					<i class="glyphicon glyphicon-plus"></i>
 					<span><?php echo $this->lang->line("requirements_dateiAuswahl"); ?></span>
 					<!-- The file input field used as target for the file upload widget -->
-					<input id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
+					<input id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
 				</span>
 			</div>
 		</div>
@@ -283,7 +242,7 @@
 		}
 		?>
 		<div id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="col-sm-1">
-			<?php 
+			<?php
 			if(isset($logo) && ($logo != false))
 			{
 			?>
@@ -352,11 +311,11 @@
 			toggleDocumentField($(evt.target).prop("checked"), studienplan_id);
 			if($(evt.target).prop("checked"))
 			{
-				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"];?>_nachreichenDatum_"+studienplan_id+"_div").show();
+				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ];?>_nachreichenDatum_"+studienplan_id+"_div").show();
 			}
 			else
 			{
-				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"];?>_nachreichenDatum_"+studienplan_id+"_div").hide();
+				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ];?>_nachreichenDatum_"+studienplan_id+"_div").hide();
 			}
 		});
 
@@ -365,18 +324,18 @@
 			toggleDocumentField($(v).prop("checked"), studienplan_id);
 			if($(v).prop("checked"))
 			{
-				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"];?>_nachreichenDatum_"+studienplan_id+"_div").show();
+				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ];?>_nachreichenDatum_"+studienplan_id+"_div").show();
 			}
 			else
 			{
-				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"];?>_nachreichenDatum_"+studienplan_id+"_div").hide();
+				$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ];?>_nachreichenDatum_"+studienplan_id+"_div").hide();
 			}
 
 		});
 
 		// File upload
-		$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
-			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/uploadFiles/".$this->config->config["dokumentTypen"]["abschlusszeugnis"]); ?>',
+		$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
+			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/uploadFiles/".$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]); ?>',
 			dataType: 'json',
 			disableValidation: false,
 			add: function(e, data) {
@@ -397,7 +356,7 @@
 				}
 				else
 				{
-					data.originalFiles['<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>'] = data.originalFiles[0];
+					data.originalFiles['<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>'] = data.originalFiles[0];
 					data.submit();
 				}
 			},
@@ -407,19 +366,19 @@
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
-					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
-					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
-					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').append(
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').append(
 							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>');
-					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
-					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("checked", false);
-					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("checked", false);
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
 						'width',
 						'0%'
 					);
-					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
-					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>').show();
-					var logo = "";	
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>').show();
+					var logo = "";
 					if(data.result.bezeichnung.indexOf(".docx") !== -1)
 					{
 						logo = "docx.gif";
@@ -441,23 +400,23 @@
 						logo = false;
 					}
 
-					$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
+					$("#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
 					msg += "</br>"+data.result.bezeichnung;
 				}
 				else
 				{
 					msg = "Fehler beim Upload";
 					var progress = parseInt(data.loaded / data.total * 100, 10);
-					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
 						'width',
 						'0%'
 					);
 				}
-				$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>_hochgeladen').html(msg);
+				$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>_hochgeladen').html(msg);
 			},
 			progressall: function (e, data) {
 				var progress = parseInt(data.loaded / data.total * 100, 10);
-				$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+				$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
 					'width',
 					progress + '%'
 				);
@@ -509,7 +468,7 @@
 						'0%'
 					);
 			$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>').show();
-					var logo = "";	
+					var logo = "";
 					if(data.result.bezeichnung.indexOf(".docx") !== -1)
 					{
 						logo = "docx.gif";
