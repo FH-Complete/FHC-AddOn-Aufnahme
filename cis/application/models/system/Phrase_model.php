@@ -26,7 +26,7 @@ class Phrase_model extends REST_Model
 	 */
 	public function getPhrase($phraseToSearchFor)
 	{
-		$phrases = $this->session->userdata('Phrase.getPhrasen');
+		$phrases = $this->session->{'Phrase.getPhrasen'};
 		
 		if (hasData($phrases))
 		{

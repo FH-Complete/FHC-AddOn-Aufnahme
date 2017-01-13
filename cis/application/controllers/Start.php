@@ -57,33 +57,38 @@ class Start extends UI_Controller
 			array('app' => 'aufnahme', 'sprache' => ucfirst($this->getCurrentLanguage())))
 		);
 		
+		$this->setData('sprache', success($this->getCurrentLanguage()));
+		
 		$this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
 		
-		$this->setData('', $this->StudiensemesterModel->getNextStudiensemester('WS'));
+		$this->setData('studiensemester', $this->StudiensemesterModel->getNextStudiensemester('WS'));
 		
 		$this->setData('person', $this->PersonModel->getPerson());
 		
 		$this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-			$studiensemester_kurzbz, $titel, $status_kurzbz
+			//$studiensemester_kurzbz, $titel, $status_kurzbz
+			'WS2017', 'Interessent', '0'
 		));
 		
-		$this->setData('', $this->PrestudentModel->getPrestudentByPersonId());
+		$this->setData('prestudent', $this->PrestudentModel->getPrestudentByPersonId());
 		
-		$this->setData('', $this->KontaktModel->getOnlyKontaktByPersonId());
+		$this->setData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId());
 		
-		$this->setData('', $this->AdresseModel->getAdresse());
+		$this->setData('adresse', $this->AdresseModel->getAdresse());
 		
-		$this->setData('', $this->NationModel->getAll());
+		$this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
 		
-		$this->setData('', $this->BundeslandModel->getAll());
+		$this->setData('nationen', $this->NationModel->getAll());
+		
+		$this->setData('bundeslaender', $this->BundeslandModel->getAll());
 		
 		$this->setData('', $this->GemeindeModel->getGemeinde());
 		
 		$this->setData('', $this->DmsModel->getAktenAcceptedDms());
 		
-		/*$this->setData('', $this->DokumentModel->getDokument('reisepass'));
+		$this->_getPersonalDocuments();
 		
-		$this->setData('', $this->DokumentModel->getDokument('lebenslauf'));*/
+		$this->_missingData();
 		
 		// Form validation rules
 		$this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
@@ -96,5 +101,63 @@ class Start extends UI_Controller
 		{
 			$this->load->view('bewerbung', $this->getAllData());
 		}
+	}
+	
+	/**
+	 * 
+	 */
+	private function _missingData()
+	{
+		$person = $this->getData('person');
+		$kontakt = $this->getData('kontakt');
+		$adresse = $this->getData('adresse');
+		$zustell_adresse = $this->getData('zustell_adresse');
+		
+		if ($person->anrede != null ||
+			$person->titelpre != null ||
+			$person->titelpost != null ||
+			$person->gebort != null ||
+			$person->staatsbuergerschaft != null ||
+			$person->geburtsnation != null ||
+			$person->svnr != null ||
+			(!isset($kontakt['telefon']) || (isset($kontakt['telefon']) && $kontakt['telefon']->kontakt != null)) ||
+			(!isset($adresse) ||
+				$adresse->plz != null ||
+				$adresse->strasse != null ||
+				$adresse->ort != null ||
+				$adresse->nation != null) ||
+			(!isset($zustell_adresse) ||
+				$zustell_adresse->plz != null ||
+				$zustell_adresse->strasse != null ||
+				$zustell_adresse->ort != null ||
+				$zustell_adresse->nation != null)
+		)
+		{
+			$this->setData('incomplete', success(true));
+		}
+		else
+		{
+			$this->setData('incomplete', success(false));
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	private function _getPersonalDocuments()
+	{
+		$personalDocumentsArray = array();
+		
+		if (isSuccess($reisepass = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["reisepass"])))
+		{
+			$personalDocumentsArray[$this->config->item("dokumentTypen")["reisepass"]] = $reisepass->retval[0];
+		}
+		
+		if (isSuccess($lebenslauf = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["lebenslauf"])))
+		{
+			$personalDocumentsArray[$this->config->item("dokumentTypen")["lebenslauf"]] = $lebenslauf->retval[0];
+		}
+		
+		$this->setData('personalDocuments', success($personalDocumentsArray));
 	}
 }

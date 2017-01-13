@@ -3,7 +3,7 @@
 /**
  * 
  */
-class Message_model extends REST_Model
+class CheckUserAuth_model extends REST_Model
 {
 	/**
 	 * 
@@ -16,8 +16,23 @@ class Message_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function checkByUsernamePassword($parameters)
+	public function checkByUsernamePassword($username, $password)
 	{
-		return $this->load('checkUserAuth/CheckByUsernamePassword', $parameters);
+		$checkUserAuth = false;
+		
+		$result = $this->load(
+			'checkUserAuth/CheckByUsernamePassword',
+			array('username' => $username, 'password' => $password)
+		);
+		
+		if (isSuccess($result))
+		{
+			if ($result->retval === true)
+			{	
+				$checkUserAuth = true;
+			}
+		}
+		
+		return $checkUserAuth;
 	}
 }

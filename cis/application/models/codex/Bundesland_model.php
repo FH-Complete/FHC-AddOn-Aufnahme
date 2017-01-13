@@ -18,6 +18,22 @@ class Bundesland_model extends REST_Model
 	 */
 	public function getAll()
 	{
-		return $this->load('codex/Bundesland/All', null, 'Bundesland.getBundeslaender');
+		$bundeslaender = $this->load('codex/Bundesland/All', null, 'Bundesland.getBundeslaender');
+		$bundeslaenderArray = array();
+		
+		if (isSuccess($bundeslaender))
+		{
+			foreach($bundeslaender->retval as $bundesland)
+			{
+				$bundeslaenderArray[$bundesland->bundesland_code] = $bundesland->bezeichnung;
+			}
+			
+			if (count($bundeslaenderArray) > 0)
+			{
+				$this->storeSession('Bundesland.getBundeslaender', $bundeslaenderArray);
+			}
+		}
+		
+		return success($bundeslaenderArray);
 	}
 }

@@ -16,8 +16,8 @@ class Dokument_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getDokument($dokumenttyp_kurzbz)
+	public function getDokument($dokument_kurzbz)
 	{
-		return $this->load('crm/Dokument/Dokument', array('dokumenttyp_kurzbz' => $dokumenttyp_kurzbz));
+		return $this->load('crm/Dokument/Dokument', array('dokument_kurzbz' => $dokument_kurzbz), 'Dokument.getDokument.'.$dokument_kurzbz);
 	}
 }

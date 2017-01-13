@@ -40,6 +40,19 @@ class Prestudent_model extends REST_Model
 	/**
 	 * 
 	 */
+	public function getLastStatuses($person_id, $studiensemester_kurzbz = null, $studiengang_kz = null, $status_kurzbz = null)
+	{
+		return $this->load('crm/Prestudent/LastStatuses', array(
+			'person_id' => $person_id,
+			'studiensemester_kurzbz' => $studiensemester_kurzbz,
+			'studiengang_kz' => $studiengang_kz,
+			'status_kurzbz' => $status_kurzbz
+		));
+	}
+	
+	/**
+	 * 
+	 */
 	public function savePrestudent($parameters)
 	{
 		return $this->save('crm/Prestudent/Prestudent', $parameters);

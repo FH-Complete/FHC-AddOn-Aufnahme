@@ -102,7 +102,7 @@ if (!isset($plz)) $plz = null;
 		});
 		
 		// File upload
-		$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
+		$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').fileupload({
 			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles/reisepass"); ?>',
 			dataType: 'json',
 			disableValidation: false,
@@ -134,17 +134,17 @@ if (!isset($plz)) $plz = null;
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
-					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
-					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
-					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').append(
-							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>');
-					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
-					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("checked", false);
-					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').parent().hide();
+					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').hide();
+					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').append(
+							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>');
+					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("disabled", true);
+					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("checked", false);
+					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?> .progress-bar').css(
 						'width',
 						'0%'
 					);
-					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>').show();
+					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').show();
 					var logo = "";	
 					if(data.result.bezeichnung.indexOf(".docx") !== -1)
 					{
@@ -167,25 +167,25 @@ if (!isset($plz)) $plz = null;
 						logo = false;
 					}
 					
-					$("#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
+					$("#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>").append('<img class="document_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
 					msg += "</br>"+data.result.bezeichnung;
-					toggleDocumentsComplete(<?php echo $studiengang->studienplan->studienplan_id; ?>);
+					toggleDocumentsComplete(<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);
 
-                    $("#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").parent().removeClass("has-error");
+                    $("#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>").parent().removeClass("has-error");
 				}
 				else
 				{
 					msg = "Fehler beim Upload";
-					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+					$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?> .progress-bar').css(
 						'width',
 						'0%'
 					);
 				}
-				$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_hochgeladen_<?php echo $studiengang->studienplan->studienplan_id; ?>').html(msg);
+				$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_hochgeladen_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').html(msg);
 			},
 			progressall: function (e, data) {
 				var progress = parseInt(data.loaded / data.total * 100, 10);
-				$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+				$('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?> .progress-bar').css(
 					'width',
 					progress + '%'
 				);
@@ -194,7 +194,7 @@ if (!isset($plz)) $plz = null;
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
 
 		// File upload
-		$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').fileupload({
+		$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').fileupload({
 			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/uploadFiles/lebenslauf"); ?>',
 			dataType: 'json',
 			disableValidation: false,
@@ -225,17 +225,17 @@ if (!isset($plz)) $plz = null;
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
-					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>').parent().hide();
-					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>').hide();
-					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>').append(
-							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplan->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>');
-					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("disabled", true);
-					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_nachgereicht_<?php echo $studiengang->studienplan->studienplan_id; ?>').prop("checked", false);
-					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').parent().hide();
+					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').hide();
+					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').append(
+							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>');
+					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("disabled", true);
+					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("checked", false);
+					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?> .progress-bar').css(
 						'width',
 						'0%'
 					);
-			$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>').show();
+			$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').show();
 					var logo = "";	
 					if(data.result.bezeichnung.indexOf(".docx") !== -1)
 					{
@@ -258,25 +258,25 @@ if (!isset($plz)) $plz = null;
 						logo = false;
 					}
 
-					$("#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").append('<img class="document_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
+					$("#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>").append('<img class="document_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'); ?>/'+logo+'"/>');
 					msg += "</br>"+data.result.bezeichnung;
-					toggleDocumentsComplete(<?php echo $studiengang->studienplan->studienplan_id; ?>);
+					toggleDocumentsComplete(<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);
 
-                    $("#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>").parent().removeClass("has-error");
+                    $("#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>").parent().removeClass("has-error");
 				}
 				else
 				{
 					msg = "Fehler beim Upload";
-					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+					$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?> .progress-bar').css(
 						'width',
 						'0%'
 					);
 				}
-				$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_hochgeladen_<?php echo $studiengang->studienplan->studienplan_id; ?>').html(msg);
+				$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_hochgeladen_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').html(msg);
 			},
 			progressall: function (e, data) {
 				var progress = parseInt(data.loaded / data.total * 100, 10);
-				$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?> .progress-bar').css(
+				$('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?> .progress-bar').css(
 					'width',
 					progress + '%'
 				);
@@ -284,8 +284,8 @@ if (!isset($plz)) $plz = null;
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
 
-		toggleAdresse($("#adresse_nation<?php echo $studiengang->studienplan->studienplan_id; ?>"));
-		toggleZustellAdresse($("#zustelladresse_nation<?php echo $studiengang->studienplan->studienplan_id; ?>"));
+		toggleAdresse($("#adresse_nation<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>"));
+		toggleZustellAdresse($("#zustelladresse_nation<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>"));
     });
 
     function toggleAdresse(target)
@@ -390,12 +390,12 @@ if (!isset($plz)) $plz = null;
 
 
 <legend>
-	<?php echo $this->getPhrase("Personal/Information", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+	<?php echo $this->getPhrase("Personal/Information", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
 	<div class="pull-right">
 		<span class="incomplete"><?php echo ((isset($complete)) && (!$complete["person"])) ? $this->lang->line("aufnahme/unvollstaendig") : "";?></span>
 	</div>
 </legend>
-<?php echo form_open_multipart("Bewerbung?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
+<?php echo form_open_multipart("Bewerbung?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
 	<div class="row form-row">
 		<div class="col-sm-3">
 			<div class="form-group <?php echo ((form_error("anrede") != "") || (!isset($person->anrede) && $incomplete)) ? 'has-error' : '' ?>">
@@ -457,7 +457,7 @@ if (!isset($plz)) $plz = null;
 			<div class="form-group <?php echo (form_error("gebdatum") != "") ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_geburtsdatum'), "gebdatum", array("name" => "gebdatum", "for" => "gebdatum", "class" => "control-label")) ?>
 				<?php
-				$data = array('id' => 'gebdatum'.$studiengang->studiengang_kz.$studiengang->studienplan->studienplan_id, 'name' => 'gebdatum', 'maxlength' => 64, "type" => "text", "value" => set_value("gebdatum", isset($person->gebdatum) ? date("d.m.Y", strtotime($person->gebdatum)) : ""), "class" => "form-control datepicker", "placeholder"=>"DD.MM.YYYY");
+				$data = array('id' => 'gebdatum'.$studiengang->studiengang_kz.$studiengang->studienplaene[0]->studienplan_id, 'name' => 'gebdatum', 'maxlength' => 64, "type" => "text", "value" => set_value("gebdatum", isset($person->gebdatum) ? date("d.m.Y", strtotime($person->gebdatum)) : ""), "class" => "form-control datepicker", "placeholder"=>"DD.MM.YYYY");
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 				echo form_input($data); ?>
 				<?php echo form_error("gebdatum"); ?>
@@ -520,7 +520,7 @@ if (!isset($plz)) $plz = null;
 		</div>-->
 	</div>
 	<legend class="">
-		<?php echo $this->getPhrase("Personal/Addresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+		<?php echo $this->getPhrase("Personal/Addresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
 		<div class="pull-right">
 			<span class="incomplete"><?php echo ((isset($complete)) && (!$complete["adresse"])) ? $this->lang->line("aufnahme/unvollstaendig") : "";?></span>
 		</div>
@@ -542,7 +542,7 @@ if (!isset($plz)) $plz = null;
 			<div class="form-group <?php echo ((form_error("adresse_nation") != "") || (!isset($adresse->nation) && $incomplete)) ? 'has-error' : '' ?>">
 				<?php echo form_label($this->lang->line('person_formAdresseNation'), "adresse_nation", array("name" => "adresse_nation", "for" => "adresse_nation", "class" => "control-label")) ?>
 				<?php 
-				$data = array('id' => 'adresse_nation'.$studiengang->studienplan->studienplan_id, 'name' => 'adresse_nation', "value" => set_value("adresse_nation"), "class" => "form-control adresse_nation");
+				$data = array('id' => 'adresse_nation'.$studiengang->studienplaene[0]->studienplan_id, 'name' => 'adresse_nation', "value" => set_value("adresse_nation"), "class" => "form-control adresse_nation");
 				(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 				echo form_dropdown("adresse_nation", $nationen, (isset($adresse->nation) ? $adresse->nation : null), $data); ?>
 				<?php echo form_error("adresse_nation"); ?>
@@ -617,10 +617,10 @@ if (!isset($plz)) $plz = null;
 				<div class="checkbox">
 					<label>
 						<?php
-							$data = array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => isset($zustell_adresse) ? TRUE : FALSE, "class"=>"zustelladresse", "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+							$data = array('id' => 'zustelladresse', 'name' => 'zustelladresse', "checked" => isset($zustell_adresse) ? TRUE : FALSE, "class"=>"zustelladresse", "studienplan_id"=>$studiengang->studienplaene[0]->studienplan_id);
 							(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 							echo form_checkbox($data);
-							echo $this->getPhrase("Personal/DifferentAddress", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
+							echo $this->getPhrase("Personal/DifferentAddress", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);
 						?>
 					</label>
 				</div>
@@ -628,9 +628,9 @@ if (!isset($plz)) $plz = null;
 			</div>
 		</div>
 	</div>
-	<div id="zustelladresse_<?php echo $studiengang->studienplan->studienplan_id; ?>" style="display: none;">
+	<div id="zustelladresse_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" style="display: none;">
 		<legend class="">
-			<?php echo $this->getPhrase("Personal/Zustelladresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+			<?php echo $this->getPhrase("Personal/Zustelladresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
 			<div class="pull-right">
 				<span class="incomplete"><?php echo ((isset($complete)) && (!$complete["zustelladresse"])) ? $this->lang->line("aufnahme/unvollstaendig") : "";?></span>
 			</div>
@@ -640,7 +640,7 @@ if (!isset($plz)) $plz = null;
 				<div class="form-group <?php echo ((form_error("zustelladresse_nation") != "") || (!isset($zustell_adresse->nation) && $incomplete)) ? 'has-error' : '' ?>">
 					<?php echo form_label($this->lang->line('person_formAdresseNation'), "zustelladresse_nation", array("name" => "zustelladresse_nation", "for" => "zustelladresse_nation", "class" => "control-label")) ?>
 					<?php 
-					$data = array('id' => 'zustelladresse_nation'.$studiengang->studienplan->studienplan_id, 'name' => 'zustelladresse_nation', "value" => set_value("zustelladresse_nation"), "class" => "form-control zustelladresse_nation");
+					$data = array('id' => 'zustelladresse_nation'.$studiengang->studienplaene[0]->studienplan_id, 'name' => 'zustelladresse_nation', "value" => set_value("zustelladresse_nation"), "class" => "form-control zustelladresse_nation");
 					(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
 					echo form_dropdown("zustelladresse_nation", $nationen, (isset($zustell_adresse->nation) ? $zustell_adresse->nation : null), $data); ?>
 					<?php echo form_error("zustelladresse_nation"); ?>
@@ -702,7 +702,7 @@ if (!isset($plz)) $plz = null;
 		</div>
 	</div>
 	<legend class="">
-		<?php echo $this->getPhrase("Personal/Kontakt", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+		<?php echo $this->getPhrase("Personal/Kontakt", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
 		<div class="pull-right">
 			<span class="incomplete"><?php echo ((isset($complete)) && (!$complete["kontakt"])) ? $this->lang->line("aufnahme/unvollstaendig") : "";?></span>
 		</div>
@@ -740,7 +740,7 @@ if (!isset($plz)) $plz = null;
 		</div>
 	</div>
 	<legend class="">
-		<?php echo $this->getPhrase("Personal/DokumentenUpload", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+		<?php echo $this->getPhrase("Personal/DokumentenUpload", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
 		<div class="pull-right">
 			<span id="document_incomplete" class="incomplete"><?php echo ((isset($complete)) && (!$complete["dokumente"])) ? $this->lang->line("aufnahme/unvollstaendig") : "";?></span>
 		</div>
@@ -748,7 +748,7 @@ if (!isset($plz)) $plz = null;
 	<div class="row form-row">
 		<div class="col-sm-12">
 			<div class="form-group">
-				<?php echo $this->getPhrase("Personal/PleaseUploadDocuments", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);  ?>
+				<?php echo $this->getPhrase("Personal/PleaseUploadDocuments", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);  ?>
 			</div>
 		</div>
 	</div>
@@ -785,18 +785,18 @@ if (!isset($plz)) $plz = null;
 			$logo = "";
 		}
 		?>
-		<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="col-sm-1">
+		<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" class="col-sm-1">
 			<?php 
 			if(isset($logo) && ($logo != false))
 			{
 			?>
-			<img class="document_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'.$logo); ?>"/>
+			<img class="document_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'.$logo); ?>"/>
 			<?php
 			}
 			?>
 		</div>
 		<div class="col-sm-6">
-			<div class="form-group" id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_hochgeladen_<?php echo $studiengang->studienplan->studienplan_id; ?>">
+			<div class="form-group" id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_hochgeladen_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>">
 				<?php
 					if ((!isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]])) || ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === true))
 					{
@@ -809,14 +809,14 @@ if (!isset($plz)) $plz = null;
 					}
 				?>
 				<!-- The global progress bar -->
-				<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
+				<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" class="progress">
 					<div class="progress-bar progress-bar-success"></div>
 				</div>
 			</div>
 		<!--<div class="checkbox">
 		<label>
 			<?php
-				$data = array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === true)) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+				$data = array('id' => 'reisepass_nachgereicht', 'name' => 'reisepass_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht === true)) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplaene[0]->studienplan_id);
 				(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 				echo form_checkbox($data);
 				echo $this->lang->line('person_formNachgereicht')
@@ -829,28 +829,28 @@ if (!isset($plz)) $plz = null;
 				<div class="form-group <?php echo (form_error("reisepass") != "") ? 'has-error' : '' ?>">
 					<div class="upload">
 						<?php
-							//echo form_input(array('id' => 'reisepass_'.$studiengang->studienplan->studienplan_id, 'name' => 'reisepass', "type" => "file"));
+							//echo form_input(array('id' => 'reisepass_'.$studiengang->studienplaene[0]->studienplan_id, 'name' => 'reisepass', "type" => "file"));
 							echo form_error("reisepass");
 						?>
 					</div>
 				</div>
 			</div>
-			<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('reisepass', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button> -->
+			<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('reisepass', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>)">Upload</button> -->
 
 			<!-- The fileinput-button span is used to style the file input field as button -->
-			<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
+			<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>">
 				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]])) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht == false) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->accepted == false)) { ?>
-					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->accepted === true)) ? "disabled='disabled'":"";?> ><span class="glyphicon glyphicon-trash"></span></button>
+					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id; ?>, <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->accepted === true)) ? "disabled='disabled'":"";?> ><span class="glyphicon glyphicon-trash"></span></button>
 				<?php
 				}
 				?>
 			</div>
-			<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht == false)) ? 'display: none;' : ''; ?>">
+			<div id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Upload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->nachgereicht == false)) ? 'display: none;' : ''; ?>">
 				<span class="btn btn-success fileinput-button">
 					<i class="glyphicon glyphicon-plus"></i>
 					<span><?php echo $this->lang->line("aufnahme_dateiAuswahl"); ?></span>
 					<!-- The file input field used as target for the file upload widget -->
-					<input id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
+					<input id="<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" type="file" name="files[]">
 				</span>
 			</div>
 		</div>
@@ -888,19 +888,19 @@ if (!isset($plz)) $plz = null;
 			$logo = "";
 		}
 		?>
-		<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="col-sm-1">
+		<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" class="col-sm-1">
 			<?php 
 			if(isset($logo) && ($logo != false))
 			{
 			?>
-			<img class="document_logo_<?php echo $studiengang->studienplan->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'.$logo); ?>"/>
+			<img class="document_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" width="30" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/'.$logo); ?>"/>
 			<?php
 			}
 			?>
 		</div>
 		<div class="col-sm-6">
 
-			<div class="form-group" id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_hochgeladen_<?php echo $studiengang->studienplan->studienplan_id; ?>">
+			<div class="form-group" id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_hochgeladen_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>">
 				<?php
 					if ((!isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) || ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === true))
 					{
@@ -913,14 +913,14 @@ if (!isset($plz)) $plz = null;
 					}
 				?>
 				<!-- The global progress bar -->
-				<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="progress">
+				<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" class="progress">
 					<div class="progress-bar progress-bar-success"></div>
 				</div>
 			</div>
 		<!--<div class="checkbox">
 		<label>
 			<?php
-				$data = array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === true)) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplan->studienplan_id);
+				$data = array('id' => 'lebenslauf_nachgereicht', 'name' => 'lebenslauf_nachgereicht', "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht === true)) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplaene[0]->studienplan_id);
 				(isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
 				echo form_checkbox($data);
 				echo $this->lang->line('person_formNachgereicht')
@@ -933,28 +933,28 @@ if (!isset($plz)) $plz = null;
 				<div class="form-group <?php echo (form_error("lebenslauf") != "") ? 'has-error' : '' ?>">
 					<div class="upload">
 						<?php
-							//echo form_input(array('id' => 'lebenslauf_'.$studiengang->studienplan->studienplan_id, 'name' => 'lebenslauf', "type" => "file"));
+							//echo form_input(array('id' => 'lebenslauf_'.$studiengang->studienplaene[0]->studienplan_id, 'name' => 'lebenslauf', "type" => "file"));
 							echo form_error("lebenslauf");
 						?>
 					</div>
 				</div>
 			</div>
-			<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('lebenslauf', <?php echo $studiengang->studienplan->studienplan_id; ?>)">Upload</button> -->
+			<!-- <button class="btn btn-primary icon-upload" type="button" onclick="uploadFiles('lebenslauf', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>)">Upload</button> -->
 
 			<!-- The fileinput-button span is used to style the file input field as button -->
-			<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Delete_<?php echo $studiengang->studienplan->studienplan_id; ?>">
+			<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>">
 				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]])) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht == false) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->accepted == false)) { ?>
-				<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id; ?>, <?php echo $studiengang->studienplan->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->accepted === true)) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
+				<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id; ?>, <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->accepted === true)) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
 				<?php
 				}
 				?>
 			</div>
-			<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Upload_<?php echo $studiengang->studienplan->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht == false)) ? 'display: none;' : ''; ?>">
+			<div id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Upload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" class="upload-widget" style="<?php echo (isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->nachgereicht == false)) ? 'display: none;' : ''; ?>">
 				<span class="btn btn-success fileinput-button">
 					<i class="glyphicon glyphicon-plus"></i>
 					<span><?php echo $this->lang->line("aufnahme_dateiAuswahl"); ?></span>
 					<!-- The file input field used as target for the file upload widget -->
-					<input id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>FileUpload_<?php echo $studiengang->studienplan->studienplan_id; ?>" type="file" name="files[]">
+					<input id="<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" type="file" name="files[]">
 				</span>
 			</div>
 		</div>

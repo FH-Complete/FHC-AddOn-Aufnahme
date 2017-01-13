@@ -18,6 +18,6 @@ class Benutzer_model extends REST_Model
 	 */
 	public function getBenutzer($uid)
 	{
-		return $this->load('person/Benutzer/Benutzer', array('uid' => $uid), 'Benutzer.getBenutzer');
+		return $this->loadOne('person/Benutzer/Benutzer', array('uid' => $uid), 'Benutzer.getBenutzer');
 	}
 }

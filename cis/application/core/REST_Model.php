@@ -44,7 +44,7 @@ class REST_Model extends CI_Model
 				
 				if (isset($sessionName) && $sessionName != '' && isSuccess($response))
 				{
-					$this->session->set_userdata($sessionName, $response);
+					$this->session->{$sessionName} = $response;
 				}
 				
 				return $response;
@@ -134,7 +134,22 @@ class REST_Model extends CI_Model
 	 */
 	protected function getPersonId()
 	{
-		return $this->session->person_id;
+		$person_id = null;
+		
+		if (isset($this->session->person_id))
+		{
+			$person_id = $this->session->person_id;
+		}
+		
+		return $person_id;
+	}
+	
+	/**
+	 * 
+	 */
+	protected function storeSession($name, $value)
+	{
+		$this->session->{$name} = $value;
 	}
 	
 	/**
@@ -155,11 +170,15 @@ class REST_Model extends CI_Model
 	 */
 	private function _logged()
 	{
-		if (!isset($this->session->person_id) || (isset($this->session->person_id) && !is_numeric($this->session->person_id)))
+		if (isset($this->session->{'Person.getPersonId'}))
 		{
-			return false;
+			$person = $this->session->{'Person.getPersonId'};
+			if (isset($person->person_id) && is_numeric($person->person_id))
+			{
+				return false;
+			}
 		}
 		
-		return true;
+		return false;
 	}
 }

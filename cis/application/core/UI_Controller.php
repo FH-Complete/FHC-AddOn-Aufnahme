@@ -59,7 +59,14 @@ class UI_Controller extends CI_Controller
 	 */
 	protected function getData($name)
 	{
-		return $this->_data[$name];
+		$data = null;
+		
+		if (isset($this->_data[$name]))
+		{
+			$data = $this->_data[$name];
+		}
+		
+		return $data;
 	}
 	
 	/**
