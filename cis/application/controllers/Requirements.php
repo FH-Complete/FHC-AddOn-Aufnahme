@@ -70,22 +70,23 @@ class Requirements extends MY_Controller
 		$this->_data["geplanter_abschluss"] = array();
 		foreach ($this->_data["prestudent"] as $prestudent)
 		{
-			if(isset($this->input->post()["studiengang_kz"]))
-			{
-				if($prestudent->studiengang_kz == $this->input->post()["studiengang_kz"])
-				{
-					{
-						$prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis"]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
-						$prestudent->zgvort = "geplanter Abschluss";
-						$this->_savePrestudent($prestudent);
-					}
-				}
-			}
-
 			if((isset($this->input->get()["studiengang_kz"])) && ($this->input->get()["studiengang_kz"] === $prestudent->studiengang_kz))
             {
                 //load studiengaenge der prestudenten
                 $this->data["studiengang"] = $studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
+
+                if(isset($this->input->post()["studiengang_kz"]))
+                {
+                    var_dump($this->input->post()["studiengang_kz"]);
+                    var_dump($prestudent->studiengang_kz);
+                    if($prestudent->studiengang_kz == $this->input->post()["studiengang_kz"])
+                    {
+                        $prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_".$studiengang->typ]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
+                        $prestudent->zgvort = "geplanter Abschluss";
+                        $this->_savePrestudent($prestudent);
+                    }
+                }
+
                 $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
 
                 $this->_data["geplanter_abschluss"][$prestudent->studiengang_kz] = $prestudent->zgvdatum;
@@ -112,7 +113,7 @@ class Requirements extends MY_Controller
 		
 		if((!empty($this->input->post())) && (isset($this->_data["bewerbung_abgeschickt"])) && ($this->_data["bewerbung_abgeschickt"] == true))
 		{
-			redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+			//redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
 		}
 		
 		if(count($this->_data["studiengaenge"]) > 1)
@@ -153,14 +154,14 @@ class Requirements extends MY_Controller
 				$akte = new stdClass();
 				$akte->person_id = $this->_data["person"]->person_id;
 
-				$akte->dokument_kurzbz = $this->config->item('dokumentTypen')["abschlusszeugnis"];
+				$akte->dokument_kurzbz = $this->config->item('dokumentTypen')["abschlusszeugnis_".$this->data["studiengang"]->typ];
 				$akte->insertvon = 'online';
 				$akte->anmerkung = $this->input->post("doktype");
 
 //				$this->_saveAkte($akte);
 			}
 			
-			if($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis"]."_nachgereicht_".$this->input->post("studienplan_id")) !== null)
+			if($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_".$this->data["studiengang"]->typ]."_nachgereicht_".$this->input->post("studienplan_id")) !== null)
 			{
 				$akte->nachgereicht = true;
 			}
@@ -257,7 +258,7 @@ class Requirements extends MY_Controller
 
 		if(!isset($this->_data["error"]) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])) && (!empty($this->input->post())))
 		{
-			redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
+			//redirect("/Summary?studiengang_kz=".$this->input->get()["studiengang_kz"]."&studienplan_id=".$this->input->get()["studienplan_id"]);
 			$this->load->view('requirements', $this->_data);
 		}
 		else
@@ -475,6 +476,8 @@ class Requirements extends MY_Controller
 
 			$dms_id = $this->input->post()["dms_id"];
 			$this->_loadDokumente($this->session->userdata()["person_id"]);
+
+			//var_dump($this->_data["dokumente"]);
 
 			foreach($this->_data["dokumente"] as $dok)
 			{
