@@ -22,7 +22,9 @@ class CheckUserAuth_model extends REST_Model
 		
 		$result = $this->load(
 			'checkUserAuth/CheckByUsernamePassword',
-			array('username' => $username, 'password' => $password)
+			array('username' => $username, 'password' => $password),
+			null,
+			Parent::AUTH_NOT_REQUIRED
 		);
 		
 		if (isSuccess($result))

@@ -35,17 +35,17 @@ class Login extends UI_Controller
 	 */
 	public function index()
 	{
-		$this->setData('sprache', success($this->getCurrentLanguage()));
+		$this->setData('sprache', $this->getCurrentLanguage());
 		
-		if (isset($this->input->get('studiengang_kz')))
+		if ($this->input->get('studiengang_kz') !== null)
 		{
-			$this->setData('studiengang_kz', $this->input->get('studiengang_kz'));
+			$this->setRawData('studiengang_kz', $this->input->get('studiengang_kz'));
 		}
 		
-		$this->setData('username', $this->input->get('username'));
-		$this->setData('email', $this->input->get('email'));
-		$this->setData('password', $this->input->get('password'));
-		$this->setData('code', $this->input->post('code') ? $this->input->post('code') : $this->input->get('code'));
+		$this->setRawData('username', $this->input->post('username'));
+		$this->setRawData('email', $this->input->post('email'));
+		$this->setRawData('password', $this->input->post('password'));
+		$this->setRawData('code', $this->input->post('code') ? $this->input->post('code') : $this->input->get('code'));
 		
 		if ($this->config->item('hybrid_login'))
 		{
@@ -57,32 +57,32 @@ class Login extends UI_Controller
 			}
 			else
 			{
-				$this->_data['code_error_msg'] = 'Bitte geben Sie eine E-Mail Adresse und ein Passwort ein';
-				$this->load->view('registration', $this->_data);
+				$this->setData('code_error_msg', 'Bitte geben Sie eine E-Mail Adresse und ein Passwort ein');
+				$this->load->view('registration', $this->getAllData());
 			}
 		}
 		else
 		{
-			if ($this->_data['code'])
+			if ($this->getData('code'))
 			{
-				$this->_codeLogin($this->_data['code'], $this->_data, $this->_data['email']);
-				if (isset($this->_data['error_msg']))
+				$this->_codeLogin($this->getData('code'), $this->getData('email'));
+				if ($this->getData('error_msg') !== null)
 				{
-					$this->load->view('registration', $this->_data);
+					$this->load->view('registration', $this->getAllData());
 				}
 			}
-			elseif ($this->_data['username'] && $this->_data['password'])
+			elseif ($this->getData('username') && $this->getData('password'))
 			{
-				$this->_cisLogin($this->_data['username'], $this->_data['password']);
+				$this->_cisLogin($this->getData('username'), $this->getData('password'));
 				
-				if (isset($this->_data['error_msg']))
+				if ($this->getData('error_msg') !== null)
 				{
-					$this->load->view('registration', $this->_data);
+					$this->load->view('registration', $this->getAllData());
 				}
 			}
 			else
 			{
-				$this->load->view('login', $this->_data);
+				$this->load->view('login', $this->getAllData());
 			}
 		}
 	}
@@ -95,17 +95,15 @@ class Login extends UI_Controller
 	 */
 	private function _codeLogin($code, $email = null)
 	{
-		$this->StudiensemesterModel->getNextStudiensemester('WS');
-		
-		$person = $this->PersonModel->getPerson($code, $email);
+		$person = $this->PersonModel->getPerson($code, $email, REST_Model::AUTH_NOT_REQUIRED);
 		if (hasData($person))
 		{
 			$this->setData('person', $person);
-			$this->_redirect($person);
+			$this->_redirect($this->getData('person'));
 		}
 		else
 		{
-			$this->setData('code_error_msg', 'E-Mail Adresse und/oder Passwort ist falsch.');
+			$this->setRawData('code_error_msg', 'E-Mail Adresse und/oder Passwort ist falsch.');
 		}
 	}
 	
@@ -118,30 +116,28 @@ class Login extends UI_Controller
 		
 		if ($checkUserAuth)
 		{
-			$benutzer = $this->BenutzerModel->getBenutzer($username);
+			$benutzer = $this->BenutzerModel->getBenutzer($username, REST_Model::AUTH_NOT_REQUIRED);
 			if (hasData($benutzer))
 			{
-				$this->setData('studiensemester_kurzbz', $this->StudiensemesterModel->getNextStudiensemester('WS'));
-
-				$person = $this->PersonModel->getPerson($benutzer->person_id);
+				$person = $this->PersonModel->getPersonByPersonId($benutzer->person_id);
 				if (hasData($person))
 				{
 					$this->setData('person', $person);
-					$this->_redirect($person);
+					$this->_redirect($this->getData('person'));
 				}
 				else
 				{
-					$this->setData('uid_error_msg', 'Person konnte nicht gefunden werden.');
+					$this->setRawData('uid_error_msg', 'Person konnte nicht gefunden werden.');
 				}
 			}
 			else
 			{
-				$this->setData('uid_error_msg', 'Benutzer existiert nicht.');
+				$this->setRawData('uid_error_msg', 'Benutzer existiert nicht.');
 			}
 		}
 		else
 		{
-			$this->setData('uid_error_msg', 'Authentifizierung fehlgeschlagen.');
+			$this->setRawData('uid_error_msg', 'Authentifizierung fehlgeschlagen.');
 		}
 	}
 	
@@ -150,19 +146,26 @@ class Login extends UI_Controller
 	 */
 	private function _redirect($person)
 	{
-		// Load last status of every prestudent
-		$prestudent = $this->PrestudentModel->getLastStatuses(
-			$person->person_id,
-			$this->getData('studiensemester_kurzbz'),
-			null,
-			'Interessent'
-		);
+		$prestudent = null;
+		$studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+		
+		if (hasData($studiensemester))
+		{
+			$this->setData('studiensemester', $studiensemester);
+			// Load last status of every prestudent
+			$prestudent = $this->PrestudentModel->getLastStatuses(
+				$person->person_id,
+				$this->getData('studiensemester')->studiensemester_kurzbz,
+				null,
+				'Interessent'
+			);
+		}
 		
 		if (hasData($prestudent))
 		{
 			$this->setData('prestudent', $prestudent);
 			
-			if (isset($this->input->get('token')))
+			if ($this->input->get('token') !== null)
 			{
 				redirect('/Registration?token='.$this->input->get('token'));
 			}
@@ -182,7 +185,7 @@ class Login extends UI_Controller
 		}
 		else
 		{
-			$this->setData('uid_error_msg', 'Prestudent nicht gefunden.');
+			$this->setRawData('uid_error_msg', 'Prestudent nicht gefunden.');
 		}
 	}
 }

@@ -16,7 +16,7 @@ class Person_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getPerson($code = null, $email = null)
+	public function getPerson($code = null, $email = null, $authNotRequired = false)
 	{
 		return $this->loadOne(
 			'person/Person/Person',
@@ -25,7 +25,23 @@ class Person_model extends REST_Model
 				'code' => $code,
 				'email' => $email
 			),
-			'Person.getPerson'
+			'Person.getPerson',
+			$authNotRequired
+		);
+	}
+	
+	/**
+	 * 
+	 */
+	public function getPersonByPersonId($person_id)
+	{
+		return $this->loadOne(
+			'person/Person/Person',
+			array(
+				'person_id' => $person_id
+			),
+			'Person.getPerson',
+			Parent::AUTH_NOT_REQUIRED
 		);
 	}
 	

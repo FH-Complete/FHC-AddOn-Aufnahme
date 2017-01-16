@@ -7,6 +7,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class REST_Model extends CI_Model
 {
+	const AUTH_NOT_REQUIRED = true;
+	
+	private $_personSessionName = 'Person.getPerson';
+	
 	/**
 	 * 
 	 */
@@ -65,7 +69,16 @@ class REST_Model extends CI_Model
 		
 		if (hasData($result))
 		{
-			$result = success($result->retval[0], $result->fhcCode);
+			if (is_array($result->retval))
+			{
+				$result = success($result->retval[0], $result->fhcCode);
+			}
+			else
+			{	
+				$result = success($result->retval, $result->fhcCode);
+			}
+			
+			$this->session->{$sessionName} = $result;
 		}
 		
 		return $result;
@@ -136,9 +149,13 @@ class REST_Model extends CI_Model
 	{
 		$person_id = null;
 		
-		if (isset($this->session->person_id))
+		if (isset($this->session->{$this->_personSessionName}))
 		{
-			$person_id = $this->session->person_id;
+			$person = $this->session->{$this->_personSessionName};
+			if (hasData($person))
+			{
+				$person_id = $person->retval->person_id;
+			}
 		}
 		
 		return $person_id;
@@ -170,12 +187,15 @@ class REST_Model extends CI_Model
 	 */
 	private function _logged()
 	{
-		if (isset($this->session->{'Person.getPersonId'}))
+		if (isset($this->session->{$this->_personSessionName}))
 		{
-			$person = $this->session->{'Person.getPersonId'};
-			if (isset($person->person_id) && is_numeric($person->person_id))
+			$person = $this->session->{$this->_personSessionName};
+			if (hasData($person))
 			{
-				return false;
+				if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+				{
+					return true;
+				}
 			}
 		}
 		

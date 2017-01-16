@@ -16,8 +16,15 @@ class Benutzer_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getBenutzer($uid)
+	public function getBenutzer($uid, $authNotRequired = false)
 	{
-		return $this->loadOne('person/Benutzer/Benutzer', array('uid' => $uid), 'Benutzer.getBenutzer');
+		return $this->loadOne(
+			'person/Benutzer/Benutzer',
+			array(
+				'uid' => $uid
+			),
+			'Benutzer.getBenutzer',
+			$authNotRequired
+		);
 	}
 }

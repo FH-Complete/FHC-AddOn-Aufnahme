@@ -36,7 +36,7 @@ class UI_Controller extends CI_Controller
 	 */
 	protected function getCurrentLanguage()
 	{
-		return $this->LanguageModel->getCurrentLanguage($this->input->get('language'));
+		return success($this->LanguageModel->getCurrentLanguage($this->input->get('language')));
 	}
 	
 	/**
@@ -52,6 +52,14 @@ class UI_Controller extends CI_Controller
 		{
 			$this->_data[$name] = null;
 		}
+	}
+	
+	/**
+	 * 
+	 */
+	protected function setRawData($name, $value)
+	{
+		$this->_data[$name] = $value;
 	}
 	
 	/**
