@@ -19,7 +19,7 @@ class Adresse_model extends REST_Model
 	public function getAdresse()
 	{
 		$adresses = $this->load('person/Adresse/Adresse', array('person_id' => $this->getPersonId()), 'Adresse.getAdresse');
-		$adressesArray = array();
+		$adresse = null;
 		
 		if (isSuccess($adresses))
 		{
@@ -27,17 +27,22 @@ class Adresse_model extends REST_Model
 			{
 				if ($adress->heimatadresse == true)
 				{
-					$adressesArray[] = $adress;
+					$adresse = $adress;
+					break;
 				}
 			}
 			
-			if (count($adressesArray) > 0)
+			if ($adresse !== null)
 			{
-				$this->storeSession('Adresse.getZustelladresse', $adressesArray);
+				$this->storeSession('Adresse.getAdresse', $adresse);
 			}
 		}
+		else if (is_object($adresses))
+		{
+			$adresse = $adresses;
+		}
 		
-		return success($adressesArray);
+		return success($adresse);
 	}
 	
 	/**
@@ -46,25 +51,30 @@ class Adresse_model extends REST_Model
 	public function getZustelladresse()
 	{
 		$adresses = $this->load('person/Adresse/Adresse', array('person_id' => $this->getPersonId()), 'Adresse.getZustelladresse');
-		$adressesArray = array();
+		$adresse = null;
 		
 		if (isSuccess($adresses))
 		{
 			foreach ($adresses->retval as $adress)
 			{
-				if (($adress->heimatadresse == false) && ($adress->zustelladresse == true))
+				if ($adress->heimatadresse == false && $adress->zustelladresse == true)
 				{
-					$adressesArray[] = $adress;
+					$adresse = $adress;
+					break;
 				}
 			}
 			
-			if (count($adressesArray) > 0)
+			if ($adresse !== null)
 			{
-				$this->storeSession('Adresse.getZustelladresse', $adressesArray);
+				$this->storeSession('Adresse.getZustelladresse', $adresse);
 			}
 		}
+		else if (is_object($adresses))
+		{
+			$adresse = $adresses;
+		}
 		
-		return success($adressesArray);
+		return success($adresse);
 	}
 	
 	/**

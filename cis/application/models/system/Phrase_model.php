@@ -16,9 +16,19 @@ class Phrase_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getPhrasen($parameters)
+	public function getPhrasen($app, $sprache, $authNotRequired = false)
 	{
-		return $this->load('system/Phrase/Phrases', $parameters, 'Phrase.getPhrasen');
+		$phrasen = $this->load(
+			'system/Phrase/Phrases',
+			array(
+				'app' => $app,
+				'sprache' => $sprache
+			),
+			'Phrase.getPhrasen',
+			$authNotRequired
+		);
+		
+		return $phrasen;
 	}
 	
 	/**

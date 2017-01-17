@@ -37,4 +37,9 @@ class CheckUserAuth_model extends REST_Model
 		
 		return $checkUserAuth;
 	}
+	
+	public function isLogged()
+	{
+		return $this->_logged();
+	}
 }

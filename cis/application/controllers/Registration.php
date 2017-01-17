@@ -8,8 +8,8 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Registration extends MY_Controller {
-
+class Registration extends UI_Controller
+{
 	/**
 	 * Index Page for this controller.
 	 *
@@ -26,8 +26,26 @@ class Registration extends MY_Controller {
 	 *
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function __construct() {
-		parent::__construct();
+	public function __construct()
+	{
+		parent::__construct(Parent::NOT_CHECK_LOGIN);
+		
+		// 
+		$this->load->library('form_validation');
+		
+		// 
+		$this->load->helper('form');
+		
+		// 
+		$currentLanguage = $this->getCurrentLanguage();
+		if (hasData($currentLanguage))
+		{
+			$this->setData('sprache', $currentLanguage);
+			$this->lang->load(array('aufnahme', 'login', 'registration'), $this->getData('sprache'));
+		}
+		
+		$this->load->model('system/Phrase_model', 'PhraseModel');
+		$this->load->model('system/Message_model', 'MessageModel');
 	}
 
 	/**
@@ -35,63 +53,60 @@ class Registration extends MY_Controller {
 	 */
 	public function index()
     {
-        $this->_loadLibraries(array("form_validation"));
-        $this->_loadCiLanguages(array("aufnahme", "login", "registration"));
+		$this->PhraseModel->getPhrasen(
+			'aufnahme',
+			ucfirst($this->getData('sprache')),
+			REST_Model::AUTH_NOT_REQUIRED
+		);
+		
+		if (isset($this->input->get()["sprache"]))
+		{
+			$this->setCurrentLanguage($this->input->get()["sprache"]);
+			$this->setData('sprache', $this->input->get()["sprache"]);
+			$this->lang->load(array('aufnahme', 'login', 'registration'), $this->getData('sprache'));
+		}
 
         if(isset($this->input->get()["token"]))
         {
             $this->_loadModels(array("MessageModel"=>"message_model"));
             $this->session->set_userdata("token", $this->input->get()["token"]);
 
-            $this->_data["messages"] = $this->_getMessageByToken($this->input->get()["token"]);
-            if((count($this->_data["messages"]) == 1) && (isset($this->session->userdata()["person_id"])))
+            $messageByToken = $this->MessageModel->getMessageByToken($this->input->get()["token"]);
+            if (hasData($messageByToken))
             {
-                if ($this->_data["messages"][0]->receiver_id == $this->session->userdata()["person_id"])
-                {
-                    $messageId = $this->_data["messages"][0]->message_id;
-                    $oe_kurzbz = $this->_data["messages"][0]->oe_kurzbz;;
-                    redirect("/Messages/answerMessage/" . $messageId . "/" . $oe_kurzbz);
-                }
+				$this->setData("messages", $messageByToken);
+				$messageId = $this->getData("messages")->message_id;
+				$oe_kurzbz = $this->getData("messages")->oe_kurzbz;;
+				redirect("/Messages/answerMessage/" . $messageId . "/" . $oe_kurzbz);
             }
         }
 
-
-		$this->_data = array(
-			"sprache" => $this->get_language(),
-			"studiengang_kz" => $this->input->get('studiengang_kz'),
-			"vorname" => $this->input->post("vorname"),
-			"nachname" => $this->input->post("nachname"),
-			"geb_datum" => $this->input->post("geb_datum"),
-			"email" => $this->input->post("email"),
-			"captcha_code" => $this->input->post("captcha_code"),
-			"zugangscode" => $this->input->post("zugangscode"),
-			//     "wohnort" =>$this->input->post("wohnort"),
-			"geschlecht" => $this->input->post("geschlecht")
-		);
-
-		if (isset($this->input->get()["sprache"])) {
-			$this->lang->load('aufnahme', $this->_data["sprache"]);
-			$this->lang->load('login', $this->_data["sprache"]);
-			$this->_data["sprache"] = $this->get_language();
-		}
-
+		$this->setRawData("studiengang_kz" ,$this->input->get('studiengang_kz'));
+		$this->setRawData("vorname" ,$this->input->post("vorname"));
+		$this->setRawData("nachname" ,$this->input->post("nachname"));
+		$this->setRawData("geb_datum" ,$this->input->post("geb_datum"));
+		$this->setRawData("email" ,$this->input->post("email"));
+		$this->setRawData("captcha_code" ,$this->input->post("captcha_code"));
+		$this->setRawData("zugangscode" ,$this->input->post("zugangscode"));
+		$this->setRawData("geschlecht" ,$this->input->post("geschlecht"));
+		
 		//form validation rules
 		$this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
 		$this->form_validation->set_rules("vorname", "Vorname", "required|max_length[32]");
 		$this->form_validation->set_rules("nachname", "Nachname", "required|max_length[64]");
 		$this->form_validation->set_rules("geb_datum", "Geburtsdatum", "required|callback_check_date");
-		// $this->form_validation->set_rules("wohnort", "Wohnort", "required");
 		$this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
 		$this->form_validation->set_rules("email2", "E-Mail", "required|valid_email|callback_check_email");
 		$this->form_validation->set_rules("datenschutz", "Datenschutz", "callback_check_terms");
 		$this->form_validation->set_rules("captcha_code", "Captcha", "required|max_length[6]|callback_check_captcha");
 
-
-		if ($this->form_validation->run() == FALSE) {
-			$this->load->view('registration',  $this->_data);
+		if ($this->form_validation->run() == false)
+		{
+			$this->load->view('registration', $this->getAllData());
 		}
-		else {
-			$this->saveRegistration($this->_data);
+		else
+		{
+			$this->saveRegistration($this->getAllData());
 		}
 	}
 
@@ -102,7 +117,7 @@ class Registration extends MY_Controller {
 	 */
 	public function securimage($random=null)
     {
-        $this->_loadLibraries(array("securimage/securimage"));
+        $this->load->library('securimage/securimage');
 		$img = new Securimage();
 		$img->show(); // alternate use: $img->show('/path/to/background.jpg');
 	}
@@ -587,18 +602,18 @@ class Registration extends MY_Controller {
 		}
 	}
 
-	private function _getMessageByToken($token)
-    {
-        $this->MessageModel->getMessagesByToken($token);
-
-        if($this->MessageModel->isResultValid() === true)
-        {
-            return $this->MessageModel->result->retval;
-        }
-        else
-        {
-            $this->_setError(true, $this->MessageModel->getErrorMessage());
-        }
-    }
+// 	private function _getMessageByToken($token)
+//     {
+//         $this->MessageModel->getMessagesByToken($token);
+// 
+//         if($this->MessageModel->isResultValid() === true)
+//         {
+//             return $this->MessageModel->result->retval;
+//         }
+//         else
+//         {
+//             $this->_setError(true, $this->MessageModel->getErrorMessage());
+//         }
+//     }
 
 }

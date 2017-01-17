@@ -40,6 +40,22 @@ class Message_model extends REST_Model
 	/**
 	 * 
 	 */
+	public function getMessageByToken($token)
+	{
+		$message = $this->loadOne('system/Message/MessagesByPersonId', array('token' => $token));
+		
+		if (hasData($message))
+		{
+			if ($message->retval->receiver_id == $this->getPersonId())
+			{
+				return $message;
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 */
 	public function sendMessage($parameters)
 	{
 		return $this->save('system/Message/Message', $parameters);

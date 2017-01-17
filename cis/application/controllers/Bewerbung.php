@@ -5,7 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /**
  * 
  */
-class Start extends UI_Controller
+class Bewerbung extends UI_Controller
 {
 	/**
 	 * 
@@ -18,10 +18,15 @@ class Start extends UI_Controller
 		$this->load->library('form_validation');
 		
 		// 
-		$this->lang->load(array('aufnahme', 'login'), $this->getCurrentLanguage());
+		$currentLanguage = $this->getCurrentLanguage();
+		if (hasData($currentLanguage))
+		{
+			$this->setData('sprache', $currentLanguage);
+			$this->lang->load(array('aufnahme', 'login'), $this->getData('sprache'));
+		}
 		
 		// 
-		$this->load->helper("form");
+		$this->load->helper('form');
 		
 		// Loading the 
 		$this->load->model('system/Phrase_model', 'PhraseModel');
@@ -53,11 +58,10 @@ class Start extends UI_Controller
 	 */
 	public function index()
 	{
-		$this->setData('', $this->PhraseModel->getPhrasen(
-			array('app' => 'aufnahme', 'sprache' => ucfirst($this->getCurrentLanguage())))
+		$this->PhraseModel->getPhrasen(
+			'aufnahme',
+			ucfirst($this->getData('sprache'))
 		);
-		
-		$this->setData('sprache', $this->getCurrentLanguage());
 		
 		$this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
 		

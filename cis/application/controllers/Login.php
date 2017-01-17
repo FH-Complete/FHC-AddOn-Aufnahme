@@ -12,7 +12,7 @@ class Login extends UI_Controller
 	 */
 	public function __construct()
 	{
-		parent::__construct();
+		parent::__construct(Parent::NOT_CHECK_LOGIN);
 		
 		// 
 		$this->load->library('form_validation');

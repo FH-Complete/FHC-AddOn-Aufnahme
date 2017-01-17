@@ -8,14 +8,17 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class MY_Loader extends CI_Loader {
-
-
+class MY_Loader extends CI_Loader
+{
 	/**
 	 *
 	 */
-	function __construct() {
+	function __construct()
+	{
 		parent::__construct();
+		
+		// Load return message helper
+		$this->helper('message');
 	}
 
 
@@ -40,10 +43,22 @@ class MY_Loader extends CI_Loader {
 	 * @param unknown $orgform_kurzbz (optional)
 	 * @return unknown
 	 */
-	function getPhrase($phrase, $sprache, $oe_kurzbz = null, $orgform_kurzbz = null) {
-		if (isset($this->session->userdata()["phrasen"])) {
-			$phrasen = $this->session->userdata()["phrasen"];
-			if (is_array($phrasen)) {
+	function getPhrase($phrase, $sprache, $oe_kurzbz = null, $orgform_kurzbz = null)
+	{
+		$result = null;
+		$phrasen = null;
+		
+		if (isset($this->session->userdata()['Phrase.getPhrasen']))
+		{
+			$result = $this->session->userdata()['Phrase.getPhrasen'];
+		}
+		
+		if (hasData($result))
+		{
+			$phrasen = $result->retval;
+			
+			if (is_array($phrasen))
+			{
 				$text = "";
 				$sprache = ucfirst($sprache);
 				
@@ -88,12 +103,14 @@ class MY_Loader extends CI_Loader {
 				if ($this->config->item('display_phrase_name'))
 					return "<i>[$phrase]</i>";
 			}
-			else {
+			else
+			{
 				return $phrasen;
 			}
 		}
-		else {
-			return "please load phrases first";
+		else
+		{
+			return "Please load phrases first";
 		}
 	}
 }

@@ -19,19 +19,27 @@ class Nation_model extends REST_Model
 	public function getAll()
 	{
 		$nations = $this->load('codex/Nation/All', null, 'Nation.getAll');
-		$nationsArray = array('null' => '');
 		
-		if (isSuccess($nations))
+		if (!is_array($nations))
 		{
-			foreach($nations->retval as $nation)
-			{
-				$nationsArray[$nation->nation_code] = $nation->kurztext;
-			}
+			$nationsArray = array('null' => '');
 			
-			if (count($nationsArray) > 0)
+			if (isSuccess($nations))
 			{
-				$this->storeSession('Nation.getAll', $nationsArray);
+				foreach($nations->retval as $nation)
+				{
+					$nationsArray[$nation->nation_code] = $nation->kurztext;
+				}
+				
+				if (count($nationsArray) > 0)
+				{
+					$this->storeSession('Nation.getAll', $nationsArray);
+				}
 			}
+		}
+		else
+		{
+			$nationsArray = $nations;
 		}
 		
 		return success($nationsArray);

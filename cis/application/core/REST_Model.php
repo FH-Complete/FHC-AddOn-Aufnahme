@@ -185,7 +185,7 @@ class REST_Model extends CI_Model
 	/**
 	 * 
 	 */
-	private function _logged()
+	protected function _logged()
 	{
 		if (isset($this->session->{$this->_personSessionName}))
 		{
