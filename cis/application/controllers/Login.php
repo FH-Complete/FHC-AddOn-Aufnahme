@@ -35,7 +35,11 @@ class Login extends UI_Controller
 	 */
 	public function index()
 	{
-		$this->setData('sprache', $this->getCurrentLanguage());
+        $currentLanguage = $this->getCurrentLanguage();
+        if (hasData($currentLanguage))
+        {
+            $this->setData('sprache', $currentLanguage);
+        }
 		
 		if ($this->input->get('studiengang_kz') !== null)
 		{

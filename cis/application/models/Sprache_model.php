@@ -1,36 +1,37 @@
 <?php
+
 /**
  * ./cis/application/models/Oe_model.php
  *
  * @package default
  */
-
-
-class Sprache_model extends MY_Model
+class Sprache_model extends REST_Model
 {
 
-	/**
-	 *
-	 */
-	public function __construct() {
-		parent::__construct();
-		//$this->load->database();
-	}
+    /**
+     *
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
 
-	/**
-	 *
-	 * @param unknown $oe_kurzbz
-	 * @return unknown
-	 */
-	public function getSprache($sprache) {
-		if ($restquery = $this->rest->get('system/sprache/sprache', array("sprache" => $sprache))) {
-			$this->result = $restquery;
-			return true;
-		}
-		else
-			return false;
-	}
+    /**
+     *
+     * @param unknown $sprache
+     * @return unknown
+     */
+    public function getSprache($sprache, $authNotRequired = false)
+    {
+        return $this->loadOne('system/sprache/sprache',
+            array(
+                "sprache" => $sprache
+            ),
+            'Sprache.getSprache',
+            $authNotRequired);
+    }
+
 
 
 }

@@ -34,6 +34,9 @@ class UI_Controller extends CI_Controller
 		
 		// Loading the 
 		$this->load->model('CheckUserAuth_model', 'CheckUserAuthModel');
+
+        // Loading the
+        $this->load->model('Sprache_model', 'SpracheModel');
 		
 		// 
 		if ($checkLogin === true)
@@ -49,13 +52,20 @@ class UI_Controller extends CI_Controller
 	{
 		if (!$this->CheckUserAuthModel->isLogged()) redirect('/Registration');
 	}
+
+    protected function _getSprache($sprache)
+    {
+        $this->SpracheModel->getSprache(ucfirst($sprache));
+    }
 	
 	/**
 	 * 
 	 */
 	protected function getCurrentLanguage()
 	{
-		return success($this->LanguageModel->getCurrentLanguage());
+	    $language = $this->LanguageModel->getCurrentLanguage();
+	    $this->_getSprache($language);
+		return success($language);
 	}
 	
 	/**
