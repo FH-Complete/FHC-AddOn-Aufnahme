@@ -55,4 +55,12 @@ class Person_model extends REST_Model
 			'studiensemester_kurzbz' => $studiensemester_kurzbz
 		));
 	}
+	
+	/**
+	 * 
+	 */
+	public function savePerson($parameters)
+	{
+		return $this->save('person/Person/Person', $parameters, 'Person.getPerson');
+	}
 }

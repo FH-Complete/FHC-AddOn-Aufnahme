@@ -5,15 +5,16 @@
  * @package default
  */
 
-
-class Menu extends Widget {
-
+class Menu extends Widget
+{
 	/**
 	 *
 	 * @param unknown $data
 	 */
-	public function display($data) {
-		if (is_null($this->config->item('menu'))) {
+	public function display($data)
+	{
+		if (is_null($this->config->item('menu')))
+		{
 			$menu['items'] = array(
 				array('href' => 'Overview', 'name' => 'Studiengänge', "glyphicon" => (isset($data["aktiv"]) && $data["atkiv"] == "Studiengänge") ? "glyphicon-ok" : "" ),
 				array('href' => 'Person', 'name' => 'Bewerbung', 'glyphicon' => 'glyphicon-ok'),
@@ -23,13 +24,12 @@ class Menu extends Widget {
 				array('href' => 'Logout', 'name' => 'Logout', 'glyphicon' => 'glyphicon-log-out')
 			);
 		}
-		else {
+		else
+		{
 			$menu['items'] = $this->config->item('menu');
 			$menu['data'] = $data;
 		}
-
+		
 		$this->view('widgets/menu', $menu);
 	}
-
-
 }

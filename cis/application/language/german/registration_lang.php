@@ -6,5 +6,9 @@
  */
 
 
+$lang['person_Firstname'] = 'Vorname';
+$lang['person_nachname'] = 'Nachname';
+$lang['person_geburtsdatum'] = 'Geburtsdatum';
+$lang['person_emailAdresse'] = 'E-Mail';
 
 ?>
