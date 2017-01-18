@@ -57,6 +57,10 @@ class Akte_model extends MY_Model
 	 * @return unknown
 	 */
 	public function getAktenAccepted($person_id = NULL, $dokumenttyp_kurzbz = null) {
+	
+		error_log($person_id);
+		error_log($dokumenttyp_kurzbz);
+	
 		if ($restquery = $this->rest->get('crm/akte/aktenaccepted', array("person_id" => $person_id, "dokumenttyp_kurzbz"=> $dokumenttyp_kurzbz))) {
 			$this->result = $restquery;
 			return true;

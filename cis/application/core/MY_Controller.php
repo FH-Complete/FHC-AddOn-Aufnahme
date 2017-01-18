@@ -10,6 +10,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class MY_Controller extends CI_Controller
 {
 	protected $_data = array();
+	
+	private $_personSessionName = 'Person.getPerson';
 
 	/**
 	 *
@@ -73,12 +75,14 @@ class MY_Controller extends CI_Controller
 		
 		return $language;
 	}
-
+	
 	/**
 	 *
 	 */
 	public function checkLogin()
 	{
+		$logged = false;
+		
 		if (isset($this->session->{$this->_personSessionName}))
 		{
 			$person = $this->session->{$this->_personSessionName};
@@ -86,9 +90,14 @@ class MY_Controller extends CI_Controller
 			{
 				if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
 				{
-					redirect("/Registration");
+					$logged = true;
 				}
 			}
+		}
+		
+		if ($logged === false)
+		{
+			redirect("/Registration");
 		}
 	}
 
