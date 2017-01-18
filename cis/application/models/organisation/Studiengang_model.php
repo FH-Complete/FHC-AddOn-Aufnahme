@@ -26,7 +26,7 @@ class Studiengang_model extends REST_Model
 	 */
 	public function getStudiengang($studiengang_kz)
 	{
-		return $this->load(
+		return $this->loadOne(
 			'organisation/Studiengang/Studiengang',
 			array('studiengang_kz' => $studiengang_kz), 'Studiengang.getStudiengang'
 		);

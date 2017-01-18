@@ -69,7 +69,7 @@ class REST_Model extends CI_Model
 		
 		if (hasData($result))
 		{
-			if (is_array($result->retval))
+			if (is_array($result->retval) && !empty($result->retval))
 			{
 				$result = success($result->retval[0], $result->fhcCode);
 			}
