@@ -158,12 +158,12 @@ class Bewerbung extends UI_Controller
 		
 		if (isSuccess($reisepass = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["reisepass"])))
 		{
-			$personalDocumentsArray[$this->config->item("dokumentTypen")["reisepass"]] = $reisepass->retval[0];
+			$personalDocumentsArray[$this->config->item("dokumentTypen")["reisepass"]] = $reisepass->retval;
 		}
 		
 		if (isSuccess($lebenslauf = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["lebenslauf"])))
 		{
-			$personalDocumentsArray[$this->config->item("dokumentTypen")["lebenslauf"]] = $lebenslauf->retval[0];
+			$personalDocumentsArray[$this->config->item("dokumentTypen")["lebenslauf"]] = $lebenslauf->retval;
 		}
 		
 		$this->setData('personalDocuments', success($personalDocumentsArray));

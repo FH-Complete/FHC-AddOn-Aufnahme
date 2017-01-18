@@ -26,13 +26,23 @@ class Akte_model extends REST_Model
 	 */
 	public function getAktenAccepted($dokumenttyp_kurzbz = null)
 	{
-		return $this->load(
+	    $result = $this->load(
 			'crm/Akte/Aktenaccepted',
 			array(
 				'person_id' => $this->getPersonId(),
 				'dokumenttyp_kurzbz' => $dokumenttyp_kurzbz
 			)
 		);
+
+	    $dokumente = array();
+        foreach($result->retval as $akte)
+        {
+            $dokumente[$akte->dokument_kurzbz] = $akte;
+        }
+
+        $result->retval = $dokumente;
+
+        return $result;
 	}
 	
 	/**

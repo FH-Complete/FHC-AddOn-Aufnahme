@@ -18,6 +18,6 @@ class Sprache_model extends REST_Model
 	 */
 	public function getSprache($sprache = null)
 	{
-		return $this->load('system/Sprache/Sprache', $sprache, 'Sprache.getSprache');
+		return $this->loadOne('system/Sprache/Sprache', array('sprache' => $sprache), 'Sprache.getSprache');
 	}
 }
