@@ -48,9 +48,9 @@ class MY_Loader extends CI_Loader
 		$result = null;
 		$phrasen = null;
 		
-		if (isset($this->session->userdata()['Phrase.getPhrasen']))
+		if (isset($this->session->userdata()['Phrase.getPhrasen:' . $sprache]))
 		{
-			$result = $this->session->userdata()['Phrase.getPhrasen'];
+			$result = $this->session->userdata()['Phrase.getPhrasen:' . $sprache];
 		}
 		
 		if (hasData($result))

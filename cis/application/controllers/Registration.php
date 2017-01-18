@@ -48,6 +48,7 @@ class Registration extends UI_Controller
 		
 		$this->load->model('person/Adresse_model', 'AdresseModel');
 		$this->load->model('person/Person_model', 'PersonModel');
+		$this->load->model('person/Kontakt_model', 'KontaktModel');
 		$this->load->model('system/Phrase_model', 'PhraseModel');
 		$this->load->model('system/Message_model', 'MessageModel');
 	}
@@ -57,20 +58,20 @@ class Registration extends UI_Controller
 	 */
 	public function index()
     {
+		if (isset($this->input->get()['language']))
+		{
+			$this->setCurrentLanguage(strtolower($this->input->get()['language']));
+			$this->setRawData('sprache', strtolower($this->input->get()['language']));
+			$this->lang->load(array('aufnahme', 'login', 'registration'), $this->getData('sprache'));
+		}
+		
 		$this->PhraseModel->getPhrasen(
 			'aufnahme',
 			ucfirst($this->getData('sprache')),
 			REST_Model::AUTH_NOT_REQUIRED
 		);
-		
-		if (isset($this->input->get()['sprache']))
-		{
-			$this->setCurrentLanguage($this->input->get()['sprache']);
-			$this->setData('sprache', $this->input->get()['sprache']);
-			$this->lang->load(array('aufnahme', 'login', 'registration'), $this->getData('sprache'));
-		}
 
-        if(isset($this->input->get()['token']))
+        if (isset($this->input->get()['token']))
         {
             $this->session->set_userdata('token', $this->input->get()['token']);
 
@@ -102,8 +103,6 @@ class Registration extends UI_Controller
 		}
 		else
 		{
-			error_log('adfasdf');
-			
 			$this->setRawData('vorname' ,$this->input->post('vorname'));
 			$this->setRawData('nachname' ,$this->input->post('nachname'));
 			$this->setRawData('geb_datum' ,$this->input->post('geb_datum'));
@@ -206,10 +205,9 @@ class Registration extends UI_Controller
 
 				$person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' +'.$this->config->item('invalidateResendTimestampAfter').' hour'));
 				$person->zugangscode = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
-				$this->_savePerson($person);
-				//$this->PersonModel->savePerson($person);
+				$this->PersonModel->savePerson($person);
 
-				$message = $this->resendMail($person->zugangscode,  $this->_data['email'], $person->person_id);
+				$message = $this->resendMail($person->zugangscode,  $this->getData('email'), $person->person_id);
 				$this->setRawData('message', $message);
 			}
 			else
@@ -229,7 +227,7 @@ class Registration extends UI_Controller
 			}
 		}
 
-		$this->load->view('registration/resendCode', $this->_data);
+		$this->load->view('registration/resendCode', $this->getAllData());
 	}
 	
 	public function confirm()
@@ -331,14 +329,15 @@ class Registration extends UI_Controller
 			if (hasData($bewerbung))
 			{
 				$data['message'] = '<p class="alert alert-danger" id="danger-alert">' . sprintf($this->lang->line('aufnahme/mailadresseBereitsGenutzt'), $data['email']) . '</p>'
-					. '<a href="' . base_url('index.dist.php/Registration/resendCode?email='.$this->_data['email']) . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button></a>';
+					. '<a href="' . base_url('index.dist.php/Registration/resendCode?email='.$this->getData('email')) . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button></a>';
 				$this->load->view('registration', $data);
 			}
 			else
 			{
-				$person = $this->_savePerson($person);
-				if ($this->PersonModel->isResultValid() === true)
+				$savePerson = $this->PersonModel->savePerson((array)$person, REST_Model::AUTH_NOT_REQUIRED);
+				if (hasData($savePerson))
 				{
+					$person_id = $savePerson->retval;
 					$kontakt = new stdClass();
 					$kontakt->person_id = $person_id;
 					$kontakt->kontakttyp = 'email';
@@ -346,22 +345,26 @@ class Registration extends UI_Controller
 					$kontakt->insertamum = date('Y-m-d H:i:s');
 					$kontakt->insertvon = 'online';
 					$kontakt->zustellung = true;
-					$this->Kontakt_model->saveKontakt($kontakt);
+					$kontakt = $this->KontaktModel->saveKontakt((array)$kontakt, REST_Model::AUTH_NOT_REQUIRED);
 
-					//TODO error handling
-					if ($this->Kontakt_model->isResultValid() === true) {
+					if (hasData($kontakt))
+					{
 						//$message = $this->sendMail($zugangscode, $data['email'], $person_id, $data['studiengang_kz']);
-						$this->_data['person'] = $this->_getPerson($person_id);
+						// TODO Why is loaded???
+						$person = $this->PersonModel->getPersonByPersonId($person_id);
+						$this->setData('person', $person);
 
-						if ($this->PersonModel->isResultValid() === true)
+						if (hasData($person))
 						{
-							$this->_sendMessageVorlage($this->_data['person'], $zugangscode, base_url($this->config->config['index_page'].'/Registration/confirm?code='.$zugangscode.'&studiengang_kz='.$data['studiengang_kz']).'&email='.$data['email'], $data['email']);
-
-							//$data['message'] = $message;
-							//       $this->load->view('templates/header');
-							$this->_data['success'] = true;
-							$this->load->view('registration', $this->_data);
-							//       $this->load->view('templates/footer');
+							$this->_sendMessageVorlage(
+								$this->getData('person'),
+								$zugangscode,
+								base_url($this->config->config['index_page'].'/Registration/confirm?code='.$zugangscode.'&studiengang_kz='.$data['studiengang_kz']).'&email='.$data['email'],
+								$data['email']
+							);
+							
+							$this->setRawData('success', true);
+							$this->load->view('registration', $this->getAllData());
 						}
 						else
 						{
@@ -370,46 +373,37 @@ class Registration extends UI_Controller
 					}
 					else
 					{
-						$this->_setError(true, $this->Kontakt_model->getErrorMessage());
+						$this->_setError(true, $kontakt->error . ' ' . $kontakt->fhcCode);
 					}
-
-					//      $adresse = new stdClass();
-					//      $adresse->person_id =$person_id;
-					//      $adresse->heimatadresse = true;
-					//      $adresse->zustelladresse = false;
-					////      $adresse->ort = $data['wohnort'];
-					//
-					//      $this->_saveAdresse($adresse);
 				}
 				else
 				{
-					//error message already set
-					$this->_setError(true, $this->PersonModel->getErrorMessage());
+					//Error message already set
+					$this->_setError(true, $savePerson->error . ' ' . $savePerson->fhcCode);
 				}
 			}
 		}
 		else
 		{
-			$this->_setError(true, $this->PersonModel->getErrorMessage());
+			$this->_setError(true, $bewerbung->error . ' ' . $bewerbung->fhcCode);
 		}
 	}
 
 
 	public function code_login()
 	{
-        $this->_loadModels(array('PersonModel'=>'Person_model'));
 		$studiengang_kz = $this->input->get()['studiengang_kz'];
 		$code = $this->input->post('password');
 		$email = $this->input->post('email');
-		$this->PersonModel->getPersonFromCode($code, $email);
+		$person = $this->PersonModel->getPerson($code, $email);
 
-		if ($this->PersonModel->isResultValid() === true) {
-			if((isset($this->PersonModel->result->retval)) && (count($this->PersonModel->result->retval) == 1))
+		if (isSuccess($person))
+		{
+			if(hasData($person))
 			{
-				$data['person'] = $this->PersonModel->result->retval[0];
-				if (isset($data['person']->person_id))
+				$this->setData('person', $person);
+				if (isset($this->getData('person')->person_id))
 				{
-					$this->session->set_userdata('person_id', $data['person']->person_id);
 					if((isset($studiengang_kz)) && ($studiengang_kz != ''))
 					{
 						redirect('/Studiengaenge/?studiengang_kz='.$studiengang_kz);
@@ -429,51 +423,19 @@ class Registration extends UI_Controller
 				$data['wrong_code'] = true;
 			}
 		}
-		else {
-			$this->_setError(true, $this->PersonModel->getErrorMessage());
+		else
+		{
+			$this->_setError(true, $person->error . ' ' . $person->fhcCode);
 		}
 	}
-
-
-	private function sendMail($zugangscode, $email, $person_id = null, $studiengang_kz = '')
-    {
-		if ($person_id != '') {
-			$this->PersonModel->getPersonen($person_id);
-			if ($this->PersonModel->result->error == 0) {
-				$person = $this->PersonModel->result->retval[0];
-				$vorname = $person->vorname;
-				$nachname = $person->nachname;
-				$geschlecht = $person->geschlecht;
-			} else {
-				return $msg = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
-			}
-		}
-		if ($geschlecht == 'm')
-			$anrede = $this->lang->line('aufnahme/anredeMaennlich');
-		elseif($geschlecht == 'w')
-			$anrede = $this->lang->line('aufnahme/anredeWeiblich');
-		else
-			$anrede = $this->lang->line('aufnahme/anredeUnknown');
-
-		$this->load->library('mail', array('to' => $email, 'from' => 'no-reply', 'subject' => $this->lang->line('aufnahme/registration'), 'text' => $this->lang->line('aufnahme/mailtextHtml')));
-		$text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, $studiengang_kz);
-		$this->mail->setHTMLContent($text);
-		if (!$this->mail->send())
-
-			$msg = '<span class="error">' . $this->getPhrase('Registration/EmailAddressTaken', $this->_data['sprache'], $this->config->item('root_oe')) . '</span><br /><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
-		else
-			$msg = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache'], $this->config->item('root_oe')), $email) . '<br><br><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
-
-		return $msg;
-	}
-
-
+	
 	private function resendMail($zugangscode, $email, $person_id = null)
     {
-		if ($person_id != '') {
-			$this->PersonModel->getPersonen($person_id);
-			if ($this->PersonModel->result->error == 0) {
-				$person = $this->PersonModel->result->retval[0];
+		if ($person_id != '')
+		{
+			$person = $this->PersonModel->getPersonByPersonId($person_id);
+			if (hasData($person))
+			{
 				$vorname = $person->vorname;
 				$nachname = $person->nachname;
 				$geschlecht = $person->geschlecht;
@@ -491,9 +453,13 @@ class Registration extends UI_Controller
 		$text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, NULL, $email);
 		$this->mail->setHTMLContent($text);
 		if (!$this->mail->send())
+		{
 			$msg = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+		}
 		else
+		{
 			$msg = sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . '<br><br><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+		}
 
 		return $msg;
 	}
@@ -507,7 +473,7 @@ class Registration extends UI_Controller
 			'nachname' => $person->nachname,
 			'code' => $code,
 			'link' => $link,
-			'eMailAdresse' => $email,
+			'eMailAdresse' => $email
 		);
 
 		if ($this->config->item('root_oe'))
@@ -515,45 +481,120 @@ class Registration extends UI_Controller
 		else
 			$oe = 'fhstp';
 
-		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->_data['sprache'];
+		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData('sprache');
 
-		$this->MessageModel->sendMessageVorlage('MailRegistrationConfirmation', $oe, $data, $sprache, $orgform_kurzbz=null, null, $person->person_id, false);
+		$messageArray = array(
+			"vorlage_kurzbz" => 'MailRegistrationConfirmation',
+			"oe_kurzbz" => $oe,
+			"data" => $data,
+			"sprache" => ucfirst($sprache),
+			"orgform_kurzbz" => null,
+			"relationmessage_id" => null,
+            "multiPartMime" => false,
+            'receiver_id' => $person->person_id
+		);
+		
+		$message = $this->MessageModel->sendMessageVorlage($messageArray);
 
-		if($this->MessageModel->isResultValid() === true)
+		if (hasData($message))
 		{
-			if((isset($this->MessageModel->result->error)) && ($this->MessageModel->result->error === 0))
+			$this->setRawData(
+				'message',
+				sprintf(
+					$this->getPhrase('Registration/EmailWithAccessCodeSent',
+					$this->getData('sprache'),
+					$this->config->item('root_oe')),
+					$email
+				) . '<br><br><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
+			);
+		}
+		else
+		{
+			$this->setRawData(
+				'message',
+				'<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
+			);
+			$this->_setError(true, $message->error . ' ' . $message->fhcCode);
+		}
+	}
+
+	private function _setError($bool, $msg = null)
+	{
+		$error = new stdClass();
+		$error->error = $bool;
+		$error->msg = $msg;
+		
+		$this->setRawData('error', $error);
+	}
+	
+	function getPhrase($phrase, $sprache, $oe_kurzbz = null, $orgform_kurzbz = null)
+	{
+		$result = null;
+		$phrasen = null;
+		
+		if (isset($this->session->userdata()['Phrase.getPhrasen:' . $sprache]))
+		{
+			$result = $this->session->userdata()['Phrase.getPhrasen:' . $sprache];
+		}
+		
+		if (hasData($result))
+		{
+			$phrasen = $result->retval;
+			
+			if (is_array($phrasen))
 			{
-				$this->_data['message'] = sprintf($this->getPhrase('Registration/EmailWithAccessCodeSent', $this->_data['sprache'], $this->config->item('root_oe')), $email) . '<br><br><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+				$text = "";
+				$sprache = ucfirst($sprache);
+				
+				foreach ($phrasen as $p) 
+				{
+					if($p->phrase == $phrase)
+					{
+						if (($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz) && ($p->sprache == $sprache))
+						{
+							if ($this->config->item('display_phrase_name'))
+								$text = $p->text . " <i>[$p->phrase]</i>";
+							else
+								$text = $p->text;
+						}
+						elseif (($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+						{
+							if ($this->config->item('display_phrase_name'))
+								$text = $p->text . " <i>[$p->phrase]</i>";
+							else
+								$text = $p->text;
+						}
+						elseif (($p->orgeinheit_kurzbz == $this->config->item("root_oe")) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+						{
+							if ($this->config->item('display_phrase_name'))
+								$text = $p->text . " <i>[$p->phrase]</i>";
+							else
+								$text = $p->text;
+						}
+						elseif (($p->orgeinheit_kurzbz == null) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+						{
+							if ($this->config->item('display_phrase_name'))
+								$text = $p->text . " <i>[$p->phrase]</i>";
+							else
+								$text = $p->text;
+						}
+					}
+				}
+
+				if($text != "")
+					return $text;
+				
+				if ($this->config->item('display_phrase_name'))
+					return "<i>[$phrase]</i>";
 			}
 			else
 			{
-				$this->_data['message'] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
+				return $phrasen;
 			}
 		}
 		else
 		{
-			$this->_data['message'] = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
-			$this->_setError(true, $this->MessageModel->getErrorMessage());
+			return "Please load phrases first";
 		}
-	}
-
-	private function _checkZugangscodePerson($code)
-	{
-		$this->PersonModel->checkZugangscodePerson(array('code' => $code));
-		if($this->PersonModel->isResultValid() === true)
-		{
-			return $this->PersonModel->result->retval;
-		}
-		else
-		{
-			$this->_setError(true, $this->PersonModel->getErrorMessage());
-		}
-	}
-	
-	private function _setError($bool, $msg = null)
-	{
-		$this->setRawData('error') = new stdClass();
-		$this->setRawData('error')->error = $bool;
-		$this->setRawData('error')->msg = $msg;
 	}
 }

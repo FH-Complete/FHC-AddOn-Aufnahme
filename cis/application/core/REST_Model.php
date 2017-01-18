@@ -69,7 +69,7 @@ class REST_Model extends CI_Model
 		
 		if (hasData($result))
 		{
-			if (is_array($result->retval) && !empty($result->retval))
+			if (is_array($result->retval))
 			{
 				$result = success($result->retval[0], $result->fhcCode);
 			}
@@ -87,9 +87,9 @@ class REST_Model extends CI_Model
 	/**
 	 * 
 	 */
-	public function save($resource, $parameters, $sessionName = null)
+	public function save($resource, $parameters, $sessionName = null, $authNotRequired = false)
 	{
-		if ($this->_logged())
+		if ($authNotRequired || $this->_logged())
 		{
 			if (is_array($parameters) && count($parameters) > 0)
 			{

@@ -19,6 +19,10 @@ class MY_Controller extends CI_Controller
 		parent::__construct();
         $this->_loadConfigs(array('aufnahme', "message"));
 		$this->output->enable_profiler($this->config->item('profiler'));
+		
+		// Load return message helper
+		$this->load->helper('message');
+		
 		//$this->load->helper('url');
 		$this->load->library('session');
 		/*$this->load->model("phrase_model", "PhraseModel");
@@ -75,9 +79,16 @@ class MY_Controller extends CI_Controller
 	 */
 	public function checkLogin()
 	{
-		if (is_null($this->session->person_id))
+		if (isset($this->session->{$this->_personSessionName}))
 		{
-			redirect("/Registration");
+			$person = $this->session->{$this->_personSessionName};
+			if (hasData($person))
+			{
+				if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+				{
+					redirect("/Registration");
+				}
+			}
 		}
 	}
 

@@ -51,7 +51,8 @@ function isSuccess($result)
 function hasData($result)
 {
 	if (isSuccess($result) && isset($result->retval)
-		&& (isset($result->retval) || (is_array($result->retval) && count($result->retval) > 0)))
+		&& ((isset($result->retval) && !is_array($result->retval))
+			|| (is_array($result->retval) && count($result->retval) > 0)))
 	{
 		return true;
 	}

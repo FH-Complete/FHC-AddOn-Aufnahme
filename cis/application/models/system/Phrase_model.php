@@ -24,7 +24,7 @@ class Phrase_model extends REST_Model
 				'app' => $app,
 				'sprache' => $sprache
 			),
-			'Phrase.getPhrasen',
+			'Phrase.getPhrasen:' . strtolower($sprache),
 			$authNotRequired
 		);
 		
@@ -34,19 +34,19 @@ class Phrase_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getPhrase($phraseToSearchFor)
-	{
-		$phrases = $this->session->{'Phrase.getPhrasen'};
-		
-		if (hasData($phrases))
-		{
-			foreach ($phrases->retval as $phrase)
-			{
-				if ($phrase->phrase == $phraseToSearchFor)
-				{
-					return $phrase->text;
-				}
-			}
-		}
-	}
+// 	public function getPhrase($phraseToSearchFor)
+// 	{
+// 		$phrases = $this->session->{'Phrase.getPhrasen'};
+// 		
+// 		if (hasData($phrases))
+// 		{
+// 			foreach ($phrases->retval as $phrase)
+// 			{
+// 				if ($phrase->phrase == $phraseToSearchFor)
+// 				{
+// 					return $phrase->text;
+// 				}
+// 			}
+// 		}
+// 	}
 }

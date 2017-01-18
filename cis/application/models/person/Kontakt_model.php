@@ -40,8 +40,8 @@ class Kontakt_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function saveKontakt($parameters)
+	public function saveKontakt($parameters, $authNotRequired = false)
 	{
-		return $this->save('person/Kontakt/Kontakt', $parameters, 'Kontakt.getKontakt');
+		return $this->save('person/Kontakt/Kontakt', $parameters, 'Kontakt.getKontakt', $authNotRequired);
 	}
 }

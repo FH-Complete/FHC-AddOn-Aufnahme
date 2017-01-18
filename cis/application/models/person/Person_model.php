@@ -50,17 +50,22 @@ class Person_model extends REST_Model
 	 */
 	public function checkBewerbung($email, $studiensemester_kurzbz = null)
 	{
-		return $this->load('person/Person/CheckBewerbung', array(
-			'email' => $email,
-			'studiensemester_kurzbz' => $studiensemester_kurzbz
-		));
+		return $this->load(
+			'person/Person/CheckBewerbung',
+			array(
+				'email' => $email,
+				'studiensemester_kurzbz' => $studiensemester_kurzbz
+			),
+			null,
+			Parent::AUTH_NOT_REQUIRED
+		);
 	}
 	
 	/**
 	 * 
 	 */
-	public function savePerson($parameters)
+	public function savePerson($parameters, $authNotRequired = false)
 	{
-		return $this->save('person/Person/Person', $parameters, 'Person.getPerson');
+		return $this->save('person/Person/Person', $parameters, 'Person.getPerson', $authNotRequired);
 	}
 }
