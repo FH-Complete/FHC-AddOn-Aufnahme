@@ -754,7 +754,7 @@ if (!isset($plz)) $plz = null;
 	</div>
 	<div class="row form-upload <?php echo ((!isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && $incomplete)) ? 'has-error' : '' ?>">
 		<div class="col-sm-2">
-			<?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["reisepass"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]."*", "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
+			<?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["reisepass"]]->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index-1]."*", "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
 		</div>
 		<?php
 		if(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype))
@@ -857,7 +857,7 @@ if (!isset($plz)) $plz = null;
 	</div>
 	<div class="row form-upload <?php echo ((!isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && $incomplete)) ? 'has-error' : '' ?>">
 		<div class="col-sm-2">
-			<?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["lebenslauf"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]."*"."&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?><span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="inklusive Foto"></span>
+			<?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["lebenslauf"]]->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index-1]."*"."&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?><span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="inklusive Foto"></span>
 		</div>
 		<?php
 		if((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype !== null))

@@ -36,7 +36,7 @@ class UI_Controller extends CI_Controller
 		$this->load->model('CheckUserAuth_model', 'CheckUserAuthModel');
 
         // Loading the
-        $this->load->model('Sprache_model', 'SpracheModel');
+        $this->load->model('system/Sprache_model', 'SpracheModel');
 		
 		// 
 		if ($checkLogin === true)
