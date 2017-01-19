@@ -300,10 +300,7 @@ class Summary extends MY_Controller
 
 	private function _loadPrestudentStatus($prestudent_id)
 	{
-		//$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->_studiensemester_kurzbz, "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
-		
 		$studiensemester = $this->session->userdata()["Studiensemester.getNextStudiensemester"];
-		
 		if (isset($studiensemester) && isset($studiensemester->retval) && is_object($studiensemester->retval))
 		{
 			$this->_studiensemester_kurzbz = $studiensemester->retval->studiensemester_kurzbz;

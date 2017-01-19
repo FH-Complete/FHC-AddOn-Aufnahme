@@ -6,15 +6,24 @@
  */
 
 
-class Send extends MY_Controller {
+class Send extends MY_Controller
+{
+	private $_person_id;
+	private $_studiensemester_kurzbz;
 
 	/**
 	 *
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
+		
         $this->_data['sprache'] = $this->get_language();
+        
 		$this->lang->load('send', $this->_data['sprache']);
+		
+		$this->load->helper("form");
+		
 		$this->load->model('studiengang_model', "StudiengangModel");
 		$this->load->model('studienplan_model', "StudienplanModel");
 		$this->load->model('prestudent_model', "PrestudentModel");
@@ -27,7 +36,6 @@ class Send extends MY_Controller {
 		$this->load->model('DokumentStudiengang_model', "DokumentStudiengangModel");
 		$this->load->model('Dokumentprestudent_model', "DokumentPrestudentModel");
 		$this->load->model('dokument_model', "DokumentModel");
-		$this->load->helper("form");
 	}
 
 	/**
@@ -36,6 +44,20 @@ class Send extends MY_Controller {
 	public function index()
 	{
 		$this->checkLogin();
+		
+		$person = null;
+		if (isset($this->session->{'Person.getPerson'}))
+		{
+			$person = $this->session->{'Person.getPerson'};
+			if (hasData($person))
+			{
+				if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+				{
+					$this->_person_id = $person->retval->person_id;
+				}
+			}
+		}
+		
         $this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 //		$this->_data['sprache'] = $this->get_language();
 		$this->_loadLanguage($this->_data["sprache"]);
@@ -79,6 +101,7 @@ class Send extends MY_Controller {
                 {
                     $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
                     $studiengang->studienplan = $studienplan;
+                    $studiengang->studienplaene = array($studienplan);
 
                     if ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
                     {
@@ -102,7 +125,7 @@ class Send extends MY_Controller {
 		//}
 
 		//load dokumente
-		$this->_loadDokumente($this->session->userdata()["person_id"]);
+		$this->_loadDokumente($this->_person_id);
 		
 		$reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
 		$lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
@@ -165,6 +188,7 @@ class Send extends MY_Controller {
                 {
                     $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
                     $studiengang->studienplan = $studienplan;
+                    $studiengang->studienplaene = array($studienplan);
 
                     if ($prestudent->prestudentStatus->bewerbung_abgeschicktamum != null)
                     {
@@ -188,7 +212,7 @@ class Send extends MY_Controller {
 		//}
 
 		//load dokumente
-		$this->_loadDokumente($this->session->userdata()["person_id"]);
+		$this->_loadDokumente($this->_person_id);
 		
 		$this->_data["completenessError"] = $this->_checkDataCompleteness();
 
@@ -309,7 +333,7 @@ class Send extends MY_Controller {
 
 	private function _loadPrestudent()
 	{
-		$this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"]));
+		$this->PrestudentModel->getPrestudent(array("person_id"=>$this->_person_id));
 		if($this->PrestudentModel->isResultValid() === true)
 		{
 			return $this->PrestudentModel->result->retval;
@@ -323,8 +347,13 @@ class Send extends MY_Controller {
 
 	private function _loadPrestudentStatus($prestudent_id)
 	{
-		//$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
-		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
+		$studiensemester = $this->session->userdata()["Studiensemester.getNextStudiensemester"];
+		if (isset($studiensemester) && isset($studiensemester->retval) && is_object($studiensemester->retval))
+		{
+			$this->_studiensemester_kurzbz = $studiensemester->retval->studiensemester_kurzbz;
+		}
+		
+		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->_studiensemester_kurzbz, "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
 		if($this->PrestudentStatusModel->isResultValid() === true)
 		{
 			if (($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
@@ -359,7 +388,7 @@ class Send extends MY_Controller {
 
 	private function _loadPerson()
 	{
-		$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
+		$this->PersonModel->getPersonen(array("person_id"=>$this->_person_id));
 		if($this->PersonModel->isResultValid() === true)
 		{
 			if(count($this->PersonModel->result->retval) == 1)
@@ -466,7 +495,7 @@ class Send extends MY_Controller {
 
 	private function _loadAdresse()
 	{
-		$this->AdresseModel->getAdresse($this->session->userdata()["person_id"]);
+		$this->AdresseModel->getAdresse($this->_person_id);
 		if($this->AdresseModel->isResultValid() === true)
 		{
 			foreach($this->AdresseModel->result->retval as $adresse)
@@ -490,7 +519,7 @@ class Send extends MY_Controller {
 
 	private function _loadKontakt()
 	{
-		$this->KontaktModel->getKontakt($this->session->userdata()["person_id"]);
+		$this->KontaktModel->getKontakt($this->_person_id);
 		if($this->KontaktModel->isResultValid() === true)
 		{
 			foreach($this->KontaktModel->result->retval as $value)
