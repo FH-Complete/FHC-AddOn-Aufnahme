@@ -45,6 +45,10 @@ class Login extends UI_Controller
 		{
 			$this->setRawData('studiengang_kz', $this->input->get('studiengang_kz'));
 		}
+		else
+        {
+            $this->setRawData('studiengang_kz', "");
+        }
 		
 		$this->setRawData('username', $this->input->post('username'));
 		$this->setRawData('email', $this->input->post('email'));
@@ -164,8 +168,8 @@ class Login extends UI_Controller
 				'Interessent'
 			);
 		}
-		
-		if (hasData($prestudent))
+
+		if (hasData($prestudent) || (isSuccess($prestudent) && empty($prestudent->retval)))
 		{
 			$this->setData('prestudent', $prestudent);
 			
