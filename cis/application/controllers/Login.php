@@ -45,6 +45,11 @@ class Login extends UI_Controller
 		{
 			$this->setRawData('studiengang_kz', $this->input->get('studiengang_kz'));
 		}
+		else
+		{
+			$this->setRawData('studiengang_kz', null);
+		}
+		
 		
 		$this->setRawData('username', $this->input->post('username'));
 		$this->setRawData('email', $this->input->post('email'));
