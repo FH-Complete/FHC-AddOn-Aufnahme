@@ -97,7 +97,7 @@ class REST_Model extends CI_Model
 				
 				if (isSuccess($result) && isset($sessionName) && isset($this->session->{$sessionName}))
 				{
-					unset($this->session->{$sessionName});
+					unset($this->session->userdata[$sessionName]);
 				}
 				
 				return $result;
@@ -126,7 +126,7 @@ class REST_Model extends CI_Model
 				
 				if (isSuccess($result) && isset($sessionName) && isset($this->session->{$sessionName}))
 				{
-					unset($this->session->{$sessionName});
+                    unset($this->session->userdata[$sessionName]);
 				}
 				
 				return $result;
