@@ -146,6 +146,19 @@ class Send extends MY_Controller
 	{
 		$this->checkLogin();
 
+        $person = null;
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
+
 		$this->_loadModels(array(
             'StudiengangstypModel'=>'studiengangstyp_model'
         ));
@@ -258,12 +271,10 @@ class Send extends MY_Controller
 							array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]);
 						}
 
-						if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]))
+						if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$this->_data["studiengang"]->typ]]))
 						{
-							array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["abschlusszeugnis"]);
+							array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["abschlusszeugnis_".$this->_data["studiengang"]->typ]);
 						}
-
-
 
 						if(is_null($prestudentStatus->bewerbung_abgeschicktamum))
 						{

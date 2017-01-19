@@ -8,7 +8,10 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Dokumente extends MY_Controller {
+class Dokumente extends MY_Controller
+{
+    private $_person_id;
+    private $_studiensemester_kurzbz;
 
 	/**
 	 * Index Page for this controller.
@@ -48,8 +51,22 @@ class Dokumente extends MY_Controller {
 	/**
 	 *
 	 */
-	public function index() {
+	public function index()
+    {
 		$this->checkLogin();
+
+        $person = null;
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
 
         $this->_loadModels(array(
             "PersonModel" => "person_model",
@@ -156,7 +173,7 @@ class Dokumente extends MY_Controller {
 				}
 
 				//load dokumente
-				$this->_loadDokumente($this->session->userdata()["person_id"]);
+				$this->_loadDokumente($this->_person_id);
 				foreach($this->_data["dokumente"] as $akte)
 				{
 					if($akte->dms_id != null)
@@ -187,7 +204,7 @@ class Dokumente extends MY_Controller {
 		$this->_data["prestudent"] = $this->_loadPrestudent();
 
 		//load dokumente
-		$this->_loadDokumente($this->session->userdata()["person_id"]);
+		$this->_loadDokumente($this->_person_id);
 		
 		foreach($this->_data["dokumente"] as $akte)
 		{
@@ -260,17 +277,17 @@ class Dokumente extends MY_Controller {
 			}
 			$this->_data["docs"][$this->config->config["dokumentTypen"]["lebenslauf"]]->studiengaenge[$stg->studiengang_kz] = $stg;
 			
-			if((!isset($this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]])) || ($this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]] ==null))
+			if((!isset($this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$stg->typ]])) || ($this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$stg->typ]] ==null))
 			{
-				$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]] = $this->_getDokument($this->config->config["dokumentTypen"]["abschlusszeugnis"]);
-				$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->studiengaenge = array();
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$stg->typ]] = $this->_getDokument($this->config->config["dokumentTypen"]["abschlusszeugnis_".$stg->typ]);
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$stg->typ]]->studiengaenge = array();
 			}
 
-			if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]))
+			if(isset($this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$stg->typ]]))
 			{
-				$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->dokument = $this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]];
+				$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$stg->typ]]->dokument = $this->_data["dokumente"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$stg->typ]];
 			}
-			$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis"]]->studiengaenge[$stg->studiengang_kz] = $stg;
+			$this->_data["docs"][$this->config->config["dokumentTypen"]["abschlusszeugnis_".$stg->typ]]->studiengaenge[$stg->studiengang_kz] = $stg;
 		}
 	}
 	
@@ -289,7 +306,7 @@ class Dokumente extends MY_Controller {
             ));
 
 			$dms_id = $this->input->post()["dms_id"];
-			$this->_loadDokumente($this->session->userdata()["person_id"]);
+			$this->_loadDokumente($this->_person_id);
 
 			foreach($this->_data["dokumente"] as $dok)
 			{
@@ -332,7 +349,7 @@ class Dokumente extends MY_Controller {
 			$this->_data["prestudent"] = $this->_loadPrestudent();
 
 			//load dokumente
-			$this->_loadDokumente($this->session->userdata()["person_id"]);
+			$this->_loadDokumente($this->_person_id);
 
 			foreach($this->_data["dokumente"] as $akte)
 			{
@@ -525,7 +542,7 @@ class Dokumente extends MY_Controller {
 
 	private function _loadPerson()
 	{
-		$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
+		$this->PersonModel->getPersonen(array("person_id"=>$this->_person_id));
 		if($this->PersonModel->isResultValid() === true)
 		{
 			if(count($this->PersonModel->result->retval) == 1)
@@ -546,7 +563,7 @@ class Dokumente extends MY_Controller {
 
 	private function _loadPrestudent()
 	{
-		$this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"]));
+		$this->PrestudentModel->getPrestudent(array("person_id"=>$this->_person_id));
 		if($this->PrestudentModel->isResultValid() === true)
 		{
 			return $this->PrestudentModel->result->retval;
@@ -560,7 +577,13 @@ class Dokumente extends MY_Controller {
 
 	private function _loadPrestudentStatus($prestudent_id)
 	{
-		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "status_kurzbz"=>"Interessent", "ausbildungssemester"=>1));
+        $studiensemester = $this->session->userdata()["Studiensemester.getNextStudiensemester"];
+        if (isset($studiensemester) && isset($studiensemester->retval) && is_object($studiensemester->retval))
+        {
+            $this->_studiensemester_kurzbz = $studiensemester->retval->studiensemester_kurzbz;
+        }
+
+		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->_studiensemester_kurzbz, "status_kurzbz"=>"Interessent", "ausbildungssemester"=>1));
 //		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>'', "ausbildungssemester"=>1));
 		if($this->PrestudentStatusModel->isResultValid() === true)
 		{
@@ -738,12 +761,12 @@ class Dokumente extends MY_Controller {
             "DokumentStudiengangModel" => "dokumentStudiengang_model"
         ));
 
-		if(isset($this->session->userdata()["person_id"]))
+		if(isset($this->_person_id))
 		{
 			$result = new stdClass();
 			$result->complete = true;
 			//load dokumente
-			$this->_loadDokumente($this->session->userdata()["person_id"]);
+			$this->_loadDokumente($this->_person_id);
 			$this->_data["prestudent"] = $this->_loadPrestudent();
 			
 			//var_dump($this->_data["prestudent"]);

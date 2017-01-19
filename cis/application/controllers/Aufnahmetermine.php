@@ -8,7 +8,10 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Aufnahmetermine extends MY_Controller {
+class Aufnahmetermine extends MY_Controller
+{
+    private $_person_id;
+    private $_studiensemester_kurzbz;
 
 	/**
 	 * Index Page for this controller.
@@ -48,6 +51,19 @@ class Aufnahmetermine extends MY_Controller {
 	 */
 	public function index() {
 		$this->checkLogin();
+
+        $person = null;
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
 		
 		//workaround for inserting code for Google Tag Manager
 		if(isset($this->input->get()["send"]))
@@ -92,7 +108,7 @@ class Aufnahmetermine extends MY_Controller {
 						if (($anmeldung->studiengang_kz === $studiengang_kz) && ($anmeldung->studienplan_id === $studienplan_id) && ($anmeldung->reihungstest_id !== $this->input->post()["rtTermin"]))
 						{
 							$this->_deleteRegistrationToReihungstest($anmeldung);
-							$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"], $studienplan_id);
+							$this->_registerToReihungstest($this->_person_id, $this->input->post()["rtTermin"], $studienplan_id);
 							foreach($this->_data["studiengaenge"] as $studiengang)
 							{
 								if($studiengang->studiengang_kz === $studiengang_kz)
@@ -105,7 +121,7 @@ class Aufnahmetermine extends MY_Controller {
 						//register if there are existing registrations for other studienplan of same stg
 						elseif(($anmeldung->studiengang_kz === $studiengang_kz) && ($anmeldung->studienplan_id != $studienplan_id) && ($anmeldung->reihungstest_id !== $this->input->post()["rtTermin"]))
 						{
-							$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"], $studienplan_id);
+							$this->_registerToReihungstest($this->_person_id, $this->input->post()["rtTermin"], $studienplan_id);
 							foreach($this->_data["studiengaenge"] as $studiengang)
 							{
 								if($studiengang->studiengang_kz === $studiengang_kz)
@@ -120,7 +136,7 @@ class Aufnahmetermine extends MY_Controller {
 			}
 			else
 			{
-				$this->_registerToReihungstest($this->session->userdata()["person_id"], $this->input->post()["rtTermin"], $studienplan_id);
+				$this->_registerToReihungstest($this->_person_id, $this->input->post()["rtTermin"], $studienplan_id);
 				foreach($this->_data["studiengaenge"] as $studiengang)
 				{
 					if($studiengang->studiengang_kz === $studiengang_kz)
@@ -289,7 +305,7 @@ class Aufnahmetermine extends MY_Controller {
 
 	private function _loadPerson()
 	{
-		$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
+		$this->PersonModel->getPersonen(array("person_id"=>$this->_person_id));
 		if($this->PersonModel->isResultValid() === true)
 		{
 			if(count($this->PersonModel->result->retval) == 1)
@@ -310,7 +326,7 @@ class Aufnahmetermine extends MY_Controller {
 
 	private function _loadPrestudent()
 	{
-		$this->PrestudentModel->getPrestudent(array("person_id"=>$this->session->userdata()["person_id"]));
+		$this->PrestudentModel->getPrestudent(array("person_id"=>$this->_person_id));
 		if($this->PrestudentModel->isResultValid() === true)
 		{
 			return $this->PrestudentModel->result->retval;
@@ -324,8 +340,13 @@ class Aufnahmetermine extends MY_Controller {
 
 	private function _loadPrestudentStatus($prestudent_id)
 	{
+        $studiensemester = $this->session->userdata()["Studiensemester.getNextStudiensemester"];
+        if (isset($studiensemester) && isset($studiensemester->retval) && is_object($studiensemester->retval))
+        {
+            $this->_studiensemester_kurzbz = $studiensemester->retval->studiensemester_kurzbz;
+        }
 		//$this->PrestudentStatusModel->getPrestudentStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
-		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->session->userdata()["studiensemester_kurzbz"], "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
+		$this->PrestudentStatusModel->getLastStatus(array("prestudent_id"=>$prestudent_id, "studiensemester_kurzbz"=>$this->_studiensemester_kurzbz, "ausbildungssemester"=>1, "status_kurzbz"=>"Interessent"));
 		if($this->PrestudentStatusModel->isResultValid() === true)
 		{
 			if(($this->PrestudentStatusModel->result->error == 0) && (count($this->PrestudentStatusModel->result->retval) == 1))
