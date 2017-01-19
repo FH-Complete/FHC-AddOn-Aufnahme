@@ -201,7 +201,7 @@ class Registration extends UI_Controller
 
 			if (hasData($bewerbung))
 			{
-				$person = $this->PersonModel->getPersonByPersonId($person->person_id);
+				$person = $this->PersonModel->getPersonByPersonId($bewerbung->retval->person_id)->retval;
 
 				$person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' +'.$this->config->item('invalidateResendTimestampAfter').' hour'));
 				$person->zugangscode = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
@@ -266,15 +266,16 @@ class Registration extends UI_Controller
 		
 		$person = $this->PersonModel->getPerson($this->session->userdata()['zugangscode'], $this->getData('email'));
 		$this->setData('person', $person);
+
 		if (hasData($person))
 		{
 			//check if timestamp code is not older than now
-			if (strtotime(date('Y-m-d H:i:s')) < strtotime($person->zugangscode_timestamp))
+			if (strtotime(date('Y-m-d H:i:s')) < strtotime($person->retval->zugangscode_timestamp))
 			{
 				$this->setRawData('zugangscode', substr(md5(openssl_random_pseudo_bytes(20)), 0, 10));
 				$this->session->set_userdata('zugangscode', $this->getData('zugangscode'));
 				$person->zugangscode =  $this->getData('zugangscode');
-				$this->PersonModel->updatePerson($person);
+				$this->PersonModel->savePerson($person);
 				$this->load->view('login/confirm_login',  $this->getAllData());
 			}
 			else
@@ -436,9 +437,9 @@ class Registration extends UI_Controller
 			$person = $this->PersonModel->getPersonByPersonId($person_id);
 			if (hasData($person))
 			{
-				$vorname = $person->vorname;
-				$nachname = $person->nachname;
-				$geschlecht = $person->geschlecht;
+				$vorname = $person->retval->vorname;
+				$nachname = $person->retval->nachname;
+				$geschlecht = $person->retval->geschlecht;
 			}
 		}
 

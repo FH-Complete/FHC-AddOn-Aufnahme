@@ -50,7 +50,7 @@ class Person_model extends REST_Model
 	 */
 	public function checkBewerbung($email, $studiensemester_kurzbz = null)
 	{
-		return $this->load(
+		return $this->loadOne(
 			'person/Person/CheckBewerbung',
 			array(
 				'email' => $email,
