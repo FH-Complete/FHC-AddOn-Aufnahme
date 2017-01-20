@@ -31,13 +31,16 @@ class Dms_model extends REST_Model
 			array('person_id' => $this->getPersonId(), 'dokument_kurzbz' => $dokument_kurzbz)
 		);
 
-        $dokumente = array();
-        foreach($result->retval as $akte)
-        {
-            $dokumente[$akte->dokument_kurzbz] = $akte;
-        }
-
-        $result->retval = $dokumente;
+		if (isSuccess($result))
+		{
+			$dokumente = array();
+			foreach($result->retval as $akte)
+			{
+				$dokumente[$akte->dokument_kurzbz] = $akte;
+			}
+			
+			$result->retval = $dokumente;
+		}
 
         return $result;
 	}

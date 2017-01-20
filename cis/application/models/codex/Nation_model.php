@@ -44,4 +44,25 @@ class Nation_model extends REST_Model
 		
 		return success($nationsArray);
 	}
+	
+	public function getNation($kurztext)
+	{
+		$result = $nations = $this->load('codex/Nation/All', null, 'Nation.getNation');
+		
+		if (isSuccess($nations))
+		{
+			$result = null;
+			foreach($nations->retval as $nation)
+			{
+				if ($nation->kurztext == $kurztext)
+				{
+					$result = $nation;
+					$this->storeSession('Nation.getNation', $result);
+					break;
+				}
+			}
+		}
+		
+		return $result;
+	}
 }

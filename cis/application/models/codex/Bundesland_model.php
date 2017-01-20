@@ -36,4 +36,24 @@ class Bundesland_model extends REST_Model
 		
 		return success($bundeslaenderArray);
 	}
+	
+	public function getBundesland($code)
+	{
+		$result = $bundeslaender = $this->load('codex/Bundesland/All', null, 'Bundesland.getBundesland');
+		
+		if (isSuccess($bundeslaender))
+		{
+			foreach($bundeslaender->retval as $bundesland)
+			{
+				if ($bundesland->bundesland_code == $code)
+				{
+					$result = $bundesland;
+					$this->storeSession('Bundesland.getBundesland', $result);
+					break;
+				}
+			}
+		}
+		
+		return $result;
+	}
 }
