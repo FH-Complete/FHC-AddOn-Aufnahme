@@ -881,7 +881,7 @@ class Bewerbung extends UI_Controller
             usort($this->_data["studiengaenge"], array($this, "cmpStg"));
         }
         //load dokumente*/
-        $this->setRawData('dokumente' , $this->AkteModel->getAktenAccepted()->retval);
+        /*$this->setRawData('dokumente' , $this->AkteModel->getAktenAccepted()->retval);
         foreach($this->getData("dokumente") as $akte)
         {
             if ($akte->dms_id != null)
@@ -889,7 +889,7 @@ class Bewerbung extends UI_Controller
                 $dms = $this->DmsModel->getDms($akte->dms_id)->retval;
                 $akte->dokument = $dms;
             }
-        }
+        }*/
         /*
         $this->_data["complete"] = $this->_checkDataCompleteness();
         */
