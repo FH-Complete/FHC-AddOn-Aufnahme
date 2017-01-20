@@ -30,7 +30,7 @@ else {
 		echo "<ul class='list'>";
 		foreach($completenessError["dokumente"][$studiengang->studiengang_kz] as $error=>$value)
 		{
-			echo "<li>".$value->bezeichnung_mehrsprachig[$this->session->sprache->index-1]."</li>";
+			echo "<li>".$value->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index-1]."</li>";
 		}
 		echo "</ul>";
 	}

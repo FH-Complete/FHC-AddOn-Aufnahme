@@ -33,21 +33,21 @@
 			<?php
 			if((isset($dokumente[$dok->dokument_kurzbz]->mimetype)) && ($dokumente[$dok->dokument_kurzbz]->mimetype !== null))
 			{
-				if(isset($dokumente[$dok->dokument_kurzbz]->dokument))
+				if(isset($dokumente[$dok->dokument_kurzbz]->name))
 				{
-					if(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".docx") !== false)
+					if(strpos($dokumente[$dok->dokument_kurzbz]->name, ".docx") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".doc") !== false)
+					elseif(strpos($dokumente[$dok->dokument_kurzbz]->name, ".doc") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".pdf") !== false)
+					elseif(strpos($dokumente[$dok->dokument_kurzbz]->name, ".pdf") !== false)
 					{
 						$logo = "document-pdf.svg";
 					}
-					elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".jpg") !== false)
+					elseif(strpos($dokumente[$dok->dokument_kurzbz]->name, ".jpg") !== false)
 					{
 						$logo = "document-picture.svg";
 					}
@@ -86,7 +86,7 @@
                         }
                         elseif($dokumente[$dok->dokument_kurzbz]->dms_id !== null)
                         {
-                            echo $dokumente[$dok->dokument_kurzbz]->dokument->name."</br>";
+                            echo $dokumente[$dok->dokument_kurzbz]->name."</br>";
                             echo $this->lang->line('requirements_DokHochgeladen');
                         }
                         ?>

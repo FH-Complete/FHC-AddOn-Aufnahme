@@ -34,7 +34,7 @@
 						<?php echo $this->lang->line('msg_answer'); ?>
 					</button>
 				</a>-->
-				<a href="<?php echo base_url($this->config->config['index_page'].'/Messages/deleteMessage/'.$msg->message_id); ?>">
+				<a href="<?php echo base_url($this->config->config['index_page'].'/Messages/deleteSentMessage/'.$msg->message_id); ?>">
 					<button class="btn btn-sm btn-primary" id="delete_<?php echo $msg->message_id; ?>"><span class="glyphicon glyphicon-trash"></span></button>
 				</a>
 			</div>

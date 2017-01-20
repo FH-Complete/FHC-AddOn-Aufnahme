@@ -33,6 +33,11 @@ class Kontakt_model extends REST_Model
 				$this->storeSession('Kontakt.getKontakt', $kontaktsArray);
 			}
 		}
+		elseif($kontakts !== null)
+        {
+            $this->storeSession('Kontakt.getKontakt', $kontakts);
+            $kontaktsArray = $kontakts;
+        }
 		
 		return success($kontaktsArray);
 	}

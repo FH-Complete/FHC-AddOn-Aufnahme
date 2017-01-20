@@ -51,6 +51,12 @@ class Registration extends UI_Controller
 		$this->load->model('person/Kontakt_model', 'KontaktModel');
 		$this->load->model('system/Phrase_model', 'PhraseModel');
 		$this->load->model('system/Message_model', 'MessageModel');
+
+        $this->PhraseModel->getPhrasen(
+            'aufnahme',
+            ucfirst($this->getData('sprache')),
+            REST_Model::AUTH_NOT_REQUIRED
+        );
 	}
 	
 	/**
@@ -64,12 +70,6 @@ class Registration extends UI_Controller
 			$this->setRawData('sprache', strtolower($this->input->get()['language']));
 			$this->lang->load(array('aufnahme', 'login', 'registration'), $this->getData('sprache'));
 		}
-		
-		$this->PhraseModel->getPhrasen(
-			'aufnahme',
-			ucfirst($this->getData('sprache')),
-			REST_Model::AUTH_NOT_REQUIRED
-		);
 
         if (isset($this->input->get()['token']))
         {
@@ -201,14 +201,22 @@ class Registration extends UI_Controller
 
 			if (hasData($bewerbung))
 			{
-				$person = $this->PersonModel->getPersonByPersonId($bewerbung->retval->person_id)->retval;
+				$person = $this->PersonModel->getPersonByPersonId($bewerbung->retval->person_id);
 
-				$person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' +'.$this->config->item('invalidateResendTimestampAfter').' hour'));
-				$person->zugangscode = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
-				$this->PersonModel->savePerson($person);
+				if(hasData($person))
+                {
+                    $person = $person->retval;
+                    $person->zugangscode_timestamp = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' +' . $this->config->item('invalidateResendTimestampAfter') . ' hour'));
+                    $person->zugangscode = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
+                    $this->PersonModel->savePerson((array)$person);
 
-				$message = $this->resendMail($person->zugangscode,  $this->getData('email'), $person->person_id);
-				$this->setRawData('message', $message);
+                    $message = $this->resendMail($person->zugangscode, $this->getData('email'), $person->person_id);
+                    $this->setRawData('message', $message);
+                }
+                else
+                {
+                    $this->_setError(true, "Person nicht gefunden.");
+                }
 			}
 			else
 			{
@@ -272,10 +280,11 @@ class Registration extends UI_Controller
 			//check if timestamp code is not older than now
 			if (strtotime(date('Y-m-d H:i:s')) < strtotime($person->retval->zugangscode_timestamp))
 			{
+			    $person = $person->retval;
 				$this->setRawData('zugangscode', substr(md5(openssl_random_pseudo_bytes(20)), 0, 10));
 				$this->session->set_userdata('zugangscode', $this->getData('zugangscode'));
 				$person->zugangscode =  $this->getData('zugangscode');
-				$this->PersonModel->savePerson($person);
+				$this->PersonModel->savePerson((array)$person);
 				$this->load->view('login/confirm_login',  $this->getAllData());
 			}
 			else
@@ -325,6 +334,7 @@ class Registration extends UI_Controller
 		$person->sprache = ucfirst($this->getData('sprache'));
 
 		$bewerbung = $this->PersonModel->checkBewerbung($this->getData('email'));
+
 		if (isSuccess($bewerbung))
 		{
 			if (hasData($bewerbung))
@@ -336,9 +346,10 @@ class Registration extends UI_Controller
 			else
 			{
 				$savePerson = $this->PersonModel->savePerson((array)$person, REST_Model::AUTH_NOT_REQUIRED);
+
 				if (hasData($savePerson))
 				{
-					$person_id = $savePerson->retval;
+					$person_id = $savePerson->retval->person_id;
 					$kontakt = new stdClass();
 					$kontakt->person_id = $person_id;
 					$kontakt->kontakttyp = 'email';
@@ -354,7 +365,6 @@ class Registration extends UI_Controller
 						// TODO Why is loaded???
 						$person = $this->PersonModel->getPersonByPersonId($person_id);
 						$this->setData('person', $person);
-
 						if (hasData($person))
 						{
 							$this->_sendMessageVorlage(
@@ -369,7 +379,7 @@ class Registration extends UI_Controller
 						}
 						else
 						{
-							//error message already setn
+                            $this->_setError(true, $person->error . ' ' . $person->fhcCode);
 						}
 					}
 					else
@@ -388,6 +398,7 @@ class Registration extends UI_Controller
 		{
 			$this->_setError(true, $bewerbung->error . ' ' . $bewerbung->fhcCode);
 		}
+        $this->load->view('registration', $this->getAllData());
 	}
 
 

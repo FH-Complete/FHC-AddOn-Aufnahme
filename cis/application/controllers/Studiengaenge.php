@@ -91,7 +91,7 @@ class Studiengaenge extends UI_Controller
             ));*/
 
 			$this->benchmark->mark('codepart_start');
-			$this->setData("studiengaenge", $this->StudiengangModel->getStudiengangBewerbung());
+			$this->setData("studiengaengeForBewerbung", $this->StudiengangModel->getStudiengangBewerbung());
 			$this->benchmark->mark('codepart_end');
 			log_message('debug', 'Time elapsed for Studiengaenge/index->getStudienplan: ' . $this->benchmark->elapsed_time('codepart_start', 'codepart_end') . 'ms');
 
@@ -101,7 +101,7 @@ class Studiengaenge extends UI_Controller
             log_message('debug', 'Time elapsed for Studiengaenge/index->getBewerbungstermine: ' . $this->benchmark->elapsed_time('codepart_start', 'codepart_end') . 'ms');
 
             $this->benchmark->mark('foreach_start');
-			foreach ($this->getData("studiengaenge") as $stg)
+			foreach ($this->getData("studiengaengeForBewerbung") as $stg)
 			{
 				if ($stg->onlinebewerbung === true)
 				{
@@ -135,15 +135,18 @@ class Studiengaenge extends UI_Controller
                 $this->getData('studiensemester')->studiensemester_kurzbz
             ));
 			$aktiveBewerbungen = array();
-			foreach ($this->getData("prestudent") as $prestudent)
-			{
-				//load studiengaenge der prestudenten
-				//$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-				if (($prestudent->status_kurzbz === "Interessent" || $prestudent->status_kurzbz === "Bewerber"))
-				{
-                    $aktiveBewerbungen[$prestudent->studiengang_kz] = $prestudent->studienplan_id;
-				}
-			}
+			if($this->getData('prestudent') !== null)
+            {
+                foreach ($this->getData("prestudent") as $prestudent)
+                {
+                    //load studiengaenge der prestudenten
+                    //$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
+                    if (($prestudent->status_kurzbz === "Interessent" || $prestudent->status_kurzbz === "Bewerber"))
+                    {
+                        $aktiveBewerbungen[$prestudent->studiengang_kz] = $prestudent->studienplan_id;
+                    }
+                }
+            }
 
 			$this->setRawData("aktiveBewerbungen", $aktiveBewerbungen);
 

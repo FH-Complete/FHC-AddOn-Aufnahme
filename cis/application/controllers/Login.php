@@ -172,10 +172,9 @@ class Login extends UI_Controller
 		if (hasData($prestudent) || (isSuccess($prestudent) && empty($prestudent->retval)))
 		{
 			$this->setData('prestudent', $prestudent);
-			
-			if ($this->input->get('token') !== null)
+			if ($this->session->userdata('token') !== null)
 			{
-				redirect('/Registration?token='.$this->input->get('token'));
+				redirect('/Registration?token='.$this->session->userdata('token'));
 			}
 
 			if ($this->getData('studiengang_kz') != null)

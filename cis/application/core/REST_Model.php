@@ -190,6 +190,7 @@ class REST_Model extends CI_Model
 		if (isset($this->session->{$this->_personSessionName}))
 		{
 			$person = $this->session->{$this->_personSessionName};
+			//var_dump($person);
 			if (hasData($person))
 			{
 				if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))

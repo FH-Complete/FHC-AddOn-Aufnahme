@@ -14,7 +14,7 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="col-sm-4">
-				<?php echo $dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1];?>
+				<?php echo $dok->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index-1];?>
 			</div>
 			<?php
 				if((isset($dokumente[$dok->dokument_kurzbz]->mimetype)) && ($dokumente[$dok->dokument_kurzbz]->mimetype !== null))

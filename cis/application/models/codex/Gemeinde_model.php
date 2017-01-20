@@ -24,8 +24,8 @@ class Gemeinde_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getGemeindeByPlz($plz)
+	public function getGemeindeByPlz($plz, $authNotRequired = true)
 	{
-		return $this->load('codex/Gemeinde/GemeindeByPlz', array('plz' => $plz));
+		return $this->load('codex/Gemeinde/GemeindeByPlz', array('plz' => $plz), null, $authNotRequired);
 	}
 }

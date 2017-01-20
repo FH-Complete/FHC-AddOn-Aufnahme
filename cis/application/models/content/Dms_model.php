@@ -26,10 +26,20 @@ class Dms_model extends REST_Model
 	 */
 	public function getAktenAcceptedDms($dokument_kurzbz = null)
 	{
-		return $this->load(
+		$result = $this->load(
 			'content/Dms/AktenAcceptedDms',
 			array('person_id' => $this->getPersonId(), 'dokument_kurzbz' => $dokument_kurzbz)
 		);
+
+        $dokumente = array();
+        foreach($result->retval as $akte)
+        {
+            $dokumente[$akte->dokument_kurzbz] = $akte;
+        }
+
+        $result->retval = $dokumente;
+
+        return $result;
 	}
 	
 	/**

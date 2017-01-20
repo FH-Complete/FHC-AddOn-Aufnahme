@@ -8,7 +8,6 @@
 
 class Summary extends MY_Controller
 {
-
 	private $_person_id;
 	private $_studiensemester_kurzbz;
 

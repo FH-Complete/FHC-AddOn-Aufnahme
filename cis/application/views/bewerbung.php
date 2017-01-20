@@ -24,54 +24,59 @@ echo $this->template->widget("menu", array('aktiv' => 'Bewerbung', 'numberOfUnre
 </div>
 <?php
 
-foreach ($studiengaenge as $studiengang) {
-	$data["studiengang"] = $studiengang;
+if(!empty($studiengaenge))
+{
+foreach ($studiengaenge as $studiengang)
+{
+    $data["studiengang"] = $studiengang;
 
-?>
-        <div class="row stg-row">
-            <div class="col-sm-12">
-                <?php $this->load_views('view_bewerbung_studiengang', $data); ?>
+    ?>
+    <div class="row stg-row">
+        <div class="col-sm-12">
+            <?php $this->load_views('view_bewerbung_studiengang', $data); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div id="<?php echo $studiengang->studiengang_kz; ?>"
+             class="collapse <?php echo (isset($studiengang_kz) && ($studiengang_kz == $studiengang->studiengang_kz)) ? "in" : "" ?>">
+            <div class="col-sm-4 navigation">
+                <?php echo
+                $this->template->widget(
+                    "person_nav",
+                    array(
+                        'aktiv' => 'personalData',
+                        "href" => array(
+                            "send" => site_url("/Send?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id),
+                            "summary" => site_url("/Summary?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id),
+                            "requirements" => site_url("/Requirements?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id),
+                            "personalData" => site_url("/Bewerbung?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id)
+                        )
+                    )
+                ); ?>
+            </div>
+            <div class="col-sm-8">
+                <div role="tabpanel" class="tab-pane" id="daten">
+                    <?php $this->load_views('view_bewerbung', $data); ?>
+                    <div class="row form-row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <?php
+                                $data = array("content" => (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $this->lang->line("person_weiter") : $this->lang->line("person_speichern"), "name" => "submit_btn", "class" => "btn btn-primary icon-absenden", "type" => "submit");
+                                //(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
+                                echo form_button($data); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php echo form_close(); ?>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div id="<?php echo $studiengang->studiengang_kz; ?>" class="collapse <?php echo (isset($studiengang_kz) && ($studiengang_kz == $studiengang->studiengang_kz)) ? "in" : ""?>">
-                <div class="col-sm-4 navigation">
-                    <?php echo
-	$this->template->widget(
-		"person_nav",
-		array(
-			'aktiv' => 'personalData',
-			"href"=>array(
-				"send"=>site_url("/Send?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id),
-				"summary"=>site_url("/Summary?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id),
-				"requirements"=>site_url("/Requirements?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id),
-				"personalData"=>site_url("/Bewerbung?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id)
-			)
-		)
-	); ?>
-                </div>
-                <div class="col-sm-8">
-					<div role="tabpanel" class="tab-pane" id="daten">
-						<?php $this->load_views('view_bewerbung', $data); ?>
-						<div class="row form-row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<?php 
-									$data = array("content"=>(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $this->lang->line("person_weiter"):$this->lang->line("person_speichern"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit");
-									//(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
-									echo form_button($data); ?>
-								</div>
-							</div>
-						</div>
-						<?php echo form_close(); ?>
-					</div>
-                </div>
-            </div>
-        </div>
-    <?php } ?>
+    </div>
+<?php } ?>
 </div>
 
 <?php
+}
 $this->load->view('templates/footer');
 ?>
 
@@ -105,8 +110,9 @@ $this->load->view('templates/footer');
 					$("#"+data.dokument_kurzbz+"Upload_"+studienplan_id).show();
 					$("#"+data.dokument_kurzbz+"Delete_"+studienplan_id).html("");
 					$('#'+data.dokument_kurzbz+'FileUpload_'+studienplan_id).parent().show();
-					$('#'+data.dokument_kurzbz+'Progress_'+studienplan_id).show();
-					$("#"+data.dokument_kurzbz+"_hochgeladen_"+studienplan_id).html("<?php echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen'); ?>");
+                    var ele = $('#'+data.dokument_kurzbz+'Progress_'+studienplan_id).show();
+					$("#"+data.dokument_kurzbz+"_hochgeladen_"+studienplan_id).html("<?php echo $this->lang->line('person_formDokumentupload_keinDokHochgeladen'); ?>").after(ele);
+                    $(ele).show();
 					$("#"+data.dokument_kurzbz+"_nachgereicht_"+studienplan_id).prop("disabled", false);
 					$("#"+data.dokument_kurzbz+"_logo_"+studienplan_id).html("");
 					toggleDocumentsComplete(studienplan_id);

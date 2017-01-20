@@ -6,7 +6,10 @@
  */
 
 
-class Messages extends MY_Controller {
+class Messages extends MY_Controller
+{
+    private $_person_id;
+    private $_studiensemester_kurzbz;
 
 	/**
 	 *
@@ -30,8 +33,22 @@ class Messages extends MY_Controller {
 	/**
 	 *
 	 */
-	public function index() {
+	public function index()
+    {
 		$this->checkLogin();
+
+        $person = null;
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
 
 		$this->_loadData();
 
@@ -44,8 +61,22 @@ class Messages extends MY_Controller {
 	/**
 	 *
 	 */
-	public function newMessage() {
+	public function newMessage()
+    {
 		$this->checkLogin();
+
+        $person = null;
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
 
 		$this->_loadData();
 
@@ -59,8 +90,22 @@ class Messages extends MY_Controller {
 	 * @param unknown $message_id
 	 * @param unknown $oe_kurzbz  (optional)
 	 */
-	public function answerMessage($message_id, $oe_kurzbz=null) {
+	public function answerMessage($message_id, $oe_kurzbz=null)
+    {
 		$this->checkLogin();
+
+        $person = null;
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
 
 		if(isset($this->session->userdata()["token"]))
         {
@@ -83,8 +128,22 @@ class Messages extends MY_Controller {
 	}
 
 
-	public function sendMessage() {
+	public function sendMessage()
+    {
 		$this->checkLogin();
+
+        $person = null;
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
 
 		$this->_loadData();
 
@@ -110,7 +169,7 @@ class Messages extends MY_Controller {
 			}
 
 			$this->_sendMessage(
-				$this->session->userdata()["person_id"],
+                $this->_person_id,
 				$this->input->post()["msg_subject"],
 				$this->input->post()["msg_body"],
 				$this->input->post()["msg_oe_kurzbz"],
@@ -131,6 +190,21 @@ class Messages extends MY_Controller {
 	public function viewMessage($messageId)
 	{
 		$this->checkLogin();
+
+        $person = null;
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
+
+
 		$this->_loadData();
 
 		if($this->MessageModel->isResultValid() === true)
@@ -140,7 +214,7 @@ class Messages extends MY_Controller {
 				if($msg->message_id === $messageId)
 				{
 					$this->_data["msg"] = $msg;
-					$this->_changeMessageStatus($this->session->userdata()["person_id"], $msg, MSG_STATUS_READ);
+					$this->_changeMessageStatus($this->_person_id, $msg, MSG_STATUS_READ);
 				}
 			}
 
@@ -149,10 +223,59 @@ class Messages extends MY_Controller {
 		}
 	}
 
+	public function deleteSentMessage($messageId)
+    {
+        $this->checkLogin();
+
+        $person = null;
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
+
+        $this->_loadData();
+
+        if($this->MessageModel->isResultValid() === true)
+        {
+            foreach($this->_data["messages_outbox"] as $msg)
+            {
+                if($msg->message_id === $messageId)
+                {
+                    $this->_data["msg"] = $msg;
+                    $this->_changeMessageStatus($this->_person_id, $msg, MSG_STATUS_DELETED);
+                }
+            }
+        }
+
+        $this->_loadData();
+        $this->load->view('messages', $this->_data);
+    }
+
 
 	public function deleteMessage($messageId)
 	{
 		$this->checkLogin();
+
+        $person = null;
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
+
 		$this->_loadData();
 
 		if($this->MessageModel->isResultValid() === true)
@@ -162,7 +285,7 @@ class Messages extends MY_Controller {
 				if($msg->message_id === $messageId)
 				{
 					$this->_data["msg"] = $msg;
-					$this->_changeMessageStatus($this->session->userdata()["person_id"], $msg, MSG_STATUS_DELETED);
+					$this->_changeMessageStatus($this->_person_id, $msg, MSG_STATUS_DELETED);
 				}
 			}
 		}
@@ -175,13 +298,13 @@ class Messages extends MY_Controller {
 	{
 		if((isset($this->input->post()["message_id"])) &&(isset($this->input->post()["status"])))
 		{
-			$this->_data["messages"] = $this->_getMessages($this->session->userdata("person_id"));
+			$this->_data["messages"] = $this->_getMessages($this->_person_id);
 			foreach($this->_data["messages"] as $msg)
 			{
 				if(($msg->message_id == $this->input->post()["message_id"]))
 				{
 					$status = $this->input->post()["status"];
-					$result = $this->_changeMessageStatus($this->session->userdata("person_id"), $msg, $status);
+					$result = $this->_changeMessageStatus($this->_person_id, $msg, $status);
 
 					if((is_object($result)) && (isset($result->message_id)))
                     {
@@ -212,7 +335,7 @@ class Messages extends MY_Controller {
 		//load person data
 		$this->_data["person"] = $this->_loadPerson();
 
-		$this->_data["prestudent"] = $this->_loadPrestudent($this->session->userdata()["person_id"]);
+		$this->_data["prestudent"] = $this->_loadPrestudent($this->_person_id);
 
 		$this->_data["studiengaenge"] = array();
 		//TODO optimize
@@ -225,16 +348,16 @@ class Messages extends MY_Controller {
 			}
 		}
 
-		$this->_data["messages"] = $this->_getMessages($this->session->userdata()["person_id"]);
+		$this->_data["messages"] = $this->_getMessages($this->_person_id);
 
-		$this->_data["messages_outbox"] = $this->_getSentMessages($this->session->userdata()["person_id"]);
+		$this->_data["messages_outbox"] = $this->_getSentMessages($this->_person_id);
 	}
 
 
 	private function _sendMessage($person_id, $subject, $body, $oe_kurzbz, $relationMessage_id = null)
 	{
 		$message = array(
-			"person_id" => $this->session->userdata()["person_id"],
+			"person_id" => $this->_person_id,
 			"subject" => $subject,
 			"body" => $body,
 			"oe_kurzbz" => $oe_kurzbz
@@ -341,7 +464,7 @@ class Messages extends MY_Controller {
 
 	private function _loadPerson()
 	{
-		$this->PersonModel->getPersonen(array("person_id"=>$this->session->userdata()["person_id"]));
+		$this->PersonModel->getPersonen(array("person_id"=>$this->_person_id));
 		if($this->PersonModel->isResultValid() === true)
 		{
 			if(count($this->PersonModel->result->retval) == 1)

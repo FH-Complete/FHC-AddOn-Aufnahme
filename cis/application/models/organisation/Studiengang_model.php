@@ -55,8 +55,13 @@ class Studiengang_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getAppliedStudiengang($studiensemester_kurzbz, $titel, $status_kurzbz)
+	public function getAppliedStudiengang($studiensemester_kurzbz, $titel, $status_kurzbz, $forceApiCall = false)
 	{
+	    if($forceApiCall)
+        {
+            unset($this->session->userdata['Studiengang.getAppliedStudiengang']);
+        }
+
 		return $this->load(
 			'organisation/Studiengang/AppliedStudiengang',
 			array(
@@ -65,6 +70,6 @@ class Studiengang_model extends REST_Model
 				'titel' => $titel,
 				'status_kurzbz' => $status_kurzbz
 			),
-			'Studiengang.getStudiengangBewerbung');
+			'Studiengang.getAppliedStudiengang');
 	}
 }

@@ -80,8 +80,13 @@ class Adresse_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function saveAdresse($parameters)
+	public function saveAdresse($parameters, $authNotRequired = false)
 	{
-		return $this->save('person/Adresse/Adresse', $parameters, 'Adresse.getAdresse');
+		return $this->save('person/Adresse/Adresse', $parameters, 'Adresse.getAdresse', $authNotRequired);
 	}
+
+    public function saveZustellAdresse($parameters, $authNotRequired = false)
+    {
+        return $this->save('person/Adresse/Adresse', $parameters, 'Adresse.getZustelladresse', $authNotRequired);
+    }
 }

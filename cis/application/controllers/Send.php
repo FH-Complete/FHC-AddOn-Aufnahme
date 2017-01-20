@@ -46,17 +46,17 @@ class Send extends MY_Controller
 		$this->checkLogin();
 		
 		$person = null;
-		if (isset($this->session->{'Person.getPerson'}))
-		{
-			$person = $this->session->{'Person.getPerson'};
-			if (hasData($person))
-			{
-				if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
-				{
-					$this->_person_id = $person->retval->person_id;
-				}
-			}
-		}
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
 		
         $this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
 //		$this->_data['sprache'] = $this->get_language();

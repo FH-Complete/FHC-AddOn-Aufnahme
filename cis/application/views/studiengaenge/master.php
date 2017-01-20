@@ -8,7 +8,7 @@
 <h2 class="master_header"><?php echo $this->lang->line('studiengaenge/master'); ?></h2>
 
 <?php
-foreach ($studiengaenge as $stg)
+foreach ($studiengaengeForBewerbung as $stg)
 {
 	if ($stg->typ == "m")
 	{

@@ -78,21 +78,21 @@
 	<?php
 	if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->mimetype !== null))
 	{
-		if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument))
+		if(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->name))
 		{
-			if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".docx") !== false)
+			if(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->name, ".docx") !== false)
 			{
 				$logo = "docx.gif";
 			}
-			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".doc") !== false)
+			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->name, ".doc") !== false)
 			{
 				$logo = "docx.gif";
 			}
-			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".pdf") !== false)
+			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->name, ".pdf") !== false)
 			{
 				$logo = "document-pdf.svg";
 			}
-			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name, ".jpg") !== false)
+			elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->name, ".jpg") !== false)
 			{
 				$logo = "document-picture.svg";
 			}
@@ -133,7 +133,7 @@
 				}
 				else
 				{
-					echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dokument->name."</br>";
+					echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->name."</br>";
 					echo $this->lang->line('requirements_DokHochgeladen');
 				}
 			?>
@@ -208,21 +208,21 @@
 		<?php
 		if((isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->mimetype !== null))
 		{
-			if(isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument))
+			if(isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->name))
 			{
-				if(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, ".docx") !== false)
+				if(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->name, ".docx") !== false)
 				{
 					$logo = "docx.gif";
 				}
-				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, ".doc") !== false)
+				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->name, ".doc") !== false)
 				{
 					$logo = "docx.gif";
 				}
-				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, ".pdf") !== false)
+				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->name, ".pdf") !== false)
 				{
 					$logo = "document-pdf.svg";
 				}
-				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name, ".jpg") !== false)
+				elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->name, ".jpg") !== false)
 				{
 					$logo = "document-picture.svg";
 				}
@@ -260,7 +260,7 @@
 					}
 					else
 					{
-						echo $dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dokument->name."</br>";
+						echo $dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->name."</br>";
 						echo $this->lang->line('requirements_DokHochgeladen');
 					}
 				?>

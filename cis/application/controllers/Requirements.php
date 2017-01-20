@@ -86,6 +86,20 @@ class Requirements extends UI_Controller
 		//load preinteressent data
         $this->setData('prestudent', $prestudent);
 
+        //test if data in session is complete -> otherwise new call to API
+        if(!isset($this->getData('prestudent')[0]->status_kurzbz))
+        {
+            $prestudent = $this->PrestudentModel->getLastStatuses(
+                $this->getData('person')->person_id,
+                $this->getData('studiensemester')->studiensemester_kurzbz,
+                null,
+                'Interessent',
+                true
+            );
+
+            $this->setData('prestudent', $prestudent);
+        }
+
         $geplanter_abschluss = array();
         $spezialisierung = array();
         foreach($this->getData('prestudent') as $prestudent)
@@ -120,7 +134,12 @@ class Requirements extends UI_Controller
                         $prestudent->zgvort = "geplanter Abschluss";
                         $prestudent = (array) $prestudent;
 
-                        $this->PrestudentModel->savePrestudent($prestudent);
+                        $updatePrestudent = $this->PrestudentModel->savePrestudent((array)$prestudent);
+
+                        if(!isSuccess($updatePrestudent))
+                        {
+                            $this->_setError(true, "could not save data");
+                        }
                     }
                 }
             }
@@ -232,7 +251,7 @@ class Requirements extends UI_Controller
 				$akte = new stdClass();
 				$akte->person_id = $this->getData("person")->person_id;
 
-				$akte->dokument_kurzbz = $this->config->item('dokumentTypen')["abschlusszeugnis"];
+				$akte->dokument_kurzbz = $this->config->item('dokumentTypen')["abschlusszeugnis_".$this->getData('studiengang')->typ];
 				$akte->insertvon = 'online';
 				$akte->anmerkung = $this->input->post("doktype");
 
@@ -244,7 +263,12 @@ class Requirements extends UI_Controller
 				$akte->nachgereicht = true;
 			}
 			$akte = (array) $akte;
-			$this->AkteModel->saveAkte($akte);
+			$updateAkte = $this->AkteModel->saveAkte((array)$akte);
+
+			if(!isSuccess($updateAkte))
+            {
+                $this->_setError(true, "could not save document");
+            }
 		}
 		else
 		{
@@ -285,23 +309,35 @@ class Requirements extends UI_Controller
 						$akte->anmerkung = $this->input->post($dok->dokument_kurzbz."_nachreichenAnmerkung");
 						$akte->nachgereicht_am = date("Y-m-d", strtotime($this->input->post($dok->dokument_kurzbz."_nachreichenDatum")));
                         $akte = (array) $akte;
-                        $this->AkteModel->saveAkte($akte);
+                        $updateAkte = $this->AkteModel->saveAkte($akte);
+                        if(!isSuccess($updateAkte))
+                        {
+                            $this->_setError(true, "could not save document");
+                        }
 					}
 				}
 			}
 		}
 
 		//load dokumente
-        $this->setRawData('dokumente', $this->AkteModel->getAktenAccepted()->retval);
-		
-		foreach($this->getData("dokumente") as $akte)
-		{
-			if ($akte->dms_id != null)
-			{
-				$dms = $this->DmsModel->getDms($akte->dms_id)->retval;
-				$akte->dokument = $dms;
-			}
-		}
+        $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
+
+		//adding abschlusszeugnis if it is not present in dokumente
+        if(!isset($this->getData('dokumente')[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+        {
+            $akten = $this->AkteModel->getAktenAccepted();
+
+            if (hasData($akten))
+            {
+                if (isset($akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+                {
+                    $dok = $akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]];
+                    $dokumente = $this->getData('dokumente');
+                    $dokumente[$dok->dokument_kurzbz] = $dok;
+                    $this->setRawData('dokumente', $dokumente);
+                }
+            }
+        }
 
 		if((isset($this->input->post()["spezialisierung"])) && (is_array($this->input->post()["spezialisierung"])))
 		{
@@ -321,19 +357,33 @@ class Requirements extends UI_Controller
 						$text = substr($text, 0, -1);
 						if (substr_count($text, ';') !== strlen($text))
 						{
-							$this->PrestudentModel->saveSpecialization(array("prestudent_id" => (int) $prestudent->prestudent_id, 'text'=>$text));
-							$prestudent->spezialisierung = $this->PrestudentModel->getSpecialization($prestudent->prestudent_id)->retval;
-							$prestudent->spezialisierung;
-                            $spezialisierung[$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+							$insertSpecialization = $this->PrestudentModel->saveSpecialization(array("prestudent_id" => (int) $prestudent->prestudent_id, 'text'=>$text));
 
+                            if(isSuccess($insertSpecialization))
+                            {
+                                $prestudent->spezialisierung = $this->PrestudentModel->getSpecialization($prestudent->prestudent_id)->retval;
+                                $prestudent->spezialisierung;
+                                $spezialisierung[$prestudent->studiengang_kz] = $prestudent->spezialisierung;
+                            }
+                            else
+                            {
+                                $this->_setError(true, "could not save data");
+                            }
 						}
 					}
 				}
 			}
             $this->setRawData("spezialisierung" ,$spezialisierung);
 		}
-		
-		$this->setRawData('dokumente' , array_merge($this->getData("dokumente"), $temp_doks));
+
+        if($this->getData("dokumente") === null)
+        {
+            $this->setRawData('dokumente', $temp_doks);
+        }
+		else
+        {
+            $this->setRawData('dokumente', array_merge($this->getData("dokumente"), $temp_doks));
+        }
 		
 		$letztGueltigesZeugnis = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["letztGueltigesZeugnis"])->retval;
 		$this->setRawData("personalDocuments",  array($this->config->item("dokumentTypen")["letztGueltigesZeugnis"]=>$letztGueltigesZeugnis));
@@ -423,7 +473,7 @@ class Requirements extends UI_Controller
 
 					$result = new stdClass();
 					$insertResult = $this->DmsModel->saveDms($obj);
-					if ($insertResult->error == 0)
+					if (isSuccess($insertResult))
 					{
 						if ($obj['version'] >= 0)
 						{
@@ -447,7 +497,7 @@ class Requirements extends UI_Controller
 							$akte = (array) $akte;
                             $akteInsertResult = $this->AkteModel->saveAkte($akte);
 
-							if ($akteInsertResult->error === 0)
+							if (isSuccess($akteInsertResult))
 							{
 								$result->success = true;
 								$result->akte_id = $akteInsertResult->retval;
@@ -475,7 +525,7 @@ class Requirements extends UI_Controller
                             $akte = (array) $akte;
                             $akteInsertResult = $this->AkteModel->saveAkte($akte);
 
-                            if ($akteInsertResult->error === 0)
+                            if (isSuccess($akteInsertResult))
 							{
 								$result->success = true;
 
@@ -489,23 +539,23 @@ class Requirements extends UI_Controller
 						if($typ == $this->config->item('dokumentTypen')["letztGueltigesZeugnis"])
 						{
 							$akte = new stdClass();
-							
+
+                            $this->setData('studiengang', $this->StudiengangModel->getStudiengang($this->input->post()["studiengang_kz"]));
+
 							foreach($this->getData("dokumente") as $akte_temp)
 							{
-								if (($akte_temp->dokument_kurzbz == $this->config->item('dokumentTypen')["letztGueltigesZeugnis"]))
+								if (($akte_temp->dokument_kurzbz == $this->config->item('dokumentTypen')["abschlusszeugnis_".$this->getData('studiengang')->typ]))
 								{
 									$akte = $akte_temp;
 								}
 							}
 						
 							$akte->person_id = $this->getData("person")->person_id;
-							$akte->dokument_kurzbz = $this->config->item('dokumentTypen')["letztGueltigesZeugnis"];
+							$akte->dokument_kurzbz = $this->config->item('dokumentTypen')["abschlusszeugnis_".$this->getData('studiengang')->typ];
 							$akte->insertvon = 'online';
 							$akte->nachgereicht = true;
 							if(isset($this->input->post()["doktype"]))
 								$akte->anmerkung = $this->input->post("doktype");
-
-                            $this->setData('studiengang', $this->StudiengangModel->getStudiengang($this->input->post()["studiengang_kz"]));
 							
 							foreach($this->getData("prestudent") as $prestudent)
 							{
@@ -516,7 +566,11 @@ class Requirements extends UI_Controller
 										$prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_".$this->getData('studiengang')->typ]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
 										$prestudent->zgvort = "geplanter Abschluss";
 										$prestudent = (array) $prestudent;
-	                                    $this->PrestudentModel->savePrestudent($prestudent);
+	                                    $updatePrestudent = $this->PrestudentModel->savePrestudent($prestudent);
+                                        if(!isSuccess($updatePrestudent))
+                                        {
+                                            $this->_setError(true, "could not save data");
+                                        }
 									}
 								}
 							}
@@ -524,7 +578,11 @@ class Requirements extends UI_Controller
 							//$akte->geplanterAbschluss = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis"]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
 
                             $akte = (array) $akte;
-                            $this->AkteModel->saveAkte($akte);
+                            $updateAkte = $this->AkteModel->saveAkte($akte);
+                            if(!isSuccess($updateAkte))
+                            {
+                                $this->_setError(true, "could not save document");
+                            }
 						}
 						
 						echo json_encode($result);
@@ -640,4 +698,17 @@ class Requirements extends UI_Controller
             }
         }
 	}
+
+    /**
+     * @param $bool
+     * @param null $msg
+     */
+    private function _setError($bool, $msg = null)
+    {
+        $error = new stdClass();
+        $error->error = $bool;
+        $error->msg = $msg;
+
+        $this->setRawData('error', $error);
+    }
 }

@@ -66,6 +66,17 @@ class Person_model extends REST_Model
 	 */
 	public function savePerson($parameters, $authNotRequired = false)
 	{
-		return $this->save('person/Person/Person', $parameters, 'Person.getPerson', $authNotRequired);
+	    unset($parameters["kontakt_id"]);
+        unset($parameters["kontakttyp"]);
+        unset($parameters["kontakt"]);
+        unset($parameters["zustellung"]);
+        unset($parameters["standort_id"]);
+		$result = $this->save('person/Person/Person', $parameters, 'Person.getPerson', $authNotRequired);
+
+		if(isSuccess($result))
+        {
+            return $this->getPersonByPersonId($result->retval);
+        }
+
 	}
 }
