@@ -494,20 +494,9 @@ class Registration extends UI_Controller
 			$oe = 'fhstp';
 
 		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData('sprache');
-
-		$messageArray = array(
-			"vorlage_kurzbz" => 'MailRegistrationConfirmation',
-			"oe_kurzbz" => $oe,
-			"data" => $data,
-			"sprache" => ucfirst($sprache),
-			"orgform_kurzbz" => null,
-			"relationmessage_id" => null,
-            "multiPartMime" => false,
-            'receiver_id' => $person->person_id
-		);
 		
-		$message = $this->MessageModel->sendMessageVorlage($messageArray);
-
+		$message = $this->MessageModel->sendMessageVorlage('MailRegistrationConfirmation', $oe, $data, $sprache, null, null, false);
+		
 		if (hasData($message))
 		{
 			$this->setRawData(

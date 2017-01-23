@@ -5,6 +5,7 @@
  * @package default
  */
 
+ //var_dump($oe_kurzbz);
 
 ?>
 <div id="answer">

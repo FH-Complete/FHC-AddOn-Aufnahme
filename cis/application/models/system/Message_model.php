@@ -55,24 +55,52 @@ class Message_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function sendMessage($parameters)
+	public function sendMessage($subject, $body, $oe_kurzbz, $relationMessage_id = null)
 	{
-		return $this->save('system/Message/Message', $parameters);
+		return $this->save(
+			'system/Message/Message',
+			array(
+				'person_id' => $this->getPersonId(),
+				'subject' => $subject,
+				'body' => $body,
+				'oe_kurzbz' => $oe_kurzbz,
+				'relationMessage_id' => $relationMessage_id
+			)
+		);
 	}
 	
 	/**
 	 * 
 	 */
-	public function sendMessageVorlage($parameters)
+	public function sendMessageVorlage($vorlage_kurzbz, $oe_kurzbz, $data, $sprache, $orgform_kurzbz = null, $sender_id = null, $multiPartMime = true)
 	{
-		return $this->save('system/Message/MessageVorlage', $parameters);
+		return $this->save(
+			'system/Message/MessageVorlage',
+			array(
+				'vorlage_kurzbz' => $vorlage_kurzbz,
+				'oe_kurzbz' => $oe,
+				'data' => $data,
+				'sprache' => ucfirst($sprache),
+				'orgform_kurzbz' => $orgform_kurzbz,
+				'relationmessage_id' => $sender_id,
+				'multiPartMime' => $multiPartMime,
+				'receiver_id' => $this->getPersonId()
+			)
+		);
 	}
 	
 	/**
 	 * 
 	 */
-	public function changeMessageStatus($parameters)
+	public function changeMessageStatus($message_id, $status)
 	{
-		return $this->save('system/Message/ChangeStatus', $parameters);
+		return $this->save(
+			'system/Message/ChangeStatus',
+			array(
+				'person_id' => $this->getPersonId(),
+				'message_id' => $message_id,
+				'status' => $status
+			)
+		);
 	}
 }

@@ -5,320 +5,225 @@
  * @package default
  */
 
-
-class Messages extends MY_Controller
+class Messages extends UI_Controller
 {
-    private $_person_id;
-    private $_studiensemester_kurzbz;
-
 	/**
 	 *
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
-		$this->load->model('message_model', "MessageModel");
-		$this->load->model('prestudent_model', "PrestudentModel");
-		$this->load->model('studiengang_model', "StudiengangModel");
-		// $this->load->model('oe_model', 'OeModel');
-		$this->load->model('person_model', 'PersonModel');
-		$this->load->helper("form");
-		$this->load->library("form_validation");
+		
 		$this->config->load('message');
-		$this->_data["sprache"] = $this->get_language();
-		$this->_data["view"] = "messages";
-		$this->_data["numberOfUnreadMessages"] = $this->_getNumberOfUnreadMessages();
+		
+		$this->load->helper('form');
+		$this->load->library('form_validation');
+		
+		$this->setData('sprache', $this->getCurrentLanguage());
+		
+		$this->load->model('crm/Prestudent_model', 'PrestudentModel');
+		$this->load->model('organisation/Studiengang_model', 'StudiengangModel');
+		$this->load->model('organisation/Studiensemester_model', 'StudiensemesterModel');
+		$this->load->model('person/Person_model', 'PersonModel');
+		$this->load->model('system/Message_model', 'MessageModel');
+		
+		$this->setRawData('view', 'messages');
 	}
-
 
 	/**
 	 *
 	 */
 	public function index()
     {
-		$this->checkLogin();
-
-        $person = null;
-        if (isset($this->session->{'Person.getPerson'}))
-        {
-            $person = $this->session->{'Person.getPerson'};
-            if (hasData($person))
-            {
-                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
-                {
-                    $this->_person_id = $person->retval->person_id;
-                }
-            }
-        }
-
 		$this->_loadData();
-
-		$this->_loadLanguage($this->_data["sprache"]);
-
-		$this->load->view('messages', $this->_data);
+		
+		$this->load->view('messages', $this->getAllData());
 	}
-
 
 	/**
 	 *
 	 */
 	public function newMessage()
     {
-		$this->checkLogin();
-
-        $person = null;
-        if (isset($this->session->{'Person.getPerson'}))
-        {
-            $person = $this->session->{'Person.getPerson'};
-            if (hasData($person))
-            {
-                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
-                {
-                    $this->_person_id = $person->retval->person_id;
-                }
-            }
-        }
-
 		$this->_loadData();
-
-		$this->_data["view"] = "newMessage";
-		$this->load->view('messages', $this->_data);
+		
+		$this->setRawData('view', 'newMessage');
+		
+		$this->load->view('messages', $this->getAllData());
 	}
-
 
 	/**
 	 *
 	 * @param unknown $message_id
 	 * @param unknown $oe_kurzbz  (optional)
 	 */
-	public function answerMessage($message_id, $oe_kurzbz=null)
+	public function answerMessage($message_id, $oe_kurzbz = null)
     {
-		$this->checkLogin();
-
-        $person = null;
-        if (isset($this->session->{'Person.getPerson'}))
+		if (isset($this->session->userdata()['token']))
         {
-            $person = $this->session->{'Person.getPerson'};
-            if (hasData($person))
-            {
-                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
-                {
-                    $this->_person_id = $person->retval->person_id;
-                }
-            }
+            $this->session->unset_userdata('token');
         }
-
-		if(isset($this->session->userdata()["token"]))
-        {
-            $this->session->unset_userdata("token");
-        }
-
+		
 		$this->_loadData();
-
-		foreach ($this->_data["messages"] as $msg) {
-			if ($msg->message_id === $message_id) {
-				$this->_data["msg"] = $msg;
+		
+		$messages = $this->MessageModel->getMessagesByPersonId();
+		if (hasData($messages))
+		{
+			foreach ($messages->retval as $message)
+			{
+				if ($message->message_id === $message_id)
+				{
+					$this->setRawData('msg', $message);
+				}
 			}
 		}
-
-		$this->_data["oe_kurzbz"] = $oe_kurzbz;
-		$this->_data["message_id"] = $message_id;
-
-		$this->_data["view"] = "newMessage";
-		$this->load->view('messages', $this->_data);
+		
+		$this->setRawData('oe_kurzbz', $oe_kurzbz);
+		$this->setRawData('message_id', $message_id);
+		
+		$this->setRawData('view', 'newMessage');
+		
+		$this->load->view('messages', $this->getAllData());
 	}
 
 
 	public function sendMessage()
     {
-		$this->checkLogin();
-
-        $person = null;
-        if (isset($this->session->{'Person.getPerson'}))
-        {
-            $person = $this->session->{'Person.getPerson'};
-            if (hasData($person))
-            {
-                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
-                {
-                    $this->_person_id = $person->retval->person_id;
-                }
-            }
-        }
-
 		$this->_loadData();
-
+		
 		//form validation rules
-		$this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
-		$this->form_validation->set_rules("msg_subject", "Subject", "required");
-		$this->form_validation->set_rules("msg_oe_kurzbz", "Empfänger", "required");
-		$this->form_validation->set_rules("msg_body", "Inhalt", "required");
+		$this->form_validation->set_error_delimiters('<span class=\'help-block\'>', '</span>');
+		$this->form_validation->set_rules('msg_subject', 'Subject', 'required');
+		$this->form_validation->set_rules('msg_oe_kurzbz', 'Empfänger', 'required');
+		$this->form_validation->set_rules('msg_body', 'Inhalt', 'required');
 
-		if ($this->form_validation->run() == FALSE) {
-			if (isset($this->input->post()["msg_relationMessage_id"])) {
-				$this->_data["oe_kurzbz"] = $this->input->post()["msg_oe_kurzbz"];
-				$this->_data["message_id"] = $this->input->post()["msg_relationMessage_id"];
-			}
-			$this->_data["view"] = "newMessage";
-			$this->load->view('messages', $this->_data);
-		}
-		else {
-			$relationMessage_id = null;
-			if (isset($this->input->post()["msg_relationMessage_id"]) && ($this->input->post()["msg_relationMessage_id"] !== ""))
+		if ($this->form_validation->run() == false)
+		{
+			if (isset($this->input->post()['msg_relationMessage_id']))
 			{
-				$relationMessage_id = $this->input->post()["msg_relationMessage_id"];
+				$this->setRawData('oe_kurzbz', $this->input->post()['msg_oe_kurzbz']);
+				$this->setRawData('message_id', $this->input->post()['msg_relationMessage_id']);
 			}
-
-			$this->_sendMessage(
-                $this->_person_id,
-				$this->input->post()["msg_subject"],
-				$this->input->post()["msg_body"],
-				$this->input->post()["msg_oe_kurzbz"],
-				$relationMessage_id);
 			
-			if(!isset($this->_data["error"]))
+			$this->setRawData('view', 'newMessage');
+			
+			$this->load->view('messages', $this->getAllData());
+		}
+		else
+		{
+			$relationMessage_id = null;
+			if (isset($this->input->post()['msg_relationMessage_id']) && $this->input->post()['msg_relationMessage_id'] !== '')
 			{
-				redirect("/Messages");
+				$relationMessage_id = $this->input->post()['msg_relationMessage_id'];
+			}
+			
+			$this->_sendMessage(
+				$this->input->post()['msg_subject'],
+				$this->input->post()['msg_body'],
+				$this->input->post()['msg_oe_kurzbz'],
+				$relationMessage_id
+			);
+			
+			if ($this->getData('error') !== null)
+			{
+				redirect('/Messages');
 			}
 			else
 			{
-				$this->load->view('messages', $this->_data);
+				$this->load->view('messages', $this->getAllData());
 			}
 		}
 	}
-
-
-	public function viewMessage($messageId)
+	
+	public function viewMessage($message_id)
 	{
-		$this->checkLogin();
-
-        $person = null;
-        if (isset($this->session->{'Person.getPerson'}))
-        {
-            $person = $this->session->{'Person.getPerson'};
-            if (hasData($person))
-            {
-                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
-                {
-                    $this->_person_id = $person->retval->person_id;
-                }
-            }
-        }
-
-
 		$this->_loadData();
-
-		if($this->MessageModel->isResultValid() === true)
+		
+		$messages = $this->MessageModel->getMessagesByPersonId();
+		
+		if (hasData($messages))
 		{
-			foreach($this->_data["messages"] as $msg)
+			foreach ($messages->retval as $message)
 			{
-				if($msg->message_id === $messageId)
+				if ($message->message_id === $message_id)
 				{
-					$this->_data["msg"] = $msg;
-					$this->_changeMessageStatus($this->_person_id, $msg, MSG_STATUS_READ);
+					$this->setRawData('msg', $message);
+					$this->_changeMessageStatus($message, MSG_STATUS_READ);
 				}
 			}
-
-			$this->_data["view"] = "message";
-			$this->load->view('messages', $this->_data);
+			
+			$this->setRawData('view', 'message');
+			
+			$this->load->view('messages', $this->getAllData());
 		}
 	}
-
-	public function deleteSentMessage($messageId)
+	
+	public function deleteSentMessage($message_id)
     {
-        $this->checkLogin();
-
-        $person = null;
-        if (isset($this->session->{'Person.getPerson'}))
-        {
-            $person = $this->session->{'Person.getPerson'};
-            if (hasData($person))
-            {
-                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
-                {
-                    $this->_person_id = $person->retval->person_id;
-                }
-            }
-        }
-
         $this->_loadData();
 
-        if($this->MessageModel->isResultValid() === true)
-        {
-            foreach($this->_data["messages_outbox"] as $msg)
-            {
-                if($msg->message_id === $messageId)
-                {
-                    $this->_data["msg"] = $msg;
-                    $this->_changeMessageStatus($this->_person_id, $msg, MSG_STATUS_DELETED);
-                }
-            }
-        }
-
-        $this->_loadData();
-        $this->load->view('messages', $this->_data);
-    }
-
-
-	public function deleteMessage($messageId)
-	{
-		$this->checkLogin();
-
-        $person = null;
-        if (isset($this->session->{'Person.getPerson'}))
-        {
-            $person = $this->session->{'Person.getPerson'};
-            if (hasData($person))
-            {
-                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
-                {
-                    $this->_person_id = $person->retval->person_id;
-                }
-            }
-        }
-
-		$this->_loadData();
-
-		if($this->MessageModel->isResultValid() === true)
+        $messages = $this->MessageModel->getMessagesByPersonId();
+		
+		if (hasData($messages))
 		{
-			foreach($this->_data["messages"] as $msg)
+            foreach ($messages->retval as $message)
+            {
+                if ($message->message_id === $message_id)
+                {
+                    $this->setRawData('msg', $message);
+                    $this->_changeMessageStatus($message, MSG_STATUS_DELETED);
+                }
+            }
+        }
+		
+        $this->_loadData();
+        
+        $this->load->view('messages', $this->getAllData());
+    }
+    
+	public function deleteMessage($message_id)
+	{
+		$this->_loadData();
+		
+		$messages = $this->MessageModel->getMessagesByPersonId();
+		
+		if (hasData($messages))
+		{
+			foreach ($messages->retval as $message)
 			{
-				if($msg->message_id === $messageId)
+				if ($message->message_id === $message_id)
 				{
-					$this->_data["msg"] = $msg;
-					$this->_changeMessageStatus($this->_person_id, $msg, MSG_STATUS_DELETED);
+					$this->setRawData('msg', $message);
+					$this->_changeMessageStatus($message, MSG_STATUS_DELETED);
 				}
 			}
 		}
-
+		
 		$this->_loadData();
-		$this->load->view('messages', $this->_data);
+		
+		$this->load->view('messages', $this->getAllData());
 	}
 	
 	public function changeMessageStatus()
 	{
-		if((isset($this->input->post()["message_id"])) &&(isset($this->input->post()["status"])))
+		if (isset($this->input->post()['message_id']) && isset($this->input->post()['status']))
 		{
-			$this->_data["messages"] = $this->_getMessages($this->_person_id);
-			foreach($this->_data["messages"] as $msg)
+			$messages = $this->MessageModel->getMessagesByPersonId();
+			
+			if (hasData($messages))
 			{
-				if(($msg->message_id == $this->input->post()["message_id"]))
+				$this->setData('messages', $messages);
+				foreach ($messages-retval as $message)
 				{
-					$status = $this->input->post()["status"];
-					$result = $this->_changeMessageStatus($this->_person_id, $msg, $status);
-
-					if((is_object($result)) && (isset($result->message_id)))
-                    {
-                        $return = new stdClass();
-                        $return->error = 0;
-                        echo json_encode($return);
-                        return;
-                    }
-					elseif((count($result) == 1) && (isset($result[0]->message_id)))
+					if (($messages->message_id == $this->input->post()['message_id']))
 					{
-						$return = new stdClass();
-						$return->error = 0;
-						echo json_encode($return);
-						return;
+						$status = $this->input->post()['status'];
+						$result = $this->_changeMessageStatus($messages, $status);
+						
+						if (hasData($message))
+						{
+							return success($message);
+						}
 					}
 				}
 			}
@@ -328,159 +233,77 @@ class Messages extends MY_Controller
 			//TODO param missing
 		}
 	}
-
-
+	
 	private function _loadData()
 	{
 		//load person data
-		$this->_data["person"] = $this->_loadPerson();
-
-		$this->_data["prestudent"] = $this->_loadPrestudent($this->_person_id);
-
-		$this->_data["studiengaenge"] = array();
-		//TODO optimize
-		foreach($this->_data["prestudent"] as $prestudent)
+		$this->setData('person', $this->PersonModel->getPerson());
+		
+		$studiengaengeArray = array();
+		
+		$studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+		if (hasData($studiensemester))
 		{
-			if($prestudent->studiengang_kz != null)
+			$this->setData('studiensemester', $studiensemester);
+			$studiengaenge = $this->StudiengangModel->getAppliedStudiengang(
+				$this->getData('studiensemester')->studiensemester_kurzbz,
+				'',
+				'Interessent',
+                true
+			);
+			
+			if (hasData($studiengaenge))
 			{
-				$studiengang = $this->_loadStudiengnag($prestudent->studiengang_kz);
-				$this->_data["studiengaenge"][$studiengang->oe_kurzbz] = $studiengang->bezeichnung;
+				foreach ($studiengaenge->retval as $studiengang)
+				{
+					$studiengaengeArray[$studiengang->oe_kurzbz] = $studiengang->oe_kurzbz;
+				}
 			}
 		}
-
-		$this->_data["messages"] = $this->_getMessages($this->_person_id);
-
-		$this->_data["messages_outbox"] = $this->_getSentMessages($this->_person_id);
-	}
-
-
-	private function _sendMessage($person_id, $subject, $body, $oe_kurzbz, $relationMessage_id = null)
-	{
-		$message = array(
-			"person_id" => $this->_person_id,
-			"subject" => $subject,
-			"body" => $body,
-			"oe_kurzbz" => $oe_kurzbz
+		
+		$this->setRawData('studiengaenge', $studiengaengeArray);
+		
+		$this->setData(
+		    'prestudent',
+            $this->PrestudentModel->getLastStatuses(
+                $this->getData('person')->person_id,
+                $this->getData('studiensemester')->studiensemester_kurzbz,
+                null,
+                null,
+                true
+            )
 		);
-
-		if(!is_null($relationMessage_id))
-		{
-			$message["relationmessage_id"] = $relationMessage_id;
-		}
-
-		$this->MessageModel->sendMessage($message);
-		if($this->MessageModel->isResultValid() === true)
-		{
-			return $this->MessageModel->result->retval;
-		}
-		else
-		{
-			$this->_setError(true, $this->MessageModel->getErrorMessage());
-		}
+		
+		$this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
+		
+		$this->setData('messages', $this->MessageModel->getMessagesByPersonId());
+		
+		$this->setData('messages_outbox', $this->MessageModel->getSentMessagesByPersonId());
 	}
-
-
-	private function _getMessages($person_id)
+	
+	private function _sendMessage($subject, $body, $oe_kurzbz, $relationMessage_id = null)
 	{
-		$this->MessageModel->getMessagesByPersonId($person_id);
-		if($this->MessageModel->isResultValid() === true)
+		$result = $this->MessageModel->sendMessage($subject, $body, $oe_kurzbz, $relationMessage_id);
+		if (isSuccess($result))
 		{
-			return $this->MessageModel->result->retval;
+			return $result->retval;
 		}
 		else
 		{
-			$this->_setError(true, $this->MessageModel->getErrorMessage());
+			$this->_setError(true, $result->fhcCode . ' ' . $result->retval);
 		}
 	}
 	
-	private function _getSentMessages($person_id)
+	private function _changeMessageStatus($msg, $status)
 	{
-		$this->MessageModel->getSentMessagesByPersonId($person_id);
-		if($this->MessageModel->isResultValid() === true)
+		$result = $this->MessageModel->changeMessageStatus($msg->message_id, $status);
+		if (isSuccess($result))
 		{
-			return $this->MessageModel->result->retval;
+			return $result->retval;
 		}
 		else
 		{
-			$this->_setError(true, $this->MessageModel->getErrorMessage());
+			$this->_setError(true, $result->fhcCode . ' ' . $result->retval);
 		}
 	}
-
-
-	private function _loadPrestudent($person_id)
-	{
-		$this->PrestudentModel->getPrestudent(array("person_id"=>$person_id));
-		if($this->PrestudentModel->isResultValid() === true)
-		{
-			return $this->PrestudentModel->result->retval;
-		}
-		else
-		{
-			$this->_setError(true, $this->PrestudentModel->getErrorMessage());
-		}
-	}
-
-
-	private function _loadStudiengnag($studiengang_kz)
-	{
-		$this->StudiengangModel->getStudiengang($studiengang_kz);
-		if($this->StudiengangModel->isResultValid() === true)
-		{
-			return $this->StudiengangModel->result->retval[0];
-		}
-		else
-		{
-			$this->_setError(true, $this->StudiengangModel->getErrorMessage());
-		}
-	}
-
-
-	//    private function _loadOrganisationseinheit($oe_kurzbz)
-	//    {
-	// $this->OeModel->getOrganisationseinheit($oe_kurzbz);
-	// if($this->OeModel->isResultValid() === true)
-	// {
-	//     return $this->OeModel->result->retval[0];
-	// }
-	// else
-	// {
-	//     $this->_setError(true, $this->OeModel->getErrorMessage());
-	// }
-	//    }
-
-	private function _changeMessageStatus($person_id, $msg, $status)
-	{
-		$this->MessageModel->changeMessageStatus($person_id, $msg->message_id, $status);
-		if($this->MessageModel->isResultValid() === true)
-		{
-			return $this->MessageModel->result->retval;
-		}
-		else
-		{
-			$this->_setError(true, $this->MessageModel->getErrorMessage());
-		}
-	}
-
-
-	private function _loadPerson()
-	{
-		$this->PersonModel->getPersonen(array("person_id"=>$this->_person_id));
-		if($this->PersonModel->isResultValid() === true)
-		{
-			if(count($this->PersonModel->result->retval) == 1)
-			{
-				return $this->PersonModel->result->retval[0];
-			}
-			else
-			{
-				return $this->PersonModel->result->retval;
-			}
-		}
-		else
-		{
-			$this->_setError(true, $this->PersonModel->getErrorMessage());
-		}
-	}
-
-
 }
