@@ -10,9 +10,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Dokumente extends UI_Controller
 {
-    private $_person_id;
-    private $_studiensemester_kurzbz;
-
     /**
      * Index Page for this controller.
      *
@@ -96,7 +93,6 @@ class Dokumente extends UI_Controller
                 'Interessent',
                 true
             ));
-
         }
 
         $this->setData(

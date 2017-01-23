@@ -125,7 +125,7 @@
 			<div class="col-sm-1">
 				<div id="<?php echo $dok->dokument_kurzbz;?>_delete">
 				<?php
-				if((isset($dok->dokument->dms_id)) && ($dok->dokument->dms_id != null) && ($dokumente[$dok->dokument_kurzbz]->accepted == false))
+				if((isset($dok->dokument->dms_id)) && ($dok->dokument->dms_id != null) && (isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->accepted == false))
 				{
 				?>
 					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dok->dokument->dms_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>

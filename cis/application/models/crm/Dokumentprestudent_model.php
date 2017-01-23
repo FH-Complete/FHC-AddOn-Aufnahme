@@ -34,7 +34,7 @@ class Dokumentprestudent_model extends REST_Model
 			array(
 				'prestudent_id' => $prestudent_id,
 				'studiengang_kz' => $studiengang_kz,
-				'dokument_kurzbz_array' => $dokument_kurzbz_array
+				'dokument_kurzbz' => $dokument_kurzbz_array
 			)
 		);
 	}
