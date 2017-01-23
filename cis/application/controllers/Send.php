@@ -52,7 +52,6 @@ class Send extends UI_Controller
             ucfirst($this->getData('sprache')),
             REST_Model::AUTH_NOT_REQUIRED
         );
-
     }
 
 	/**

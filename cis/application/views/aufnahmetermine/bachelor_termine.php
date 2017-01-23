@@ -14,7 +14,7 @@ if (!empty($studiengaenge)) {
 		if ($stg->typ == "b") {
 
 ?>
-	    <h3>Bachelor / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplan->orgform_kurzbz; ?>)</h3>
+	    <h3>Bachelor / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplaene[0]->orgform_kurzbz; ?>)</h3>
 	    <div id="<?php echo $stg->studiengang_kz; ?>">
 		<div class="row">
 		    <div class="col-sm-12">
@@ -35,7 +35,7 @@ if (!empty($studiengaenge)) {
                 }
 				?>
 				<div id="<?php echo $rtId ?>_select" class="row" <?php if(!empty($rt_person[$stg->studiengang_kz])) echo 'style="display: none;"'?>>
-					<?php echo form_open("/Aufnahmetermine/register/".$stg->studiengang_kz."/".$stg->studienplan->studienplan_id, array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin")); ?>
+					<?php echo form_open("/Aufnahmetermine/register/".$stg->studiengang_kz."/".$stg->studienplaene[0]->studienplan_id, array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin")); ?>
 					<div class="col-sm-4">
 
 						<div class="form-group <?php echo (form_error("rtTermin") != "") ? 'has-error' : '' ?>">
@@ -104,7 +104,7 @@ if (!empty($studiengaenge)) {
 				{
 				?>
 				<div class="row">
-					<?php echo form_open("/Aufnahmetermine/register/".$stg->studiengang_kz."/".$stg->studienplan->studienplan_id, array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin")); ?>
+					<?php echo form_open("/Aufnahmetermine/register/".$stg->studiengang_kz."/".$stg->studienplaene[0]->studienplan_id, array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin")); ?>
 					<div class="col-sm-4">
 
 						<div class="form-group <?php echo (form_error("rtTermin") != "") ? 'has-error' : '' ?>">

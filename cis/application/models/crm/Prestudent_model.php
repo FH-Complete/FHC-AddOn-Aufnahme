@@ -123,6 +123,6 @@ class Prestudent_model extends REST_Model
 	 */
 	public function removeRegistrationToReihungstest($parameters)
 	{
-		return $this->delete('crm/Prestudent/DelReihungstest', $parameters);
+		return $this->save('crm/Prestudent/DelReihungstest', $parameters);
 	}
 }
