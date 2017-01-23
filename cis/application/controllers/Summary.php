@@ -114,6 +114,17 @@ class Summary extends UI_Controller
                 true
 			)
 		);
+
+		if($this->getData('prestudent') !== null)
+        {
+            foreach($this->getData('prestudent') as $prestudent)
+            {
+                if($prestudent->bewerbung_abgeschicktamum !== null)
+                {
+                    $this->setRawData("bewerbung_abgeschickt", true);
+                }
+            }
+        }
 		
 		//load bundeslaender
 		$this->setData('bundeslaender', $this->BundeslandModel->getAll());

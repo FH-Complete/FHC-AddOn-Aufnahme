@@ -81,10 +81,21 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
     $(document).ready(function() {
 		$('input[type=file]').on('change', prepareUpload);
     });
-	
+
+    <?php
+    $phrase = "";
+    if(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true))
+    {
+        $phrase = $this->getPhrase("Bewerbung/StornoConfirmationAfterApplicationIsSent", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);
+    }
+    else
+    {
+        $phrase = $this->getPhrase("Bewerbung/StornoConfirmation", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);
+    }
+    ?>
 	function confirmStorno(studiengang_kz)
     {
-		if(confirm("<?php echo $this->getPhrase("Bewerbung/StornoConfirmation", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>"))
+		if(confirm("<?php echo $phrase; ?>"))
 		{
 			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + "/"+ studiengang_kz;
 		}

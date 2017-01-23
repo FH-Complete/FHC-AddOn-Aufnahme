@@ -156,21 +156,21 @@
 			<?php
 			if((isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype !== null))
 			{
-				if(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument))
+				if(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name))
 				{
-					if(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".docx") !== false)
+					if(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".docx") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".doc") !== false)
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".doc") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".pdf") !== false)
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".pdf") !== false)
 					{
 						$logo = "document-pdf.svg";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".jpg") !== false)
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".jpg") !== false)
 					{
 						$logo = "document-picture.svg";
 					}
@@ -206,7 +206,7 @@
 							}
 							else
 							{
-								echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name;
+								echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name;
 							}
 							?>
 				</div>
@@ -222,21 +222,21 @@
 			<?php
 			if((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype !== null))
 			{
-				if(isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument))
+				if(isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name))
 				{
-					if(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".docx") !== false)
+					if(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".docx") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".doc") !== false)
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".doc") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".pdf") !== false)
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".pdf") !== false)
 					{
 						$logo = "document-pdf.svg";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".jpg") !== false)
+					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".jpg") !== false)
 					{
 						$logo = "document-picture.svg";
 					}
@@ -272,7 +272,7 @@
 						}
 						else
 						{
-							echo $dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name;
+							echo $dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name;
 						}
 						?>
 				</div>
