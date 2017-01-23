@@ -39,21 +39,21 @@
 			<?php
 			if((isset($dokumente[$dok->dokument_kurzbz]->mimetype)) && ($dokumente[$dok->dokument_kurzbz]->mimetype !== null))
 			{
-				if(isset($dokumente[$dok->dokument_kurzbz]->dokument))
+				if(isset($dokumente[$dok->dokument_kurzbz]->name))
 				{
-					if(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".docx") !== false)
+					if(strpos($dokumente[$dok->dokument_kurzbz]->name, ".docx") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".doc") !== false)
+					elseif(strpos($dokumente[$dok->dokument_kurzbz]->name, ".doc") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".pdf") !== false)
+					elseif(strpos($dokumente[$dok->dokument_kurzbz]->name, ".pdf") !== false)
 					{
 						$logo = "document-pdf.svg";
 					}
-					elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".jpg") !== false)
+					elseif(strpos($dokumente[$dok->dokument_kurzbz]->name, ".jpg") !== false)
 					{
 						$logo = "document-picture.svg";
 					}
@@ -92,19 +92,20 @@
 				<?php
 					}
 				?>
-				<div id="<?php echo $dok->dokument_kurzbz; ?>_name"></div>
+
 				<?php 
 				if(isset($logo) && ($logo != false))
 				{
-					echo '<div>'.$dokumente[$dok->dokument_kurzbz]->dokument->name.'</div>';
+					echo '<div id="'.$dok->dokument_kurzbz.'_name">'.$dokumente[$dok->dokument_kurzbz]->name.'</div>';
 				}
 				else
 				{
 				?>
-				<!-- The global progress bar -->
-				<div id="<?php echo $dok->dokument_kurzbz; ?>Progress" class="progress" style="display:none;">
-					<div class="progress-bar progress-bar-success"></div>
-				</div>
+                    <div id="<?php echo $dok->dokument_kurzbz; ?>_name"></div>
+                    <!-- The global progress bar -->
+                    <div id="<?php echo $dok->dokument_kurzbz; ?>Progress" class="progress" style="display:none;">
+                        <div class="progress-bar progress-bar-success"></div>
+                    </div>
 				<?php
 				}
 				?>
@@ -124,7 +125,7 @@
 			<div class="col-sm-1">
 				<div id="<?php echo $dok->dokument_kurzbz;?>_delete">
 				<?php
-				if((isset($dok->dokument)) && ($dok->dokument->dms_id != null) && ($dokumente[$dok->dokument_kurzbz]->accepted == false))
+				if((isset($dok->dokument->dms_id)) && ($dok->dokument->dms_id != null) && ($dokumente[$dok->dokument_kurzbz]->accepted == false))
 				{
 				?>
 					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dok->dokument->dms_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>
@@ -132,7 +133,7 @@
 				}
 				?>
 				</div>
-				<div id="<?php echo $dok->dokument_kurzbz; ?>_Upload" class="upload-widget" style="<?php echo ((!isset($dok->dokument)) || ($dok->dokument->dms_id == null)) ? "" : "display: none;"; ?>">
+				<div id="<?php echo $dok->dokument_kurzbz; ?>_Upload" class="upload-widget" style="<?php echo ((!isset($dok->dokument->dms_id)) || ($dok->dokument->dms_id == null)) ? "" : "display: none;"; ?>">
 					<span class="btn btn-success fileinput-button">
 						<i class="glyphicon glyphicon-plus"></i>
 						<!-- The file input field used as target for the file upload widget -->
@@ -261,7 +262,7 @@
 	function deleteDocument(dms_id)
 	{	
 		$.ajax({
-			url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/deleteDocument"); ?>',
+			url: '<?php echo base_url($this->config->config["index_page"]."/Dokumente/deleteDocument"); ?>',
 			type: 'POST',
 			data: {
 				"dms_id": dms_id
