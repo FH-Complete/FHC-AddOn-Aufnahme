@@ -341,7 +341,8 @@ class Aufnahmetermine extends UI_Controller
         else
         {
             $this->setData("message", '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />');
-            $this->_setError(true, 'Could not send message'." ".$message->fhcCode);
+            //TODO set error message
+            //$this->_setError(true, 'Could not send message'." ".$message->fhcCode);
         }
     }
 
