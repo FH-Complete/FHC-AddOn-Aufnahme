@@ -12,10 +12,10 @@
     <h1 id="sendHeader"><?php echo $this->lang->line("send_header"); ?></h1>
     <fieldset><?php
 if ((empty($completenessError["person"])) && (empty($completenessError["adresse"])) && (empty($completenessError["kontakt"])) && (empty($completenessError["dokumente"][$studiengang->studiengang_kz])) && (empty($completenessError["doks"]))) {
-	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz)."</p>";
+	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz)."</p>";
 }
 else {
-	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationNotReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz)."</p>";
+	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationNotReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz)."</p>";
 	echo "<ul class='list'>";
 	foreach ($completenessError as $error=>$value) {
 		if ($value === true) {
@@ -36,9 +36,9 @@ else {
 	}
 }
 ?></fieldset>
-	<span id="absenden_text"><?php echo $this->getPhrase("Submission/ApplicationFor", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);?></span>
+	<span id="absenden_text"><?php echo $this->getPhrase("Submission/ApplicationFor", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);?></span>
     <span id="studiengang"><?php echo $studiengang->bezeichnung; ?></span></br>
-    <?php echo form_open("Send/send/".$studiengang->studiengang_kz."/".$studiengang->studienplan->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
+    <?php echo form_open("Send/send/".$studiengang->studiengang_kz."/".$studiengang->studienplaene[0]->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
