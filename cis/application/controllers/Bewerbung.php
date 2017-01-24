@@ -628,6 +628,23 @@ class Bewerbung extends UI_Controller
 
         $this->_getPersonalDocuments();
 
+        //adding abschlusszeugnis if it is not present in dokumente
+        if(!isset($this->getData('dokumente')[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+        {
+            $akten = $this->AkteModel->getAktenAccepted();
+
+            if (hasData($akten))
+            {
+                if (isset($akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+                {
+                    $dok = $akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]];
+                    $dokumente = $this->getData('dokumente');
+                    $dokumente[$dok->dokument_kurzbz] = $dok;
+                    $this->setRawData('dokumente', $dokumente);
+                }
+            }
+        }
+
         echo json_encode($this->_checkDataCompleteness());
     }
 
