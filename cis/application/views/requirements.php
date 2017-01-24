@@ -62,7 +62,18 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="form-group">
-							<?php echo form_button(array("content"=>(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $this->lang->line("requirements_weiter"):$this->lang->line("requirements_speichern"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
+							<?php
+                            if((isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)))
+                            {
+                                echo '<a href="'.site_url("/Summary?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id).'">
+                                    <button type="button" class="btn btn-primary icon-absenden">'.$this->lang->line("requirements_weiter").'</button>';
+                            }
+                            else
+                            {
+                                $data = array("content" => $this->lang->line("requirements_speichern"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit");
+                                echo form_button($data);
+                            }
+                            ?>
 						</div>
 					</div>
 				</div>

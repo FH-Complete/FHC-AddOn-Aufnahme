@@ -321,7 +321,7 @@ class Aufnahmetermine extends UI_Controller
 
         (isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData("sprache");
 
-        $messageArray = array(
+        /*$messageArray = array(
             "vorlage_kurzbz" => 'MailAppointmentConfirmation',
             "oe_kurzbz" => $oe,
             "data" => $data,
@@ -330,9 +330,9 @@ class Aufnahmetermine extends UI_Controller
             "relationmessage_id" => null,
             "multiPartMime" => false,
             'receiver_id' => $person->person_id
-        );
+        );*/
 
-        $message = $this->MessageModel->sendMessageVorlage($messageArray);
+        $message = $this->MessageModel->sendMessageVorlage('MailAppointmentConfirmation', $oe, $data, $sprache, $orgform_kurzbz, null, false, $person->person_id);
 
         if(hasData($message))
         {

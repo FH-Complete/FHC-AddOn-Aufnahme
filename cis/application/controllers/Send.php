@@ -245,6 +245,8 @@ class Send extends UI_Controller
             }
 		}
 
+        $this->setRawData("prestudentStatus", $prestudentStatus);
+
 		/*
 		if(count($this->_data["studiengaenge"]) > 1)
 		{
@@ -352,6 +354,13 @@ class Send extends UI_Controller
 
 								$this->_sendMessageMailApplicationConfirmation($this->getData("person"), $studiengang);
 								$this->_sendMessageMailNewApplicationInfo($this->getData("person"), $studiengang);
+
+                                if($this->getData('error') !== null)
+                                {
+                                    //TODO set view if error occurs
+                                    //$this->load->view('send', $this->getAllData());
+                                }
+
 								$time = time();
 								redirect("/Aufnahmetermine?send=".$time);
 							}
@@ -420,6 +429,7 @@ class Send extends UI_Controller
 
 		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData("sprache");
 
+		/*
         $messageArray = array(
             "vorlage_kurzbz" => 'MailApplicationConfirmation',
             "oe_kurzbz" => $oe,
@@ -429,9 +439,11 @@ class Send extends UI_Controller
             "relationmessage_id" => null,
             "multiPartMime" => false,
             'receiver_id' => $person->person_id
-        );
+        );*/
 
-		$message = $this->MessageModel->sendMessageVorlage($messageArray);
+		$message = $this->MessageModel->sendMessageVorlage('MailApplicationConfirmation', $oe, $data, $sprache, $orgform_kurzbz, null, false, $person->person_id);
+
+		//var_dump($message);
 
 		if(hasData($message))
 		{
@@ -440,7 +452,7 @@ class Send extends UI_Controller
 		else
 		{
 			$this->setData("message", '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />');
-            $this->_setError(true, 'Could not send message'." ".$message->fhcCode." ".$message->msg);
+            $this->_setError(true, 'Could not send message'." ".$message->fhcCode." ".(isset($message->msg) ? $message->msg : $message->retval));
 		}
 	}
 
@@ -459,7 +471,7 @@ class Send extends UI_Controller
 		$orgform_kurzbz = $studiengang->orgform_kurzbz;
 
 		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData("sprache");
-
+/*
         $messageArray = array(
             "vorlage_kurzbz" => 'MailNewApplicationInfo',
             "oe_kurzbz" => $oe,
@@ -469,9 +481,11 @@ class Send extends UI_Controller
             "relationmessage_id" => null,
             "multiPartMime" => false,
             'receiver_id' => $person->person_id
-        );
+        );*/
 
-		$message = $this->MessageModel->sendMessageVorlage($messageArray);
+		$message = $this->MessageModel->sendMessageVorlage('MailNewApplicationInfo', $oe, $data, $sprache, $orgform_kurzbz, null, false, $person->person_id);
+
+		//var_dump($message);
 
         if(hasData($message))
         {
@@ -480,7 +494,7 @@ class Send extends UI_Controller
         else
         {
             $this->setData("message", '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />');
-            $this->_setError(true, 'Could not send message'." ".$message->fhcCode." ".$message->msg);
+            $this->_setError(true, 'Could not send message'." ".$message->fhcCode." ".(isset($message->msg) ? $message->msg : $message->retval));
         }
 	}
 

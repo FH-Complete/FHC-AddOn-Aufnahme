@@ -495,15 +495,15 @@ class Registration extends UI_Controller
 
 		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData('sprache');
 
-        $messageArray = array(
+        /*$messageArray = array(
             "vorlage_kurzbz" => 'MailRegistrationConfirmation',
             "oe_kurzbz" => $oe,
             "data" => $data,
             "sprache" => ucfirst($sprache),
             "multiPartMime" => false
-        );
+        );*/
 		
-		$message = $this->MessageModel->sendMessageVorlage($messageArray);
+		$message = $this->MessageModel->sendMessageVorlage('MailRegistrationConfirmation', $oe, $data, $sprache, null, null, false, $person->person_id);
 		
 		if (hasData($message))
 		{

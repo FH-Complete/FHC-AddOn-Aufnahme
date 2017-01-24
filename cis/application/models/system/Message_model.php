@@ -72,19 +72,19 @@ class Message_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function sendMessageVorlage($vorlage_kurzbz, $oe_kurzbz, $data, $sprache, $orgform_kurzbz = null, $sender_id = null, $multiPartMime = true)
+	public function sendMessageVorlage($vorlage_kurzbz, $oe_kurzbz, $data, $sprache, $orgform_kurzbz = null, $sender_id = null, $multiPartMime = true, $receiver_id = null)
 	{
 		return $this->save(
 			'system/Message/MessageVorlage',
 			array(
 				'vorlage_kurzbz' => $vorlage_kurzbz,
-				'oe_kurzbz' => $oe,
+				'oe_kurzbz' => $oe_kurzbz,
 				'data' => $data,
 				'sprache' => ucfirst($sprache),
 				'orgform_kurzbz' => $orgform_kurzbz,
 				'relationmessage_id' => $sender_id,
 				'multiPartMime' => $multiPartMime,
-				'receiver_id' => $this->getPersonId()
+				'receiver_id' => $receiver_id
 			)
 		);
 	}
