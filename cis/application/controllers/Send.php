@@ -143,6 +143,23 @@ class Send extends UI_Controller
 		//load dokumente
         $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
 
+        //adding abschlusszeugnis if it is not present in dokumente
+        if(!isset($this->getData('dokumente')[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+        {
+            $akten = $this->AkteModel->getAktenAccepted();
+
+            if (hasData($akten))
+            {
+                if (isset($akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+                {
+                    $dok = $akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]];
+                    $dokumente = $this->getData('dokumente');
+                    $dokumente[$dok->dokument_kurzbz] = $dok;
+                    $this->setRawData('dokumente', $dokumente);
+                }
+            }
+        }
+
         $this->_getPersonalDocuments();
 
 		$this->setRawData("completenessError", $this->_checkDataCompleteness());
@@ -241,6 +258,26 @@ class Send extends UI_Controller
 
         //load dokumente
         $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
+
+        //load dokumente
+        $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
+
+        //adding abschlusszeugnis if it is not present in dokumente
+        if(!isset($this->getData('dokumente')[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+        {
+            $akten = $this->AkteModel->getAktenAccepted();
+
+            if (hasData($akten))
+            {
+                if (isset($akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+                {
+                    $dok = $akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]];
+                    $dokumente = $this->getData('dokumente');
+                    $dokumente[$dok->dokument_kurzbz] = $dok;
+                    $this->setRawData('dokumente', $dokumente);
+                }
+            }
+        }
 
         $this->_getPersonalDocuments();
 
