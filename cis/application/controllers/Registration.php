@@ -397,8 +397,11 @@ class Registration extends UI_Controller
 		else
 		{
 			$this->_setError(true, $bewerbung->error . ' ' . $bewerbung->fhcCode);
+            $this->load->view('registration', $this->getAllData());
 		}
-        $this->load->view('registration', $this->getAllData());
+
+		//needed to unset session after registration; otherwhise user is automatically logged in
+        $this->session->sess_destroy();
 	}
 
 

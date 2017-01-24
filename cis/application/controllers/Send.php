@@ -104,7 +104,7 @@ class Send extends UI_Controller
 		foreach ($this->getData("prestudent") as $prestudent)
 		{
 			//load studiengaenge der prestudenten
-            if($prestudent->studiengang_kz == $this->getData("studiengang_kz"))
+            //if($prestudent->studiengang_kz == $this->getData("studiengang_kz"))
             {
                 /*$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
                 $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);*/
@@ -137,7 +137,12 @@ class Send extends UI_Controller
 
 		//load Dokumente from Studiengang
         $dokumenteStudiengang = array();
-        $dokumenteStudiengang[$this->getData('studiengang_kz')] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($this->getData("studiengang_kz"), true, true)->retval;
+
+        foreach($this->getData('studiengaenge') as $stg)
+        {
+            $dokumenteStudiengang[$stg->studiengang_kz] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($stg->studiengang_kz, true, true)->retval;
+        }
+
         $this->setRawData('dokumenteStudiengang', $dokumenteStudiengang);
 
 		//load dokumente
@@ -221,7 +226,7 @@ class Send extends UI_Controller
 		$prestudentStatus = array();
 		foreach ($this->getData("prestudent") as $prestudent)
 		{
-            if($prestudent->studiengang_kz == $studiengang_kz)
+            //if($prestudent->studiengang_kz == $studiengang_kz)
             {
                 //load studiengaenge der prestudenten
                 //$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
@@ -255,7 +260,12 @@ class Send extends UI_Controller
 
         //load Dokumente from Studiengang
         $dokumenteStudiengang = array();
-        $dokumenteStudiengang[$this->getData('studiengang_kz')] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($this->getData("studiengang_kz"), true, true)->retval;
+
+        foreach($this->getData('studiengaenge') as $stg)
+        {
+            $dokumenteStudiengang[$stg->studiengang_kz] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($stg->studiengang_kz, true, true)->retval;
+        }
+
         $this->setRawData('dokumenteStudiengang', $dokumenteStudiengang);
 
         //load dokumente
@@ -357,8 +367,7 @@ class Send extends UI_Controller
 
                                 if($this->getData('error') !== null)
                                 {
-                                    //TODO set view if error occurs
-                                    //$this->load->view('send', $this->getAllData());
+                                    $this->load->view('send', $this->getAllData());
                                 }
 
 								$time = time();
@@ -443,8 +452,6 @@ class Send extends UI_Controller
 
 		$message = $this->MessageModel->sendMessageVorlage('MailApplicationConfirmation', $oe, $data, $sprache, $orgform_kurzbz, null, false, $person->person_id);
 
-		//var_dump($message);
-
 		if(hasData($message))
 		{
 				//success
@@ -484,8 +491,6 @@ class Send extends UI_Controller
         );*/
 
 		$message = $this->MessageModel->sendMessageVorlage('MailNewApplicationInfo', $oe, $data, $sprache, $orgform_kurzbz, null, false, $person->person_id);
-
-		//var_dump($message);
 
         if(hasData($message))
         {
