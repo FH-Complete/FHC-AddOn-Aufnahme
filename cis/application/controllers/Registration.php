@@ -494,26 +494,35 @@ class Registration extends UI_Controller
 			$oe = 'fhstp';
 
 		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData('sprache');
+
+        $messageArray = array(
+            "vorlage_kurzbz" => 'MailRegistrationConfirmation',
+            "oe_kurzbz" => $oe,
+            "data" => $data,
+            "sprache" => ucfirst($sprache),
+            "multiPartMime" => false
+        );
 		
-		$message = $this->MessageModel->sendMessageVorlage('MailRegistrationConfirmation', $oe, $data, $sprache, null, null, false);
+		$message = $this->MessageModel->sendMessageVorlage($messageArray);
 		
 		if (hasData($message))
 		{
 			$this->setRawData(
-				'message',
+				'message','<div class=\'alert alert-success\'>'.
 				sprintf(
 					$this->getPhrase('Registration/EmailWithAccessCodeSent',
 					$this->getData('sprache'),
 					$this->config->item('root_oe')),
 					$email
-				) . '<br><br><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
+				).'</div>'
+                //. '<br><br><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
 			);
 		}
 		else
 		{
 			$this->setRawData(
 				'message',
-				'<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
+				'<span class="alert alert-danger">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />'
 			);
 			$this->_setError(true, $message->error . ' ' . $message->fhcCode);
 		}
