@@ -313,7 +313,8 @@ class Aufnahmetermine extends UI_Controller
             "termin" => date("d.m.Y", strtotime($termin->datum)) . " " . date("H:i", strtotime($termin->uhrzeit)),
             "anrede" => $person->anrede,
             "vorname" => $person->vorname,
-            "nachname" => $person->nachname
+            "nachname" => $person->nachname,
+            "stgMail" => $studiengang->email
         );
 
         $oe = $studiengang->oe_kurzbz;
