@@ -507,7 +507,7 @@ class Dokumente extends UI_Controller
                             {
                                 if ($prestudent->status_kurzbz == "Interessent")
                                 {
-                                    $doks = $this->DokumentStudiengangModel->$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($prestudent->studiengang_kz, true, null)->retval;
+                                    $doks = $this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($prestudent->studiengang_kz, true, null)->retval;
                                     foreach ($doks as $dok)
                                     {
                                         if (($this->getData('dokumente') !== null) && ((!isset($this->getData("dokumente")[$dok->dokument_kurzbz])) && ($dok->pflicht == true)))
