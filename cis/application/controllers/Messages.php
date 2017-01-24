@@ -256,7 +256,7 @@ class Messages extends UI_Controller
 			{
 				foreach ($studiengaenge->retval as $studiengang)
 				{
-					$studiengaengeArray[$studiengang->oe_kurzbz] = $studiengang->oe_kurzbz;
+					$studiengaengeArray[$studiengang->oe_kurzbz] = $studiengang->bezeichnung;
 				}
 			}
 		}
