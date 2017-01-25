@@ -201,7 +201,7 @@ class Send extends UI_Controller
         }
 
 		//load studiengang
-		$this->setData("studiengang", $this->StudiengangModel->getStudiengang($studiengang_kz));
+		$this->setData("studiengang", $this->StudiengangModel->getStudiengang($studiengang_kz, true));
 
 		//$this->_data["studiengang"]->studiengangstyp = $this->_loadStudiengangstyp($this->_data["studiengang"]->typ);
 

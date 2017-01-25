@@ -24,8 +24,13 @@ class Studiengang_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getStudiengang($studiengang_kz)
+	public function getStudiengang($studiengang_kz, $forceApiCall = false)
 	{
+        if($forceApiCall)
+        {
+            unset($this->session->userdata['Studiengang.getStudiengang']);
+        }
+
 		return $this->loadOne(
 			'organisation/Studiengang/Studiengang',
 			array('studiengang_kz' => $studiengang_kz), 'Studiengang.getStudiengang'
