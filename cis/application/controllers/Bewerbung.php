@@ -489,7 +489,7 @@ class Bewerbung extends UI_Controller
             $complete["person"] = false;
         }
         //check adress data
-        
+
         if ($this->getData("adresse") !== null)
         {
             $adresse = $this->getData("adresse");

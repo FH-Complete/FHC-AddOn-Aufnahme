@@ -272,7 +272,7 @@ class Registration extends UI_Controller
 			$this->load->view('login/confirm_login', $this->getAllData());
 		}
 		
-		$person = $this->PersonModel->getPerson($this->session->userdata()['zugangscode'], $this->getData('email'));
+		$person = $this->PersonModel->getPerson($this->session->userdata()['zugangscode'], $this->getData('email'),true);
 		$this->setData('person', $person);
 
 		if (hasData($person))
