@@ -11,7 +11,7 @@
 <div role="tabpanel" class="tab-pane" id="send">
     <h1 id="sendHeader"><?php echo $this->lang->line("send_header"); ?></h1>
     <fieldset><?php
-if ((empty($completenessError["person"])) && (empty($completenessError["adresse"])) && (empty($completenessError["kontakt"])) && (empty($completenessError["dokumente"][$studiengang->studiengang_kz])) && (empty($completenessError["doks"]))) {
+if ((empty($completenessError["person"])) && (empty($completenessError["adresse"])) && (empty($completenessError["kontakt"])) && (empty($completenessError["dokumente"][$studiengang->studiengang_kz])) && (empty($completenessError["doks"])) && (empty($completenessError['spezialisierung']))) {
 	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz)."</p>";
 }
 else {
@@ -23,6 +23,11 @@ else {
 		}
 	}
 	echo "</ul>";
+
+    if (isset($completenessError["spezialisierung"][$studiengang->studiengang_kz]))
+    {
+        echo "<p class='p'>".$this->getPhrase("Personal/SpezialisierungHeader", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz)."</p>";
+    }
 
 	if (isset($completenessError["dokumente"][$studiengang->studiengang_kz]))
 	{

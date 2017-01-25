@@ -124,4 +124,42 @@
 		</div>
     </div>
 </div>
+<?php
+if(isset($spezPhrase) && (isset($spezPhrase[$studiengang->studiengang_kz])) && ($spezPhrase[$studiengang->studiengang_kz] !== null))
+{
+    if((!isset($spezialisierung)) || (!isset($spezialisierung[$studiengang->studiengang_kz])) || (empty($spezialisierung[$studiengang->studiengang_kz])))
+    {
+        $unvollständig = true;
+    }
+    else
+    {
+        $unvollständig = false;
+    }
+    ?>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="col-sm-4">
+                <?php echo $this->getPhrase("Personal/SpezialisierungHeader", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
+            </div>
+            <div class="col-sm-1">
+                &nbsp;
+            </div>
+            <div class="col-sm-6 <?php echo ($unvollständig) ? "incomplete" : ""; ?>">
+                <?php
+                if($unvollständig)
+                {
+                    echo $this->lang->line('summary_unvollstaendig');
+                }
+                else
+                {
+                    echo str_replace(";", "<br> ", $spezialisierung[$studiengang->studiengang_kz]->text);
+                }
+
+                ?>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+?>
 <hr>

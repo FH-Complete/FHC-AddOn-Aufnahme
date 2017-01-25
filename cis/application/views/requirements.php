@@ -173,7 +173,7 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
 			dataType: 'json',
 			success: function(data, textStatus, jqXHR)
 			{
-				if((data.person==false) ||(data.adresse==false) ||(data.dokumente==false) ||(data.kontakt==false) ||(data.zustelladresse==false))
+                if((data.person==false) ||(data.adresse==false) ||(data.dokumente==false) ||(data.kontakt==false) ||(data.zustelladresse==false) || (data.spezialisierung == false))
 				{
 					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
 				}

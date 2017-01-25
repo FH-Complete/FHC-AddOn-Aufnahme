@@ -350,12 +350,27 @@ class Requirements extends UI_Controller
 							|| $prestudent->status_kurzbz === "Bewerber"))
 					{
 						$text = "";
+						$count = 0;
 						foreach($this->input->post()["spezialisierung"] as $spez)
 						{
-							$text .= $spez.";";
+						    if($spez !== "")
+                            {
+                                $count ++;
+                                $text .= $spez . ";";
+                            }
 						}
+
+						if(isset($this->input->post()['mandatory']))
+                        {
+                            if ($count < $this->input->post()['mandatory'])
+                            {
+                                $this->_setError(true);
+                                $this->setRawData('spezialisierung_error', true);
+                            }
+                        }
+
 						$text = substr($text, 0, -1);
-						if (substr_count($text, ';') !== strlen($text))
+						if (substr_count($text, ';') !== strlen($text) && ($this->getData('error') === null))
 						{
 							$insertSpecialization = $this->PrestudentModel->saveSpecialization(array("prestudent_id" => (int) $prestudent->prestudent_id, 'text'=>$text));
 

@@ -23,3 +23,4 @@ $lang["requirements_delete"] = "löschen";
 $lang["requirements_speichern"] = "Speichern & Weiter";
 $lang["requirements_weiter"] = "Weiter";
 $lang["requirements_selectOption"] = "Treffen Sie bitte eine Auswahl.";
+$lang["requirements_selectSpecialization"] = "Treffen Sie bitte eine Auswahl.";
