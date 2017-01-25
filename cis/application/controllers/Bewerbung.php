@@ -489,6 +489,7 @@ class Bewerbung extends UI_Controller
             $complete["person"] = false;
         }
         //check adress data
+        
         if ($this->getData("adresse") !== null)
         {
             $adresse = $this->getData("adresse");
@@ -526,10 +527,11 @@ class Bewerbung extends UI_Controller
                 $complete["zustelladresse"] = false;
             }
         }
-        else
+        elseif(($this->getData('adresse') !== null) && ($this->getData('adresse')->zustelladresse === false))
         {
             $complete["zustelladresse"] = false;
         }
+
         //check contact data
         $kontakt = $this->getData("kontakt");
         if($kontakt !== null)
