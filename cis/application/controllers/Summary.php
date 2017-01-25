@@ -51,124 +51,151 @@ class Summary extends UI_Controller
 	 */
 	public function index()
 	{
-		$this->PhraseModel->getPhrasen(
-			'aufnahme',
-			ucfirst($this->getData('sprache'))
-		);
-		
-		if ($this->input->get('studiengang_kz') != null)
+        if ((isset($this->input->get()["studiengang_kz"]) && ($this->input->get()["studiengang_kz"] !== null) && ($this->input->get()["studiengang_kz"] !== ''))
+            && (isset($this->input->get()['studienplan_id'])) && ($this->input->get()["studienplan_id"] !== null) && ($this->input->get()["studienplan_id"] !== '')
+        )
         {
-            $this->setRawData('studiengang_kz', $this->input->get('studiengang_kz'));
-            $dokumenteStudiengang = array();
-			$dokumenteStudiengang[$this->getData('studiengang_kz')] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($this->getData('studiengang_kz'), true, true)->retval;
+            $this->PhraseModel->getPhrasen(
+                'aufnahme',
+                ucfirst($this->getData('sprache'))
+            );
 
-			$this->setRawData('dokumenteStudiengang', $dokumenteStudiengang);
-        }
-        
-        $this->setData('person', $this->PersonModel->getPerson());
-        $person = $this->getData('person');
-        
-        $bundesland = $this->BundeslandModel->getBundesland($person->bundesland_code);
-        if ($bundesland !== null)
-        {
-			$person->bundesland_bezeichnung = $bundesland->bezeichnung;
-		}
-		else
-		{
-			$person->bundesland_bezeichnung = null;
-		}
-        
-        $nation = $this->NationModel->getNation($person->geburtsnation);
-        if ($nation !== null)
-        {
-			$person->geburtsnation_text = $nation->kurztext;
-		}
-		else
-		{
-			$person->geburtsnation_text = null;
-		}
-		
-        
-        $this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
-		
-		$studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
-		if (hasData($studiensemester))
-		{
-			$this->setData('studiensemester', $studiensemester);
-			$this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-				$this->getData('studiensemester')->studiensemester_kurzbz,
-				'',
-				'Interessent',
-                true
-			));
-		}
-		
-		//load preinteressent data
-		$this->setData(
-		    'prestudent',
-            $this->PrestudentModel->getLastStatuses(
-                $this->getData('person')->person_id,
-                $this->getData('studiensemester')->studiensemester_kurzbz,
-                null,
-                null,
-                true
-			)
-		);
+            $this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
+            $this->setData('person', $this->PersonModel->getPerson());
 
-		$spezialisierung = array();
-		if($this->getData('prestudent') !== null)
-        {
-            foreach($this->getData('prestudent') as $prestudent)
+            $this->setRawData("studiengang_kz", $this->input->get("studiengang_kz"));
+            $this->setRawData("studienplan_id", $this->input->get("studienplan_id"));
+
+            $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+            if (hasData($studiensemester))
             {
-                if($prestudent->bewerbung_abgeschicktamum !== null)
-                {
-                    $this->setRawData("bewerbung_abgeschickt", true);
-                }
-
-                $spezialisierung[$prestudent->studiengang_kz] = $this->PrestudentModel->getSpecialization($prestudent->prestudent_id)->retval;
+                $this->setData('studiensemester', $studiensemester);
+                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
+                    $this->getData('studiensemester')->studiensemester_kurzbz,
+                    '',
+                    'Interessent',
+                    true
+                ));
             }
+
+            //setting selected Studiengang by GET Param
+            foreach ($this->getData('studiengaenge') as $stg)
+            {
+                if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
+                {
+                    $this->setRawData("studiengang", $stg);
+                }
+            }
+
+            $this->setRawData("studiengaenge", array($this->getData('studiengang')));
+
+            $this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
+
+            $this->setData('adresse', $this->AdresseModel->getAdresse());
+
+            $this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
+
+            $this->setData(
+                'prestudent',
+                $this->PrestudentModel->getLastStatuses(
+                    $this->getData('person')->person_id,
+                    $this->getData('studiensemester')->studiensemester_kurzbz,
+                    null,
+                    null,
+                    true
+                )
+            );
+
+            $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
+            $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
+
+            if ($this->getData('prestudentStatus')->bewerbung_abgeschicktamum != null)
+            {
+                $this->setRawData("bewerbung_abgeschickt", true);
+            }
+
+            //load Dokumente from Studiengang
+            $dokumenteStudiengang = array();
+            $dokumenteStudiengang[$this->getData('studiengang')->studiengang_kz] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($this->getData('studiengang')->studiengang_kz, true, true)->retval;
+            $this->setRawData('dokumenteStudiengang', $dokumenteStudiengang);
+
+            $person = $this->getData('person');
+
+            $bundesland = $this->BundeslandModel->getBundesland($person->bundesland_code);
+            if ($bundesland !== null)
+            {
+                $person->bundesland_bezeichnung = $bundesland->bezeichnung;
+            }
+            else
+            {
+                $person->bundesland_bezeichnung = null;
+            }
+
+            $nation = $this->NationModel->getNation($person->geburtsnation);
+
+            if ($nation !== null)
+            {
+
+                $person->geburtsnation_text = $nation->kurztext;
+            }
+            else
+            {
+                $person->geburtsnation_text = null;
+            }
+
+            $this->setRawData('person', $person);
+
+            //load preinteressent data
+           /* $this->setData(
+                'prestudent',
+                $this->PrestudentModel->getLastStatuses(
+                    $this->getData('person')->person_id,
+                    $this->getData('studiensemester')->studiensemester_kurzbz,
+                    null,
+                    null,
+                    true
+                )
+            );*/
+
+            if ($this->getData('prestudentStatus')->bewerbung_abgeschicktamum != null)
+            {
+                $this->setRawData("bewerbung_abgeschickt", true);
+            }
+
+            //load data for specialization
+            $spezialisierung = array();
+            $spezialisierung[$this->getData('prestudent')->studiengang_kz] = $this->PrestudentModel->getSpecialization($this->getData('prestudent')->prestudent_id)->retval;
+            $this->setRawData('spezialisierung', $spezialisierung);
+
+            //load bundeslaender
+            $this->setData('bundeslaender', $this->BundeslandModel->getAll());
+
+            //load nationen
+            $this->setData('nationen', $this->NationModel->getAll());
+
+            //load adresse
+            $this->setData('adresse', $this->AdresseModel->getAdresse());
+
+            //load kontakt
+            $this->setData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId());
+
+            //load dokumente
+            $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
+
+            $this->_getPersonalDocuments();
+
+            //load phrase for specialization
+            $spezPhrase = array();
+            $spezPhrase[$this->getData('prestudent')->studiengang_kz] = $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $this->getData('studiengang')->oe_kurzbz, $this->getData('studiengang')->studienplaene[0]->orgform_kurzbz);
+            $this->setRawData('spezPhrase', $spezPhrase);
+
+            $this->load->view('summary', $this->getAllData());
+
         }
-
-        $this->setRawData('spezialisierung', $spezialisierung);
-		
-		//load bundeslaender
-		$this->setData('bundeslaender', $this->BundeslandModel->getAll());
-		
-		//load nationen
-		$this->setData('nationen', $this->NationModel->getAll());
-		
-		//load adresse
-		$this->setData('adresse', $this->AdresseModel->getAdresse());
-		
-		//load kontakt
-		$this->setData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId());
-		
-		//load dokumente
-		$this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
-		
-		$this->_getPersonalDocuments();
-
-		$spezPhrase = array();
-		foreach($this->getData('studiengaenge') as $stg)
+        else
         {
-            $spezPhrase[$stg->studiengang_kz] = $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $stg->oe_kurzbz, $stg->studienplaene[0]->orgform_kurzbz);
+            redirect('/Bewerbung');
         }
-        $this->setRawData('spezPhrase', $spezPhrase);
-
-		$this->load->view('summary', $this->getAllData());
-	}
-	
-	private function _loadDokumentByStudiengang($studiengang_kz)
-	{
-		$this->DokumentStudiengangModel->getDokumentstudiengangByStudiengang_kz($studiengang_kz, true, true);
-		if($this->DokumentStudiengangModel->isResultValid() === true)
-		{
-			return $this->DokumentStudiengangModel->result->retval;
-		}
-		else
-		{
-			$this->_setError(true, $this->DokumentStudiengangModel->getErrorMessage());
-		}
 	}
 
 	/**

@@ -124,12 +124,12 @@ class Send extends UI_Controller
 
             //load Dokumente from Studiengang
             $dokumenteStudiengang = array();
-            $dokumenteStudiengang[$stg->studiengang_kz] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($this->getData('studiengang')->studiengang_kz, true, true)->retval;
+            $dokumenteStudiengang[$this->getData('studiengang')->studiengang_kz] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($this->getData('studiengang')->studiengang_kz, true, true)->retval;
             $this->setRawData('dokumenteStudiengang', $dokumenteStudiengang);
 
             //load phrase for specialization
             $spezPhrase = array();
-            $spezPhrase[$stg->studiengang_kz] = $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $this->getData('studiengang')->oe_kurzbz, $this->getData('studiengang')->studienplaene[0]->orgform_kurzbz);
+            $spezPhrase[$this->getData('prestudent')->studiengang_kz] = $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $this->getData('studiengang')->oe_kurzbz, $this->getData('studiengang')->studienplaene[0]->orgform_kurzbz);
             $this->setRawData('spezPhrase', $spezPhrase);
 
             //load dokumente
@@ -224,44 +224,30 @@ class Send extends UI_Controller
                 )
             );
 
+            $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
+            $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
 
-            $prestudentStatus = array();
-            $spezialisierung = array();
-            foreach ($this->getData("prestudent") as $prestudent)
+            if ($this->getData('prestudentStatus')->bewerbung_abgeschicktamum != null)
             {
-                if($prestudent->studiengang_kz == $studiengang_kz)
-                {
-                    $prestudentStatus[$prestudent->studiengang_kz] = $prestudent;
-
-                    if (($prestudent->status_kurzbz === "Interessent"
-                        || $prestudent->status_kurzbz === "Bewerber")
-                    )
-                    {
-
-                        if ($prestudent->bewerbung_abgeschicktamum != null)
-                        {
-                            $this->setData("bewerbung_abgeschickt", true);
-                        }
-                    }
-                    $spezialisierung[$prestudent->studiengang_kz] = $this->PrestudentModel->getSpecialization($prestudent->prestudent_id)->retval;
-                }
+                $this->setRawData("bewerbung_abgeschickt", true);
             }
+
+
+            //load data for specialization
+            $spezialisierung = array();
+            $spezialisierung[$this->getData('prestudent')->studiengang_kz] = $this->PrestudentModel->getSpecialization($this->getData('prestudent')->prestudent_id)->retval;
             $this->setRawData('spezialisierung', $spezialisierung);
-            $this->setRawData("prestudentStatus", $prestudentStatus);
 
             //load Dokumente from Studiengang
             $dokumenteStudiengang = array();
-            $spezPhrase = array();
-            foreach ($this->getData('studiengaenge') as $stg)
-            {
-                $dokumenteStudiengang[$stg->studiengang_kz] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($stg->studiengang_kz, true, true)->retval;
-                $spezPhrase[$stg->studiengang_kz] = $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $stg->oe_kurzbz, $stg->studienplaene[0]->orgform_kurzbz);
-            }
-            $this->setRawData('spezPhrase', $spezPhrase);
+            $dokumenteStudiengang[$this->getData('studiengang')->studiengang_kz] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($this->getData('studiengang')->studiengang_kz, true, true)->retval;
             $this->setRawData('dokumenteStudiengang', $dokumenteStudiengang);
 
-            //load dokumente
-            $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
+            //load phrase for specialization
+            $spezPhrase = array();
+            $spezPhrase[$this->getData('prestudent')->studiengang_kz] = $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $this->getData('studiengang')->oe_kurzbz, $this->getData('studiengang')->studienplaene[0]->orgform_kurzbz);
+            $this->setRawData('spezPhrase', $spezPhrase);
+
 
             //load dokumente
             $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
@@ -287,101 +273,95 @@ class Send extends UI_Controller
 
             $this->setRawData("completenessError", $this->_checkDataCompleteness());
 
+            $prestudent = $this->getData('prestudent');
+            $prestudentStatus = $this->getData('prestudentStatus');
 
-            //load prestudent data for correct studiengang
-            foreach ($this->getData("prestudent") as $prestudent)
+            //load studiengaenge der prestudenten
+            if ($this->getData('prestudent')->studiengang_kz == $studiengang_kz)
             {
-                //load studiengaenge der prestudenten
-                if ($prestudent->studiengang_kz == $studiengang_kz)
+                if (($this->getData('prestudentStatus')->status_kurzbz === "Interessent"
+                    || $this->getData('prestudentStatus')->status_kurzbz === "Bewerber")
+                )
                 {
-                    //$prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-                    if (($prestudent->status_kurzbz === "Interessent"
-                        || $prestudent->status_kurzbz === "Bewerber")
+                    if ((!empty($this->getData("completenessError")["person"]))
+                        || (!empty($this->getData("completenessError")["adresse"]))
+                        || (!empty($this->getData("completenessError")["kontakt"]))
+                        || (!empty($this->getData("completenessError")["dokumente"][$this->getData('prestudent')->studiengang_kz]))
+                        || (!empty($this->getData("completenessError")["doks"]))
                     )
                     {
-                        //$studienplan = $this->_loadStudienplan($prestudentStatus->studienplan_id);
-                        //$this->_data["studiengang"]->studienplan = $studienplan;
-
-
-                        if ((!empty($this->getData("completenessError")["person"]))
-                            || (!empty($this->getData("completenessError")["adresse"]))
-                            || (!empty($this->getData("completenessError")["kontakt"]))
-                            || (!empty($this->getData("completenessError")["dokumente"][$prestudent->studiengang_kz]))
-                            || (!empty($this->getData("completenessError")["doks"]))
-                        )
+                        $this->_setError(true, $this->lang->line("send_datenUnvollstaendig"));
+                        $this->load->view('send', $this->getAllData());
+                    }
+                    else
+                    {
+                        $dokument_kurzbz_array = array();
+                        if (($this->getData('dokumente') !== null) && (isset($this->getData("dokumente")[$this->config->config["dokumentTypen"]["reisepass"]])))
                         {
-                            $this->_setError(true, $this->lang->line("send_datenUnvollstaendig"));
-                            $this->load->view('send', $this->getAllData());
+                            array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["reisepass"]);
                         }
-                        else
+
+                        if (($this->getData('dokumente') !== null) && (isset($this->getData("dokumente")[$this->config->config["dokumentTypen"]["lebenslauf"]])))
                         {
-                            $dokument_kurzbz_array = array();
-                            if (($this->getData('dokumente') !== null) && (isset($this->getData("dokumente")[$this->config->config["dokumentTypen"]["reisepass"]])))
-                            {
-                                array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["reisepass"]);
-                            }
+                            array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["lebenslauf"]);
+                        }
 
-                            if (($this->getData('dokumente') !== null) && (isset($this->getData("dokumente")[$this->config->config["dokumentTypen"]["lebenslauf"]])))
-                            {
-                                array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["lebenslauf"]);
-                            }
+                        if (($this->getData('dokumente') !== null) && (isset($this->getData("dokumente")[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]])))
+                        {
+                            array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]);
+                        }
 
-                            if (($this->getData('dokumente') !== null) && (isset($this->getData("dokumente")[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]])))
-                            {
-                                array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]);
-                            }
+                        if (($this->getData('dokumente') !== null) && (isset($this->getData("dokumente")[$this->config->config["dokumentTypen"]["abschlusszeugnis_" . $this->getData("studiengang")->typ]])))
+                        {
+                            array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["abschlusszeugnis_" . $this->getData("studiengang")->typ]);
+                        }
 
-                            if (($this->getData('dokumente') !== null) && (isset($this->getData("dokumente")[$this->config->config["dokumentTypen"]["abschlusszeugnis_" . $this->getData("studiengang")->typ]])))
+                        if (is_null($this->getData('prestudentStatus')->bewerbung_abgeschicktamum))
+                        {
+                            if (($this->DokumentPrestudentModel->setAccepted($this->getData('prestudent')->prestudent_id, $this->getData('prestudent')->studiengang_kz)->retval === true) && ($this->DokumentPrestudentModel->setAcceptedDocuments($this->getData('prestudent')->prestudent_id, $this->getData('prestudent')->studiengang_kz, $dokument_kurzbz_array)->retval === true))
                             {
-                                array_push($dokument_kurzbz_array, $this->config->config["dokumentTypen"]["abschlusszeugnis_" . $this->getData("studiengang")->typ]);
-                            }
+                                $prestudentStatus = array();
+                                $prestudentStatus['prestudent_id'] = $this->getData('prestudent')->prestudent_id;
+                                $prestudentStatus['status_kurzbz'] = "Interessent";
+                                $prestudentStatus['rt_stufe'] = $this->getData('prestudentStatus')->rt_stufe;
+                                $prestudentStatus['studiensemester_kurzbz'] = $this->getData('prestudentStatus')->studiensemester_kurzbz;
+                                $prestudentStatus['orgform_kurzbz'] = $this->getData('prestudentStatus')->orgform_kurzbz;
+                                $prestudentStatus['studienplan_id'] = $this->getData('prestudentStatus')->studienplan_id;
+                                $prestudentStatus['bewerbung_abgeschicktamum'] = date('Y-m-d H:i:s');
+                                $prestudentStatus['datum'] = date('Y-m-d');
+                                $prestudentStatus['ausbildungssemester'] = $this->getData('prestudentStatus')->ausbildungssemester;
 
-                            if (is_null($prestudent->bewerbung_abgeschicktamum))
-                            {
-                                if (($this->DokumentPrestudentModel->setAccepted($prestudent->prestudent_id, $prestudent->studiengang_kz)->retval === true) && ($this->DokumentPrestudentModel->setAcceptedDocuments($prestudent->prestudent_id, $prestudent->studiengang_kz, $dokument_kurzbz_array)->retval === true))
+                                $this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
+
+                                $studiengang = $this->getData("studiengang");
+                                $studiengang->studiengangstyp = $this->StudiengangstypModel->getStudiengangstyp($studiengang->typ)->retval;
+
+                                $this->_sendMessageMailApplicationConfirmation($this->getData("person"), $studiengang);
+                                $this->_sendMessageMailNewApplicationInfo($this->getData("person"), $studiengang);
+
+                                if ($this->getData('error') !== null)
                                 {
-                                    $prestudentStatus = array();
-                                    $prestudentStatus['prestudent_id'] = $prestudent->prestudent_id;
-                                    $prestudentStatus['status_kurzbz'] = "Interessent";
-                                    $prestudentStatus['rt_stufe'] = $prestudent->rt_stufe;
-                                    $prestudentStatus['studiensemester_kurzbz'] = $prestudent->studiensemester_kurzbz;
-                                    $prestudentStatus['orgform_kurzbz'] = $prestudent->orgform_kurzbz;
-                                    $prestudentStatus['studienplan_id'] = $prestudent->studienplan_id;
-                                    $prestudentStatus['bewerbung_abgeschicktamum'] = date('Y-m-d H:i:s');
-                                    $prestudentStatus['datum'] = date('Y-m-d');
-                                    $prestudentStatus['ausbildungssemester'] = $prestudent->ausbildungssemester;
-
-                                    $this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
-
-                                    $studiengang = $this->getData("studiengang");
-                                    $studiengang->studiengangstyp = $this->StudiengangstypModel->getStudiengangstyp($studiengang->typ)->retval;
-
-                                    $this->_sendMessageMailApplicationConfirmation($this->getData("person"), $studiengang);
-                                    $this->_sendMessageMailNewApplicationInfo($this->getData("person"), $studiengang);
-
-                                    if ($this->getData('error') !== null)
-                                    {
-                                        $this->load->view('send', $this->getAllData());
-                                    }
-
-                                    $time = time();
-                                    redirect("/Aufnahmetermine?send=" . $time);
-                                }
-                                else
-                                {
-                                    $this->_setError(true, $this->lang->line("send_FehlerDokumente"));
                                     $this->load->view('send', $this->getAllData());
                                 }
+
+                                $time = time();
+                                redirect("/Aufnahmetermine?send=" . $time);
                             }
                             else
                             {
-                                $this->_setError(true, $this->lang->line("send_bereitsAbgeschickt"));
+                                $this->_setError(true, $this->lang->line("send_FehlerDokumente"));
                                 $this->load->view('send', $this->getAllData());
                             }
+                        }
+                        else
+                        {
+                            $this->_setError(true, $this->lang->line("send_bereitsAbgeschickt"));
+                            $this->load->view('send', $this->getAllData());
                         }
                     }
                 }
             }
+
         }
         else
         {

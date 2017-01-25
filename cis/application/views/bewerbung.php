@@ -19,11 +19,18 @@ if (isset($error) && ($error->error === true))
 $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
 echo $this->template->widget("menu", array('aktiv' => 'Bewerbung', 'numberOfUnreadMessages'=>$numberOfUnreadMessages));
 ?>
-<div id="backToApplication">
-	<span class="arrowLeft"></span><span><a href="<?php  echo base_url($this->config->config["index_page"]."/Bewerbung");?>"><?php echo $this->lang->line("aufnahme/backToApplications"); ?></a></span>
-</div>
-<?php
+    <?php if(!isset($studiengang_kz) && !isset($studienplan_id))
 
+    {
+        ?>
+        <div id="backToApplication">
+            <span class="arrowLeft"></span><span><a
+                        href="<?php echo base_url($this->config->config["index_page"] . "/Bewerbung"); ?>"><?php echo $this->lang->line("aufnahme/backToApplications"); ?></a></span>
+        </div>
+        <?php
+    }
+        ?>
+<?php
 if(!empty($studiengaenge))
 {
 foreach ($studiengaenge as $studiengang)
