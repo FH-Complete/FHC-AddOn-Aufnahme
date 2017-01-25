@@ -162,7 +162,7 @@ class Messages extends UI_Controller
     {
         $this->_loadData();
 
-        $messages = $this->MessageModel->getMessagesByPersonId();
+        $messages = $this->MessageModel->getSentMessagesByPersonId();
 		
 		if (hasData($messages))
 		{
@@ -277,8 +277,18 @@ class Messages extends UI_Controller
 		$this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
 		
 		$this->setData('messages', $this->MessageModel->getMessagesByPersonId());
-		
+		//Set to empty array if no messages are present
+		if($this->getData('messages') === null)
+        {
+            $this->setRawData('messages', array());
+        }
+
 		$this->setData('messages_outbox', $this->MessageModel->getSentMessagesByPersonId());
+        //Set to empty array if no messages are present
+		if($this->getData('messages_outbox') === null)
+        {
+            $this->setRawData('messages_outbox', array());
+        }
 	}
 	
 	private function _sendMessage($subject, $body, $oe_kurzbz, $relationMessage_id = null)
