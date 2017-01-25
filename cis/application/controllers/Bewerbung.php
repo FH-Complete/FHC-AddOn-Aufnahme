@@ -596,7 +596,7 @@ class Bewerbung extends UI_Controller
 
         $spezialisierung = $this->getData('spezialisierung');
         $spezPhrase = $this->getData('spezPhrase');
-        
+
         if(isset($spezPhrase) && ($spezPhrase !== null))
         {
             if((!isset($spezialisierung)) || ($spezialisierung === null))

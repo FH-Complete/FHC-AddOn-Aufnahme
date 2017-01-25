@@ -48,7 +48,7 @@ else {
             <div class="col-sm-4">
                 <div class="form-group">
 				<?php
-				if(($prestudentStatus[$studiengang->studiengang_kz]->bewerbung_abgeschicktamum != null) || (!empty($completenessError["person"])) || (!empty($completenessError["adresse"])) || (!empty($completenessError["kontakt"])) || (!empty($completenessError["dokumente"][$studiengang->studiengang_kz])) || (!empty($completenessError["doks"])))
+				if(($prestudentStatus->bewerbung_abgeschicktamum != null) || (!empty($completenessError["person"])) || (!empty($completenessError["adresse"])) || (!empty($completenessError["kontakt"])) || (!empty($completenessError["dokumente"][$studiengang->studiengang_kz])) || (!empty($completenessError["doks"])))
 				{
 					echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden button-absenden", "type"=>"submit", "disabled"=>"disabled"));
 				}
@@ -65,7 +65,7 @@ else {
 	<div class="col-sm-6">
 	    <div class="form-group">
 		<?php
-if($prestudentStatus[$studiengang->studiengang_kz]->bewerbung_abgeschicktamum != null)
+if($prestudentStatus->bewerbung_abgeschicktamum != null)
 {
 	echo "<p class='p'>".$this->lang->line("send_bereitsAbgeschickt")."</p>";
 }
