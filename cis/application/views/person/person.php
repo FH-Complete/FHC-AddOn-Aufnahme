@@ -162,6 +162,7 @@ if (!isset($plz))
                     );
                     $('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').show();
                     var logo = "";
+                    data.result.bezeichnung = data.result.bezeichnung.toLowerCase();
                     if (data.result.bezeichnung.indexOf(".docx") !== -1)
                     {
                         logo = "docx.gif";
@@ -256,6 +257,7 @@ if (!isset($plz))
                     );
                     $('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').show();
                     var logo = "";
+                    data.result.bezeichnung = data.result.bezeichnung.toLowerCase();
                     if (data.result.bezeichnung.indexOf(".docx") !== -1)
                     {
                         logo = "docx.gif";
@@ -791,19 +793,19 @@ if (!isset($plz))
     <?php
     if (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype))
     {
-        if (strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".docx") !== false)
+        if (strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".docx") !== false)
         {
             $logo = "docx.gif";
         }
-        elseif (strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".doc") !== false)
+        elseif (strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".doc") !== false)
         {
             $logo = "docx.gif";
         }
-        elseif (strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".pdf") !== false)
+        elseif (strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".pdf") !== false)
         {
             $logo = "document-pdf.svg";
         }
-        elseif (strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".jpg") !== false)
+        elseif (strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".jpg") !== false)
         {
             $logo = "document-picture.svg";
         }
@@ -906,19 +908,19 @@ if (!isset($plz))
     <?php
     if ((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype !== null))
     {
-        if (strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".docx") !== false)
+        if (strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".docx") !== false)
         {
             $logo = "docx.gif";
         }
-        elseif (strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".doc") !== false)
+        elseif (strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".doc") !== false)
         {
             $logo = "docx.gif";
         }
-        elseif (strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".pdf") !== false)
+        elseif (strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".pdf") !== false)
         {
             $logo = "document-pdf.svg";
         }
-        elseif (strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".jpg") !== false)
+        elseif (strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".jpg") !== false)
         {
             $logo = "document-picture.svg";
         }

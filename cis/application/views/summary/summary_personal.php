@@ -158,19 +158,19 @@
 			{
 				if(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name))
 				{
-					if(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".docx") !== false)
+					if(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".docx") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".doc") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".doc") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".pdf") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".pdf") !== false)
 					{
 						$logo = "document-pdf.svg";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name, ".jpg") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".jpg") !== false)
 					{
 						$logo = "document-picture.svg";
 					}
@@ -224,19 +224,19 @@
 			{
 				if(isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name))
 				{
-					if(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".docx") !== false)
+					if(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".docx") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".doc") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".doc") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".pdf") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".pdf") !== false)
 					{
 						$logo = "document-pdf.svg";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name, ".jpg") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".jpg") !== false)
 					{
 						$logo = "document-picture.svg";
 					}
