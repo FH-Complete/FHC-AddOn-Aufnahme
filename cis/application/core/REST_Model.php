@@ -176,7 +176,11 @@ class REST_Model extends CI_Model
 	{
 		if (isError($response))
 		{
-			return error('Generic error');
+			return error(
+				isset($response->retval) ? $response->retval : 'Generic error',
+				isset($response->code) ? $response->code : null,
+				isset($response->error) ? $response->error : EXIT_ERROR
+			);
 		}
 		
 		return $response;
