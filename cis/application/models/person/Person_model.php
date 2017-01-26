@@ -76,6 +76,8 @@ class Person_model extends REST_Model
         unset($parameters["kontakt"]);
         unset($parameters["zustellung"]);
         unset($parameters["standort_id"]);
+        unset($parameters["bundesland_bezeichnung"]);
+        unset($parameters["geburtsnation_text"]);
 		$result = $this->save('person/Person/Person', $parameters, 'Person.getPerson', $authNotRequired);
 
 		if(isSuccess($result))
