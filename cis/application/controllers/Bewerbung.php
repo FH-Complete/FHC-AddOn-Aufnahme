@@ -1026,7 +1026,7 @@ class Bewerbung extends UI_Controller
 
         if(!hasData($updatePerson))
         {
-            $this->_setError(true, "Could not save data");
+            $this->_setError(true, $updatePerson->retval);
         }
 
         $adresse = new stdClass();
@@ -1069,14 +1069,14 @@ class Bewerbung extends UI_Controller
 
                 if(!hasData($updatePerson))
                 {
-                    $this->_setError(true, "Could not save data");
+                    $this->_setError(true, $updatePerson->retval);
                 }
 
                 $updateAdresse = $this->AdresseModel->saveAdresse((array)$adresse);
 
                 if(!isSuccess($updateAdresse))
                 {
-                    $this->_setError(true, "Could not save address data");
+                    $this->_setError(true, $updateAdresse->retval);
                 }
             }
         }
@@ -1109,7 +1109,7 @@ class Bewerbung extends UI_Controller
 
                 if(!isSuccess($updateAdresse))
                 {
-                    $this->_setError(true, "Could not save address data");
+                    $this->_setError(true, $updateAdresse->retval);
                 }
             }
         }
@@ -1146,7 +1146,7 @@ class Bewerbung extends UI_Controller
 
                 if(!isSuccess($updateZustellAdresse))
                 {
-                    $this->_setError(true, "Could not save address data");
+                    $this->_setError(true, $updateZustellAdresse->retval);
                 }
 
             }
@@ -1173,7 +1173,7 @@ class Bewerbung extends UI_Controller
 
                 if(!isSuccess($updateZustellAdresse))
                 {
-                    $this->_setError(true, "Could not save address data");
+                    $this->_setError(true, $updateZustellAdresse->retval);
                 }
             }
         }
@@ -1196,7 +1196,7 @@ class Bewerbung extends UI_Controller
 
             if(!isSuccess($updateKontakt))
             {
-                $this->_setError(true, "Could not save contact data");
+                $this->_setError(true, $updateKontakt->retval);
             }
         }
         if ((isset($post["telefon"])) && ($post["telefon"] != ""))
@@ -1217,7 +1217,7 @@ class Bewerbung extends UI_Controller
 
             if(!isSuccess($updateKontakt))
             {
-                $this->_setError(true, "Could not save contact data");
+                $this->_setError(true, $updateKontakt->retval);
             }
         }
         if ((isset($post["fax"])) && ($post["fax"] != ""))
@@ -1238,7 +1238,7 @@ class Bewerbung extends UI_Controller
 
             if(!isSuccess($updateKontakt))
             {
-                $this->_setError(true, "Could not save contact data");
+                $this->_setError(true, $updateKontakt->retval);
             }
         }
 
@@ -1293,9 +1293,9 @@ class Bewerbung extends UI_Controller
         $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
         $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
 
-        if (($this->getData("error") === null) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
+        if (($this->getData("error") === null) && ($this->getData("studiengang_kz") !== null) && ($this->getData('studienplan_id') !== null))
         {
-            redirect("/Requirements?studiengang_kz=" . $this->input->get()["studiengang_kz"] . "&studienplan_id=" . $this->input->get()["studienplan_id"]);
+            redirect("/Requirements?studiengang_kz=" . $this->getData("studiengang_kz") . "&studienplan_id=" . $this->getData('studienplan_id'));
             $this->setRawData("complete", $this->_checkDataCompleteness());
             $this->load->view('bewerbung', $this->getAllData());
         }
