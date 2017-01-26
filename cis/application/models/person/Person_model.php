@@ -48,8 +48,13 @@ class Person_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function checkBewerbung($email, $studiensemester_kurzbz = null)
+	public function checkBewerbung($email, $studiensemester_kurzbz = null, $forceApiCall = false)
 	{
+	    if($forceApiCall)
+        {
+            unset($this->session->userdata{'Person.getPerson'});
+        }
+
 		return $this->loadOne(
 			'person/Person/CheckBewerbung',
 			array(
