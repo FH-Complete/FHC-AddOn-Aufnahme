@@ -475,7 +475,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 		'phrasentext' => array
 		(
 			'sprache' => 'German',
-			'text' => 'Wollen Sie Ihre Bewerbung wirklich zurückziehen?',
+			'text' => 'Wollen Sie Ihre Bewerbung wirklich löschen?',
 			'description' => ''
 		)
 	),
@@ -485,7 +485,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 		'phrasentext' => array
 		(
 			'sprache' => 'English',
-			'text' => 'Do really want to revoke your application?',
+			'text' => 'Do really want to delete your application?',
 			'description' => ''
 		)
 	),
@@ -495,7 +495,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
         'phrasentext' => array
         (
             'sprache' => 'German',
-            'text' => 'Wollen Sie Ihre Bewerbung wirklich löschen?',
+            'text' => 'Wollen Sie Ihre Bewerbung wirklich zurückziehen?',
             'description' => ''
         )
     ),
@@ -505,7 +505,7 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
         'phrasentext' => array
         (
             'sprache' => 'English',
-            'text' => 'Do really want to delete your application?',
+            'text' => 'Do really want to revoke your application?',
             'description' => ''
         )
     ),
@@ -1041,8 +1041,3 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 		)
 	)
 );
-
-
-
-
-
