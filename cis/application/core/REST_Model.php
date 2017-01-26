@@ -7,6 +7,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class REST_Model extends CI_Model
 {
+	const AUTH_NOT_REQUIRED = true;
+	
+	private $_personSessionName = 'Person.getPerson';
+	
 	/**
 	 * 
 	 */
@@ -44,7 +48,7 @@ class REST_Model extends CI_Model
 				
 				if (isset($sessionName) && $sessionName != '' && isSuccess($response))
 				{
-					$this->session->set_userdata($sessionName, $response);
+					$this->session->{$sessionName} = $response;
 				}
 				
 				return $response;
@@ -65,7 +69,16 @@ class REST_Model extends CI_Model
 		
 		if (hasData($result))
 		{
-			$result = success($result->retval[0], $result->fhcCode);
+			if (is_array($result->retval))
+			{
+				$result = success($result->retval[0], $result->fhcCode);
+			}
+			else
+			{	
+				$result = success($result->retval, $result->fhcCode);
+			}
+			
+			$this->session->{$sessionName} = $result;
 		}
 		
 		return $result;
@@ -74,9 +87,9 @@ class REST_Model extends CI_Model
 	/**
 	 * 
 	 */
-	public function save($resource, $parameters, $sessionName = null)
+	public function save($resource, $parameters, $sessionName = null, $authNotRequired = false)
 	{
-		if ($this->_logged())
+		if ($authNotRequired || $this->_logged())
 		{
 			if (is_array($parameters) && count($parameters) > 0)
 			{
@@ -84,7 +97,7 @@ class REST_Model extends CI_Model
 				
 				if (isSuccess($result) && isset($sessionName) && isset($this->session->{$sessionName}))
 				{
-					unset($this->session->{$sessionName});
+					unset($this->session->userdata[$sessionName]);
 				}
 				
 				return $result;
@@ -113,7 +126,7 @@ class REST_Model extends CI_Model
 				
 				if (isSuccess($result) && isset($sessionName) && isset($this->session->{$sessionName}))
 				{
-					unset($this->session->{$sessionName});
+                    unset($this->session->userdata[$sessionName]);
 				}
 				
 				return $result;
@@ -134,7 +147,26 @@ class REST_Model extends CI_Model
 	 */
 	protected function getPersonId()
 	{
-		return $this->session->person_id;
+		$person_id = null;
+		
+		if (isset($this->session->{$this->_personSessionName}))
+		{
+			$person = $this->session->{$this->_personSessionName};
+			if (hasData($person))
+			{
+				$person_id = $person->retval->person_id;
+			}
+		}
+		
+		return $person_id;
+	}
+	
+	/**
+	 * 
+	 */
+	protected function storeSession($name, $value)
+	{
+		$this->session->{$name} = $value;
 	}
 	
 	/**
@@ -144,7 +176,11 @@ class REST_Model extends CI_Model
 	{
 		if (isError($response))
 		{
-			return error('Generic error');
+			return error(
+				isset($response->retval) ? $response->retval : 'Generic error',
+				isset($response->code) ? $response->code : null,
+				isset($response->error) ? $response->error : EXIT_ERROR
+			);
 		}
 		
 		return $response;
@@ -153,13 +189,21 @@ class REST_Model extends CI_Model
 	/**
 	 * 
 	 */
-	private function _logged()
+	protected function _logged()
 	{
-		if (!isset($this->session->person_id) || (isset($this->session->person_id) && !is_numeric($this->session->person_id)))
+		if (isset($this->session->{$this->_personSessionName}))
 		{
-			return false;
+			$person = $this->session->{$this->_personSessionName};
+			//var_dump($person);
+			if (hasData($person))
+			{
+				if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+				{
+					return true;
+				}
+			}
 		}
 		
-		return true;
+		return false;
 	}
 }

@@ -7,7 +7,7 @@
 
 
 $this->load->view('templates/header');
-$this->lang->load(array('aufnahme', 'dokumente'), $language);
+$this->lang->load(array('aufnahme', 'dokumente'), $sprache);
 $this->load->view('templates/cookieHeader');
 $this->load->view('templates/metaHeader');
 

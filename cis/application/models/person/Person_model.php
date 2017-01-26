@@ -16,13 +16,33 @@ class Person_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getPerson($code = null, $email = null)
+	public function getPerson($code = null, $email = null, $authNotRequired = false)
 	{
-		return $this->loadOne('person/Person/Person', array(
-			'person_id' => $this->getPersonId(),
-			'code' => $code,
-			'email' => $email
-		));
+		return $this->loadOne(
+			'person/Person/Person',
+			array(
+				'person_id' => $this->getPersonId(),
+				'code' => $code,
+				'email' => $email
+			),
+			'Person.getPerson',
+			$authNotRequired
+		);
+	}
+	
+	/**
+	 * 
+	 */
+	public function getPersonByPersonId($person_id)
+	{
+		return $this->loadOne(
+			'person/Person/Person',
+			array(
+				'person_id' => $person_id
+			),
+			'Person.getPerson',
+			Parent::AUTH_NOT_REQUIRED
+		);
 	}
 	
 	/**
@@ -30,9 +50,37 @@ class Person_model extends REST_Model
 	 */
 	public function checkBewerbung($email, $studiensemester_kurzbz = null)
 	{
-		return $this->load('person/Person/CheckBewerbung', array(
-			'email' => $email,
-			'studiensemester_kurzbz' => $studiensemester_kurzbz
-		));
+		return $this->loadOne(
+			'person/Person/CheckBewerbung',
+			array(
+				'email' => $email,
+				'studiensemester_kurzbz' => $studiensemester_kurzbz
+			),
+			null,
+			Parent::AUTH_NOT_REQUIRED
+		);
+	}
+	
+	/**
+	 * 
+	 */
+	public function savePerson($parameters, $authNotRequired = false)
+	{
+	    unset($parameters["kontakt_id"]);
+        unset($parameters["kontakttyp"]);
+        unset($parameters["kontakt"]);
+        unset($parameters["zustellung"]);
+        unset($parameters["standort_id"]);
+		$result = $this->save('person/Person/Person', $parameters, 'Person.getPerson', $authNotRequired);
+
+		if(isSuccess($result))
+        {
+            return $this->getPersonByPersonId($result->retval);
+        }
+        else
+        {
+            return $result;
+        }
+
 	}
 }

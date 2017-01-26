@@ -489,6 +489,26 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 			'description' => ''
 		)
 	),
+    array
+    (
+        'phrase' => 'Bewerbung/StornoConfirmationAfterApplicationIsSent',
+        'phrasentext' => array
+        (
+            'sprache' => 'German',
+            'text' => 'Wollen Sie Ihre Bewerbung wirklich löschen?',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'Bewerbung/StornoConfirmationAfterApplicationIsSent',
+        'phrasentext' => array
+        (
+            'sprache' => 'English',
+            'text' => 'Do really want to delete your application?',
+            'description' => ''
+        )
+    ),
 	array
 	(
 		'phrase' => 'ZGV/letztgueltigesZeugnis',

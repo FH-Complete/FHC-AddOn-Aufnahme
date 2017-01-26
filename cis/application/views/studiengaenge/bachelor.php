@@ -8,7 +8,7 @@
 <h2 class="bachelor_header"><?php echo $this->lang->line('studiengaenge/bachelor'); ?></h2>
 
 <?php
-foreach ($studiengaenge as $stg)
+foreach ($studiengaengeForBewerbung as $stg)
 {
 	if ($stg->typ == "b")
 	{

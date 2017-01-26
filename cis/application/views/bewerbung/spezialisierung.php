@@ -1,10 +1,10 @@
 <?php
-$spez_phrase = $this->getPhrase("Aufnahme/Spezialisierung", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);
+$spez_phrase = $this->getPhrase("Aufnahme/Spezialisierung", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);
 if(($spez_phrase != null) && (substr($spez_phrase,0,3) !== "<i>"))
 {
 ?>
 	<legend>
-		<?php echo $this->getPhrase("Personal/SpezialisierungHeader", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+		<?php echo $this->getPhrase("Personal/SpezialisierungHeader", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
 		<div class="pull-right">
 			<span class="incomplete"><?php echo ((isset($complete)) && (!$complete["person"])) ? $this->lang->line("aufnahme/unvollstaendig") : ""; ?></span>
 		</div>
@@ -12,13 +12,23 @@ if(($spez_phrase != null) && (substr($spez_phrase,0,3) !== "<i>"))
 	<div class="row form-row">
 		<div class="col-sm-12">
 			<div class="form-group">
-				<?php echo $this->getPhrase("Personal/SpezialiserungText", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+				<?php echo $this->getPhrase("Personal/SpezialiserungText", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
 			</div>
 		</div>
 	</div>
 	<div class="row form-row">
 		<div class="col-sm-10">
 			<?php
+                if (isset($error) && ($error->error === true) && (isset($spezialisierung_error)))
+                {
+                    ?>
+                    <div class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        <?php echo $this->lang->line("requirements_selectSpecialization"); ?>
+                    </div>
+                    <?php
+                }
 				if(!empty($spezialisierung[$studiengang->studiengang_kz]))
 				{
 					if((!isset($bewerbung_abgeschickt)) || ($bewerbung_abgeschickt!=true))

@@ -18,14 +18,35 @@ class Kontakt_model extends REST_Model
 	 */
 	public function getOnlyKontaktByPersonId()
 	{
-		return $this->load('person/Kontakt/OnlyKontaktByPersonId', array('person_id' => $this->getPersonId()), 'Kontakt.getKontakt');
+		$kontakts = $this->load('person/Kontakt/OnlyKontaktByPersonId', array('person_id' => $this->getPersonId()), 'Kontakt.getKontakt');
+		$kontaktsArray = array();
+		
+		if (isSuccess($kontakts))
+		{
+			foreach ($kontakts->retval as $kontakt)
+			{
+				$kontaktsArray[$kontakt->kontakttyp] = $kontakt;
+			}
+			
+			if (count($kontaktsArray) > 0)
+			{
+				$this->storeSession('Kontakt.getKontakt', $kontaktsArray);
+			}
+		}
+		elseif($kontakts !== null)
+        {
+            $this->storeSession('Kontakt.getKontakt', $kontakts);
+            $kontaktsArray = $kontakts;
+        }
+		
+		return success($kontaktsArray);
 	}
 	
 	/**
 	 * 
 	 */
-	public function saveKontakt($parameters)
+	public function saveKontakt($parameters, $authNotRequired = false)
 	{
-		return $this->save('person/Kontakt/Kontakt', $parameters, 'Kontakt.getKontakt');
+		return $this->save('person/Kontakt/Kontakt', $parameters, 'Kontakt.getKontakt', $authNotRequired);
 	}
 }

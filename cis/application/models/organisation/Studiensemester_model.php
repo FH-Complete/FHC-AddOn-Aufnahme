@@ -18,7 +18,7 @@ class Studiensemester_model extends REST_Model
 	 */
 	public function getNextStudiensemester($art = null)
 	{
-		return $this->load(
+		return $this->loadOne(
 			'organisation/Studiensemester/Nextstudiensemester',
 			array('art' => $art),
 			'Studiensemester.getNextStudiensemester'

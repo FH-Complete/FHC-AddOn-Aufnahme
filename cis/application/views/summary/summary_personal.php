@@ -7,7 +7,7 @@
 
 
 ?>
-<fieldset><?php echo $this->getPhrase("Overview/CompleteAndCheckData", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?></fieldset>
+<fieldset><?php echo $this->getPhrase("Overview/CompleteAndCheckData", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?></fieldset>
 
 <legend><?php echo $this->lang->line("summary_persoenlicheDaten"); ?></legend>
 <div class="row">
@@ -151,26 +151,26 @@
     <div class="row">
 		<div class="col-sm-12">
 			<div class="col-sm-4">
-				<?php echo $personalDocuments[$this->config->config["dokumentTypen"]["reisepass"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]; ?>
+				<?php echo $personalDocuments[$this->config->config["dokumentTypen"]["reisepass"]]->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index-1]; ?>
 			</div>
 			<?php
 			if((isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype !== null))
 			{
-				if(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument))
+				if(isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name))
 				{
-					if(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".docx") !== false)
+					if(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".docx") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".doc") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".doc") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".pdf") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".pdf") !== false)
 					{
 						$logo = "document-pdf.svg";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name, ".jpg") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name), ".jpg") !== false)
 					{
 						$logo = "document-picture.svg";
 					}
@@ -206,7 +206,7 @@
 							}
 							else
 							{
-								echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dokument->name;
+								echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->name;
 							}
 							?>
 				</div>
@@ -217,26 +217,26 @@
     <div class="row">
 		<div class="col-sm-12">
 			<div class="col-sm-4">
-				<?php echo $personalDocuments[$this->config->config["dokumentTypen"]["lebenslauf"]]->bezeichnung_mehrsprachig[$this->session->sprache->index-1]; ?>
+				<?php echo $personalDocuments[$this->config->config["dokumentTypen"]["lebenslauf"]]->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index-1]; ?>
 			</div>
 			<?php
 			if((isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->mimetype !== null))
 			{
-				if(isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument))
+				if(isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name))
 				{
-					if(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".docx") !== false)
+					if(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".docx") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".doc") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".doc") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".pdf") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".pdf") !== false)
 					{
 						$logo = "document-pdf.svg";
 					}
-					elseif(strpos($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name, ".jpg") !== false)
+					elseif(strpos(strtolower($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name), ".jpg") !== false)
 					{
 						$logo = "document-picture.svg";
 					}
@@ -272,7 +272,7 @@
 						}
 						else
 						{
-							echo $dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokument->name;
+							echo $dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->name;
 						}
 						?>
 				</div>

@@ -24,17 +24,40 @@ class Prestudent_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getPrestudentByPersonId()
+	public function getPrestudentByPersonId($forceApiCall = false)
 	{
-		return $this->load('crm/Prestudent/prestudentByPersonId', array('person_id' => $this->getPersonId()));
+	    if($forceApiCall)
+        {
+            unset($this->session->userdata['prestudent']);
+        }
+		return $this->load('crm/Prestudent/prestudentByPersonId', array('person_id' => $this->getPersonId()), 'prestudent');
 	}
 	
 	/**
 	 * 
 	 */
-	public function getSpecialization($prestudent_id, $titel)
+	public function getSpecialization($prestudent_id, $titel = "aufnahme/spezialisierung")
 	{
-		return $this->load('crm/Prestudent/Specialization', array('prestudent_id' => $prestudent_id, '$titel' => $titel));
+		return $this->loadOne('crm/Prestudent/Specialization', array('prestudent_id' => $prestudent_id, 'titel' => $titel), 'Prestudent.Specialization');
+	}
+	
+	/**
+	 * 
+	 */
+	public function getLastStatuses($person_id, $studiensemester_kurzbz = null, $studiengang_kz = null, $status_kurzbz = null, $forceApiCall = false)
+	{
+	    if($forceApiCall)
+        {
+            unset($this->session->userdata['prestudent']);
+        }
+		return $this->load('crm/Prestudent/LastStatuses', array(
+			'person_id' => $person_id,
+			'studiensemester_kurzbz' => $studiensemester_kurzbz,
+			'studiengang_kz' => $studiengang_kz,
+			'status_kurzbz' => $status_kurzbz
+		),
+        'prestudent'
+        );
 	}
 	
 	/**
@@ -42,7 +65,24 @@ class Prestudent_model extends REST_Model
 	 */
 	public function savePrestudent($parameters)
 	{
-		return $this->save('crm/Prestudent/Prestudent', $parameters);
+	    unset($parameters['studiensemester_kurzbz']);
+        unset($parameters['ausbildungssemester']);
+        unset($parameters['datum']);
+        unset($parameters['kurzbz']);
+        unset($parameters['studienplan_id']);
+        unset($parameters['bestaetigtam']);
+        unset($parameters['bestaetigtvon']);
+        unset($parameters['fgm']);
+        unset($parameters['faktiv']);
+        unset($parameters['bewerbung_abgeschicktamum']);
+        unset($parameters['rt_stufe']);
+        unset($parameters['beschreibung']);
+        unset($parameters['bezeichnung_mehrsprachig']);
+        unset($parameters['status_kurzbz']);
+        unset($parameters['orgform_kurzbz']);
+        unset($parameters['spezialisierung']);
+
+		return $this->save('crm/Prestudent/Prestudent', $parameters, 'prestudent');
 	}
 	
 	/**
@@ -50,7 +90,8 @@ class Prestudent_model extends REST_Model
 	 */
 	public function saveSpecialization($parameters)
 	{
-		return $this->save('crm/Prestudent/Specialization', $parameters);
+	    $parameters['titel'] = "aufnahme/spezialisierung";
+		return $this->save('crm/Prestudent/Specialization', $parameters, 'Prestudent.Specialization');
 	}
 	
 	/**
@@ -66,7 +107,7 @@ class Prestudent_model extends REST_Model
 	 */
 	public function removePrestudent($parameters)
 	{
-		return $this->delete('crm/Prestudent/Prestudent', $parameters);
+		return $this->delete('crm/Prestudent/Prestudent', $parameters, 'prestudent');
 	}
 	
 	/**
@@ -74,7 +115,7 @@ class Prestudent_model extends REST_Model
 	 */
 	public function removeSpecialization($parameters)
 	{
-		return $this->delete('crm/Prestudent/RmSpecialization', $parameters);
+		return $this->save('crm/Prestudent/RmSpecialization', $parameters, 'Prestudent.Specialization');
 	}
 	
 	/**
@@ -82,6 +123,6 @@ class Prestudent_model extends REST_Model
 	 */
 	public function removeRegistrationToReihungstest($parameters)
 	{
-		return $this->delete('crm/Prestudent/DelReihungstest', $parameters);
+		return $this->save('crm/Prestudent/DelReihungstest', $parameters);
 	}
 }

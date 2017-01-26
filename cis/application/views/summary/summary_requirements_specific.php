@@ -14,26 +14,26 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="col-sm-4">
-				<?php echo $dok->bezeichnung_mehrsprachig[$this->session->sprache->index-1];?>
+				<?php echo $dok->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index-1];?>
 			</div>
 			<?php
 				if((isset($dokumente[$dok->dokument_kurzbz]->mimetype)) && ($dokumente[$dok->dokument_kurzbz]->mimetype !== null))
 				{
-					if(isset($dokumente[$dok->dokument_kurzbz]->dokument))
+					if(isset($dokumente[$dok->dokument_kurzbz]->name))
 					{
-						if(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".docx") !== false)
+						if(strpos(strtolower($dokumente[$dok->dokument_kurzbz]->name), ".docx") !== false)
 						{
 							$logo = "docx.gif";
 						}
-						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".doc") !== false)
+						elseif(strpos(strtolower($dokumente[$dok->dokument_kurzbz]->name), ".doc") !== false)
 						{
 							$logo = "docx.gif";
 						}
-						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".pdf") !== false)
+						elseif(strpos(strtolower($dokumente[$dok->dokument_kurzbz]->name), ".pdf") !== false)
 						{
 							$logo = "document-pdf.svg";
 						}
-						elseif(strpos($dokumente[$dok->dokument_kurzbz]->dokument->name, ".jpg") !== false)
+						elseif(strpos(strtolower($dokumente[$dok->dokument_kurzbz]->name), ".jpg") !== false)
 						{
 							$logo = "document-picture.svg";
 						}
@@ -72,9 +72,9 @@
 						{
 							echo $this->lang->line('summary_nachgereicht');
 						}
-						elseif(isset($dokumente[$dok->dokument_kurzbz]->dokument))
+						elseif(isset($dokumente[$dok->dokument_kurzbz]->name))
 						{
-							echo $dokumente[$dok->dokument_kurzbz]->dokument->name;
+							echo $dokumente[$dok->dokument_kurzbz]->name;
 						}
 				?>
 				</div>

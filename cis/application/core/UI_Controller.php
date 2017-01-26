@@ -12,12 +12,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 class UI_Controller extends CI_Controller
 {
+	const NOT_CHECK_LOGIN = false;
+	
 	private $_data;
 	
 	/**
 	 * 
 	 */
-	public function __construct()
+	public function __construct($checkLogin = true)
 	{
 		parent::__construct();
 		
@@ -29,14 +31,49 @@ class UI_Controller extends CI_Controller
 		
 		// Loading the 
 		$this->load->model('Language_model', 'LanguageModel');
+		
+		// Loading the 
+		$this->load->model('CheckUserAuth_model', 'CheckUserAuthModel');
+
+        // Loading the
+        $this->load->model('system/Sprache_model', 'SpracheModel');
+		
+		// 
+		if ($checkLogin === true)
+		{
+			$this->_checkLogin();
+		}
 	}
+	
+	/**
+	 * 
+	 */
+	private function _checkLogin()
+	{
+		if (!$this->CheckUserAuthModel->isLogged()) redirect('/Registration');
+	}
+
+    protected function _getSprache($sprache)
+    {
+        $this->SpracheModel->getSprache(ucfirst($sprache));
+    }
 	
 	/**
 	 * 
 	 */
 	protected function getCurrentLanguage()
 	{
-		return $this->LanguageModel->getCurrentLanguage($this->input->get('language'));
+	    $language = $this->LanguageModel->getCurrentLanguage();
+	    $this->_getSprache($language);
+		return success($language);
+	}
+	
+	/**
+	 * 
+	 */
+	protected function setCurrentLanguage($language)
+	{
+		$this->LanguageModel->setCurrentLanguage($language);
 	}
 	
 	/**
@@ -44,7 +81,7 @@ class UI_Controller extends CI_Controller
 	 */
 	protected function setData($name, $response)
 	{
-		if (isSuccess($response))
+		if (hasData($response))
 		{
 			$this->_data[$name] = $response->retval;
 		}
@@ -57,9 +94,24 @@ class UI_Controller extends CI_Controller
 	/**
 	 * 
 	 */
+	protected function setRawData($name, $value)
+	{
+		$this->_data[$name] = $value;
+	}
+	
+	/**
+	 * 
+	 */
 	protected function getData($name)
 	{
-		return $this->_data[$name];
+		$data = null;
+		
+		if (isset($this->_data[$name]))
+		{
+			$data = $this->_data[$name];
+		}
+		
+		return $data;
 	}
 	
 	/**

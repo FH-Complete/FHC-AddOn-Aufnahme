@@ -18,7 +18,7 @@ class Studienplan_model extends REST_Model
 	 */
 	public function getStudienplan($studienplan_id)
 	{
-		return $this->load('organisation/Studienplan/Studienplan', array('studienplan_id' => $studienplan_id));
+		return $this->loadOne('organisation/Studienplan/Studienplan', array('studienplan_id' => $studienplan_id));
 	}
 	
 	/**

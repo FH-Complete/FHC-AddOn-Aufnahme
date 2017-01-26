@@ -10,6 +10,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class MY_Controller extends CI_Controller
 {
 	protected $_data = array();
+	
+	private $_personSessionName = 'Person.getPerson';
+    private $_person_id;
 
 	/**
 	 *
@@ -19,6 +22,10 @@ class MY_Controller extends CI_Controller
 		parent::__construct();
         $this->_loadConfigs(array('aufnahme', "message"));
 		$this->output->enable_profiler($this->config->item('profiler'));
+		
+		// Load return message helper
+		$this->load->helper('message');
+		
 		//$this->load->helper('url');
 		$this->load->library('session');
 		/*$this->load->model("phrase_model", "PhraseModel");
@@ -69,13 +76,27 @@ class MY_Controller extends CI_Controller
 		
 		return $language;
 	}
-
+	
 	/**
 	 *
 	 */
 	public function checkLogin()
 	{
-		if (is_null($this->session->person_id))
+		$logged = false;
+		
+		if (isset($this->session->{$this->_personSessionName}))
+		{
+			$person = $this->session->{$this->_personSessionName};
+			if (hasData($person))
+			{
+				if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+				{
+					$logged = true;
+				}
+			}
+		}
+		
+		if ($logged === false)
 		{
 			redirect("/Registration");
 		}
@@ -267,10 +288,22 @@ class MY_Controller extends CI_Controller
 	
 	protected function _getNumberOfUnreadMessages()
 	{
+        if (isset($this->session->{'Person.getPerson'}))
+        {
+            $person = $this->session->{'Person.getPerson'};
+            if (hasData($person))
+            {
+                if (isset($person->retval->person_id) && is_numeric($person->retval->person_id))
+                {
+                    $this->_person_id = $person->retval->person_id;
+                }
+            }
+        }
+
         $this->_loadModels(array("MessageModel"=>"message_model"));
-		if(isset($this->session->userdata()["person_id"]))
+		if(isset($this->_person_id))
 		{
-			$this->_data["messages"] = $this->_getMessages($this->session->userdata()["person_id"]);
+			$this->_data["messages"] = $this->_getMessages($this->_person_id);
 			$numberOfUnreadMessages = 0;
 			foreach($this->_data["messages"] as $msg)
 			{

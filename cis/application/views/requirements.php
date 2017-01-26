@@ -42,10 +42,10 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
 					array (
 						'aktiv' => 'requirements',
 						"href"=>array (
-							"send"=>site_url("/Send?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id),
-							"summary"=>site_url("/Summary?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id),
-							"requirements"=>site_url("/Requirements?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id),
-							"personalData"=>site_url("/Bewerbung?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplan->studienplan_id)
+							"send"=>site_url("/Send?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id),
+							"summary"=>site_url("/Summary?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id),
+							"requirements"=>site_url("/Requirements?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id),
+							"personalData"=>site_url("/Bewerbung?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id)
 						)
 					)
 				);
@@ -55,14 +55,25 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
             <div role="tabpanel" class="tab-pane" id="requirements">
                 <div class="row">
                     <div class="col-sm-12">
-                        <?php echo $this->getPhrase("ZGV/AdmissionRequirements", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>
+                        <?php echo $this->getPhrase("ZGV/AdmissionRequirements", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
                     </div>
                 </div>
 				<?php $this->load_views('view_requirements'); ?>
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="form-group">
-							<?php echo form_button(array("content"=>(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $this->lang->line("requirements_weiter"):$this->lang->line("requirements_speichern"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
+							<?php
+                            if((isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)))
+                            {
+                                echo '<a href="'.site_url("/Summary?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id).'">
+                                    <button type="button" class="btn btn-primary icon-absenden">'.$this->lang->line("requirements_weiter").'</button>';
+                            }
+                            else
+                            {
+                                $data = array("content" => $this->lang->line("requirements_speichern"), "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit");
+                                echo form_button($data);
+                            }
+                            ?>
 						</div>
 					</div>
 				</div>
@@ -81,10 +92,21 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
     $(document).ready(function() {
 		$('input[type=file]').on('change', prepareUpload);
     });
-	
+
+    <?php
+    $phrase = "";
+    if(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true))
+    {
+        $phrase = $this->getPhrase("Bewerbung/StornoConfirmationAfterApplicationIsSent", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);
+    }
+    else
+    {
+        $phrase = $this->getPhrase("Bewerbung/StornoConfirmation", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);
+    }
+    ?>
 	function confirmStorno(studiengang_kz)
     {
-		if(confirm("<?php echo $this->getPhrase("Bewerbung/StornoConfirmation", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz); ?>"))
+		if(confirm("<?php echo $phrase; ?>"))
 		{
 			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + "/"+ studiengang_kz;
 		}
@@ -118,8 +140,9 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
 					$("#"+data.dokument_kurzbz+"Upload_"+studienplan_id).show();
 					$("#"+data.dokument_kurzbz+"Delete_"+studienplan_id).html("");
 					$('#'+data.dokument_kurzbz+'FileUpload_'+studienplan_id).parent().show();
-					$('#'+data.dokument_kurzbz+'Progress_'+studienplan_id).show();
-					$("#"+data.dokument_kurzbz+"_hochgeladen").html("<?php echo $this->lang->line('requirements_keinDokHochgeladen'); ?>");
+					var ele = $('#'+data.dokument_kurzbz+'Progress_'+studienplan_id).show();
+					$("#"+data.dokument_kurzbz+"_hochgeladen").html("<?php echo $this->lang->line('requirements_keinDokHochgeladen'); ?>").after(ele);
+					$(ele).show();
 					$("#"+data.dokument_kurzbz+"_nachgereicht_"+studienplan_id).prop("disabled", false);
 					$("#"+data.dokument_kurzbz+"_logo_"+studienplan_id).children().hide();
 					toggleDateField(studienplan_id);
@@ -150,7 +173,7 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
 			dataType: 'json',
 			success: function(data, textStatus, jqXHR)
 			{
-				if((data.person==false) ||(data.adresse==false) ||(data.dokumente==false) ||(data.kontakt==false) ||(data.zustelladresse==false))
+                if((data.person==false) ||(data.adresse==false) ||(data.dokumente==false) ||(data.kontakt==false) ||(data.zustelladresse==false) || (data.spezialisierung == false))
 				{
 					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
 				}

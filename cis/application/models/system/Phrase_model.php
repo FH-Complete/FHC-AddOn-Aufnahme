@@ -16,27 +16,37 @@ class Phrase_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getPhrasen($parameters)
+	public function getPhrasen($app, $sprache, $authNotRequired = false)
 	{
-		return $this->load('system/Phrase/Phrases', $parameters, 'Phrase.getPhrasen');
+		$phrasen = $this->load(
+			'system/Phrase/Phrases',
+			array(
+				'app' => $app,
+				'sprache' => $sprache
+			),
+			'Phrase.getPhrasen:' . strtolower($sprache),
+			$authNotRequired
+		);
+		
+		return $phrasen;
 	}
 	
 	/**
 	 * 
 	 */
-	public function getPhrase($phraseToSearchFor)
-	{
-		$phrases = $this->session->userdata('Phrase.getPhrasen');
-		
-		if (hasData($phrases))
-		{
-			foreach ($phrases->retval as $phrase)
-			{
-				if ($phrase->phrase == $phraseToSearchFor)
-				{
-					return $phrase->text;
-				}
-			}
-		}
-	}
+// 	public function getPhrase($phraseToSearchFor)
+// 	{
+// 		$phrases = $this->session->{'Phrase.getPhrasen'};
+// 		
+// 		if (hasData($phrases))
+// 		{
+// 			foreach ($phrases->retval as $phrase)
+// 			{
+// 				if ($phrase->phrase == $phraseToSearchFor)
+// 				{
+// 					return $phrase->text;
+// 				}
+// 			}
+// 		}
+// 	}
 }

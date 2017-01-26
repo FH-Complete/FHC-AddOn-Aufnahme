@@ -34,7 +34,7 @@ class Prestudentstatus_model extends REST_Model
 	 */
 	public function getLastStatus($prestudent_id, $studiensemester_kurzbz = null, $status_kurzbz = null)
 	{
-		return $this->load(
+		return $this->loadOne(
 			'crm/Prestudentstatus/Laststatus',
 			array(
 				'prestudent_id' => $prestudent_id,
@@ -57,6 +57,6 @@ class Prestudentstatus_model extends REST_Model
 	 */
 	public function removePrestudentStatus($parameters)
 	{
-		return $this->delete('crm/Prestudentstatus/Prestudentstatus', $parameters);
+		return $this->delete('crm/Prestudentstatus/Prestudentstatus', $parameters, 'prestudent');
 	}
 }

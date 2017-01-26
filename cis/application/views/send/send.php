@@ -11,11 +11,11 @@
 <div role="tabpanel" class="tab-pane" id="send">
     <h1 id="sendHeader"><?php echo $this->lang->line("send_header"); ?></h1>
     <fieldset><?php
-if ((empty($completenessError["person"])) && (empty($completenessError["adresse"])) && (empty($completenessError["kontakt"])) && (empty($completenessError["dokumente"][$studiengang->studiengang_kz])) && (empty($completenessError["doks"]))) {
-	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz)."</p>";
+if ((empty($completenessError["person"])) && (empty($completenessError["adresse"])) && (empty($completenessError["kontakt"])) && (empty($completenessError["dokumente"][$studiengang->studiengang_kz])) && (empty($completenessError["doks"])) && (empty($completenessError['spezialisierung']))) {
+	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz)."</p>";
 }
 else {
-	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationNotReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz)."</p>";
+	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationNotReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz)."</p>";
 	echo "<ul class='list'>";
 	foreach ($completenessError as $error=>$value) {
 		if ($value === true) {
@@ -24,26 +24,31 @@ else {
 	}
 	echo "</ul>";
 
+    if (isset($completenessError["spezialisierung"][$studiengang->studiengang_kz]))
+    {
+        echo "<p class='p'>".$this->getPhrase("Personal/SpezialisierungHeader", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz)."</p>";
+    }
+
 	if (isset($completenessError["dokumente"][$studiengang->studiengang_kz]))
 	{
 		echo "<p class='p'>".$this->lang->line("send_dokumenteErgaenzen")."</p>";
 		echo "<ul class='list'>";
 		foreach($completenessError["dokumente"][$studiengang->studiengang_kz] as $error=>$value)
 		{
-			echo "<li>".$value->bezeichnung_mehrsprachig[$this->session->sprache->index-1]."</li>";
+			echo "<li>".$value->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index-1]."</li>";
 		}
 		echo "</ul>";
 	}
 }
 ?></fieldset>
-	<span id="absenden_text"><?php echo $this->getPhrase("Submission/ApplicationFor", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplan->orgform_kurzbz);?></span>
+	<span id="absenden_text"><?php echo $this->getPhrase("Submission/ApplicationFor", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);?></span>
     <span id="studiengang"><?php echo $studiengang->bezeichnung; ?></span></br>
-    <?php echo form_open("Send/send/".$studiengang->studiengang_kz."/".$studiengang->studienplan->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
+    <?php echo form_open("Send/send/".$studiengang->studiengang_kz."/".$studiengang->studienplaene[0]->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
 				<?php
-				if(($prestudentStatus[$studiengang->studiengang_kz]->bewerbung_abgeschicktamum != null) || (!empty($completenessError["person"])) || (!empty($completenessError["adresse"])) || (!empty($completenessError["kontakt"])) || (!empty($completenessError["dokumente"][$studiengang->studiengang_kz])) || (!empty($completenessError["doks"])))
+				if(($prestudentStatus->bewerbung_abgeschicktamum != null) || (!empty($completenessError["person"])) || (!empty($completenessError["adresse"])) || (!empty($completenessError["kontakt"])) || (!empty($completenessError["dokumente"][$studiengang->studiengang_kz])) || (!empty($completenessError["doks"])))
 				{
 					echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden button-absenden", "type"=>"submit", "disabled"=>"disabled"));
 				}
@@ -60,7 +65,7 @@ else {
 	<div class="col-sm-6">
 	    <div class="form-group">
 		<?php
-if($prestudentStatus[$studiengang->studiengang_kz]->bewerbung_abgeschicktamum != null)
+if($prestudentStatus->bewerbung_abgeschicktamum != null)
 {
 	echo "<p class='p'>".$this->lang->line("send_bereitsAbgeschickt")."</p>";
 }
