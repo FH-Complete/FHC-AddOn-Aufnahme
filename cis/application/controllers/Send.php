@@ -101,10 +101,11 @@ class Send extends UI_Controller
 		
 		//$this->_data["studiengaenge"] = array();
 		$prestudentStatus = array();
+        $spezialisierung = array();
 		foreach ($this->getData("prestudent") as $prestudent)
 		{
 			//load studiengaenge der prestudenten
-            if($prestudent->studiengang_kz == $this->getData("studiengang_kz"))
+            //if($prestudent->studiengang_kz == $this->getData("studiengang_kz"))
             {
                 /*$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
                 $prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);*/
@@ -124,10 +125,12 @@ class Send extends UI_Controller
                     }
                     //array_push($this->_data["studiengaenge"], $studiengang);
                 }
+                $spezialisierung[$prestudent->studiengang_kz] = $this->PrestudentModel->getSpecialization($prestudent->prestudent_id)->retval;
             }
 		}
 
 		$this->setRawData("prestudentStatus", $prestudentStatus);
+        $this->setRawData('spezialisierung', $spezialisierung);
 
 		/*
 		if(count($this->_data["studiengaenge"]) > 1)
@@ -137,11 +140,34 @@ class Send extends UI_Controller
 
 		//load Dokumente from Studiengang
         $dokumenteStudiengang = array();
-        $dokumenteStudiengang[$this->getData('studiengang_kz')] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($this->getData("studiengang_kz"), true, true)->retval;
+        $spezPhrase = array();
+        foreach($this->getData('studiengaenge') as $stg)
+        {
+            $dokumenteStudiengang[$stg->studiengang_kz] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($stg->studiengang_kz, true, true)->retval;
+            $spezPhrase[$stg->studiengang_kz] = $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $stg->oe_kurzbz, $stg->studienplaene[0]->orgform_kurzbz);
+        }
+        $this->setRawData('spezPhrase', $spezPhrase);
         $this->setRawData('dokumenteStudiengang', $dokumenteStudiengang);
 
 		//load dokumente
         $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
+
+        //adding abschlusszeugnis if it is not present in dokumente
+        if(!isset($this->getData('dokumente')[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+        {
+            $akten = $this->AkteModel->getAktenAccepted();
+
+            if (hasData($akten))
+            {
+                if (isset($akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+                {
+                    $dok = $akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]];
+                    $dokumente = $this->getData('dokumente');
+                    $dokumente[$dok->dokument_kurzbz] = $dok;
+                    $this->setRawData('dokumente', $dokumente);
+                }
+            }
+        }
 
         $this->_getPersonalDocuments();
 
@@ -179,7 +205,7 @@ class Send extends UI_Controller
         }
 
 		//load studiengang
-		$this->setData("studiengang", $this->StudiengangModel->getStudiengang($studiengang_kz));
+		$this->setData("studiengang", $this->StudiengangModel->getStudiengang($studiengang_kz, true));
 
 		//$this->_data["studiengang"]->studiengangstyp = $this->_loadStudiengangstyp($this->_data["studiengang"]->typ);
 
@@ -202,9 +228,10 @@ class Send extends UI_Controller
 
 		//$this->_data["studiengaenge"] = array();
 		$prestudentStatus = array();
+        $spezialisierung = array();
 		foreach ($this->getData("prestudent") as $prestudent)
 		{
-            if($prestudent->studiengang_kz == $studiengang_kz)
+            //if($prestudent->studiengang_kz == $studiengang_kz)
             {
                 //load studiengaenge der prestudenten
                 //$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
@@ -225,8 +252,11 @@ class Send extends UI_Controller
                     }
                     //array_push($this->_data["studiengaenge"], $studiengang);
                 }
+                $spezialisierung[$prestudent->studiengang_kz] = $this->PrestudentModel->getSpecialization($prestudent->prestudent_id)->retval;
             }
 		}
+        $this->setRawData('spezialisierung', $spezialisierung);
+        $this->setRawData("prestudentStatus", $prestudentStatus);
 
 		/*
 		if(count($this->_data["studiengaenge"]) > 1)
@@ -236,11 +266,37 @@ class Send extends UI_Controller
 
         //load Dokumente from Studiengang
         $dokumenteStudiengang = array();
-        $dokumenteStudiengang[$this->getData('studiengang_kz')] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($this->getData("studiengang_kz"), true, true)->retval;
+        $spezPhrase = array();
+        foreach($this->getData('studiengaenge') as $stg)
+        {
+            $dokumenteStudiengang[$stg->studiengang_kz] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($stg->studiengang_kz, true, true)->retval;
+            $spezPhrase[$stg->studiengang_kz] = $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $stg->oe_kurzbz, $stg->studienplaene[0]->orgform_kurzbz);
+        }
+        $this->setRawData('spezPhrase', $spezPhrase);
         $this->setRawData('dokumenteStudiengang', $dokumenteStudiengang);
 
         //load dokumente
         $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
+
+        //load dokumente
+        $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
+
+        //adding abschlusszeugnis if it is not present in dokumente
+        if(!isset($this->getData('dokumente')[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+        {
+            $akten = $this->AkteModel->getAktenAccepted();
+
+            if (hasData($akten))
+            {
+                if (isset($akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+                {
+                    $dok = $akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]];
+                    $dokumente = $this->getData('dokumente');
+                    $dokumente[$dok->dokument_kurzbz] = $dok;
+                    $this->setRawData('dokumente', $dokumente);
+                }
+            }
+        }
 
         $this->_getPersonalDocuments();
 
@@ -315,6 +371,12 @@ class Send extends UI_Controller
 
 								$this->_sendMessageMailApplicationConfirmation($this->getData("person"), $studiengang);
 								$this->_sendMessageMailNewApplicationInfo($this->getData("person"), $studiengang);
+
+                                if($this->getData('error') !== null)
+                                {
+                                    $this->load->view('send', $this->getAllData());
+                                }
+
 								$time = time();
 								redirect("/Aufnahmetermine?send=".$time);
 							}
@@ -383,6 +445,7 @@ class Send extends UI_Controller
 
 		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData("sprache");
 
+		/*
         $messageArray = array(
             "vorlage_kurzbz" => 'MailApplicationConfirmation',
             "oe_kurzbz" => $oe,
@@ -392,9 +455,9 @@ class Send extends UI_Controller
             "relationmessage_id" => null,
             "multiPartMime" => false,
             'receiver_id' => $person->person_id
-        );
+        );*/
 
-		$message = $this->MessageModel->sendMessageVorlage($messageArray);
+		$message = $this->MessageModel->sendMessageVorlage('MailApplicationConfirmation', $oe, $data, $sprache, $orgform_kurzbz, null, false, $person->person_id);
 
 		if(hasData($message))
 		{
@@ -403,7 +466,7 @@ class Send extends UI_Controller
 		else
 		{
 			$this->setData("message", '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />');
-            $this->_setError(true, 'Could not send message'." ".$message->fhcCode." ".$message->msg);
+            $this->_setError(true, 'Could not send message'." ".$message->fhcCode." ".(isset($message->msg) ? $message->msg : $message->retval));
 		}
 	}
 
@@ -422,7 +485,7 @@ class Send extends UI_Controller
 		$orgform_kurzbz = $studiengang->orgform_kurzbz;
 
 		(isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData("sprache");
-
+/*
         $messageArray = array(
             "vorlage_kurzbz" => 'MailNewApplicationInfo',
             "oe_kurzbz" => $oe,
@@ -432,9 +495,9 @@ class Send extends UI_Controller
             "relationmessage_id" => null,
             "multiPartMime" => false,
             'receiver_id' => $person->person_id
-        );
+        );*/
 
-		$message = $this->MessageModel->sendMessageVorlage($messageArray);
+		$message = $this->MessageModel->sendMessageVorlage('MailNewApplicationInfo', $oe, $data, $sprache, $orgform_kurzbz, null, false, $person->person_id);
 
         if(hasData($message))
         {
@@ -443,13 +506,13 @@ class Send extends UI_Controller
         else
         {
             $this->setData("message", '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br />');
-            $this->_setError(true, 'Could not send message'." ".$message->fhcCode." ".$message->msg);
+            $this->_setError(true, 'Could not send message'." ".$message->fhcCode." ".(isset($message->msg) ? $message->msg : $message->retval));
         }
 	}
 
 	private function _checkDataCompleteness()
 	{
-		$error = array("dokumente"=>array(), "person"=>array(), "adresse"=>array(), "kontakt"=>array(), "doks"=>array());
+		$error = array("dokumente"=>array(), "person"=>array(), "adresse"=>array(), "kontakt"=>array(), "doks"=>array(), "spezialisierung" => array());
 
         $abschlusszeugnis = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["abschlusszeugnis_".$this->getData("studiengang")->typ])->retval;
         $letztesZeugnis = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["letztGueltigesZeugnis"])->retval;
@@ -481,6 +544,16 @@ class Send extends UI_Controller
 			{
 				$error["dokumente"][$key][$letztesZeugnis->bezeichnung] = $letztesZeugnis;
 			}
+
+			$spezialisierung = $this->getData('spezialisierung');
+			$spezPhrase = $this->getData('spezPhrase');
+            if(isset($spezPhrase) && (isset($spezPhrase[$key])) && ($spezPhrase[$key] !== null))
+            {
+                if((!isset($spezialisierung)) || (!isset($spezialisierung[$key])) || (empty($spezialisierung[$key])))
+                {
+                    $error['spezialisierung'][$key] = true;
+                }
+            }
 		}
 
 		//check personal data
@@ -602,4 +675,75 @@ class Send extends UI_Controller
 
 		return $error;
 	}
+
+    function getPhrase($phrase, $sprache, $oe_kurzbz = null, $orgform_kurzbz = null)
+    {
+        $result = null;
+        $phrasen = null;
+
+        if (isset($this->session->userdata()['Phrase.getPhrasen:' . $sprache]))
+        {
+            $result = $this->session->userdata()['Phrase.getPhrasen:' . $sprache];
+        }
+
+        if (hasData($result))
+        {
+            $phrasen = $result->retval;
+
+            if (is_array($phrasen))
+            {
+                $text = "";
+                $sprache = ucfirst($sprache);
+
+                foreach ($phrasen as $p)
+                {
+                    if($p->phrase == $phrase)
+                    {
+                        if (($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz) && ($p->sprache == $sprache))
+                        {
+                            if ($this->config->item('display_phrase_name'))
+                                $text = $p->text . " <i>[$p->phrase]</i>";
+                            else
+                                $text = $p->text;
+                        }
+                        elseif (($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+                        {
+                            if ($this->config->item('display_phrase_name'))
+                                $text = $p->text . " <i>[$p->phrase]</i>";
+                            else
+                                $text = $p->text;
+                        }
+                        elseif (($p->orgeinheit_kurzbz == $this->config->item("root_oe")) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+                        {
+                            if ($this->config->item('display_phrase_name'))
+                                $text = $p->text . " <i>[$p->phrase]</i>";
+                            else
+                                $text = $p->text;
+                        }
+                        elseif (($p->orgeinheit_kurzbz == null) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+                        {
+                            if ($this->config->item('display_phrase_name'))
+                                $text = $p->text . " <i>[$p->phrase]</i>";
+                            else
+                                $text = $p->text;
+                        }
+                    }
+                }
+
+                if($text != "")
+                    return $text;
+
+                if ($this->config->item('display_phrase_name'))
+                    return "<i>[$phrase]</i>";
+            }
+            else
+            {
+                return $phrasen;
+            }
+        }
+        else
+        {
+            return "Please load phrases first";
+        }
+    }
 }

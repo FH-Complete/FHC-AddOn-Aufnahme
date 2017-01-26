@@ -61,9 +61,17 @@ foreach ($studiengaenge as $studiengang)
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?php
-                                $data = array("content" => (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $this->lang->line("person_weiter") : $this->lang->line("person_speichern"), "name" => "submit_btn", "class" => "btn btn-primary icon-absenden", "type" => "submit");
-                                //(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
-                                echo form_button($data); ?>
+                                if((isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)))
+                                {
+                                    echo '<a href="'.site_url("/Requirements?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id).'">
+                                    <button type="button" class="btn btn-primary icon-absenden">'.$this->lang->line("person_weiter").'</button>';
+                                }
+                                else
+                                {
+                                    $data = array("content" => $this->lang->line("person_speichern"), "name" => "submit_btn", "class" => "btn btn-primary icon-absenden", "type" => "submit");
+                                    echo form_button($data);
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -156,7 +164,7 @@ $this->load->view('templates/footer');
 			dataType: 'json',
 			success: function(data, textStatus, jqXHR)
 			{
-				if((data.person==false) ||(data.adresse==false) ||(data.dokumente==false) ||(data.kontakt==false) ||(data.zustelladresse==false))
+				if((data.person==false) ||(data.adresse==false) ||(data.dokumente==false) ||(data.kontakt==false) ||(data.zustelladresse==false) || (data.spezialisierung == false))
 				{
 					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
 				}

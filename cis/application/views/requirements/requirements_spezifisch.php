@@ -35,19 +35,19 @@
 			{
 				if(isset($dokumente[$dok->dokument_kurzbz]->name))
 				{
-					if(strpos($dokumente[$dok->dokument_kurzbz]->name, ".docx") !== false)
+					if(strpos(strtolower($dokumente[$dok->dokument_kurzbz]->name), ".docx") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$dok->dokument_kurzbz]->name, ".doc") !== false)
+					elseif(strpos(strtolower($dokumente[$dok->dokument_kurzbz]->name), ".doc") !== false)
 					{
 						$logo = "docx.gif";
 					}
-					elseif(strpos($dokumente[$dok->dokument_kurzbz]->name, ".pdf") !== false)
+					elseif(strpos(strtolower($dokumente[$dok->dokument_kurzbz]->name), ".pdf") !== false)
 					{
 						$logo = "document-pdf.svg";
 					}
-					elseif(strpos($dokumente[$dok->dokument_kurzbz]->name, ".jpg") !== false)
+					elseif(strpos(strtolower($dokumente[$dok->dokument_kurzbz]->name), ".jpg") !== false)
 					{
 						$logo = "document-picture.svg";
 					}
@@ -209,7 +209,8 @@
 						'0%'
 					);
 					$('#<?php echo $dok->dokument_kurzbz; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').show();
-					var logo = "";	
+					var logo = "";
+                    data.result.bezeichnung = data.result.bezeichnung.toLowerCase();
 					if(data.result.bezeichnung.indexOf(".docx") !== -1)
 					{
 						logo = "docx.gif";

@@ -19,6 +19,16 @@ if(($spez_phrase != null) && (substr($spez_phrase,0,3) !== "<i>"))
 	<div class="row form-row">
 		<div class="col-sm-10">
 			<?php
+                if (isset($error) && ($error->error === true) && (isset($spezialisierung_error)))
+                {
+                    ?>
+                    <div class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        <?php echo $this->lang->line("requirements_selectSpecialization"); ?>
+                    </div>
+                    <?php
+                }
 				if(!empty($spezialisierung[$studiengang->studiengang_kz]))
 				{
 					if((!isset($bewerbung_abgeschickt)) || ($bewerbung_abgeschickt!=true))

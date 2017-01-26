@@ -77,6 +77,10 @@ class Person_model extends REST_Model
         {
             return $this->getPersonByPersonId($result->retval);
         }
+        else
+        {
+            return $result;
+        }
 
 	}
 }
