@@ -79,6 +79,7 @@ class Summary extends UI_Controller
             }
 
             //setting selected Studiengang by GET Param
+            $abgeschickt_array = array();
             foreach ($this->getData('studiengaenge') as $stg)
             {
                 if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
@@ -89,8 +90,10 @@ class Summary extends UI_Controller
                 if($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
                 {
                     $this->setRawData("bewerbung_abgeschickt", true);
+                    $abgeschickt_array[$stg->studiengang_kz] = true;
                 }
             }
+            $this->setRawData('abgeschickt_array', $abgeschickt_array);
 
             $this->setRawData("studiengaenge", array($this->getData('studiengang')));
 

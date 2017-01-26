@@ -11,9 +11,21 @@
 		(<?php echo $studiengang->studienplaene[0]->orgform_kurzbz; ?>)
 	</h1>
 </a>
-<button class="btn btn-sm btn-primary btn-background" type="button" onclick="confirmStorno(<?php echo $studiengang->studiengang_kz; ?>)">
-	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-</button>
+<?php
+if(!((isset($bewerbung_abgeschickt))
+    && ($bewerbung_abgeschickt === true)
+    && (isset($abgeschickt_array))
+    && (isset($abgeschickt_array[$studiengang->studiengang_kz]))
+    && ($abgeschickt_array[$studiengang->studiengang_kz] == true)))
+{
+    ?>
+    <button class="btn btn-sm btn-primary btn-background" type="button" onclick="confirmStorno(<?php echo $studiengang->studiengang_kz; ?>)">
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+    </button>
+<?php
+}
+ ?>
+
 <span id="infotext_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" class="infotext" studienplan_id="<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" studiengang_kz="<?php echo $studiengang->studiengang_kz; ?>">
 	
 </span>

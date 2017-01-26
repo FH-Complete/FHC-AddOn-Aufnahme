@@ -102,7 +102,7 @@ class Bewerbung extends UI_Controller
                 true
             ));
 
-		//$this->_isAnyApplicationSent();
+		$this->_isAnyApplicationSent();
 
 		$this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
 		
@@ -412,6 +412,7 @@ class Bewerbung extends UI_Controller
             }
 
             //setting selected Studiengang by GET Param
+            $abgeschickt_array = array();
             foreach ($this->getData('studiengaenge') as $stg)
             {
                 if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
@@ -422,8 +423,10 @@ class Bewerbung extends UI_Controller
                 if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
                 {
                     $this->setRawData("bewerbung_abgeschickt", true);
+                    $abgeschickt_array[$stg->studiengang_kz] = true;
                 }
             }
+            $this->setRawData('abgeschickt_array', $abgeschickt_array);
 
             /**
              * check if studiengang data is not set
@@ -460,11 +463,15 @@ class Bewerbung extends UI_Controller
                 $this->setRawData("studiengaenge", array($this->getData('studiengang')));
                 $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
                 $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
+                $abgeschickt_array = array();
                 if ($this->getData('prestudentStatus')->bewerbung_abgeschicktamum != null)
                 {
                     $this->setRawData("bewerbung_abgeschickt", true);
+                    $abgeschickt_array[$stg->studiengang_kz] = true;
                 }
+                $this->setRawData('abgeschickt_array', $abgeschickt_array);
             }
+
 
             //load Studienplan
             $this->setData("studienplan", $this->StudienplanModel->getStudienplan($studienplan_id));
@@ -496,10 +503,14 @@ class Bewerbung extends UI_Controller
                     )
                     {
                         $exists = true;
+                        $abgeschickt_array = array();
                         if ($prestudentStatus->bewerbung_abgeschicktamum !== null)
                         {
                             $this->setRawData("bewerbung_abgeschickt", true);
+                            $abgeschickt_array[$prestudent->studiengang_kz] = true;
                         }
+
+                        $this->setRawData('abgeschickt_array', $abgeschickt_array);
                         //nothing else to do; same prestudent with status exists
                     }
                     elseif (($prestudent->studiengang_kz == $studiengang_kz)
@@ -587,6 +598,7 @@ class Bewerbung extends UI_Controller
             }
 
             //setting selected Studiengang by GET Param
+            $abgeschickt_array = array();
             foreach ($this->getData('studiengaenge') as $stg)
             {
                 if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
@@ -597,8 +609,10 @@ class Bewerbung extends UI_Controller
                 if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
                 {
                     $this->setRawData("bewerbung_abgeschickt", true);
+                    $abgeschickt_array[$stg->studiengang_kz] = true;
                 }
             }
+            $this->setRawData('abgeschickt_array', $abgeschickt_array);
 
             $this->setRawData("studiengaenge", array($this->getData('studiengang')));
 
@@ -651,6 +665,7 @@ class Bewerbung extends UI_Controller
         }
 
         //setting selected Studiengang by GET Param
+        $abgeschickt_array = array();
         foreach ($this->getData('studiengaenge') as $stg)
         {
             if ($stg->studiengang_kz === $studiengang_kz)
@@ -661,8 +676,10 @@ class Bewerbung extends UI_Controller
             if($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
             {
                 $this->setRawData("bewerbung_abgeschickt", true);
+                $abgeschickt_array[$stg->studiengang_kz] = true;
             }
         }
+        $this->setRawData('abgeschickt_array', $abgeschickt_array);
 
         $this->setRawData("studiengaenge", array($this->getData('studiengang')));
 
@@ -1275,6 +1292,7 @@ class Bewerbung extends UI_Controller
         }
 
         //setting selected Studiengang by GET Param
+        $abgeschickt_array = array();
         foreach ($this->getData('studiengaenge') as $stg)
         {
             if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
@@ -1285,8 +1303,10 @@ class Bewerbung extends UI_Controller
             if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
             {
                 $this->setRawData("bewerbung_abgeschickt", true);
+                $abgeschickt_array[$stg->studiengang_kz] = true;
             }
         }
+        $this->setRawData('abgeschickt_array', $abgeschickt_array);
 
         $this->setRawData("studiengaenge", array($this->getData('studiengang')));
 
@@ -1367,9 +1387,10 @@ class Bewerbung extends UI_Controller
 	/**
      *
      */
-	/*private function _isAnyApplicationSent()
+	private function _isAnyApplicationSent()
     {
         //check if any application is sent
+        $abgeschickt_array = array();
         if($this->getData("prestudent") !== null)
         {
             foreach($this->getData("prestudent") as $prestudent)
@@ -1377,10 +1398,12 @@ class Bewerbung extends UI_Controller
                 if ((isset($prestudent->bewerbung_abgeschicktamum)) && ($prestudent->bewerbung_abgeschicktamum != null))
                 {
                     $this->setRawData("bewerbung_abgeschickt", true);
+                    $abgeschickt_array[$prestudent->studiengang_kz] = true;
                 }
             }
         }
-    }*/
+        $this->setRawData('abgeschickt_array', $abgeschickt_array);
+    }
 
     /**
      * @param $bool
