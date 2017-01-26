@@ -19,8 +19,7 @@ if (isset($error) && ($error->error === true))
 $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
 echo $this->template->widget("menu", array('aktiv' => 'Bewerbung', 'numberOfUnreadMessages'=>$numberOfUnreadMessages));
 ?>
-    <?php if(!isset($studiengang_kz) && !isset($studienplan_id))
-
+    <?php if(isset($studiengang_kz) && isset($studienplan_id))
     {
         ?>
         <div id="backToApplication">
