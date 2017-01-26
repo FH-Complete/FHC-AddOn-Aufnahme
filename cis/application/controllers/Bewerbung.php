@@ -65,27 +65,32 @@ class Bewerbung extends UI_Controller
 			ucfirst($this->getData('sprache'))
 		);
 
-        if ($this->input->get("studiengang_kz") != null)
+        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        if (hasData($studiensemester))
+        {
+            $this->setData('studiensemester', $studiensemester);
+        }
+
+        if ((isset($this->input->get()["studiengang_kz"]) && ($this->input->get()["studiengang_kz"] !== null) && ($this->input->get()["studiengang_kz"] !== ''))
+            && (isset($this->input->get()['studienplan_id'])) && ($this->input->get()["studienplan_id"] !== null) && ($this->input->get()["studienplan_id"] !== '')
+        )
         {
             $this->setRawData("studiengang_kz", $this->input->get("studiengang_kz"));
+            $this->setRawData("studienplan_id", $this->input->get("studienplan_id"));
+
+            redirect("/Bewerbung/studiengang/".$this->getData('studiengang_kz')."/".$this->getData('studienplan_id')."/".$this->getData('studiensemester')->studiensemester_kurzbz);
         }
 		
 		$this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
 		
 		$this->setData('person', $this->PersonModel->getPerson());
-		
-		$studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
-		if (hasData($studiensemester))
-		{
-			$this->setData('studiensemester', $studiensemester);
-			$this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-				$this->getData('studiensemester')->studiensemester_kurzbz,
-				'',
-				'Interessent',
-                true
-			));
 
-		}
+        $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
+            $this->getData('studiensemester')->studiensemester_kurzbz,
+            '',
+            'Interessent',
+            true
+        ));
 
 		$this->setData(
 		    'prestudent',
@@ -97,7 +102,7 @@ class Bewerbung extends UI_Controller
                 true
             ));
 
-		$this->_isAnyApplicationSent();
+		//$this->_isAnyApplicationSent();
 
 		$this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
 		
@@ -136,307 +141,8 @@ class Bewerbung extends UI_Controller
             }
         }
 
-		if ($this->form_validation->run() == FALSE)
-		{
-			$this->load->view('bewerbung', $this->getAllData());
-		}
-		else
-        {
-            $post = $this->input->post();
-            $person = $this->getData("person");
-            $person->vorname = $post["vorname"];
-            $person->nachname = $post["nachname"];
-            //$person->bundesland_code = $post["bundesland"];
-            if (isset($post["gebdatum"]))
-            {
-                $person->gebdatum = date('Y-m-d', strtotime($post["gebdatum"]));
-            }
-            $person->gebort = (($post["geburtsort"] != '') && ($post["geburtsort"] != 'null')) ? $post["geburtsort"] : null;
-            $person->geburtsnation = (($post["nation"] != '') && ($post["nation"] != 'null')) ? $post["nation"] : null;
-            if ($post["anrede"] === "Herr")
-            {
-                $person->geschlecht = "m";
-                $person->anrede = $post["anrede"];
-            }
-            elseif ($post["anrede"] === "Frau")
-            {
-                $person->geschlecht = "w";
-                $person->anrede = $post["anrede"];
-            }
-            else
-            {
-                $person->geschlecht = "u";
-            }
-            $person->staatsbuergerschaft = (($post["staatsbuergerschaft"] != '') && ($post["staatsbuergerschaft"] != 'null')) ? $post["staatsbuergerschaft"] : null;
-            // An die SVNR wird v1, v2, v3, etc hinzugefuegt wenn die SVNR bereits vorhanden ist
-            // In der Anzeige wird dies herausgefiltert. Deshalb muss beim Speichern der Daten
-            // wieder die SVNR mit v1 etc geschickt werden wenn diese nicht geaendert wurde
-            if ($post["svnr_orig"] != '' && mb_substr($post["svnr_orig"], 0, 10) == $post["svnr"])
-            {
-                $person->svnr = $post["svnr_orig"];
-            }
-            else
-            {
-                if ($post["svnr"] != '')
-                {
-                    $person->svnr = $post["svnr"];
-                }
-            }
-            $person->titelpre = $post["titelpre"] != '' ? $post["titelpre"] : null;
-            $person->titelpost = $post["titelpost"] != '' ? $post["titelpost"] : null;
+        $this->load->view('bewerbung', $this->getAllData());
 
-            $updatePerson = $this->PersonModel->savePerson((array)$person);
-
-            if(!hasData($updatePerson))
-            {
-                $this->_setError(true, "Could not save data");
-            }
-
-            $adresse = new stdClass();
-            $zustell_adresse = new stdClass();
-            if ($post["adresse_nation"] === "A")
-            {
-                if (($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort_dd"] != ""))
-                {
-                    if ($this->getData("adresse") !== null)
-                    {
-                        $adresse = $this->getData("adresse");
-                    }
-                    else
-                    {
-                        $adresse->person_id = $this->getData("person")->person_id;
-                        $adresse->heimatadresse = true;
-                    }
-                    if (($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
-                    {
-                        $adresse->zustelladresse = false;
-                    }
-                    else
-                    {
-                        $adresse->zustelladresse = true;
-                    }
-                    $adresse->strasse = $post["strasse"];
-                    $adresse->nation = $post["adresse_nation"];
-                    $adresse->plz = $post["plz"];
-
-                    foreach ($this->getData("gemeinden") as $gemeinde)
-                    {
-                        if ($gemeinde->gemeinde_id === $post["ort_dd"])
-                        {
-                            $adresse->gemeinde = $gemeinde->name;
-                            $adresse->ort = $gemeinde->ortschaftsname;
-                            $person->bundesland_code = $gemeinde->bulacode;
-                        }
-                    }
-                    $updatePerson = $this->PersonModel->savePerson((array)$person);
-
-                    if(!hasData($updatePerson))
-                    {
-                        $this->_setError(true, "Could not save data");
-                    }
-
-                    $updateAdresse = $this->AdresseModel->saveAdresse((array)$adresse);
-
-                    if(!isSuccess($updateAdresse))
-                    {
-                        $this->_setError(true, "Could not save address data");
-                    }
-                }
-            }
-            else
-            {
-                if (($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort"] != ""))
-                {
-                    if ($this->getData("adresse") !== null)
-                    {
-                        $adresse = $this->getData("adresse");
-                    }
-                    else
-                    {
-                        $adresse->person_id = $this->getData("person")->person_id;
-                        $adresse->heimatadresse = true;
-                    }
-                    if (($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
-                    {
-                        $adresse->zustelladresse = false;
-                    }
-                    else
-                    {
-                        $adresse->zustelladresse = true;
-                    }
-                    $adresse->strasse = $post["strasse"];
-                    $adresse->plz = $post["plz"];
-                    $adresse->ort = $post["ort"];
-                    $adresse->nation = $post["adresse_nation"];
-                    $updateAdresse = $this->AdresseModel->saveAdresse((array)$adresse);
-
-                    if(!isSuccess($updateAdresse))
-                    {
-                        $this->_setError(true, "Could not save address data");
-                    }
-                }
-            }
-            if ($post["zustelladresse_nation"] === "A")
-            {
-                if (($post["zustell_strasse"] != "") && (($post["zustell_plz"] != "") && ($post["zustell_ort_dd"] != "")))
-                {
-                    if ($this->getData("zustell_adresse") !== null)
-                    {
-                        $zustell_adresse = $this->getData("zustell_adresse");
-                    }
-                    else
-                    {
-                        $zustell_adresse->person_id = $this->getData("person")->person_id;
-                        $zustell_adresse->heimatadresse = false;
-                        $zustell_adresse->zustelladresse = true;
-                    }
-                    $zustell_adresse->strasse = $post["zustell_strasse"];
-                    $zustell_adresse->nation = $post["zustelladresse_nation"];
-                    $zustell_adresse->plz = $post["zustell_plz"];
-
-                    $this->GemeindeModel->getGemeindeByPlz($zustell_adresse->plz);
-
-                    foreach ($this->getData("gemeinden") as $gemeinde)
-                    {
-                        if ($gemeinde->gemeinde_id === $post["zustell_ort_dd"])
-                        {
-                            $zustell_adresse->gemeinde = $gemeinde->name;
-                            $zustell_adresse->ort = $gemeinde->ortschaftsname;
-                        }
-                    }
-
-                    $updateZustellAdresse = $this->AdresseModel->saveZustellAdresse((array)$zustell_adresse);
-
-                    if(!isSuccess($updateZustellAdresse))
-                    {
-                        $this->_setError(true, "Could not save address data");
-                    }
-
-                }
-            }
-            else
-            {
-                if (($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
-                {
-                    if ($this->getData("zustell_adresse") !== null)
-                    {
-                        $zustell_adresse = $this->getData("zustell_adresse");
-                    }
-                    else
-                    {
-                        $zustell_adresse->person_id = $this->getData("person")->person_id;
-                        $zustell_adresse->heimatadresse = false;
-                        $zustell_adresse->zustelladresse = true;
-                    }
-                    $zustell_adresse->strasse = $post["zustell_strasse"];
-                    $zustell_adresse->plz = $post["zustell_plz"];
-                    $zustell_adresse->ort = $post["zustell_ort"];
-                    $zustell_adresse->nation = $post["zustelladresse_nation"];
-                    $updateZustellAdresse = $this->AdresseModel->saveZustellAdresse((array)$zustell_adresse);
-
-                    if(!isSuccess($updateZustellAdresse))
-                    {
-                        $this->_setError(true, "Could not save address data");
-                    }
-                }
-            }
-            if (($post["email"] != ""))
-            {
-                if (!(isset($this->getData("kontakt")["email"])))
-                {
-                    $kontakt = new stdClass();
-                    $kontakt->person_id = $this->getData("person")->person_id;
-                    $kontakt->kontakttyp = "email";
-                    $kontakt->kontakt = $post["email"];
-                    $kontakt->zustellung = true;
-                }
-                else
-                {
-                    $kontakt = $this->getData("kontakt")["email"];
-                    $kontakt->kontakt = $post["email"];
-                }
-                $updateKontakt = $this->KontaktModel->saveKontakt((array)$kontakt);
-
-                if(!isSuccess($updateKontakt))
-                {
-                    $this->_setError(true, "Could not save contact data");
-                }
-            }
-            if ((isset($post["telefon"])) && ($post["telefon"] != ""))
-            {
-                if (!(isset($this->getData("kontakt")["telefon"])))
-                {
-                    $kontakt = new stdClass();
-                    $kontakt->person_id = $this->getData("person")->person_id;
-                    $kontakt->kontakttyp = "telefon";
-                    $kontakt->kontakt = $post["telefon"];
-                }
-                else
-                {
-                    $kontakt = $this->getData("kontakt")["telefon"];
-                    $kontakt->kontakt = $post["telefon"];
-                }
-                $updateKontakt = $this->KontaktModel->saveKontakt((array)$kontakt);
-
-                if(!isSuccess($updateKontakt))
-                {
-                    $this->_setError(true, "Could not save contact data");
-                }
-            }
-            if ((isset($post["fax"])) && ($post["fax"] != ""))
-            {
-                if (!(isset($this->getData("kontakt")["fax"])))
-                {
-                    $kontakt = new stdClass();
-                    $kontakt->person_id = $this->getData("person")->person_id;
-                    $kontakt->kontakttyp = "fax";
-                    $kontakt->kontakt = $post["fax"];
-                }
-                else
-                {
-                    $kontakt = $this->getData("kontakt")["fax"];
-                    $kontakt->kontakt = $post["fax"];
-                }
-                $updateKontakt = $this->KontaktModel->saveKontakt((array)$kontakt);
-
-                if(!isSuccess($updateKontakt))
-                {
-                    $this->_setError(true, "Could not save contact data");
-                }
-            }
-
-            $this->setData('person', $this->PersonModel->getPerson());
-
-            $this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
-
-            $this->setData('adresse', $this->AdresseModel->getAdresse());
-
-            $this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
-
-            foreach ($this->getData("gemeinden") as $gemeinde)
-            {
-                if (($this->getData("adresse") !== null) && ($gemeinde->plz == $this->getData("adresse")->plz) && ($gemeinde->name == $this->getData("adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("adresse")->ort))
-                {
-                    $this->setRawData("ort_dd", $gemeinde->gemeinde_id);
-                }
-                if (($this->getData("zustell_adresse") !== null) && ($gemeinde->plz == $this->getData("zustell_adresse")->plz) && ($gemeinde->name == $this->getData("zustell_adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("zustell_adresse")->ort))
-                {
-                    $this->setRawData("zustell_ort_dd", $gemeinde->gemeinde_id);
-                }
-            }
-
-            if (($this->getData("error") === null) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
-            {
-                redirect("/Requirements?studiengang_kz=" . $this->input->get()["studiengang_kz"] . "&studienplan_id=" . $this->input->get()["studienplan_id"]);
-                $this->setRawData("complete", $this->_checkDataCompleteness());
-                $this->load->view('bewerbung', $this->getAllData());
-            }
-            else
-            {
-                $this->setRawData("complete", $this->_checkDataCompleteness());
-                $this->load->view('bewerbung', $this->getAllData());
-            }
-        }
 	}
 
     /**
@@ -624,12 +330,6 @@ class Bewerbung extends UI_Controller
             ));
         }
 
-/*
-        $reisepass = $this->_loadDokument($this->config->item("dokumentTypen")["reisepass"]);
-        $lebenslauf = $this->_loadDokument($this->config->item("dokumentTypen")["lebenslauf"]);
-        $this->_data["personalDocuments"] = array($this->config->item("dokumentTypen")["reisepass"] => $reisepass, $this->config->item("dokumentTypen")["lebenslauf"] => $lebenslauf);
-*/
-
         $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
 
         $this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
@@ -678,188 +378,259 @@ class Bewerbung extends UI_Controller
 
     public function studiengang($studiengang_kz, $studienplan_id, $studiensemester_kurzbz)
     {
-        $this->PhraseModel->getPhrasen(
-            'aufnahme',
-            ucfirst($this->getData('sprache'))
-        );
-
-        $this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
-
-        $this->setData('person', $this->PersonModel->getPerson());
-
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
-        if (hasData($studiensemester))
-        {
-            $this->setData('studiensemester', $studiensemester);
-        }
+        // Form validation rules
+        $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
+        $this->form_validation->set_rules("vorname", "Vorname", "required|max_length[32]");
+        $this->form_validation->set_rules("nachname", "Nachname", "required|max_length[64]");
+        $this->form_validation->set_rules("gebdatum", "Geburtsdatum", "callback_check_date");
+        $this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
 
         $this->setRawData("studiengang_kz", $studiengang_kz);
+        $this->setRawData("studienplan_id", $studienplan_id);
 
-        //load preinteressent data
-        $this->setData("prestudent", $this->PrestudentModel->getPrestudentByPersonId(true));
-
-        //load Studienplan
-        $this->setData("studienplan", $this->StudienplanModel->getStudienplan($studienplan_id));
-        $fristen = $this->BewerbungstermineModel->getByStudienplan($studienplan_id)->retval;
-        $bewerbungMoeglich = false;
-        if (!empty($fristen))
+        if ($this->form_validation->run() == FALSE)
         {
-            foreach ($fristen as $frist)
+            $this->PhraseModel->getPhrasen(
+                'aufnahme',
+                ucfirst($this->getData('sprache'))
+            );
+
+            $this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
+
+            $this->setData('person', $this->PersonModel->getPerson());
+
+            $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+            if (hasData($studiensemester))
             {
-                if ((date("Y-m-d", strtotime($frist->beginn)) < date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) > date("Y-m-d")))
+                $this->setData('studiensemester', $studiensemester);
+                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
+                    $this->getData('studiensemester')->studiensemester_kurzbz,
+                    '',
+                    'Interessent',
+                    true
+                ));
+            }
+
+            //setting selected Studiengang by GET Param
+            foreach ($this->getData('studiengaenge') as $stg)
+            {
+                if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
                 {
-                    $bewerbungMoeglich = true;
+                    $this->setRawData("studiengang", $stg);
+                }
+
+                if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                {
+                    $this->setRawData("bewerbung_abgeschickt", true);
                 }
             }
-        }
-        if ($bewerbungMoeglich)
-        {
-            $exists = false;
-            $exitingPrestudent = null;
 
-            if($this->getData('prestudent') !== null)
+            /**
+             * check if studiengang data is not set
+             * and load prestudenten without status
+             *
+             */
+            if ($this->getData('studiengang') === null)
             {
-                foreach ($this->getData("prestudent") as $prestudent)
+                $this->setData("prestudent", $this->PrestudentModel->getPrestudentByPersonId(true));
+                $prestudenten = $this->getData('prestudent');
+                foreach ($prestudenten as $key => $prestudent)
                 {
-                    $prestudentStatus = $this->PrestudentStatusModel->getLastStatus(
-                        $prestudent->prestudent_id,
-                        $this->getData('studiensemester')->studiensemester_kurzbz
-                    );
-
-                    if(isSuccess($prestudentStatus))
+                    if ($prestudent->studiengang_kz !== $studiengang_kz)
                     {
-                        if(is_array($prestudentStatus->retval) && count($prestudentStatus->retval) == 0)
-                        {
-                            $prestudentStatus = $prestudentStatus->retval;
-                        }
-                        else
-                        {
-                            $prestudentStatus = $prestudentStatus->retval;
-                        }
+                        unset($prestudenten[$key]);
+                    }
+                }
 
-                        if ((!empty($prestudentStatus))
-                            && ($prestudent->studiengang_kz == $studiengang_kz)
-                            && ($prestudentStatus->studienplan_id == $studienplan_id)
-                            && ($prestudentStatus->studiensemester_kurzbz == $this->getData("studiensemester")->studiensemester_kurzbz)
-                        )
-                        {
-                            $exists = true;
-                            if($prestudentStatus->bewerbung_abgeschicktamum !== null)
-                            {
-                                $this->setRawData("bewerbung_abgeschickt", true);
-                            }
-                            //nothing else to do; same prestudent with status exists
-                        }
-                        elseif (($prestudent->studiengang_kz == $studiengang_kz)
-                            && (!empty($prestudentStatus))
-                            && (
-                                ($prestudent->status_kurzbz === "Interessent")
-                                || ($prestudent->status_kurzbz === "Bewerber")
-                                || ($prestudent->status_kurzbz === "Abgewiesener")
-                            )
-                        )
-                        {
-                            $exists = true;
-                            //just adding new status
-                            $prestudentStatus = array();
-                            $prestudentStatus['new'] = true;
-                            $prestudentStatus['prestudent_id'] = $prestudent->prestudent_id;
-                            $prestudentStatus['status_kurzbz'] = "Interessent";
-                            $prestudentStatus['rt_stufe'] = 1;
-                            $prestudentStatus['studiensemester_kurzbz'] = $this->getData("studiensemester")->studiensemester_kurzbz;
-                            $prestudentStatus['orgform_kurzbz'] = $this->getData('studienplan')->orgform_kurzbz;
-                            $prestudentStatus['studienplan_id'] = $studienplan_id;
-                            $prestudentStatus['datum'] = date('Y-m-d');
+                if (!empty($prestudenten))
+                {
+                    //prestudent for stg without status exists
+                    $prestudenten = array_values($prestudenten);
+                    $this->setRawData('prestudent', $prestudenten[0]);
+                }
+                else
+                {
+                    //no prestudent for stg exists
+                    $this->setRawData('prestudent', null);
+                }
+                $this->setRawData('prestudentStatus', null);
+            }
+            else
+            {
+                $this->setRawData("studiengaenge", array($this->getData('studiengang')));
+                $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
+                $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
+                if ($this->getData('prestudentStatus')->bewerbung_abgeschicktamum != null)
+                {
+                    $this->setRawData("bewerbung_abgeschickt", true);
+                }
+            }
 
-                            $this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
-                        }
-                        elseif (($prestudent->studiengang_kz == $studiengang_kz) && (empty($prestudentStatus)))
-                        {
-                            //adding status if prestudent has no status
-                            $exists = true;
-                            $prestudentStatus = array();
-                            $prestudentStatus['new'] = true;
-                            $prestudentStatus['prestudent_id'] = $prestudent->prestudent_id;
-                            $prestudentStatus['status_kurzbz'] = "Interessent";
-                            $prestudentStatus['rt_stufe'] = 1;
-                            $prestudentStatus['studiensemester_kurzbz'] = $this->getData("studiensemester")->studiensemester_kurzbz;
-                            $prestudentStatus['orgform_kurzbz'] = $this->getData('studienplan')->orgform_kurzbz;
-                            $prestudentStatus['studienplan_id'] = $studienplan_id;
-                            $prestudentStatus['datum'] = date('Y-m-d');
-                            $this->PrestudentStatusModel->savePrestudentstatus($prestudentStatus);
-                        }
+            //load Studienplan
+            $this->setData("studienplan", $this->StudienplanModel->getStudienplan($studienplan_id));
+            $fristen = $this->BewerbungstermineModel->getByStudienplan($studienplan_id)->retval;
+            $bewerbungMoeglich = false;
+            if (!empty($fristen))
+            {
+                foreach ($fristen as $frist)
+                {
+                    if ((date("Y-m-d", strtotime($frist->beginn)) < date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) > date("Y-m-d")))
+                    {
+                        $bewerbungMoeglich = true;
                     }
                 }
             }
-
-            if ((!$exists))
+            if ($bewerbungMoeglich)
             {
-                $prestudent = array();
-                $prestudent["person_id"] = $this->getData('person')->person_id;
-                $prestudent["studiengang_kz"] = $studiengang_kz;
-                $prestudent["aufmerksamdurch_kurzbz"] = 'k.A.';
-                $prestudent["insertamum"] = date('Y-m-d H:i:s');
-                $prestudent["insertvon"] = 'aufnahme';
+                $exists = false;
+                $exitingPrestudent = null;
 
-                $savedPrestudent = $this->PrestudentModel->savePrestudent($prestudent);
-
-                if(hasData($savedPrestudent))
+                if ($this->getData('prestudent') !== null)
                 {
-                    $prestudentStatus = array();
-                    $prestudentStatus['new'] = true;
-                    $prestudentStatus['prestudent_id'] = $savedPrestudent->retval;
-                    $prestudentStatus['status_kurzbz'] = "Interessent";
-                    $prestudentStatus['rt_stufe'] = 1;
-                    $prestudentStatus['studiensemester_kurzbz'] = $this->getData("studiensemester")->studiensemester_kurzbz;
-                    $prestudentStatus['orgform_kurzbz'] = $this->getData('studienplan')->orgform_kurzbz;
-                    $prestudentStatus['studienplan_id'] = $studienplan_id;
-                    $prestudentStatus['datum'] = date('Y-m-d');
+                    $prestudent = $this->getData('prestudent');
+                    $prestudentStatus = $this->getData('prestudentStatus');
 
-                    $this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
+                    if (($prestudentStatus !== null) && ($prestudent->studiengang_kz == $studiengang_kz)
+                        && ($prestudentStatus->studienplan_id == $studienplan_id)
+                        && ($prestudentStatus->studiensemester_kurzbz == $this->getData("studiensemester")->studiensemester_kurzbz)
+                    )
+                    {
+                        $exists = true;
+                        if ($prestudentStatus->bewerbung_abgeschicktamum !== null)
+                        {
+                            $this->setRawData("bewerbung_abgeschickt", true);
+                        }
+                        //nothing else to do; same prestudent with status exists
+                    }
+                    elseif (($prestudent->studiengang_kz == $studiengang_kz)
+                        && ($prestudentStatus != null)
+                        && (
+                            ($prestudentStatus->status_kurzbz === "Interessent")
+                            || ($prestudentStatus->status_kurzbz === "Bewerber")
+                            || ($prestudentStatus->status_kurzbz === "Abgewiesener")
+                        )
+                    )
+                    {
+                        $exists = true;
+                        //just adding new status
+                        $prestudentStatus = array();
+                        $prestudentStatus['new'] = true;
+                        $prestudentStatus['prestudent_id'] = $prestudent->prestudent_id;
+                        $prestudentStatus['status_kurzbz'] = "Interessent";
+                        $prestudentStatus['rt_stufe'] = 1;
+                        $prestudentStatus['studiensemester_kurzbz'] = $this->getData("studiensemester")->studiensemester_kurzbz;
+                        $prestudentStatus['orgform_kurzbz'] = $this->getData('studienplan')->orgform_kurzbz;
+                        $prestudentStatus['studienplan_id'] = $studienplan_id;
+                        $prestudentStatus['datum'] = date('Y-m-d');
+
+                        $this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
+                    }
+                    elseif (($prestudent->studiengang_kz == $studiengang_kz) && (empty($prestudentStatus)))
+                    {
+                        //adding status if prestudent has no status
+                        $exists = true;
+                        $prestudentStatus = array();
+                        $prestudentStatus['new'] = true;
+                        $prestudentStatus['prestudent_id'] = $prestudent->prestudent_id;
+                        $prestudentStatus['status_kurzbz'] = "Interessent";
+                        $prestudentStatus['rt_stufe'] = 1;
+                        $prestudentStatus['studiensemester_kurzbz'] = $this->getData("studiensemester")->studiensemester_kurzbz;
+                        $prestudentStatus['orgform_kurzbz'] = $this->getData('studienplan')->orgform_kurzbz;
+                        $prestudentStatus['studienplan_id'] = $studienplan_id;
+                        $prestudentStatus['datum'] = date('Y-m-d');
+                        $this->PrestudentStatusModel->savePrestudentstatus($prestudentStatus);
+                    }
+                }
+
+                if ((!$exists))
+                {
+                    $prestudent = array();
+                    $prestudent["person_id"] = $this->getData('person')->person_id;
+                    $prestudent["studiengang_kz"] = $studiengang_kz;
+                    $prestudent["aufmerksamdurch_kurzbz"] = 'k.A.';
+                    $prestudent["insertamum"] = date('Y-m-d H:i:s');
+                    $prestudent["insertvon"] = 'aufnahme';
+
+                    $savedPrestudent = $this->PrestudentModel->savePrestudent($prestudent);
+
+                    if (hasData($savedPrestudent))
+                    {
+                        $prestudentStatus = array();
+                        $prestudentStatus['new'] = true;
+                        $prestudentStatus['prestudent_id'] = $savedPrestudent->retval;
+                        $prestudentStatus['status_kurzbz'] = "Interessent";
+                        $prestudentStatus['rt_stufe'] = 1;
+                        $prestudentStatus['studiensemester_kurzbz'] = $this->getData("studiensemester")->studiensemester_kurzbz;
+                        $prestudentStatus['orgform_kurzbz'] = $this->getData('studienplan')->orgform_kurzbz;
+                        $prestudentStatus['studienplan_id'] = $studienplan_id;
+                        $prestudentStatus['datum'] = date('Y-m-d');
+
+                        $this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
+                    }
                 }
             }
+            else
+            {
+                redirect("/Studiengaenge");
+            }
+
+            $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+            if (hasData($studiensemester))
+            {
+                $this->setData('studiensemester', $studiensemester);
+                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
+                    $this->getData('studiensemester')->studiensemester_kurzbz,
+                    '',
+                    'Interessent',
+                    true
+                ));
+            }
+
+            //setting selected Studiengang by GET Param
+            foreach ($this->getData('studiengaenge') as $stg)
+            {
+                if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
+                {
+                    $this->setRawData("studiengang", $stg);
+                }
+
+                if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                {
+                    $this->setRawData("bewerbung_abgeschickt", true);
+                }
+            }
+
+            $this->setRawData("studiengaenge", array($this->getData('studiengang')));
+
+            $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
+            $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
+
+            //$this->_isAnyApplicationSent();
+
+            $this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
+
+            $this->setData('adresse', $this->AdresseModel->getAdresse());
+
+            $this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
+
+            $this->setData('nationen', $this->NationModel->getAll());
+
+            $this->setData('bundeslaender', $this->BundeslandModel->getAll());
+
+            $this->setData('gemeinden', $this->GemeindeModel->getGemeinde());
+
+            $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
+
+            $this->_getPersonalDocuments();
+
+            $this->_missingData();
+
+            $this->load->view('bewerbung', $this->getAllData());
         }
         else
         {
-            redirect("/Studiengaenge");
+            $this->_saveData();
         }
-
-        $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-            $this->getData('studiensemester')->studiensemester_kurzbz,
-            '',
-            'Interessent',
-            true
-        ));
-
-        //TODO force reload here
-        $this->setData(
-            'prestudent',
-            $this->PrestudentModel->getLastStatuses(
-                $this->getData('person')->person_id,
-                $this->getData('studiensemester')->studiensemester_kurzbz
-            ));
-
-        $this->_isAnyApplicationSent();
-
-        $this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
-
-        $this->setData('adresse', $this->AdresseModel->getAdresse());
-
-        $this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
-
-        $this->setData('nationen', $this->NationModel->getAll());
-
-        $this->setData('bundeslaender', $this->BundeslandModel->getAll());
-
-        $this->setData('gemeinden', $this->GemeindeModel->getGemeinde());
-
-        $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
-
-        $this->_getPersonalDocuments();
-
-        $this->_missingData();
-
-        $this->load->view('bewerbung', $this->getAllData());
     }
     /**
      *
@@ -871,84 +642,96 @@ class Bewerbung extends UI_Controller
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
+                $this->getData('studiensemester')->studiensemester_kurzbz,
+                '',
+                'Interessent',
+                true
+            ));
         }
+
+        //setting selected Studiengang by GET Param
+        foreach ($this->getData('studiengaenge') as $stg)
+        {
+            if ($stg->studiengang_kz === $studiengang_kz)
+            {
+                $this->setRawData("studiengang", $stg);
+            }
+
+            if($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+            {
+                $this->setRawData("bewerbung_abgeschickt", true);
+            }
+        }
+
+        $this->setRawData("studiengaenge", array($this->getData('studiengang')));
+
+        $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
+        $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
 
         //load person data
         $this->setData('person', $this->PersonModel->getPerson());
 
-        //load preinteressent data
-        $prestudenten = $this->PrestudentModel->getLastStatuses(
-            $this->getData('person')->person_id,
-            $this->getData('studiensemester')->studiensemester_kurzbz,
-            null,
-            'Interessent'
-        );
-        $this->setData("prestudent", $prestudenten);
-
         if($this->getData('prestudent') != null)
         {
-            foreach ($this->getData('prestudent') as $prestudent)
+            $prestudent = $this->getData('prestudent');
+            $prestudentStatus = $this->getData('prestudentStatus');
+            if ($prestudent->studiengang_kz === $studiengang_kz)
             {
-                if ($prestudent->studiengang_kz === $studiengang_kz)
+                if($prestudentStatus->bewerbung_abgeschicktamum == null)
                 {
-                    if($prestudent->bewerbung_abgeschicktamum == null)
-                    {
-                        $statusToDelete = array(
-                            "prestudent_id"=>$prestudent->prestudent_id,
-                            "ausbildungssemester" => 1,
-                            "studiensemester_kurzbz" => $this->getData('studiensemester')->studiensemester_kurzbz,
-                            "status_kurzbz" => $prestudent->status_kurzbz
-                        );
-
-                        $deletedPrestudentStatus = $this->PrestudentStatusModel->removePrestudentStatus($statusToDelete);
-                        redirect("/Bewerbung");
-                    }
-                    else
-                    {
-                        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
-                        if (hasData($studiensemester))
-                        {
-                            $this->setData('studiensemester', $studiensemester);
-                            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                                $this->getData('studiensemester')->studiensemester_kurzbz,
-                                '',
-                                'Interessent',
-                                true
-                            ));
-                        }
-
-                        $this->setData('prestudent', $this->PrestudentModel->getPrestudentByPersonId(true));
-
-                        $this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
-
-                        $this->setData('adresse', $this->AdresseModel->getAdresse());
-
-                        $this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
-
-                        $this->setData('nationen', $this->NationModel->getAll());
-
-                        $this->setData('bundeslaender', $this->BundeslandModel->getAll());
-
-                        $this->setData('', $this->GemeindeModel->getGemeinde());
-
-                        $this->setData('', $this->DmsModel->getAktenAcceptedDms());
-
-                        $this->_getPersonalDocuments();
-
-                        $this->_missingData();
-
-                        $this->_isAnyApplicationSent();
-
-                        $this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
-                        $this->_setError(true, $this->lang->line("aufnahme/bewerbungKannNichtGeloeschtWerden"));
-                        $this->load->view('bewerbung', $this->getAllData());
-                    }
+                    $deletedPrestudentStatus = $this->PrestudentStatusModel->removePrestudentStatus((array)$prestudentStatus);
+                    redirect("/Bewerbung");
                 }
                 else
                 {
-                    redirect("/Bewerbung");
+                    //TODO call load data method
+
+
+                    $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+                    if (hasData($studiensemester))
+                    {
+                        $this->setData('studiensemester', $studiensemester);
+                        $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
+                            $this->getData('studiensemester')->studiensemester_kurzbz,
+                            '',
+                            'Interessent',
+                            true
+                        ));
+                    }
+
+                    $this->setData('prestudent', $this->PrestudentModel->getPrestudentByPersonId(true));
+
+                    $this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
+
+                    $this->setData('adresse', $this->AdresseModel->getAdresse());
+
+                    $this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
+
+                    $this->setData('nationen', $this->NationModel->getAll());
+
+                    $this->setData('bundeslaender', $this->BundeslandModel->getAll());
+
+                    $this->setData('', $this->GemeindeModel->getGemeinde());
+
+                    $this->setData('', $this->DmsModel->getAktenAcceptedDms());
+
+                    $this->_getPersonalDocuments();
+
+                    $this->_missingData();
+
+                    //$this->_isAnyApplicationSent();
+
+                    $this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
+                    $this->_setError(true, $this->lang->line("aufnahme/bewerbungKannNichtGeloeschtWerden"));
+                    $this->load->view('bewerbung', $this->getAllData());
                 }
             }
+            else
+            {
+                redirect("/Bewerbung");
+            }
+
         }
     }
     public function uploadFiles($typ)
@@ -1130,6 +913,398 @@ class Bewerbung extends UI_Controller
 
         echo json_encode($result);
     }
+
+    private function _saveData()
+    {
+        $this->PhraseModel->getPhrasen(
+            'aufnahme',
+            ucfirst($this->getData('sprache'))
+        );
+
+        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        if (hasData($studiensemester))
+        {
+            $this->setData('studiensemester', $studiensemester);
+        }
+        $this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
+
+        $this->setData('person', $this->PersonModel->getPerson());
+
+        $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
+            $this->getData('studiensemester')->studiensemester_kurzbz,
+            '',
+            'Interessent',
+            true
+        ));
+
+        $this->setData(
+            'prestudent',
+            $this->PrestudentModel->getLastStatuses(
+                $this->getData('person')->person_id,
+                $this->getData('studiensemester')->studiensemester_kurzbz,
+                null,
+                null,
+                true
+            ));
+
+        //$this->_isAnyApplicationSent();
+
+        $this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
+
+        $this->setData('adresse', $this->AdresseModel->getAdresse());
+
+        $this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
+
+        $this->setData('nationen', $this->NationModel->getAll());
+
+        $this->setData('bundeslaender', $this->BundeslandModel->getAll());
+
+        $this->setData('gemeinden', $this->GemeindeModel->getGemeinde());
+
+        $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
+
+        $this->_getPersonalDocuments();
+
+        $this->_missingData();
+
+        foreach ($this->getData("gemeinden") as $gemeinde)
+        {
+            if (($this->getData("adresse") !== null) && ($gemeinde->plz == $this->getData("adresse")->plz) && ($gemeinde->name == $this->getData("adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("adresse")->ort))
+            {
+                $this->setRawData("ort_dd", $gemeinde->gemeinde_id);
+            }
+            if (($this->getData("zustell_adresse") !== null) && ($gemeinde->plz == $this->getData("zustell_adresse")->plz) && ($gemeinde->name == $this->getData("zustell_adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("zustell_adresse")->ort))
+            {
+                $this->setRawData("zustell_ort_dd", $gemeinde->gemeinde_id);
+            }
+        }
+
+        $post = $this->input->post();
+        $person = $this->getData("person");
+        $person->vorname = $post["vorname"];
+        $person->nachname = $post["nachname"];
+        //$person->bundesland_code = $post["bundesland"];
+        if (isset($post["gebdatum"]))
+        {
+            $person->gebdatum = date('Y-m-d', strtotime($post["gebdatum"]));
+        }
+        $person->gebort = (($post["geburtsort"] != '') && ($post["geburtsort"] != 'null')) ? $post["geburtsort"] : null;
+        $person->geburtsnation = (($post["nation"] != '') && ($post["nation"] != 'null')) ? $post["nation"] : null;
+        if ($post["anrede"] === "Herr")
+        {
+            $person->geschlecht = "m";
+            $person->anrede = $post["anrede"];
+        }
+        elseif ($post["anrede"] === "Frau")
+        {
+            $person->geschlecht = "w";
+            $person->anrede = $post["anrede"];
+        }
+        else
+        {
+            $person->geschlecht = "u";
+        }
+        $person->staatsbuergerschaft = (($post["staatsbuergerschaft"] != '') && ($post["staatsbuergerschaft"] != 'null')) ? $post["staatsbuergerschaft"] : null;
+        // An die SVNR wird v1, v2, v3, etc hinzugefuegt wenn die SVNR bereits vorhanden ist
+        // In der Anzeige wird dies herausgefiltert. Deshalb muss beim Speichern der Daten
+        // wieder die SVNR mit v1 etc geschickt werden wenn diese nicht geaendert wurde
+        if ($post["svnr_orig"] != '' && mb_substr($post["svnr_orig"], 0, 10) == $post["svnr"])
+        {
+            $person->svnr = $post["svnr_orig"];
+        }
+        else
+        {
+            if ($post["svnr"] != '')
+            {
+                $person->svnr = $post["svnr"];
+            }
+        }
+        $person->titelpre = $post["titelpre"] != '' ? $post["titelpre"] : null;
+        $person->titelpost = $post["titelpost"] != '' ? $post["titelpost"] : null;
+
+        $updatePerson = $this->PersonModel->savePerson((array)$person);
+
+        if(!hasData($updatePerson))
+        {
+            $this->_setError(true, "Could not save data");
+        }
+
+        $adresse = new stdClass();
+        $zustell_adresse = new stdClass();
+        if ($post["adresse_nation"] === "A")
+        {
+            if (($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort_dd"] != ""))
+            {
+                if ($this->getData("adresse") !== null)
+                {
+                    $adresse = $this->getData("adresse");
+                }
+                else
+                {
+                    $adresse->person_id = $this->getData("person")->person_id;
+                    $adresse->heimatadresse = true;
+                }
+                if (($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
+                {
+                    $adresse->zustelladresse = false;
+                }
+                else
+                {
+                    $adresse->zustelladresse = true;
+                }
+                $adresse->strasse = $post["strasse"];
+                $adresse->nation = $post["adresse_nation"];
+                $adresse->plz = $post["plz"];
+
+                foreach ($this->getData("gemeinden") as $gemeinde)
+                {
+                    if ($gemeinde->gemeinde_id === $post["ort_dd"])
+                    {
+                        $adresse->gemeinde = $gemeinde->name;
+                        $adresse->ort = $gemeinde->ortschaftsname;
+                        $person->bundesland_code = $gemeinde->bulacode;
+                    }
+                }
+                $updatePerson = $this->PersonModel->savePerson((array)$person);
+
+                if(!hasData($updatePerson))
+                {
+                    $this->_setError(true, "Could not save data");
+                }
+
+                $updateAdresse = $this->AdresseModel->saveAdresse((array)$adresse);
+
+                if(!isSuccess($updateAdresse))
+                {
+                    $this->_setError(true, "Could not save address data");
+                }
+            }
+        }
+        else
+        {
+            if (($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort"] != ""))
+            {
+                if ($this->getData("adresse") !== null)
+                {
+                    $adresse = $this->getData("adresse");
+                }
+                else
+                {
+                    $adresse->person_id = $this->getData("person")->person_id;
+                    $adresse->heimatadresse = true;
+                }
+                if (($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
+                {
+                    $adresse->zustelladresse = false;
+                }
+                else
+                {
+                    $adresse->zustelladresse = true;
+                }
+                $adresse->strasse = $post["strasse"];
+                $adresse->plz = $post["plz"];
+                $adresse->ort = $post["ort"];
+                $adresse->nation = $post["adresse_nation"];
+                $updateAdresse = $this->AdresseModel->saveAdresse((array)$adresse);
+
+                if(!isSuccess($updateAdresse))
+                {
+                    $this->_setError(true, "Could not save address data");
+                }
+            }
+        }
+        if ($post["zustelladresse_nation"] === "A")
+        {
+            if (($post["zustell_strasse"] != "") && (($post["zustell_plz"] != "") && ($post["zustell_ort_dd"] != "")))
+            {
+                if ($this->getData("zustell_adresse") !== null)
+                {
+                    $zustell_adresse = $this->getData("zustell_adresse");
+                }
+                else
+                {
+                    $zustell_adresse->person_id = $this->getData("person")->person_id;
+                    $zustell_adresse->heimatadresse = false;
+                    $zustell_adresse->zustelladresse = true;
+                }
+                $zustell_adresse->strasse = $post["zustell_strasse"];
+                $zustell_adresse->nation = $post["zustelladresse_nation"];
+                $zustell_adresse->plz = $post["zustell_plz"];
+
+                $this->GemeindeModel->getGemeindeByPlz($zustell_adresse->plz);
+
+                foreach ($this->getData("gemeinden") as $gemeinde)
+                {
+                    if ($gemeinde->gemeinde_id === $post["zustell_ort_dd"])
+                    {
+                        $zustell_adresse->gemeinde = $gemeinde->name;
+                        $zustell_adresse->ort = $gemeinde->ortschaftsname;
+                    }
+                }
+
+                $updateZustellAdresse = $this->AdresseModel->saveZustellAdresse((array)$zustell_adresse);
+
+                if(!isSuccess($updateZustellAdresse))
+                {
+                    $this->_setError(true, "Could not save address data");
+                }
+
+            }
+        }
+        else
+        {
+            if (($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
+            {
+                if ($this->getData("zustell_adresse") !== null)
+                {
+                    $zustell_adresse = $this->getData("zustell_adresse");
+                }
+                else
+                {
+                    $zustell_adresse->person_id = $this->getData("person")->person_id;
+                    $zustell_adresse->heimatadresse = false;
+                    $zustell_adresse->zustelladresse = true;
+                }
+                $zustell_adresse->strasse = $post["zustell_strasse"];
+                $zustell_adresse->plz = $post["zustell_plz"];
+                $zustell_adresse->ort = $post["zustell_ort"];
+                $zustell_adresse->nation = $post["zustelladresse_nation"];
+                $updateZustellAdresse = $this->AdresseModel->saveZustellAdresse((array)$zustell_adresse);
+
+                if(!isSuccess($updateZustellAdresse))
+                {
+                    $this->_setError(true, "Could not save address data");
+                }
+            }
+        }
+        if (($post["email"] != ""))
+        {
+            if (!(isset($this->getData("kontakt")["email"])))
+            {
+                $kontakt = new stdClass();
+                $kontakt->person_id = $this->getData("person")->person_id;
+                $kontakt->kontakttyp = "email";
+                $kontakt->kontakt = $post["email"];
+                $kontakt->zustellung = true;
+            }
+            else
+            {
+                $kontakt = $this->getData("kontakt")["email"];
+                $kontakt->kontakt = $post["email"];
+            }
+            $updateKontakt = $this->KontaktModel->saveKontakt((array)$kontakt);
+
+            if(!isSuccess($updateKontakt))
+            {
+                $this->_setError(true, "Could not save contact data");
+            }
+        }
+        if ((isset($post["telefon"])) && ($post["telefon"] != ""))
+        {
+            if (!(isset($this->getData("kontakt")["telefon"])))
+            {
+                $kontakt = new stdClass();
+                $kontakt->person_id = $this->getData("person")->person_id;
+                $kontakt->kontakttyp = "telefon";
+                $kontakt->kontakt = $post["telefon"];
+            }
+            else
+            {
+                $kontakt = $this->getData("kontakt")["telefon"];
+                $kontakt->kontakt = $post["telefon"];
+            }
+            $updateKontakt = $this->KontaktModel->saveKontakt((array)$kontakt);
+
+            if(!isSuccess($updateKontakt))
+            {
+                $this->_setError(true, "Could not save contact data");
+            }
+        }
+        if ((isset($post["fax"])) && ($post["fax"] != ""))
+        {
+            if (!(isset($this->getData("kontakt")["fax"])))
+            {
+                $kontakt = new stdClass();
+                $kontakt->person_id = $this->getData("person")->person_id;
+                $kontakt->kontakttyp = "fax";
+                $kontakt->kontakt = $post["fax"];
+            }
+            else
+            {
+                $kontakt = $this->getData("kontakt")["fax"];
+                $kontakt->kontakt = $post["fax"];
+            }
+            $updateKontakt = $this->KontaktModel->saveKontakt((array)$kontakt);
+
+            if(!isSuccess($updateKontakt))
+            {
+                $this->_setError(true, "Could not save contact data");
+            }
+        }
+
+        $this->setData('person', $this->PersonModel->getPerson());
+
+        $this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
+
+        $this->setData('adresse', $this->AdresseModel->getAdresse());
+
+        $this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
+
+        foreach ($this->getData("gemeinden") as $gemeinde)
+        {
+            if (($this->getData("adresse") !== null) && ($gemeinde->plz == $this->getData("adresse")->plz) && ($gemeinde->name == $this->getData("adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("adresse")->ort))
+            {
+                $this->setRawData("ort_dd", $gemeinde->gemeinde_id);
+            }
+            if (($this->getData("zustell_adresse") !== null) && ($gemeinde->plz == $this->getData("zustell_adresse")->plz) && ($gemeinde->name == $this->getData("zustell_adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("zustell_adresse")->ort))
+            {
+                $this->setRawData("zustell_ort_dd", $gemeinde->gemeinde_id);
+            }
+        }
+
+        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        if (hasData($studiensemester))
+        {
+            $this->setData('studiensemester', $studiensemester);
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
+                $this->getData('studiensemester')->studiensemester_kurzbz,
+                '',
+                'Interessent',
+                true
+            ));
+        }
+
+        //setting selected Studiengang by GET Param
+        foreach ($this->getData('studiengaenge') as $stg)
+        {
+            if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
+            {
+                $this->setRawData("studiengang", $stg);
+            }
+
+            if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+            {
+                $this->setRawData("bewerbung_abgeschickt", true);
+            }
+        }
+
+        $this->setRawData("studiengaenge", array($this->getData('studiengang')));
+
+        $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
+        $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
+
+        if (($this->getData("error") === null) && (isset($this->input->get()["studiengang_kz"])) && (isset($this->input->get()["studienplan_id"])))
+        {
+            redirect("/Requirements?studiengang_kz=" . $this->input->get()["studiengang_kz"] . "&studienplan_id=" . $this->input->get()["studienplan_id"]);
+            $this->setRawData("complete", $this->_checkDataCompleteness());
+            $this->load->view('bewerbung', $this->getAllData());
+        }
+        else
+        {
+            $this->setRawData("complete", $this->_checkDataCompleteness());
+            $this->load->view('bewerbung', $this->getAllData());
+        }
+    }
 	
 	/**
 	 * 
@@ -1192,7 +1367,7 @@ class Bewerbung extends UI_Controller
 	/**
      *
      */
-	private function _isAnyApplicationSent()
+	/*private function _isAnyApplicationSent()
     {
         //check if any application is sent
         if($this->getData("prestudent") !== null)
@@ -1205,7 +1380,7 @@ class Bewerbung extends UI_Controller
                 }
             }
         }
-    }
+    }*/
 
     /**
      * @param $bool

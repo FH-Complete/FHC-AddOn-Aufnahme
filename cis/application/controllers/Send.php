@@ -88,6 +88,11 @@ class Send extends UI_Controller
                 {
                     $this->setRawData("studiengang", $stg);
                 }
+
+                if($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                {
+                    $this->setRawData("bewerbung_abgeschickt", true);
+                }
             }
 
             $this->setRawData("studiengaenge", array($this->getData('studiengang')));
@@ -111,11 +116,6 @@ class Send extends UI_Controller
 
             $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
             $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
-
-            if ($this->getData('prestudentStatus')->bewerbung_abgeschicktamum != null)
-            {
-                $this->setRawData("bewerbung_abgeschickt", true);
-            }
 
             //load data for specialization
             $spezialisierung = array();
@@ -203,6 +203,11 @@ class Send extends UI_Controller
                 {
                     $this->setRawData("studiengang", $stg);
                 }
+
+                if($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                {
+                    $this->setRawData("bewerbung_abgeschickt", true);
+                }
             }
 
             $this->setRawData("studiengaenge", array($this->getData('studiengang')));
@@ -226,12 +231,6 @@ class Send extends UI_Controller
 
             $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
             $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
-
-            if ($this->getData('prestudentStatus')->bewerbung_abgeschicktamum != null)
-            {
-                $this->setRawData("bewerbung_abgeschickt", true);
-            }
-
 
             //load data for specialization
             $spezialisierung = array();

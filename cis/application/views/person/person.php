@@ -426,7 +426,7 @@ if (!isset($plz))
         <span class="incomplete"><?php echo ((isset($complete)) && (!$complete["person"])) ? $this->lang->line("aufnahme/unvollstaendig") : ""; ?></span>
     </div>
 </legend>
-<?php echo form_open_multipart("Bewerbung?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
+<?php echo form_open_multipart("Bewerbung/studiengang/" . $studiengang->studiengang_kz . "/" . $studiengang->studienplaene[0]->studienplan_id."/".$studiensemester->studiensemester_kurzbz, array("id" => "PersonForm", "name" => "PersonForm")); ?>
 <div class="row form-row">
     <div class="col-sm-3">
         <div class="form-group <?php echo ((form_error("anrede") != "") || (!isset($person->anrede) && $incomplete)) ? 'has-error' : '' ?>">

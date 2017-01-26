@@ -84,6 +84,11 @@ class Requirements extends UI_Controller
                 {
                     $this->setRawData("studiengang", $stg);
                 }
+
+                if($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                {
+                    $this->setRawData("bewerbung_abgeschickt", true);
+                }
             }
 
             $this->setRawData("studiengaenge", array($this->getData('studiengang')));
@@ -91,40 +96,10 @@ class Requirements extends UI_Controller
             $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
             $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
 
-            if ($this->getData('prestudentStatus')->bewerbung_abgeschicktamum != null)
-            {
-                $this->setRawData("bewerbung_abgeschickt", true);
-            }
-
             //load Dokumente from Studiengang
             $dokumenteStudiengang = array();
             $dokumenteStudiengang[$this->getData('studiengang')->studiengang_kz] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($this->getData('studiengang')->studiengang_kz, true, true)->retval;
             $this->setRawData('dokumenteStudiengang', $dokumenteStudiengang);
-
-/*
-            $prestudent = $this->PrestudentModel->getLastStatuses(
-                $this->getData('person')->person_id,
-                $this->getData('studiensemester')->studiensemester_kurzbz,
-                null,
-                'Interessent'
-            );
-
-            //load preinteressent data
-            $this->setData('prestudent', $prestudent);
-
-            //test if data in session is complete -> otherwise new call to API
-            if (!isset($this->getData('prestudent')[0]->status_kurzbz))
-            {
-                $prestudent = $this->PrestudentModel->getLastStatuses(
-                    $this->getData('person')->person_id,
-                    $this->getData('studiensemester')->studiensemester_kurzbz,
-                    null,
-                    'Interessent',
-                    true
-                );
-
-                $this->setData('prestudent', $prestudent);
-            }*/
 
             //load data for specialization
             $spezialisierung = array();
@@ -167,6 +142,11 @@ class Requirements extends UI_Controller
                 if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
                 {
                     $this->setRawData("studiengang", $stg);
+                }
+
+                if($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                {
+                    $this->setRawData("bewerbung_abgeschickt", true);
                 }
             }
 
@@ -415,6 +395,11 @@ class Requirements extends UI_Controller
                 if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
                 {
                     $this->setRawData("studiengang", $stg);
+                }
+
+                if($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                {
+                    $this->setRawData("bewerbung_abgeschickt", true);
                 }
             }
 
