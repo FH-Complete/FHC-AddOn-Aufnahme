@@ -197,7 +197,7 @@ class Registration extends UI_Controller
 		if (($this->input->post('email') != null) && ($this->input->post('email') != ''))
 		{
 			$this->setRawData('email', $this->input->post('email'));
-			$bewerbung = $this->PersonModel->checkBewerbung($this->getData('email'));
+			$bewerbung = $this->PersonModel->checkBewerbung($this->getData('email'), null, true);
 
 			if (hasData($bewerbung))
 			{
@@ -240,6 +240,7 @@ class Registration extends UI_Controller
 	
 	public function confirm()
     {
+        $this->session->sess_destroy();
 		if (isset($this->input->get()['studiengang_kz']))
 		{
 			$this->setRawData('studiengang_kz', $this->input->get()['studiengang_kz']);
@@ -410,7 +411,7 @@ class Registration extends UI_Controller
 		$studiengang_kz = $this->input->get()['studiengang_kz'];
 		$code = $this->input->post('password');
 		$email = $this->input->post('email');
-		$person = $this->PersonModel->getPerson($code, $email);
+		$person = $this->PersonModel->getPerson($code, $email, true);
 
 		if (isSuccess($person))
 		{
@@ -442,6 +443,8 @@ class Registration extends UI_Controller
 		{
 			$this->_setError(true, $person->error . ' ' . $person->fhcCode);
 		}
+
+		redirect("/Registration/confirm?code=&email=".$email."&studiengang_kz=".$studiengang_kz);
 	}
 	
 	private function resendMail($zugangscode, $email, $person_id = null)
