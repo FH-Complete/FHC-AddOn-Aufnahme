@@ -662,18 +662,19 @@ class Requirements extends UI_Controller
 
 
         $prestudent = $this->getData('prestudent');
+        $prestudentStatus = $this->getData('prestudentStatus');
 
         if($prestudent->studiengang_kz === $studiengang_kz)
         {
-            if (($prestudent->status_kurzbz === "Interessent"
-                || $prestudent->status_kurzbz === "Bewerber"))
+            if (($prestudentStatus->status_kurzbz === "Interessent"
+                || $prestudentStatus->status_kurzbz === "Bewerber"))
             {
                 $prestudent->spezialisierung = $this->PrestudentModel->getSpecialization($prestudent->prestudent_id)->retval;
 
                 if((!empty($prestudent->spezialisierung)) && ($prestudent->spezialisierung->notiz_id === $notiz_id))
                 {
                     $this->PrestudentModel->removeSpecialization(array('notiz_id' => $notiz_id));
-                    redirect("/Requirements?studiengang_kz=".$studiengang_kz."&tudienplan_id=".$this->getData('prestudentStatus')->studienplan_id);
+                    redirect("/Requirements?studiengang_kz=".$studiengang_kz."&studienplan_id=".$this->getData('prestudentStatus')->studienplan_id);
                 }
             }
         }
