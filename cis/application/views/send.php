@@ -66,7 +66,7 @@ $this->template->widget(
         $phrase = "";
         if(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true))
         {
-            $phrase = $this->getPhrase("Bewerbung/StornoConfirmationAfterApplicationIsSent", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);
+            $phrase = $this->getPhrase("Bewerbung/StornoConfirmation", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);
         }
         else
         {
