@@ -124,14 +124,18 @@ class Summary extends UI_Controller
 
             $person = $this->getData('person');
 
-            $bundesland = $this->BundeslandModel->getBundesland($person->bundesland_code);
-            if ($bundesland !== null)
+            if((isset($person->bundesland_code)) && ($person->bundesland_code !== null))
             {
-                $person->bundesland_bezeichnung = $bundesland->bezeichnung;
-            }
-            else
-            {
-                $person->bundesland_bezeichnung = null;
+                $bundesland = $this->BundeslandModel->getBundesland($person->bundesland_code);
+
+                if ($bundesland !== null)
+                {
+                    $person->bundesland_bezeichnung = $bundesland->bezeichnung;
+                }
+                else
+                {
+                    $person->bundesland_bezeichnung = null;
+                }
             }
 
             $nation = $this->NationModel->getNation($person->geburtsnation);
