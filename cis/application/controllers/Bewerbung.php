@@ -413,17 +413,20 @@ class Bewerbung extends UI_Controller
 
             //setting selected Studiengang by GET Param
             $abgeschickt_array = array();
-            foreach ($this->getData('studiengaenge') as $stg)
+            if($this->getData('studiengaenge') !== null)
             {
-                if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
+                foreach ($this->getData('studiengaenge') as $stg)
                 {
-                    $this->setRawData("studiengang", $stg);
-                }
+                    if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
+                    {
+                        $this->setRawData("studiengang", $stg);
+                    }
 
-                if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
-                {
-                    $this->setRawData("bewerbung_abgeschickt", true);
-                    $abgeschickt_array[$stg->studiengang_kz] = true;
+                    if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                    {
+                        $this->setRawData("bewerbung_abgeschickt", true);
+                        $abgeschickt_array[$stg->studiengang_kz] = true;
+                    }
                 }
             }
             $this->setRawData('abgeschickt_array', $abgeschickt_array);
@@ -437,11 +440,14 @@ class Bewerbung extends UI_Controller
             {
                 $this->setData("prestudent", $this->PrestudentModel->getPrestudentByPersonId(true));
                 $prestudenten = $this->getData('prestudent');
-                foreach ($prestudenten as $key => $prestudent)
+                if($prestudenten !== null)
                 {
-                    if ($prestudent->studiengang_kz !== $studiengang_kz)
+                    foreach ($prestudenten as $key => $prestudent)
                     {
-                        unset($prestudenten[$key]);
+                        if ($prestudent->studiengang_kz !== $studiengang_kz)
+                        {
+                            unset($prestudenten[$key]);
+                        }
                     }
                 }
 
