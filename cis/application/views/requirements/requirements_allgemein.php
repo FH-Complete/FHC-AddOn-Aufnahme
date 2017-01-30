@@ -17,7 +17,7 @@
 		<span><?php echo $this->getPhrase("ZGV/introduction_short", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?></span>
 		<span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true" title="<?php echo $this->getPhrase("ZGV/introduction_long", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>"></span>
 		<?php
-			if (isset($error) && ($error->error === true) && (!isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]])))
+			if (isset($error) && ($error->error === true) && ((!isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]])) || (isset($optionError))))
 			{
 				?>
 					<div class="alert alert-danger" role="alert">
@@ -421,7 +421,14 @@
 					'width',
 					progress + '%'
 				);
-			}
+			},
+            drop: function(e, data){
+                e.preventDefault();
+            },
+            dragover: function (e, data)
+            {
+                e.preventDefault();
+            }
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
 
@@ -512,7 +519,14 @@
 					'width',
 					progress + '%'
 				);
-			}
+			},
+            drop: function(e, data){
+                e.preventDefault();
+            },
+            dragover: function (e, data)
+            {
+                e.preventDefault();
+            }
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
 		

@@ -207,6 +207,13 @@ if (!isset($plz))
                     'width',
                     progress + '%'
                 );
+            },
+            drop: function(e, data){
+                e.preventDefault();
+            },
+            dragover: function (e, data)
+            {
+                e.preventDefault();
             }
         }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
@@ -302,6 +309,13 @@ if (!isset($plz))
                     'width',
                     progress + '%'
                 );
+            },
+            drop: function(e, data){
+                e.preventDefault();
+            },
+            dragover: function (e, data)
+            {
+                e.preventDefault();
             }
         }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
