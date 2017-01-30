@@ -161,7 +161,7 @@ class Requirements extends UI_Controller
             $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
             $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
 
-            if ((!empty($this->input->post())) && ($this->getData("bewerbung_abgeschickt") !== null) && ($this->getData("bewerbung_abgeschickt") == true))
+            if ((!empty($this->input->post())) && ($this->getData("abgeschickt_array") !== null) && (isset($this->getData("abgeschickt_array")[$this->getData('studiengang')->studiengang_kz])) && ($this->getData("abgeschickt_array")[$this->getData('studiengang')->studiengang_kz] == true))
             {
                 redirect("/Summary?studiengang_kz=" . $this->input->get()["studiengang_kz"] . "&studienplan_id=" . $this->input->get()["studienplan_id"]);
             }
@@ -222,6 +222,7 @@ class Requirements extends UI_Controller
                 if (!empty($this->input->post()))
                 {
                     $this->_setError(true);
+                    $this->setData("optionError", true);
                 }
             }
 
@@ -333,6 +334,11 @@ class Requirements extends UI_Controller
                             {
                                 $this->_setError(true, "could not save data");
                             }
+                        }
+                        else
+                        {
+                            $this->_setError(true);
+                            $this->setRawData('spezialisierung_error', true);
                         }
                     }
                 }
