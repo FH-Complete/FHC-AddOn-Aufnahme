@@ -106,7 +106,7 @@ class Requirements extends UI_Controller
 
             //load data for specialization
             $spezialisierung = array();
-            $spezialisierung[$this->getData('prestudent')->studiengang_kz] = $this->PrestudentModel->getSpecialization($this->getData('prestudent')->prestudent_id)->retval;
+            $spezialisierung[$this->getData('prestudent')->studiengang_kz] = $this->PrestudentModel->getSpecialization($this->getData('prestudent')->prestudent_id, true)->retval;
             $this->setRawData('spezialisierung', $spezialisierung);
 
 
@@ -327,7 +327,7 @@ class Requirements extends UI_Controller
 
                             if (isSuccess($insertSpecialization))
                             {
-                                $prestudent->spezialisierung = $this->PrestudentModel->getSpecialization($prestudent->prestudent_id)->retval;
+                                $prestudent->spezialisierung = $this->PrestudentModel->getSpecialization($prestudent->prestudent_id, true)->retval;
                                 $prestudent->spezialisierung;
                                 $spezialisierung[$prestudent->studiengang_kz] = $prestudent->spezialisierung;
                             }
@@ -685,7 +685,7 @@ class Requirements extends UI_Controller
             if (($prestudentStatus->status_kurzbz === "Interessent"
                 || $prestudentStatus->status_kurzbz === "Bewerber"))
             {
-                $prestudent->spezialisierung = $this->PrestudentModel->getSpecialization($prestudent->prestudent_id)->retval;
+                $prestudent->spezialisierung = $this->PrestudentModel->getSpecialization($prestudent->prestudent_id, true)->retval;
 
                 if((!empty($prestudent->spezialisierung)) && ($prestudent->spezialisierung->notiz_id === $notiz_id))
                 {

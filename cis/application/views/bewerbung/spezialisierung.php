@@ -31,7 +31,7 @@ if(($spez_phrase != null) && (substr($spez_phrase,0,3) !== "<i>"))
                 }
 				if(!empty($spezialisierung[$studiengang->studiengang_kz]))
 				{
-					if((!isset($bewerbung_abgeschickt)) || ($bewerbung_abgeschickt!=true))
+                    if((isset($abgeschickt_array) || (!isset($abgeschickt_array[$studiengang->studiengang_kz])) || ($abgeschickt_array[$studiengang->studiengang_kz] != true)))
 					{
 					?>
 					<a href="<?php echo base_url($this->config->config["index_page"]."/Requirements/deleteSpezialisierung/".$spezialisierung[$studiengang->studiengang_kz]->notiz_id."/".$studiengang->studiengang_kz); ?>"><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-trash"></span></button></a>

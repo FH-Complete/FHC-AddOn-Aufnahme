@@ -154,7 +154,7 @@ class Summary extends UI_Controller
 
             //load data for specialization
             $spezialisierung = array();
-            $spezialisierung[$this->getData('prestudent')->studiengang_kz] = $this->PrestudentModel->getSpecialization($this->getData('prestudent')->prestudent_id)->retval;
+            $spezialisierung[$this->getData('prestudent')->studiengang_kz] = $this->PrestudentModel->getSpecialization($this->getData('prestudent')->prestudent_id, true)->retval;
             $this->setRawData('spezialisierung', $spezialisierung);
 
             //load bundeslaender

@@ -36,8 +36,12 @@ class Prestudent_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getSpecialization($prestudent_id, $titel = "aufnahme/spezialisierung")
+	public function getSpecialization($prestudent_id, $forceApiCall = false, $titel = "aufnahme/spezialisierung")
 	{
+        if($forceApiCall)
+        {
+            unset($this->session->userdata['Prestudent.Specialization']);
+        }
 		return $this->loadOne('crm/Prestudent/Specialization', array('prestudent_id' => $prestudent_id, 'titel' => $titel), 'Prestudent.Specialization');
 	}
 	
