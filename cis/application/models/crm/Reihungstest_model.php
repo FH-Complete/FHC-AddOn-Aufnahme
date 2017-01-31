@@ -47,13 +47,16 @@ class Reihungstest_model extends REST_Model
 		);
 
         $anmeldungen = array();
-        foreach ($result->retval as $anmeldung)
+        if(is_array($result->retval) && (!empty($result->retval)))
         {
-            if (!isset($anmeldungen[$anmeldung->studiengang_kz]))
+            foreach ($result->retval as $anmeldung)
             {
-                $anmeldungen[$anmeldung->studiengang_kz] = array();
+                if (!isset($anmeldungen[$anmeldung->studiengang_kz]))
+                {
+                    $anmeldungen[$anmeldung->studiengang_kz] = array();
+                }
+                array_push($anmeldungen[$anmeldung->studiengang_kz], $anmeldung);
             }
-            array_push($anmeldungen[$anmeldung->studiengang_kz], $anmeldung);
         }
         $result->retval = $anmeldungen;
 
