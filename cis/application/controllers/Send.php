@@ -525,7 +525,8 @@ class Send extends UI_Controller
 
             $spezialisierung = $this->getData('spezialisierung');
             $spezPhrase = $this->getData('spezPhrase');
-            if (isset($spezPhrase) && (isset($spezPhrase[$key])) && ($spezPhrase[$key] !== null))
+
+            if (isset($spezPhrase) && (isset($spezPhrase[$key])) && ($spezPhrase[$key] !== null) && ((substr($spezPhrase[$key], 0, 3) !== '<i>')))
             {
                 if ((!isset($spezialisierung)) || (!isset($spezialisierung[$key])) || (empty($spezialisierung[$key])))
                 {

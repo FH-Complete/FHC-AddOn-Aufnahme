@@ -300,12 +300,15 @@ class Bewerbung extends UI_Controller
             $complete["dokumente"] = false;
         }
 
-        $spezialisierung = $this->getData('spezialisierung');
         $spezPhrase = $this->getData('spezPhrase');
+        $spezialisierung = $this->getData('spezialisierung');
 
-        if(isset($spezPhrase) && ($spezPhrase !== null))
+        if(
+            isset($spezPhrase)
+            && (isset($spezPhrase[$this->getData('studiengang')->studiengang_kz]))
+            && (substr($spezPhrase[$this->getData('studiengang')->studiengang_kz], 0, 3) !== '<i>'))
         {
-            if((!isset($spezialisierung)) || ($spezialisierung === null))
+            if((!isset($spezialisierung)) || (!isset($spezialisierung[$this->getData('studiengang')->studiengang_kz])) || (empty($spezialisierung[$this->getData('studiengang')->studiengang_kz])))
             {
                 $complete["spezialisierung"] = false;
             }
@@ -330,6 +333,14 @@ class Bewerbung extends UI_Controller
             ));
         }
 
+        foreach ($this->getData('studiengaenge') as $stg)
+        {
+            if ($stg->studiengang_kz === $studiengang_kz)
+            {
+                $this->setRawData("studiengang", $stg);
+            }
+        }
+
         $this->setData('dokumente', $this->DmsModel->getAktenAcceptedDms());
 
         $this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
@@ -338,16 +349,25 @@ class Bewerbung extends UI_Controller
 
         $this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
 
-        $this->setData('studiengang', $this->StudiengangModel->getStudiengang($studiengang_kz));
+        $this->setRawData("studiengaenge", array($this->getData('studiengang')));
 
+        $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
+        $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
+
+        $spezPhrase = array();
         foreach($this->getData('studiengaenge') as $stg)
         {
             if($stg->studiengang_kz === $studiengang_kz)
             {
-                $this->setRawData('spezPhrase', $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $stg->oe_kurzbz, $stg->studienplaene[0]->orgform_kurzbz));
-                $this->setData('spezialisierung', $this->PrestudentModel->getSpecialization($stg->prestudenten[0]->prestudent_id));
+                 $spezPhrase[$studiengang_kz] = $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $stg->oe_kurzbz, $stg->studienplaene[0]->orgform_kurzbz);
             }
         }
+        $this->setRawData('spezPhrase', $spezPhrase);
+
+        //load data for specialization
+        $spezialisierung = array();
+        $spezialisierung[$this->getData('prestudent')->studiengang_kz] = $this->PrestudentModel->getSpecialization($this->getData('prestudent')->prestudent_id, true)->retval;
+        $this->setRawData('spezialisierung', $spezialisierung);
 
         $dokumenteStudiengang = array();
         $dokumenteStudiengang[$studiengang_kz] = $this->DokumentStudiengangModel->getDokumentStudiengangByStudiengang_kz($studiengang_kz, true, true)->retval;

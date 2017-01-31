@@ -125,7 +125,7 @@
     </div>
 </div>
 <?php
-if(isset($spezPhrase) && (isset($spezPhrase[$studiengang->studiengang_kz])) && ($spezPhrase[$studiengang->studiengang_kz] !== null))
+if(isset($spezPhrase) && (isset($spezPhrase[$studiengang->studiengang_kz])) && ($spezPhrase[$studiengang->studiengang_kz] !== null) && ((substr($spezPhrase[$studiengang->studiengang_kz], 0, 3) !== '<i>')))
 {
     if((!isset($spezialisierung)) || (!isset($spezialisierung[$studiengang->studiengang_kz])) || (empty($spezialisierung[$studiengang->studiengang_kz])))
     {
