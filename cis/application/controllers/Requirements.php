@@ -168,6 +168,7 @@ class Requirements extends UI_Controller
 
             //load dokumente
             $this->setRawData('dokumente', $this->AkteModel->getAktenAccepted()->retval);
+            $dokumente = $this->getData('dokumente');
 
             if (($this->input->post("doktype") != null) && ($this->input->post("doktype") !== ""))
             {
@@ -219,7 +220,7 @@ class Requirements extends UI_Controller
             }
             else
             {
-                if (!empty($this->input->post()))
+                if ((!empty($this->input->post())) && ((!isset($dokumente[$this->config->item("dokumentTypen")["abschlusszeugnis_".$this->getData('studiengang')->typ]]))))
                 {
                     $this->_setError(true);
                     $this->setData("optionError", true);
