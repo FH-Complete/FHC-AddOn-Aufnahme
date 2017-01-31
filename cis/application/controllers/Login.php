@@ -19,6 +19,7 @@ class Login extends UI_Controller
 		
 		// Loading the 
 		$this->load->model('person/Person_model', 'PersonModel');
+        $this->load->model('person/Benutzer_model', 'BenutzerModel');
 		
 		$this->load->model('crm/Prestudent_model', 'PrestudentModel');
 		$this->load->model('crm/Prestudentstatus_model', 'PrestudentStatusModel');
@@ -124,10 +125,12 @@ class Login extends UI_Controller
 		
 		if ($checkUserAuth)
 		{
-			$benutzer = $this->BenutzerModel->getBenutzer($username, REST_Model::AUTH_NOT_REQUIRED);
+			$benutzer = $this->BenutzerModel->getBenutzer($username, REST_Model::AUTH_NOT_REQUIRED, true);
+
 			if (hasData($benutzer))
 			{
-				$person = $this->PersonModel->getPersonByPersonId($benutzer->person_id);
+				$person = $this->PersonModel->getPersonByPersonId($benutzer->retval->person_id, true);
+
 				if (hasData($person))
 				{
 					$this->setData('person', $person);
