@@ -213,19 +213,33 @@ class Messages extends UI_Controller
 			if (hasData($messages))
 			{
 				$this->setData('messages', $messages);
-				foreach ($messages-retval as $message)
+				$removed = false;
+				foreach ($messages->retval as $message)
 				{
-					if (($messages->message_id == $this->input->post()['message_id']))
+					if (($message->message_id == $this->input->post()['message_id']))
 					{
 						$status = $this->input->post()['status'];
-						$result = $this->_changeMessageStatus($messages, $status);
+						$result = $this->_changeMessageStatus($message, $status);
 						
-						if (hasData($message))
+						if (is_object($result) && (isset($result->message_id)) && (isset($result->person_id)) && (isset($result->status)))
 						{
+						    $removed = true;
+						    $return = new stdClass();
+						    $return->error = 0;
+						    echo json_encode($return);
 							return success($message);
 						}
 					}
 				}
+
+                if(!$removed)
+                {
+                    $return = new stdClass();
+                    $return->error = 1;
+                    $return->msg = "message not found";
+                    echo json_encode($return);
+                }
+
 			}
 		}
 		else

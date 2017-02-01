@@ -56,7 +56,8 @@ $this->load->view('templates/footer');
                         message_id: messageId,
                         status: "<?php echo MSG_STATUS_READ; ?>"
                     }
-                }).done(function(data){
+                }).done(function(data)
+                {
                     if(data.error === 0)
                     {
                         $("#status_"+messageId).removeClass("icon-unread");
