@@ -28,7 +28,7 @@
                             <?php
                                 $sprache = $this->session->{'Sprache.getSprache'}->retval;
 								echo $item['name'][$sprache->index-1]." ";
-								if(isset($data["numberOfUnreadMessages"]) && ($data["numberOfUnreadMessages"] > 0) &&($item["id"] == "Nachrichten"))
+								if(isset($data["numberOfUnreadMessages"]) && ($data["numberOfUnreadMessages"]->unreadmessages > 0) &&($item["id"] == "Nachrichten"))
 								{
 									echo "<span class='glyphicon glyphicon-exclamation-sign red'></span>";	
 								}
