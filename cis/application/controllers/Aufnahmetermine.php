@@ -333,7 +333,7 @@ class Aufnahmetermine extends UI_Controller
             'receiver_id' => $person->person_id
         );*/
 
-        $message = $this->MessageModel->sendMessageVorlage('MailAppointmentConfirmation', $oe, $data, $sprache, $orgform_kurzbz, null, false, $person->person_id);
+        $message = $this->MessageModel->sendMessageVorlage('MailAppointmentConfirmation', $oe, $data, $sprache, $orgform_kurzbz, null, true, $person->person_id);
 
         if(hasData($message))
         {
