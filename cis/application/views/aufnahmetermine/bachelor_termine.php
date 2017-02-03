@@ -13,7 +13,7 @@ if (!empty($studiengaenge))
 {
 	foreach ($studiengaenge as $stg)
 	{
-		if ($stg->typ == "b")
+		if ($stg->typ == 'b')
 		{
 ?>
 	    <h3>Bachelor / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplaene[0]->orgform_kurzbz; ?>)</h3>
