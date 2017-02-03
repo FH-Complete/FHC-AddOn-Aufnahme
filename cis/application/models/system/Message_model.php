@@ -34,7 +34,7 @@ class Message_model extends REST_Model
 	 */
 	public function getCountUnreadMessages()
 	{
-		return $this->load('system/Message/CountUnreadMessages', array('person_id' => $this->getPersonId()));
+		return $this->loadOne('system/Message/CountUnreadMessages', array('person_id' => $this->getPersonId()));
 	}
 	
 	/**
@@ -70,7 +70,7 @@ class Message_model extends REST_Model
 	}
 	
 	/**
-	 * 
+	 *
 	 */
 	public function sendMessageVorlage($vorlage_kurzbz, $oe_kurzbz, $data, $sprache, $orgform_kurzbz = null, $sender_id = null, $multiPartMime = true, $receiver_id = null)
 	{

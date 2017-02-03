@@ -434,7 +434,7 @@ class Send extends UI_Controller
             'receiver_id' => $person->person_id
         );*/
 
-        $message = $this->MessageModel->sendMessageVorlage('MailApplicationConfirmation', $oe, $data, $sprache, $orgform_kurzbz, null, false, $person->person_id);
+        $message = $this->MessageModel->sendMessageVorlage('MailApplicationConfirmation', $oe, $data, $sprache, $orgform_kurzbz, null, true, $person->person_id);
 
         if (hasData($message))
         {
@@ -474,7 +474,7 @@ class Send extends UI_Controller
                     'receiver_id' => $person->person_id
                 );*/
 
-        $message = $this->MessageModel->sendMessageVorlage('MailNewApplicationInfo', $oe, $data, $sprache, $orgform_kurzbz, null, false, $person->person_id);
+        $message = $this->MessageModel->sendMessageVorlage('MailNewApplicationInfo', $oe, $data, $sprache, $orgform_kurzbz, null, true, $person->person_id);
 
         if (hasData($message))
         {
