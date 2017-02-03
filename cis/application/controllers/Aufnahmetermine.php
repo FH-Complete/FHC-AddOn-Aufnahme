@@ -213,7 +213,6 @@ class Aufnahmetermine extends UI_Controller
         $this->load->view('aufnahmetermine', $this->getAllData());
     }
 
-
     /**
      *
      */
@@ -230,27 +229,7 @@ class Aufnahmetermine extends UI_Controller
                 true
             ));
         }
-
-        $this->setData('anmeldungen', $this->ReihungstestModel->getReihungstestByPersonID());
-
-        $rt_person = array();
-        if($this->getData('anmeldungen') !== null)
-        {
-            foreach ($this->getData("anmeldungen") as $studiengang_kz => $anmeldungen)
-            {
-                foreach ($anmeldungen as $anmeldung)
-                {
-                    if (!isset($rt_person[$studiengang_kz]))
-                    {
-                        $rt_person[$studiengang_kz] = array();
-                    }
-                    array_push($rt_person[$studiengang_kz], $anmeldung->reihungstest_id);
-                }
-            }
-        }
-
-        $this->setRawData('rt_person', $rt_person);
-
+        
         //load preinteressent data
         $this->setData(
             'prestudent',
@@ -263,45 +242,9 @@ class Aufnahmetermine extends UI_Controller
             )
         );
 
-        //$this->_data["studiengaenge"] = array();
-        $reihungstests = array();
-        if($this->getData('prestudent') !== null)
-        {
-            foreach ($this->getData("prestudent") as $prestudent)
-            {
-                //$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-
-                if ($prestudent->bewerbung_abgeschicktamum != null)
-                {
-                    //load studiengaenge der prestudenten
-                    /*$studiengang = $this->_loadStudiengang($prestudent->studiengang_kz);
-                    $studienplan = $this->_loadStudienplan($prestudent->prestudentStatus->studienplan_id);
-                    $studiengang->studienplan = $studienplan;
-                    array_push($this->_data["studiengaenge"], $studiengang);*/
-
-                    $reihungstestsStg = $this->ReihungstestModel->getByStudiengangStudiensemester($prestudent->studiengang_kz, $this->getData("studiensemester")->studiensemester_kurzbz, true);
-
-                    if(hasData($reihungstestsStg))
-                    {
-                        $reihungstestsStg = $reihungstestsStg->retval;
-
-                        if (!empty($reihungstestsStg))
-                        {
-                            $reihungstests[$prestudent->studiengang_kz] = array();
-                            foreach ($reihungstestsStg as $rt)
-                            {
-                                if (isset($rt->stufe) && ($rt->stufe <= $prestudent->rt_stufe))
-                                {
-                                    $reihungstests[$prestudent->studiengang_kz][$rt->stufe][$rt->reihungstest_id] = date("d.m.Y", strtotime($rt->datum));//." // ".$this->getPhrase("Test/Bewerbungsfrist", $this->_data["sprache"], $this->config->item('root_oe'))." ".date("d.m.Y", strtotime($rt->anmeldefrist));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        $this->setRawData('reihungstests', $reihungstests);
+        $this->_loadAvailablesTests();
+        
+        $this->_loadRegisteredTests();
     }
 
     private function _sendMessageMailAppointmentConfirmation($person, $studiengang, $termin)
@@ -359,5 +302,70 @@ class Aufnahmetermine extends UI_Controller
 
         $this->setRawData('error', $error);
     }
-
+	
+    private function _loadAvailablesTests()
+	{
+		$reihungstestsStg = $this->ReihungstestModel->getAvailableReihungstestByPersonId();
+		
+		$reihungstests = array();
+		
+		if (hasData($reihungstestsStg))
+		{
+			foreach ($reihungstestsStg->retval as $stg)
+			{
+				$tmp = new stdClass();
+				$tmp->reihungstest = array();
+				
+				if (is_array($stg->reihungstest))
+				{
+					foreach($stg->reihungstest as $reihungstest)
+					{
+						if ($reihungstest->stufe == null)
+						{
+							$reihungstest->stufe = 0;
+						}
+						
+						if (isset($tmp->reihungstest[$reihungstest->stufe]) && !is_array($tmp->reihungstest[$reihungstest->stufe]))
+						{
+							$tmp->reihungstest[$reihungstest->stufe] = array();
+						}
+						
+						$tmp->reihungstest[$reihungstest->stufe][$reihungstest->reihungstest_id] = date('d.m.Y', strtotime($reihungstest->datum));
+					}
+				}
+				
+				$reihungstests[$stg->studiengang_kz] = $tmp;
+			}
+		}
+		
+		$this->setRawData('reihungstests', $reihungstests);
+	}
+	
+	private function _loadRegisteredTests()
+	{
+		$anmeldungen = $this->ReihungstestModel->getReihungstestByPersonID();
+		$registeredReihungstests = array();
+		
+		if (hasData($anmeldungen))
+		{
+			foreach($anmeldungen->retval as $registeredReihungstest)
+			{
+				if (isset($registeredReihungstests[$registeredReihungstest->studiengang_kz])
+					&& !is_array($registeredReihungstests[$registeredReihungstest->studiengang_kz]))
+				{
+					$registeredReihungstests[$registeredReihungstest->studiengang_kz] = array();
+				}
+				
+				$stufe = 0;
+				if ($registeredReihungstest->stufe != null)
+				{
+					$stufe = $registeredReihungstest->stufe;
+				}
+				
+				$registeredReihungstests[$registeredReihungstest->studiengang_kz][$stufe] = $registeredReihungstest->reihungstest_id;
+			}
+		}
+		
+        $this->setRawData('registeredReihungstests', $registeredReihungstests);
+	}
 }

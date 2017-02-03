@@ -41,25 +41,17 @@ class Reihungstest_model extends REST_Model
 	 */
 	public function getReihungstestByPersonId($available = null)
 	{
-		$result = $this->load(
+		return $this->load(
 			'crm/Reihungstest/ReihungstestByPersonId',
 			array('person_id' => $this->getPersonId(), 'available' => $available)
 		);
-
-        $anmeldungen = array();
-        if(is_array($result->retval) && (!empty($result->retval)))
-        {
-            foreach ($result->retval as $anmeldung)
-            {
-                if (!isset($anmeldungen[$anmeldung->studiengang_kz]))
-                {
-                    $anmeldungen[$anmeldung->studiengang_kz] = array();
-                }
-                array_push($anmeldungen[$anmeldung->studiengang_kz], $anmeldung);
-            }
-        }
-        $result->retval = $anmeldungen;
-
-		return $result;
+	}
+	
+	/**
+	 * 
+	 */
+	public function getAvailableReihungstestByPersonId()
+	{
+		return $this->load('crm/Reihungstest/AvailableReihungstestByPersonId', array('person_id' => $this->getPersonId()));
 	}
 }
