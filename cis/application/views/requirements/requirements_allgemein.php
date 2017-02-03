@@ -70,11 +70,7 @@
         <?php echo $this->getPhrase("ZGV/UploadDiploma", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
     </div>
 </div>
-
 <div class="row form-upload">
-	<div class="col-sm-2">
-		&nbsp;
-	</div>
 	<?php
 	if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->mimetype)) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->mimetype !== null))
 	{
@@ -147,7 +143,7 @@
 				<?php
 					$data = array('id' => $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ].'_nachgereicht_'.$studiengang->studienplaene[0]->studienplan_id, 'name' => $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ].'_nachgereicht_'.$studiengang->studienplaene[0]->studienplan_id, "checked" => (isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->nachgereicht === true)) ? TRUE : FALSE, "studienplan_id"=>$studiengang->studienplaene[0]->studienplan_id, "class"=>"nachreichen_checkbox_zeugnis");
 					(isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dms_id !== null)) ? $data["disabled"] = "disabled" : false;
-					(isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : false;
+					(isset($abgeschickt_array[$studiengang->studiengang_kz]) && ($abgeschickt_array[$studiengang->studiengang_kz] == true)) ? $data["disabled"] = "disabled" : false;
 					echo form_checkbox($data);
 					echo $this->lang->line('requirements_formNachgereicht')
 				?>
