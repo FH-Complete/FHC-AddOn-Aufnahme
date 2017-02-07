@@ -16,7 +16,7 @@ if (!empty($studiengaenge))
 		if ($stg->typ == 'm')
 		{
 ?>
-	    <h3>Bachelor / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplaene[0]->orgform_kurzbz; ?>)</h3>
+	    <h3>Master / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplaene[0]->orgform_kurzbz; ?>)</h3>
 	    <div id="<?php echo $stg->studiengang_kz; ?>">
 		<div class="row">
 		    <div class="col-sm-12">
@@ -24,7 +24,7 @@ if (!empty($studiengaenge))
 		    </div>
 		</div>
 		<h4><?php echo $this->lang->line("termine/erstesAufnahmeverfahren"); ?></h4>
-		
+
 		<?php
 			if (isset($reihungstests[$stg->studiengang_kz]) && is_object($reihungstests[$stg->studiengang_kz]))
 			{
@@ -36,7 +36,7 @@ if (!empty($studiengaenge))
 						$selectdReihungstest = $registeredReihungstests[$stg->studiengang_kz][$stufe];
 					}
 		?>
-		
+
 				<div id="<?php echo $selectdReihungstest ?>_select" class="row" <?php if ($selectdReihungstest != 0) echo 'style="display: none;"'?>>
 		<?php
 				echo form_open("/Aufnahmetermine/register/".$stg->studiengang_kz."/".$stg->studienplaene[0]->studienplan_id, array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin"));
@@ -59,8 +59,8 @@ if (!empty($studiengaenge))
 							<?php echo form_button(array("content"=>"Absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
 						</div>
 					</div>
-					
-					
+
+
 		<?php
 				echo form_close();
 		?>
