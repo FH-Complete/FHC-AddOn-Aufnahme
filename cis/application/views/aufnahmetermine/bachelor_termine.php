@@ -25,7 +25,7 @@ if (!empty($studiengaenge))
 		    </div>
 		</div>
 		<h4><?php echo $this->lang->line("termine/erstesAufnahmeverfahren"); ?></h4>
-		
+
 		<?php
 			if (isset($reihungstests[$stg->studiengang_kz]) && is_object($reihungstests[$stg->studiengang_kz]))
 			{
@@ -37,7 +37,7 @@ if (!empty($studiengaenge))
 						$selectdReihungstest = $registeredReihungstests[$stg->studiengang_kz][$stufe];
 					}
 		?>
-		
+
 				<div id="<?php echo $selectdReihungstest ?>_select" class="row" <?php if ($selectdReihungstest != 0) echo 'style="display: none;"'?>>
 		<?php
 				echo form_open("/Aufnahmetermine/register/".$stg->studiengang_kz."/".$stg->studienplaene[0]->studienplan_id, array("id" => "Aufnahmetermin", "name" => "Aufnahmetermin"));
@@ -60,8 +60,8 @@ if (!empty($studiengaenge))
 							<?php echo form_button(array("content"=>"Absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden", "type"=>"submit")); ?>
 						</div>
 					</div>
-					
-					
+
+
 		<?php
 				echo form_close();
 		?>
@@ -95,20 +95,16 @@ if (!empty($studiengaenge))
 									</div>
 								</div>
 							</div>
-	<?php
+<?php
 						}
-	?>
-	<?php
 				}
 			}
 			else
 			{
 				echo $this->lang->line("termine/keineTermineVorhanden");
 			}
+			echo '</div>';
 		}
-	?>
-	    </div>
-<?php
 	}
 }
 ?>

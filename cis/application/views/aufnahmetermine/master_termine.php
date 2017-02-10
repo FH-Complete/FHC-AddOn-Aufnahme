@@ -95,20 +95,16 @@ if (!empty($studiengaenge))
 									</div>
 								</div>
 							</div>
-	<?php
+<?php
 						}
-	?>
-	<?php
 				}
 			}
 			else
 			{
 				echo $this->lang->line("termine/keineTermineVorhanden");
 			}
+			echo '</div>';
 		}
-	?>
-	    </div>
-<?php
 	}
 }
 ?>
