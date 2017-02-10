@@ -17,7 +17,7 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
 <div class="container">
     <?php
 		$this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
-		echo $this->template->widget("menu", array('aktiv' => 'Bewerbung', 'numberOfUnreadMessages'=>$numberOfUnreadMessages));
+		echo $this->template->widget("menu", array('aktiv' => 'Bewerbung', 'numberOfUnreadMessages'=>$numberOfUnreadMessages, 'studiengaenge' => $studiengaenge));
 
 	?>
 		<div id="backToApplication">

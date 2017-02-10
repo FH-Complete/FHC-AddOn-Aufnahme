@@ -27,7 +27,7 @@ if (isset($error) && ($error->error === true))
 <div class="container">
     <?php
 $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$person->nachname));
-echo $this->template->widget("menu", array('aktiv' => 'Aufnahmetermine', 'numberOfUnreadMessages'=>$numberOfUnreadMessages)); ?>
+echo $this->template->widget("menu", array('aktiv' => 'Aufnahmetermine', 'numberOfUnreadMessages' => $numberOfUnreadMessages, 'studiengaenge' => $studiengaenge)); ?>
     <div class="row">
         <div class="col-sm-12">
             <?php $this->load_views('view_aufnahmetermine'); ?>

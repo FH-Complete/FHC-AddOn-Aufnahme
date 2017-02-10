@@ -84,11 +84,11 @@ class Studiengaenge extends UI_Controller
         {
             $this->setData('studiensemester', $studiensemester);
             $this->setRawData('studiensemester_kurzbz', $studiensemester->retval->studiensemester_kurzbz);
-            /*$this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
                 $this->getData('studiensemester')->studiensemester_kurzbz,
                 '',
                 'Interessent'
-            ));*/
+            ));
 
 			$this->benchmark->mark('codepart_start');
 			$this->setData("studiengaengeForBewerbung", $this->StudiengangModel->getStudiengangBewerbung());
