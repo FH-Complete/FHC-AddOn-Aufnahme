@@ -13,7 +13,8 @@ if (!empty($studiengaenge))
 {
 	foreach ($studiengaenge as $stg)
 	{
-		if ($stg->typ == 'm')
+		// If the type is Master and if the application is sent
+		if ($stg->typ == 'm' && $stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
 		{
 ?>
 	    <h3>Master / <?php echo $stg->bezeichnung ?> (<?php echo $stg->studienplaene[0]->orgform_kurzbz; ?>)</h3>
