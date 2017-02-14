@@ -330,4 +330,17 @@ class Messages extends UI_Controller
 			$this->_setError(true, $result->fhcCode . ' ' . $result->retval);
 		}
 	}
+
+    /**
+     * @param $bool
+     * @param null $msg
+     */
+    private function _setError($bool, $msg = null)
+    {
+        $error = new stdClass();
+        $error->error = $bool;
+        $error->msg = $msg;
+
+        $this->setRawData('error', $error);
+    }
 }
