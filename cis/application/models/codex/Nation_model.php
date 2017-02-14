@@ -26,10 +26,21 @@ class Nation_model extends REST_Model
 			
 			if (isSuccess($nations))
 			{
-				foreach($nations->retval as $nation)
-				{
-					$nationsArray[$nation->nation_code] = $nation->kurztext;
-				}
+                $nation_code = "";
+                $kurztext = "";
+                foreach ($nations->retval as $nation)
+                {
+                    if ($nation->nation_code == "A")
+                    {
+                        $nation_code = $nation->nation_code;
+                        $kurztext = $nation->kurztext;
+                    }
+                    else
+                    {
+                        $nationsArray[$nation->nation_code] = $nation->kurztext;
+                    }
+                }
+                $nationsArray = array_merge(array("null" => "", $nation_code => $kurztext), $nationsArray);
 				
 				if (count($nationsArray) > 0)
 				{
