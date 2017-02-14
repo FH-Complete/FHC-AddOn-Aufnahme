@@ -27,7 +27,7 @@
 					  </div>
 				<?php
 			}
-			
+
 			$phrase = $this->config->item("ZgvOptionsMapping");
 			if((is_array($phrase)) && (isset($phrase[$studiengang->typ])))
 			{
@@ -108,7 +108,7 @@
 	}
 	?>
 	<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" class="col-sm-1">
-		<?php 
+		<?php
 		if(isset($logo) && ($logo != false))
 		{
 		?>
@@ -189,7 +189,7 @@
     </div>
 </div>
 
-<div id="letztesZeugnis_<?php echo $studiengang->studienplaene[0]->studienplan_id;?>" class="row" style="display: none;">
+<div id="letztesZeugnis_<?php echo $studiengang->studienplaene[0]->studienplan_id;?>" class="" style="display: none;">
 	<div class="row">
 		<div class="col-sm-12">
 			<?php echo $this->getPhrase("ZGV/letztgueltigesZeugnis", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
@@ -525,8 +525,8 @@
             }
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
-		
-		
+
+
 	});
 
 	function toggleDocumentField(isChecked, studienplan_id)

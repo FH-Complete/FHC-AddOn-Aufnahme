@@ -22,7 +22,17 @@
             <ul class="nav navbar-nav">
 
                 <?php
-					foreach ($items as $item): ?>
+					foreach ($items as $item):
+					
+					if ((!isset($data['studiengaenge'])
+						|| (isset($data['studiengaenge']) && is_array($data['studiengaenge']) && count($data['studiengaenge']) == 0))
+						&& $item["id"] == "Nachrichten")
+					{
+						// Not to be displayed
+					}
+					else
+					{
+				?>
                     <li class="<?php if (isset($data['aktiv']) && $data["aktiv"] === $item["id"]) echo 'active'; ?>">
                         <a href="<?php echo $item['href']; ?>">
                             <?php
@@ -40,7 +50,10 @@
                         </a>
 						
                     </li>
-                <?php endforeach; ?>
+                <?php
+					}
+					endforeach;
+				?>
             </ul>
         </div>
     </div>
