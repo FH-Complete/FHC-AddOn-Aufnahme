@@ -665,6 +665,18 @@ class Bewerbung extends UI_Controller
 
             $this->_missingData();
 
+            foreach ($this->getData("gemeinden") as $gemeinde)
+            {
+                if (($this->getData("adresse") !== null) && ($gemeinde->plz == $this->getData("adresse")->plz) && ($gemeinde->name == $this->getData("adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("adresse")->ort))
+                {
+                    $this->setRawData("ort_dd", $gemeinde->gemeinde_id);
+                }
+                if (($this->getData("zustell_adresse") !== null) && ($gemeinde->plz == $this->getData("zustell_adresse")->plz) && ($gemeinde->name == $this->getData("zustell_adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("zustell_adresse")->ort))
+                {
+                    $this->setRawData("zustell_ort_dd", $gemeinde->gemeinde_id);
+                }
+            }
+
             $this->load->view('bewerbung', $this->getAllData());
         }
         else
