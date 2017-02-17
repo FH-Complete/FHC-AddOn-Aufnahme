@@ -130,6 +130,7 @@ class Messages extends UI_Controller
 			}
 			else
 			{
+			    $this->_loadData();
 				$this->load->view('messages', $this->getAllData());
 			}
 		}
