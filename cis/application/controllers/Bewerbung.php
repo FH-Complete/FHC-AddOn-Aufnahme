@@ -163,7 +163,7 @@ class Bewerbung extends UI_Controller
 
     private function _checkDataCompleteness()
     {
-        $complete = array("person" => true, "adresse" => true, "kontakt" => true, "zustelladresse" => true, "dokumente" => true, "spezialisierung"=>true);
+        $complete = array("person" => true, "adresse" => true, "kontakt" => true, "zustelladresse" => true, "dokumente" => true, "requirements_dokumente"=>true,"spezialisierung"=>true);
         //check personal data
         $person = $this->getData("person");
         if ($person->vorname == "")
@@ -272,7 +272,7 @@ class Bewerbung extends UI_Controller
                 {
                     if (($this->getData("dokumente") !== null) && (!isset($this->getData("dokumente")[$dokType->dokument_kurzbz])) && ($dokType->pflicht == true))
                     {
-                        $complete["dokumente"] = false;
+                        $complete["requirements_dokumente"] = false;
                     }
                 }
 
@@ -280,24 +280,24 @@ class Bewerbung extends UI_Controller
                 {
                     if ((!isset($this->getData("dokumente")[$dokType->dokument_kurzbz])))
                     {
-                        $complete["dokumente"] = false;
+                        $complete["requirements_dokumente"] = false;
                     }
                 }
                 $abschlusszeugnis = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["abschlusszeugnis_".$this->getData("studiengang")->typ])->retval;
                 $letztesZeugnis = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["letztGueltigesZeugnis"])->retval;
                 if ((!isset($this->getData("dokumente")[$abschlusszeugnis->dokument_kurzbz])) || ((!$this->getData("dokumente")[$abschlusszeugnis->dokument_kurzbz]->nachgereicht) && ($this->getData("dokumente")[$abschlusszeugnis->dokument_kurzbz]->dms_id == null )))
                 {
-                    $complete["dokumente"] = false;
+                    $complete["requirements_dokumente"] = false;
                 }
                 elseif ((!isset($this->getData("dokumente")[$letztesZeugnis->dokument_kurzbz])) && ($this->getData("dokumente")[$abschlusszeugnis->dokument_kurzbz]->nachgereicht))
                 {
-                    $complete["dokumente"] = false;
+                    $complete["requirements_dokumente"] = false;
                 }
             }
         }
         else
         {
-            $complete["dokumente"] = false;
+            $complete["requirements_dokumente"] = false;
         }
 
         $spezPhrase = $this->getData('spezPhrase');

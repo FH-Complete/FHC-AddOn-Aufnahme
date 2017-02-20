@@ -48,7 +48,8 @@ $this->template->widget(
 			"summary"=>site_url("/Summary?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id),
 			"requirements"=>site_url("/Requirements?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id),
 			"personalData"=>site_url("/Bewerbung?studiengang_kz=".$studiengang->studiengang_kz."&studienplan_id=".$studiengang->studienplaene[0]->studienplan_id)
-		)
+		),
+        "studienplan_id"=>$studiengang->studienplaene[0]->studienplan_id
 	)
 ); ?>
         </div>
@@ -102,14 +103,51 @@ $this->template->widget(
 			dataType: 'json',
 			success: function(data, textStatus, jqXHR)
 			{
-                if((data.person==false) ||(data.adresse==false) ||(data.dokumente==false) ||(data.kontakt==false) ||(data.zustelladresse==false) || (data.spezialisierung == false))
-				{
-					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
-				}
-				else
-				{
-					checkDocuments(studiengang_kz, studienplan_id);
-				}
+                if((data.person==false)
+                    ||(data.adresse==false)
+                    ||(data.dokumente==false)
+                    ||(data.kontakt==false)
+                    ||(data.zustelladresse==false)
+                    || (data.spezialisierung == false)
+                    || (data.requirements_dokumente == false)
+                )
+                {
+                    $("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
+                }
+                else
+                {
+                    checkDocuments(studiengang_kz, studienplan_id);
+                }
+
+                var allModulesComplete = true;
+                //set module as checked
+                if((data.person==true)
+                    && (data.adresse==true)
+                    && (data.dokumente==true)
+                    && (data.kontakt==true)
+                    && (data.zustelladresse==true)
+                )
+                {
+                    $("#personalData_"+studienplan_id).addClass('check');
+                }
+                else
+                {
+                    allModulesComplete = false;
+                }
+
+                if((data.requirements_dokumente==true) && (data.spezialisierung == true))
+                {
+                    $("#requirements_"+studienplan_id).addClass('check');
+                }
+                else
+                {
+                    allModulesComplete = false;
+                }
+
+                if(allModulesComplete)
+                {
+                    $("#summary_"+studienplan_id).addClass('check');
+                }
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				// Handle errors here
@@ -141,6 +179,10 @@ $this->template->widget(
 					{
 						$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/nochNichtAbgeschickt'); ?>");
 					}
+                    else
+                    {
+                        $("#send_"+studienplan_id).addClass('check');
+                    }
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
