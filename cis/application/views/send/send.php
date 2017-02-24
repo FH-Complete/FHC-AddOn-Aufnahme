@@ -41,8 +41,8 @@ else {
 	}
 }
 ?></fieldset>
-	<span id="absenden_text"><?php echo $this->getPhrase("Submission/ApplicationFor", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);?></span>
-    <span id="studiengang"><?php echo $studiengang->bezeichnung; ?></span></br>
+	<!--<span id="absenden_text"><?php echo $this->getPhrase("Submission/ApplicationFor", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);?></span>
+    <span id="studiengang"><?php echo $studiengang->bezeichnung; ?></span></br>-->
     <?php echo form_open("Send/send/".$studiengang->studiengang_kz."/".$studiengang->studienplaene[0]->studienplan_id, array("id" => "PersonForm", "name" => "PersonForm")); ?>
         <div class="row">
             <div class="col-sm-4">

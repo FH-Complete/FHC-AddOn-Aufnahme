@@ -43,7 +43,7 @@ foreach ($studiengaenge as $studiengang)
         </div>
     </div>
     <div class="row">
-        <div id="<?php echo $studiengang->studiengang_kz; ?>"
+        <div id="<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>"
              class="collapse <?php echo (isset($studiengang_kz) && ($studiengang_kz == $studiengang->studiengang_kz)) ? "in" : "" ?>">
             <div class="col-sm-4 navigation">
                 <?php echo
@@ -96,7 +96,7 @@ $this->load->view('templates/footer');
 ?>
 
 <script type="text/javascript">
-    function confirmStorno(studiengang_kz)
+    function confirmStorno(studiengang_kz, studienplan_id)
     {
         <?php
         $phrase = "";
@@ -111,7 +111,7 @@ $this->load->view('templates/footer');
         ?>
 		if(confirm("<?php echo $phrase; ?>"))
 		{
-			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + "/"+ studiengang_kz;
+			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + "/"+ studiengang_kz+"/"+studienplan_id;
 		}
     }
 	

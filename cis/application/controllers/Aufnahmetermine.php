@@ -229,6 +229,36 @@ class Aufnahmetermine extends UI_Controller
                 true
             ));
         }
+
+        $studiengaenge = array();
+
+        foreach($this->getData("studiengaenge") as $stg)
+        {
+            if((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
+            {
+                foreach($stg->prestudenten as $key => $ps)
+                {
+                    $tempStg = clone $stg;
+                    $tempStg->prestudenten = array();
+                    $tempStg->prestudenten[0] = $ps;
+                    $tempStg->prestudentstatus = array();
+                    $tempStg->prestudentstatus[0] = $stg->prestudentstatus[$key];
+                    $tempStg->studienplaene = array();
+                    $tempStg->studienplaene[0] = $stg->studienplaene[$key];
+                    array_push($studiengaenge, $tempStg);
+                }
+            }
+            else
+            {
+                array_push($studiengaenge, $stg);
+                if ($stg->studiengang_kz === $this->getData('studiengang_kz') && ($stg->prestudentstatus[0]->studienplan_id === $studienplan_id))
+                {
+                    $this->setRawData("studiengang", $stg);
+                }
+            }
+        }
+
+        $this->setRawData("studiengaenge", $studiengaenge);
         
         //load preinteressent data
         $this->setData(

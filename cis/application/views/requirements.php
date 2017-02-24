@@ -105,11 +105,11 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
         $phrase = $this->getPhrase("Bewerbung/StornoConfirmation", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz);
     }
     ?>
-	function confirmStorno(studiengang_kz)
+    function confirmStorno(studiengang_kz, studienplan_id)
     {
 		if(confirm("<?php echo $phrase; ?>"))
 		{
-			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + "/"+ studiengang_kz;
+			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + "/"+ studiengang_kz+"/"+studienplan_id;
 		}
     }
 

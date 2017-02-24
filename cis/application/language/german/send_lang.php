@@ -10,7 +10,7 @@ $lang['english'] = 'English';
 $lang['german'] = 'German';
 $lang['send_header'] = 'Absenden der Daten';
 $lang['send_text'] = 'Bewerbung für den Studiengang';
-$lang['send_bereitsAbgeschickt'] = "Sie haben Ihre Bewerbung bereits abgeschickt";
+$lang['send_bereitsAbgeschickt'] = "Sie haben Ihre Bewerbung bereits abgeschickt.";
 
 $lang['send_vorname'] = "Vorname";
 $lang['send_nachname'] = "Nachname";

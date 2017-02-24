@@ -6,7 +6,7 @@
  */
 
 ?>
-<a class="<?php echo (isset($studiengang_kz) && ($studiengang_kz == $studiengang->studiengang_kz)) ? "" : "collapsed"?>" data-toggle='collapse' data-target='#<?php echo $studiengang->studiengang_kz; ?>'>
+<a class="<?php echo (isset($studiengang_kz) && ($studiengang_kz == $studiengang->studiengang_kz)) ? "" : "collapsed"?>" data-toggle='collapse' data-target='#<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>'>
 	<h1 class="studiengang-list-item"><?php echo $studiengang->bezeichnung ?>
 		(<?php echo $studiengang->studienplaene[0]->orgform_kurzbz; ?>)
 	</h1>
@@ -19,7 +19,7 @@ if(!((isset($bewerbung_abgeschickt))
     && ($abgeschickt_array[$studiengang->studiengang_kz] == true)))
 {
     ?>
-    <button class="btn btn-sm btn-primary btn-background" type="button" onclick="confirmStorno(<?php echo $studiengang->studiengang_kz; ?>)">
+    <button class="btn btn-sm btn-primary btn-background" type="button" onclick="confirmStorno(<?php echo $studiengang->studiengang_kz; ?>, <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>)">
         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
     </button>
 <?php

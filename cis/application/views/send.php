@@ -61,7 +61,7 @@ $this->template->widget(
 	<?php } ?>
 </div>
 <script type="text/javascript">
-	function confirmStorno(studiengang_kz)
+    function confirmStorno(studiengang_kz, studienplan_id)
     {
         <?php
         $phrase = "";
@@ -77,7 +77,7 @@ $this->template->widget(
 
 		if(confirm("<?php echo $phrase; ?>"))
 		{
-			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + "/"+ studiengang_kz;
+			window.location.href = "<?php echo base_url($this->config->config["index_page"]."/Bewerbung/storno/") ?>" + "/"+ studiengang_kz+"/"+studienplan_id;
 		}
     }
 	

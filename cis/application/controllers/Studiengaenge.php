@@ -90,6 +90,32 @@ class Studiengaenge extends UI_Controller
                 'Interessent'
             ));
 
+            $studiengaenge = array();
+
+            foreach($this->getData("studiengaenge") as $stg)
+            {
+                if((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
+                {
+                    foreach($stg->prestudenten as $key => $ps)
+                    {
+                        $tempStg = clone $stg;
+                        $tempStg->prestudenten = array();
+                        $tempStg->prestudenten[0] = $ps;
+                        $tempStg->prestudentstatus = array();
+                        $tempStg->prestudentstatus[0] = $stg->prestudentstatus[$key];
+                        $tempStg->studienplaene = array();
+                        $tempStg->studienplaene[0] = $stg->studienplaene[$key];
+                        array_push($studiengaenge, $tempStg);
+                    }
+                }
+                else
+                {
+                    array_push($studiengaenge, $stg);
+                }
+            }
+
+            $this->setRawData("studiengaenge", $studiengaenge);
+
 			$this->benchmark->mark('codepart_start');
 			$this->setData("studiengaengeForBewerbung", $this->StudiengangModel->getStudiengangBewerbung());
 			$this->benchmark->mark('codepart_end');
@@ -143,7 +169,7 @@ class Studiengaenge extends UI_Controller
                     //$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
                     if (($prestudent->status_kurzbz === "Interessent" || $prestudent->status_kurzbz === "Bewerber"))
                     {
-                        $aktiveBewerbungen[$prestudent->studiengang_kz] = $prestudent->studienplan_id;
+                        $aktiveBewerbungen[$prestudent->studienplan_id] = $prestudent->studienplan_id;
                     }
                 }
             }

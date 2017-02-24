@@ -80,19 +80,46 @@ class Summary extends UI_Controller
 
             //setting selected Studiengang by GET Param
             $abgeschickt_array = array();
-            foreach ($this->getData('studiengaenge') as $stg)
-            {
-                if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
-                {
-                    $this->setRawData("studiengang", $stg);
-                }
+            $studiengaenge = array();
 
-                if($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+            foreach($this->getData("studiengaenge") as $stg)
+            {
+                if((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
                 {
-                    $this->setRawData("bewerbung_abgeschickt", true);
-                    $abgeschickt_array[$stg->studiengang_kz] = true;
+                    foreach($stg->prestudenten as $key => $ps)
+                    {
+                        $tempStg = clone $stg;
+                        $tempStg->prestudenten = array();
+                        $tempStg->prestudenten[0] = $ps;
+                        $tempStg->prestudentstatus = array();
+                        $tempStg->prestudentstatus[0] = $stg->prestudentstatus[$key];
+                        $tempStg->studienplaene = array();
+                        $tempStg->studienplaene[0] = $stg->studienplaene[$key];
+                        array_push($studiengaenge, $tempStg);
+
+                        if ($tempStg->studiengang_kz === $this->getData('studiengang_kz') && ($tempStg->prestudentstatus[0]->studienplan_id === $this->getData("studienplan_id")))
+                        {
+                            $this->setRawData("studiengang", $tempStg);
+                        }
+
+                        if ($tempStg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                        {
+                            $this->setRawData("bewerbung_abgeschickt", true);
+                            $abgeschickt_array[$tempStg->studiengang_kz] = true;
+                        }
+                    }
+                }
+                else
+                {
+                    array_push($studiengaenge, $stg);
+                    if ($stg->studiengang_kz === $this->getData('studiengang_kz') && ($stg->prestudentstatus[0]->studienplan_id === $this->getData("studienplan_id")))
+                    {
+                        $this->setRawData("studiengang", $stg);
+                    }
                 }
             }
+
+            $this->setRawData("studiengaenge", $studiengaenge);
             $this->setRawData('abgeschickt_array', $abgeschickt_array);
 
             $this->setRawData("studiengaenge", array($this->getData('studiengang')));
