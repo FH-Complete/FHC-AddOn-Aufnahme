@@ -34,3 +34,5 @@ $lang['summary_dokumentVorhanden'] = 'Dokument vorhanden';
 $lang['summary_Abschlusszeugnis'] = 'Leaving certificate';
 $lang['summary_next'] = 'Next';
 $lang["summary_nachgereicht"] = "will be given later";
+$lang["summary_zustelladresse"] = "Delivery address";
+$lang["summary_titelpost"] = "Titel nachgestellt";

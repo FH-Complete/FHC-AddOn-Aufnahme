@@ -36,3 +36,6 @@ $lang['summary_dokumentVorhanden'] = 'Dokument vorhanden';
 $lang['summary_Abschlusszeugnis'] = 'Abschlusszeugnis';
 $lang['summary_next'] = 'Weiter';
 $lang["summary_nachgereicht"] = "wird nachgereicht";
+$lang["summary_zustelladresse"] = "Zustelladresse";
+$lang["summary_titelpost"] = "Titel nachgestellt";
+
