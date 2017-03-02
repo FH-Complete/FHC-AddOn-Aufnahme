@@ -21,7 +21,7 @@ class Requirements extends UI_Controller
         if (hasData($currentLanguage))
         {
             $this->setData('sprache', $currentLanguage);
-            $this->lang->load(array('aufnahme', 'login'), $this->getData('sprache'));
+            $this->lang->load(array('aufnahme', 'requirements'), $this->getData('sprache'));
         }
 
         //
@@ -145,18 +145,28 @@ class Requirements extends UI_Controller
             {
                 if ($this->getData('prestudent')->studiengang_kz == $this->input->post()["studiengang_kz"])
                 {
-                    $prestudent = $this->getData('prestudent');
-                    $prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ] . "_nachreichenDatum_" . $this->input->post("studienplan_id"))));
-                    $prestudent->zgvort = "geplanter Abschluss";
-
-                    $updatePrestudent = $this->PrestudentModel->savePrestudent((array)$prestudent);
-
-                    if (!isSuccess($updatePrestudent))
+                    if((isset($this->input->post()[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ] . "_nachreichenDatum_" . $this->input->post("studienplan_id")]))
+                        && ($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ] . "_nachreichenDatum_" . $this->input->post("studienplan_id")) != ''))
                     {
-                        $this->_setError(true, "could not save data");
+                        $prestudent = $this->getData('prestudent');
+                        $prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ] . "_nachreichenDatum_" . $this->input->post("studienplan_id"))));
+                        $prestudent->zgvort = "geplanter Abschluss";
+
+                        $updatePrestudent = $this->PrestudentModel->savePrestudent((array)$prestudent);
+
+                        if (!isSuccess($updatePrestudent))
+                        {
+                            $this->_setError(true, "could not save data");
+                        }
+                    }
+                    else
+                    {
+                        $this->_setError(true, $this->lang->line("requirements_nachreichenAbschlussGeplantDatumFehlt"));
+                        $this->setRawData('geplanter_abschluss_date_fehlt', true);
                     }
                 }
             }
+
 
             //reload saved data
             $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(

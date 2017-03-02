@@ -24,3 +24,4 @@ $lang["requirements_speichern"] = "Save & Next";
 $lang["requirements_selectOption"] = "Please make a selection.";
 $lang["requirements_selectSpecialization"] = "Please make a selection.";
 $lang["requirements_weiter"] = "Next";
+$lang["requirements_nachreichenAbschlussGeplantDatumFehlt"] = "Please fill in the missing date.";
