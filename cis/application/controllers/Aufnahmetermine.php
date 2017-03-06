@@ -141,7 +141,7 @@ class Aufnahmetermine extends UI_Controller
                                             if ($studiengang->studiengang_kz === $studiengang_kz)
                                             {
                                                 $studiengang->studiengangstyp = $this->StudiengangstypModel->getStudiengangstyp($studiengang->typ)->retval;
-                                                $this->_sendMessageMailAppointmentConfirmation($this->getData("person"), $studiengang, $reihungstest);
+                                                $this->_sendMessageMailAppointmentConfirmation($this->getData("person"), $studiengang, $reihungstest, $studienplan_id);
                                             }
                                         }
                                     }
@@ -167,7 +167,7 @@ class Aufnahmetermine extends UI_Controller
                                         if ($studiengang->studiengang_kz === $studiengang_kz)
                                         {
                                             $studiengang->studiengangstyp = $this->StudiengangstypModel->getStudiengangstyp($studiengang->typ)->retval;
-                                            $this->_sendMessageMailAppointmentConfirmation($this->getData("person"), $studiengang, $reihungstest);
+                                            $this->_sendMessageMailAppointmentConfirmation($this->getData("person"), $studiengang, $reihungstest, $studienplan_id);
                                         }
                                     }
                                 }
@@ -190,7 +190,7 @@ class Aufnahmetermine extends UI_Controller
                             if ($studiengang->studiengang_kz === $studiengang_kz)
                             {
                                 $studiengang->studiengangstyp = $this->StudiengangstypModel->getStudiengangstyp($studiengang->typ)->retval;
-                                $this->_sendMessageMailAppointmentConfirmation($this->getData("person"), $studiengang, $reihungstest);
+                                $this->_sendMessageMailAppointmentConfirmation($this->getData("person"), $studiengang, $reihungstest, $studienplan_id);
                             }
                         }
                     }
@@ -231,6 +231,7 @@ class Aufnahmetermine extends UI_Controller
         }
 
         $studiengaenge = array();
+        $prestudentStufen = array();
 
         foreach($this->getData("studiengaenge") as $stg)
         {
@@ -246,18 +247,17 @@ class Aufnahmetermine extends UI_Controller
                     $tempStg->studienplaene = array();
                     $tempStg->studienplaene[0] = $stg->studienplaene[$key];
                     array_push($studiengaenge, $tempStg);
+                    $prestudentStufen[$tempStg->studienplaene[0]->studienplan_id] = $tempStg->prestudentstatus[0]->rt_stufe;
                 }
             }
             else
             {
                 array_push($studiengaenge, $stg);
-                if ($stg->studiengang_kz === $this->getData('studiengang_kz') && ($stg->prestudentstatus[0]->studienplan_id === $studienplan_id))
-                {
-                    $this->setRawData("studiengang", $stg);
-                }
+                $prestudentStufen[$stg->studienplaene[0]->studienplan_id] = $stg->prestudentstatus[0]->rt_stufe;
             }
         }
 
+        $this->setRawData("prestudentStufen", $prestudentStufen);
         $this->setRawData("studiengaenge", $studiengaenge);
         
         //load preinteressent data
@@ -277,13 +277,22 @@ class Aufnahmetermine extends UI_Controller
         $this->_loadRegisteredTests();
     }
 
-    private function _sendMessageMailAppointmentConfirmation($person, $studiengang, $termin)
+    private function _sendMessageMailAppointmentConfirmation($person, $studiengang, $termin, $studienplan_id)
     {
+        if($termin->uhrzeit != null)
+        {
+            $termin = date("d.m.Y", strtotime($termin->datum)) . " " . date("H:i", strtotime($termin->uhrzeit));
+        }
+        else
+        {
+            $termin = date("d.m.Y", strtotime($termin->datum));
+        }
+
         $data = array(
             "typ" => $studiengang->studiengangstyp->bezeichnung,
             "studiengang" => $studiengang->bezeichnung,
             "orgform" => $studiengang->orgform_kurzbz,
-            "termin" => date("d.m.Y", strtotime($termin->datum)) . " " . date("H:i", strtotime($termin->uhrzeit)),
+            "termin" => $termin,
             "anrede" => $person->anrede,
             "vorname" => $person->vorname,
             "nachname" => $person->nachname,
@@ -292,6 +301,14 @@ class Aufnahmetermine extends UI_Controller
 
         $oe = $studiengang->oe_kurzbz;
         $orgform_kurzbz = $studiengang->orgform_kurzbz;
+
+        foreach($studiengang->studienplaene as $stpl)
+        {
+            if($stpl->studienplan_id == $studienplan_id)
+            {
+                $orgform_kurzbz = $stpl->orgform_kurzbz;
+            }
+        }
 
         (isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData("sprache");
 
@@ -336,8 +353,9 @@ class Aufnahmetermine extends UI_Controller
     private function _loadAvailablesTests()
 	{
 		$reihungstestsStg = $this->ReihungstestModel->getAvailableReihungstestByPersonId();
-		
+
 		$reihungstests = array();
+		$reihungstestData = array();
 		
 		if (hasData($reihungstestsStg))
 		{
@@ -359,6 +377,8 @@ class Aufnahmetermine extends UI_Controller
 						{
 							$tmp->reihungstest[$reihungstest->stufe] = array();
 						}
+
+						$reihungstestData[$reihungstest->reihungstest_id] = $reihungstest;
 						
 						$tmp->reihungstest[$reihungstest->stufe][$reihungstest->reihungstest_id] = date('d.m.Y', strtotime($reihungstest->datum));
 					}
@@ -369,6 +389,7 @@ class Aufnahmetermine extends UI_Controller
 		}
 		
 		$this->setRawData('reihungstests', $reihungstests);
+        $this->setRawData('reihungstestData', $reihungstestData);
 	}
 	
 	private function _loadRegisteredTests()
@@ -391,11 +412,19 @@ class Aufnahmetermine extends UI_Controller
 				{
 					$stufe = $registeredReihungstest->stufe;
 				}
+
+				foreach($this->getData('reihungstests') as $key => $rt)
+                {
+                    if(isset($rt->reihungstest[$stufe][$registeredReihungstest->reihungstest_id]))
+                    {
+                        $registeredReihungstests[$key][$stufe] = $registeredReihungstest->reihungstest_id;
+                    }
+                }
 				
-				$registeredReihungstests[$registeredReihungstest->studiengang_kz][$stufe] = $registeredReihungstest->reihungstest_id;
+
 			}
 		}
-		
+
         $this->setRawData('registeredReihungstests', $registeredReihungstests);
 	}
 }

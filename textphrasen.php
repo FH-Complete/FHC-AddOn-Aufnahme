@@ -1039,5 +1039,85 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
 						</div>',
 			'description' => ''
 		)
-	)
+	),
+    array
+    (
+        'phrase' => 'Termine/Stufe0',
+        'phrasentext' => array
+        (
+            'sprache' => 'German',
+            'text' => 'Aufnahmeverfahren Stufe 0',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'Termine/Stufe0',
+        'phrasentext' => array
+        (
+            'sprache' => 'English',
+            'text' => 'Aufnahmeverfahren Stufe 0',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'Termine/Stufe1',
+        'phrasentext' => array
+        (
+            'sprache' => 'German',
+            'text' => 'Erstes Aufnahmeverfahren',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'Termine/Stufe1',
+        'phrasentext' => array
+        (
+            'sprache' => 'English',
+            'text' => 'Erstes Aufnahmeverfahren',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'Termine/Stufe2',
+        'phrasentext' => array
+        (
+            'sprache' => 'German',
+            'text' => 'Zweites Aufnahmeverfahren',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'Termine/Stufe2',
+        'phrasentext' => array
+        (
+            'sprache' => 'English',
+            'text' => 'Zweites Aufnahmeverfahren',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'Termine/Stufe3',
+        'phrasentext' => array
+        (
+            'sprache' => 'German',
+            'text' => 'Drittes Aufnahmeverfahren',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'Termine/Stufe3',
+        'phrasentext' => array
+        (
+            'sprache' => 'English',
+            'text' => 'Drittes Aufnahmeverfahren',
+            'description' => ''
+        )
+    )
 );
