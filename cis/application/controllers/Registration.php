@@ -52,6 +52,8 @@ class Registration extends UI_Controller
 		$this->load->model('system/Phrase_model', 'PhraseModel');
 		$this->load->model('system/Message_model', 'MessageModel');
 
+        $this->session->sess_destroy();
+
         $this->PhraseModel->getPhrasen(
             'aufnahme',
             ucfirst($this->getData('sprache')),
