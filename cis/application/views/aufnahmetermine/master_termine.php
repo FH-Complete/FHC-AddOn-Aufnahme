@@ -21,7 +21,7 @@ if (!empty($studiengaenge))
 	    <div id="<?php echo $stg->studiengang_kz; ?>">
 		<div class="row">
 		    <div class="col-sm-12">
-			<?php echo $this->getPhrase("Termine/BewerbungIstEingelangt", $sprache, $this->config->item('root_oe')); ?>
+			<?php echo $this->getPhrase("Termine/BewerbungIstEingelangt", $sprache, $stg->oe_kurzbz, $stg->studienplaene[0]->orgform_kurzbz); ?>
 		    </div>
 		</div>
 		<h4><?php echo $this->lang->line("termine/erstesAufnahmeverfahren"); ?></h4>
