@@ -104,7 +104,7 @@ class Login extends UI_Controller
 	 */
 	private function _codeLogin($code, $email = null)
 	{
-		$person = $this->PersonModel->getPerson($code, $email, REST_Model::AUTH_NOT_REQUIRED);
+		$person = $this->PersonModel->getPerson($code, $email, REST_Model::AUTH_NOT_REQUIRED, true);
 		if (hasData($person))
 		{
 			$this->setData('person', $person);

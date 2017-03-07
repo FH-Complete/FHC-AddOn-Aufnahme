@@ -16,8 +16,13 @@ class Person_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getPerson($code = null, $email = null, $authNotRequired = false)
+	public function getPerson($code = null, $email = null, $authNotRequired = false, $forceApiCall = false)
 	{
+        if($forceApiCall)
+        {
+            unset($this->session->userdata{'Person.getPerson'});
+        }
+
 		return $this->loadOne(
 			'person/Person/Person',
 			array(
