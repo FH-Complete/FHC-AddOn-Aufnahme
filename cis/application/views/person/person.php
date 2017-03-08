@@ -434,27 +434,27 @@ if (!isset($plz))
 </script>
 
 
-<legend>
-    <?php echo $this->getPhrase("Personal/Information", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
+<div>
+    <h3><?php echo $this->getPhrase("Personal/Information", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?></h3>
     <div class="pull-right">
         <span class="incomplete"><?php echo ((isset($complete)) && (!$complete["person"])) ? $this->lang->line("aufnahme/unvollstaendig") : ""; ?></span>
     </div>
-</legend>
+</div>
 <?php echo form_open_multipart("Bewerbung/studiengang/" . $studiengang->studiengang_kz . "/" . $studiengang->studienplaene[0]->studienplan_id."/".$studiensemester->studiensemester_kurzbz, array("id" => "PersonForm", "name" => "PersonForm")); ?>
 <div class="row form-row">
     <div class="col-sm-3">
         <div class="form-group <?php echo ((form_error("anrede") != "") || (!isset($person->anrede) && $incomplete)) ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_formAnrede'), "anrede", array("name" => "anrede", "for" => "anrede", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_formAnrede'), "anrede", array("class" => "control-label")) ?>
             <?php
             $data = array('id' => 'anrede', 'name' => 'anrede', "class" => "form-control");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
-            echo form_dropdown("anrede", array("null" => "", "Herr" => "Herr", "Frau" => "Frau"), isset($person->anrede) ? $person->anrede : "null", $data); ?>
+            echo form_dropdown("anrede", array("null" => "keine Auswahl", "Herr" => "Herr", "Frau" => "Frau"), isset($person->anrede) ? $person->anrede : "null", $data); ?>
             <?php echo form_error("anrede"); ?>
         </div>
     </div>
     <div class="col-sm-3">
         <div class="form-group <?php echo (form_error("titelpre") != "") ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_formPrenomen'), "titelpre", array("name" => "titelpre", "for" => "titelpre", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_formPrenomen'), "titelpre", array("class" => "control-label")) ?>
             <span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true"
                   title="<?php echo $this->lang->line('person_titelPreInfo'); ?>"></span>
             <?php
@@ -466,7 +466,7 @@ if (!isset($plz))
     </div>
     <div class="col-sm-3">
         <div class="form-group <?php echo (form_error("titelpost") != "") ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_formPostnomen'), "titelpost", array("name" => "titelpost", "for" => "titelpost", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_formPostnomen'), "titelpost", array("class" => "control-label")) ?>
             <span class="fhc-tooltip glyphicon glyphicon-info-sign" aria-hidden="true"
                   title="<?php echo $this->lang->line('person_titelPostInfo'); ?>"></span>
             <?php
@@ -480,7 +480,7 @@ if (!isset($plz))
 <div class="row form-row">
     <div class="col-sm-6">
         <div class="form-group <?php echo (form_error("vorname") != "") ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_vorname'), "vorname", array("name" => "vorname", "for" => "vorname", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_vorname'), "vorname", array("class" => "control-label")) ?>
             <?php
             $data = array('id' => 'vorname', 'name' => 'vorname', 'maxlength' => 32, "type" => "text", "value" => set_value("vorname", isset($person->vorname) ? $person->vorname : ""), "class" => "form-control");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -490,7 +490,7 @@ if (!isset($plz))
     </div>
     <div class="col-sm-6">
         <div class="form-group <?php echo (form_error("nachname") != "") ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_nachname'), "nachname", array("name" => "nachname", "for" => "nachname", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_nachname'), "nachname", array("class" => "control-label")) ?>
             <?php
             $data = array('id' => 'nachname', 'name' => 'nachname', 'maxlength' => 64, "type" => "text", "value" => set_value("nachname", isset($person->nachname) ? $person->nachname : ""), "class" => "form-control");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -502,7 +502,7 @@ if (!isset($plz))
 <div class="row form-row">
     <div class="col-sm-6">
         <div class="form-group <?php echo (form_error("gebdatum") != "") ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_geburtsdatum'), "gebdatum", array("name" => "gebdatum", "for" => "gebdatum", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_geburtsdatum'), "gebdatum", array("class" => "control-label")) ?>
             <?php
             $data = array('id' => 'gebdatum' . $studiengang->studiengang_kz . $studiengang->studienplaene[0]->studienplan_id, 'name' => 'gebdatum', 'maxlength' => 64, "type" => "text", "value" => set_value("gebdatum", isset($person->gebdatum) ? date("d.m.Y", strtotime($person->gebdatum)) : ""), "class" => "form-control datepicker", "placeholder" => "DD.MM.YYYY");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -512,7 +512,7 @@ if (!isset($plz))
     </div>
     <div class="col-sm-6">
         <div class="form-group <?php echo ((form_error("geburtsort") != "") || (!isset($person->gebort) && $incomplete)) ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_geburtsort'), "geburtsort", array("name" => "geburtsort", "for" => "geburtsort", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_geburtsort'), "geburtsort", array("class" => "control-label")) ?>
             <?php
             $data = array('id' => 'geburtsort', 'name' => 'geburtsort', "type" => "text", "value" => set_value("geburtsort", (isset($person->gebort) ? $person->gebort : "")), "class" => "form-control");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -524,7 +524,7 @@ if (!isset($plz))
 <div class="row form-row">
     <div class="col-sm-6">
         <div class="form-group <?php echo ((form_error("staatsbuergerschaft") != "") || (!isset($person->staatsbuergerschaft) && $incomplete)) ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_staatsbuergerschaft'), "staatsbuergerschaft", array("name" => "staatsbuergerschaft", "for" => "staatsbuergerschaft", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_staatsbuergerschaft'), "staatsbuergerschaft", array("class" => "control-label")) ?>
             <?php
             $data = array('id' => 'staatsbuergerschaft', 'name' => 'staatsbuergerschaft', "class" => "form-control");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -534,9 +534,9 @@ if (!isset($plz))
     </div>
     <div class="col-sm-6">
         <div class="form-group <?php echo ((form_error("nation") != "") || (!isset($person->geburtsnation) && $incomplete)) ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_formGeburtsnation'), "nation", array("name" => "nation", "for" => "nation", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_formGeburtsnation'), "nation", array("class" => "control-label")) ?>
             <?php
-            $data = array('id' => 'nation', 'name' => 'nation', "value" => set_value("nation"), "class" => "form-control");
+            $data = array('id' => 'nation', 'name' => 'nation', "class" => "form-control");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
             echo form_dropdown("nation", $nationen, (isset($person->geburtsnation) ? $person->geburtsnation : null), $data); ?>
             <?php echo form_error("nation"); ?>
@@ -546,7 +546,7 @@ if (!isset($plz))
 <div class="row form-row svnr_row">
     <div class="col-sm-6">
         <div class="form-group <?php echo ((form_error("svnr") != "") || (!isset($person->svnr) && $incomplete)) ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_formSvn'), "svnr", array("name" => "svnr", "for" => "svnr", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_formSvn'), "svnr", array("class" => "control-label")) ?>
             <?php echo form_input(array('id' => 'svnr_orig', 'name' => 'svnr_orig', "type" => "hidden", "value" => set_value("svnr", (isset($person->svnr) ? $person->svnr : "")), "class" => "form-control")); ?>
             <?php
             $data = array('id' => 'svnr', 'name' => 'svnr', "type" => "text", "value" => set_value("svnr", (isset($person->svnr) ? mb_substr($person->svnr, 0, 10) : "")), "class" => "form-control", 'placeholder' => 'XXXXTTMMJJ');
@@ -566,12 +566,12 @@ if (!isset($plz))
 			</div>
 		</div>-->
 </div>
-<legend class="">
-    <?php echo $this->getPhrase("Personal/Addresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
+<div class="">
+    <h3><?php echo $this->getPhrase("Personal/Addresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?></h3>
     <div class="pull-right">
         <span class="incomplete"><?php echo ((isset($complete)) && (!$complete["adresse"])) ? $this->lang->line("aufnahme/unvollstaendig") : ""; ?></span>
     </div>
-</legend>
+</div>
 <!--<div class="row">
 		<div class="col-sm-12">
 			<div class="form-group <?php echo (form_error("heimatadresse") != "") ? 'has-error' : '' ?>">
@@ -587,9 +587,9 @@ if (!isset($plz))
 <div class="row form-row">
     <div class="col-sm-6">
         <div class="form-group <?php echo ((form_error("adresse_nation") != "") || (!isset($adresse->nation) && $incomplete)) ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_formAdresseNation'), "adresse_nation", array("name" => "adresse_nation", "for" => "adresse_nation", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_formAdresseNation'), "adresse_nation", array("class" => "control-label")) ?>
             <?php
-            $data = array('id' => 'adresse_nation' . $studiengang->studienplaene[0]->studienplan_id, 'name' => 'adresse_nation', "value" => set_value("adresse_nation"), "class" => "form-control adresse_nation");
+            $data = array('id' => 'adresse_nation' . $studiengang->studienplaene[0]->studienplan_id, 'name' => 'adresse_nation', "class" => "form-control adresse_nation");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
             echo form_dropdown("adresse_nation", $nationen, (isset($adresse->nation) ? $adresse->nation : null), $data); ?>
             <?php echo form_error("adresse_nation"); ?>
@@ -599,7 +599,7 @@ if (!isset($plz))
 <!--<div class="row">
 	<div class="col-sm-6">
 			<div class="form-group <?php echo ((form_error("plzOrt") != "") || (!isset($gemeinde_id) && $incomplete)) ? 'has-error' : '' ?>">
-				<?php echo form_label($this->lang->line('person_formPlzOrt'), "plzOrt", array("name" => "plzOrt", "for" => "plzOrt", "class" => "control-label")) ?>
+				<?php echo form_label($this->lang->line('person_formPlzOrt'), "plzOrt", array("class" => "control-label")) ?>
 				<?php echo form_dropdown("plzOrt", $plz, (isset($gemeinde_id) ? $gemeinde_id : null), array('id' => 'plzOrt', 'name' => 'plzOrt', "value" => set_value("plzOrt"), "class" => "form-control")); ?>
 				<?php echo form_error("plzOrt"); ?>
 			</div>
@@ -608,7 +608,7 @@ if (!isset($plz))
 <div class="row form-row">
     <div class="col-sm-6">
         <div class="form-group <?php echo ((form_error("strasse") != "") || (!isset($adresse->strasse) && $incomplete)) ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_strasse'), "strasse", array("name" => "strasse", "for" => "strasse", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_strasse'), "strasse", array("class" => "control-label")) ?>
             <?php
             $data = array('id' => 'strasse', 'name' => 'strasse', "type" => "text", "value" => set_value("strasse", (isset($adresse->strasse) ? $adresse->strasse : NULL)), "class" => "form-control");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -620,7 +620,7 @@ if (!isset($plz))
 <div class="row form-row">
     <div class="col-sm-3">
         <div class="form-group <?php echo ((form_error("plz") != "") || (!isset($adresse->plz) && $incomplete)) ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_formPlz'), "plz", array("name" => "plz", "for" => "plz", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_formPlz'), "plz", array("class" => "control-label")) ?>
             <?php
             $data = array('id' => 'plz', 'name' => 'plz', "type" => "text", "value" => set_value("plz", (isset($adresse->plz) ? $adresse->plz : NULL)), "class" => "form-control plz", "maxlength" => 16);
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -630,7 +630,7 @@ if (!isset($plz))
     </div>
     <div id="ort_input" class="col-sm-6 ort_input" style="display: none;">
         <div class="form-group <?php echo ((form_error("ort") != "") || (!isset($adresse->ort) && $incomplete)) ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_formOrt'), "ort", array("name" => "ort", "for" => "ort", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_formOrt'), "ort", array("class" => "control-label")) ?>
             <?php
             $data = array('id' => 'ort', 'name' => 'ort', "type" => "text", "value" => set_value("ort", (isset($adresse->ort) ? $adresse->ort : NULL)), "class" => "form-control");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -640,9 +640,9 @@ if (!isset($plz))
     </div>
     <div id="ort_dropdown" class="col-sm-6 ort_dropdown" style="display: none;">
         <div class="form-group <?php echo ((form_error("ort") != "") || (!isset($adresse->ort) && $incomplete)) ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_formOrt'), "ort", array("name" => "ort", "for" => "ort", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_formOrt'), "ort", array("class" => "control-label")) ?>
             <?php
-            $data = array('id' => 'ort', 'name' => 'ort_dd', "class" => "form-control");
+            $data = array('id' => 'ort_dd', 'name' => 'ort_dd', "class" => "form-control");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
             echo form_dropdown("ort_dd", null, (isset($ort_dd) ? $ort_dd : NULL), $data); ?>
             <?php echo form_error("ort"); ?>
@@ -652,7 +652,7 @@ if (!isset($plz))
 <!--<div class="row">
 		<div class="col-sm-6">
 			<div class="form-group <?php echo (form_error("bundesland") != "") ? 'has-error' : '' ?>">
-				<?php echo form_label($this->lang->line('person_formBundesland'), "bundesland", array("name" => "bundesland", "for" => "bundesland", "class" => "control-label")) ?>
+				<?php echo form_label($this->lang->line('person_formBundesland'), "bundesland", array("class" => "control-label")) ?>
 				<?php echo form_dropdown("bundesland", $bundeslaender, (isset($person->bundesland_code) ? $person->bundesland_code : NULL), array('id' => 'bundesland', 'name' => 'bundesland', "class" => "form-control")); ?>
 				<?php echo form_error("bundesland"); ?>
 			</div>
@@ -676,18 +676,18 @@ if (!isset($plz))
     </div>
 </div>
 <div id="zustelladresse_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" style="display: none;">
-    <legend class="">
-        <?php echo $this->getPhrase("Personal/Zustelladresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
+    <div class="">
+        <h3><?php echo $this->getPhrase("Personal/Zustelladresse", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?></h3>
         <div class="pull-right">
             <span class="incomplete"><?php echo ((isset($complete)) && (!$complete["zustelladresse"])) ? $this->lang->line("aufnahme/unvollstaendig") : ""; ?></span>
         </div>
-    </legend>
+    </div>
     <div class="row form-row">
         <div class="col-sm-6">
             <div class="form-group <?php echo ((form_error("zustelladresse_nation") != "") || (!isset($zustell_adresse->nation) && $incomplete)) ? 'has-error' : '' ?>">
-                <?php echo form_label($this->lang->line('person_formAdresseNation'), "zustelladresse_nation", array("name" => "zustelladresse_nation", "for" => "zustelladresse_nation", "class" => "control-label")) ?>
+                <?php echo form_label($this->lang->line('person_formAdresseNation'), "zustelladresse_nation", array("class" => "control-label")) ?>
                 <?php
-                $data = array('id' => 'zustelladresse_nation' . $studiengang->studienplaene[0]->studienplan_id, 'name' => 'zustelladresse_nation', "value" => set_value("zustelladresse_nation"), "class" => "form-control zustelladresse_nation");
+                $data = array('id' => 'zustelladresse_nation' . $studiengang->studienplaene[0]->studienplan_id, 'name' => 'zustelladresse_nation', "class" => "form-control zustelladresse_nation");
                 (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
                 echo form_dropdown("zustelladresse_nation", $nationen, (isset($zustell_adresse->nation) ? $zustell_adresse->nation : null), $data); ?>
                 <?php echo form_error("zustelladresse_nation"); ?>
@@ -697,7 +697,7 @@ if (!isset($plz))
     <!--<div class="row">
 			<div class="col-sm-6">
 			<div class="form-group <?php echo ((form_error("zustell_plzOrt") != "") || (!isset($zustell_gemeinde_id) && $incomplete)) ? 'has-error' : '' ?>">
-				<?php echo form_label($this->lang->line('person_formPlzOrt'), "zustell_plzOrt", array("name" => "zustell_plzOrt", "for" => "zustell_plzOrt", "class" => "control-label")) ?>
+				<?php echo form_label($this->lang->line('person_formPlzOrt'), "zustell_plzOrt", array("class" => "control-label")) ?>
 				<?php echo form_dropdown("zustell_plzOrt", $plz, (isset($zustell_gemeinde_id) ? $zustell_gemeinde_id : null), array('id' => 'zustell_plzOrt', 'name' => 'zustell_plzOrt', "value" => set_value("zustell_plzOrt"), "class" => "form-control")); ?>
 				<?php echo form_error("zustell_plzOrt"); ?>
 			</div>
@@ -706,7 +706,7 @@ if (!isset($plz))
     <div class="row form-row">
         <div class="col-sm-8">
             <div class="form-group <?php echo ((form_error("zustell_strasse") != "") || (!isset($zustell_adresse->strasse) && $incomplete)) ? 'has-error' : '' ?>">
-                <?php echo form_label($this->lang->line('person_strasse'), "zustell_strasse", array("name" => "zustell_strasse", "for" => "zustell_strasse", "class" => "control-label")) ?>
+                <?php echo form_label($this->lang->line('person_strasse'), "zustell_strasse", array("class" => "control-label")) ?>
                 <?php
                 $data = array('id' => 'zustell_strasse', 'name' => 'zustell_strasse', "type" => "text", "value" => set_value("zustell_strasse", (isset($zustell_adresse->strasse) ? $zustell_adresse->strasse : NULL)), "class" => "form-control");
                 (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -718,7 +718,7 @@ if (!isset($plz))
     <div class="row form-row">
         <div class="col-sm-3">
             <div class="form-group <?php echo ((form_error("zustell_plz") != "") || (!isset($zustell_adresse->plz) && $incomplete)) ? 'has-error' : '' ?>">
-                <?php echo form_label($this->lang->line('person_formPlz'), "zustell_plz", array("name" => "zustell_plz", "for" => "zustell_plz", "class" => "control-label")) ?>
+                <?php echo form_label($this->lang->line('person_formPlz'), "zustell_plz", array("class" => "control-label")) ?>
                 <?php
                 $data = array('id' => 'zustell_plz', 'name' => 'zustell_plz', "type" => "text", "value" => set_value("zustell_plz", (isset($zustell_adresse->plz) ? $zustell_adresse->plz : NULL)), "class" => "form-control zustell_plz", "maxlength" => 16);
                 (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -728,7 +728,7 @@ if (!isset($plz))
         </div>
         <div id="zustell_ort_input" class="col-sm-6 zustell_ort_input" style="display: none;">
             <div class="form-group <?php echo ((form_error("zustell_ort") != "") || (!isset($zustell_adresse->ort) && $incomplete)) ? 'has-error' : '' ?>">
-                <?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("name" => "zustell_ort", "for" => "zustell_ort", "class" => "control-label")) ?>
+                <?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("class" => "control-label")) ?>
                 <?php
                 $data = array('id' => 'zustell_ort', 'name' => 'zustell_ort', "type" => "text", "value" => set_value("zustell_ort", (isset($zustell_adresse->ort) ? $zustell_adresse->ort : NULL)), "class" => "form-control");
                 (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -738,9 +738,9 @@ if (!isset($plz))
         </div>
         <div id="zustell_ort_dropdown" class="col-sm-6 zustell_ort_dropdown" style="display: none;">
             <div class="form-group <?php echo ((form_error("zustell_ort") != "") || (!isset($zustell_adresse->ort) && $incomplete)) ? 'has-error' : '' ?>">
-                <?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("name" => "zustell_ort", "for" => "zustell_ort", "class" => "control-label")) ?>
+                <?php echo form_label($this->lang->line('person_formOrt'), "zustell_ort", array("class" => "control-label")) ?>
                 <?php
-                $data = array('id' => 'zustell_ort', 'name' => 'zustell_ort_dd', "value" => set_value("zustell_ort"), "class" => "form-control");
+                $data = array('id' => 'zustell_ort_dd', 'name' => 'zustell_ort_dd', "class" => "form-control");
                 (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
                 echo form_dropdown("zustell_ort_dd", null, null, $data); ?>
                 <?php echo form_error("zustell_ort"); ?>
@@ -748,16 +748,16 @@ if (!isset($plz))
         </div>
     </div>
 </div>
-<legend class="">
-    <?php echo $this->getPhrase("Personal/Kontakt", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
+<div class="">
+    <h3><?php echo $this->getPhrase("Personal/Kontakt", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?></h3>
     <div class="pull-right">
         <span class="incomplete"><?php echo ((isset($complete)) && (!$complete["kontakt"])) ? $this->lang->line("aufnahme/unvollstaendig") : ""; ?></span>
     </div>
-</legend>
+</div>
 <div class="row form-row">
     <div class="col-sm-6">
         <div class="form-group <?php echo ((form_error("telefon") != "") || (!isset($kontakt["telefon"]) && $incomplete)) ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_telefon'), "telefon", array("name" => "telefon", "for" => "telefon", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_telefon'), "telefon", array("class" => "control-label")) ?>
             <?php
             $data = array('id' => 'telefon', 'name' => 'telefon', "type" => "text", "value" => set_value("telefon", isset($kontakt["telefon"]) ? $kontakt["telefon"]->kontakt : ""), "class" => "form-control", "placeholder" => "0664 1234213");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -767,7 +767,7 @@ if (!isset($plz))
     </div>
     <!--		<div class="col-sm-6">
 			<div class="form-group <?php echo (form_error("fax") != "") ? 'has-error' : '' ?>">
-				<?php echo form_label($this->lang->line('person_fax'), "fax", array("name" => "fax", "for" => "fax", "class" => "control-label")) ?>
+				<?php echo form_label($this->lang->line('person_fax'), "fax", array("class" => "control-label")) ?>
 				<?php
     $data = array('id' => 'fax', 'name' => 'fax', "type" => "text", "value" => set_value("fax", isset($kontakt["fax"]) ? $kontakt["fax"]->kontakt : ""), "class" => "form-control");
     (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -777,7 +777,7 @@ if (!isset($plz))
 		</div>-->
     <div class="col-sm-6">
         <div class="form-group <?php echo (form_error("email") != "") ? 'has-error' : '' ?>">
-            <?php echo form_label($this->lang->line('person_emailAdresse'), "email", array("name" => "email", "for" => "email", "class" => "control-label")) ?>
+            <?php echo form_label($this->lang->line('person_emailAdresse'), "email", array("class" => "control-label")) ?>
             <?php
             $data = array('id' => 'email', 'name' => 'email', "type" => "email", "value" => set_value("email", isset($kontakt["email"]) ? $kontakt["email"]->kontakt : ""), "class" => "form-control");
             (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)) ? $data["disabled"] = "disabled" : "";
@@ -786,13 +786,13 @@ if (!isset($plz))
         </div>
     </div>
 </div>
-<legend class="">
-    <?php echo $this->getPhrase("Personal/DokumentenUpload", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>
+<div class="">
+    <h3><?php echo $this->getPhrase("Personal/DokumentenUpload", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?></h3>
     <div class="pull-right">
         <span id="document_incomplete"
               class="incomplete"><?php echo ((isset($complete)) && (!$complete["dokumente"])) ? $this->lang->line("aufnahme/unvollstaendig") : ""; ?></span>
     </div>
-</legend>
+</div>
 <div class="row form-row">
     <div class="col-sm-12">
         <div class="form-group">
@@ -802,7 +802,7 @@ if (!isset($plz))
 </div>
 <div class="row form-upload <?php echo ((!isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]) && $incomplete)) ? 'has-error' : '' ?>">
     <div class="col-sm-2">
-        <?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["reisepass"]]->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index - 1] . "*", "reisepass", array("name" => "reisepass", "for" => "reisepass", "class" => "control-label")) ?>
+        <?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["reisepass"]]->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index - 1] . "*", "reisepass", array("class" => "control-label")) ?>
     </div>
     <?php
     if (isset($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->mimetype))
@@ -839,7 +839,7 @@ if (!isset($plz))
         if (isset($logo) && ($logo != false))
         {
             ?>
-            <img class="document_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" width="30"
+            <img class="document_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" width="30" alt="Dokument Logo"
                  src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/' . $logo); ?>"/>
             <?php
         }
@@ -916,7 +916,7 @@ if (!isset($plz))
 </div>
 <div class="row form-upload <?php echo ((!isset($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]) && $incomplete)) ? 'has-error' : '' ?>">
     <div class="col-sm-2">
-        <?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["lebenslauf"]]->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index - 1] . "*" . "&nbsp;", "lebenslauf", array("name" => "lebenslauf", "for" => "lebenslauf", "class" => "control-label")) ?>
+        <?php echo form_label($personalDocuments[$this->config->config["dokumentTypen"]["lebenslauf"]]->bezeichnung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index - 1] . "*" . "&nbsp;", "lebenslauf", array("class" => "control-label")) ?>
         <?php if(isset($personalDocuments[$this->config->config["dokumentTypen"]["lebenslauf"]]->dokumentbeschreibung_mehrsprachig[$this->session->{'Sprache.getSprache'}->retval->index - 1]))
         {
             ?>
@@ -962,7 +962,7 @@ if (!isset($plz))
         if (isset($logo) && ($logo != false))
         {
             ?>
-            <img class="document_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" width="30"
+            <img class="document_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>" width="30" alt="Dokument Logo"
                  src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/' . $logo); ?>"/>
             <?php
         }

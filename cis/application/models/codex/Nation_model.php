@@ -22,7 +22,7 @@ class Nation_model extends REST_Model
 		
 		if (!is_array($nations))
 		{
-			$nationsArray = array('null' => '');
+			$nationsArray = array('null' => 'keine Auswahl');
 			
 			if (isSuccess($nations))
 			{

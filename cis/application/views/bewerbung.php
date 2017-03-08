@@ -70,8 +70,8 @@ foreach ($studiengaenge as $studiengang)
                                 <?php
                                 if((isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true)))
                                 {
-                                    echo '<a href="'.site_url("/Requirements?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id).'">
-                                    <button type="button" class="btn btn-primary icon-absenden">'.$this->lang->line("person_weiter").'</button>';
+                                    echo '<a class="btn btn-primary icon-absenden" href="'.site_url("/Requirements?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id).'">
+                                    '.$this->lang->line("person_weiter").'</a>';
                                 }
                                 else
                                 {

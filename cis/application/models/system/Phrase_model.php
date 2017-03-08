@@ -22,7 +22,8 @@ class Phrase_model extends REST_Model
 			'system/Phrase/Phrases',
 			array(
 				'app' => $app,
-				'sprache' => $sprache
+				'sprache' => $sprache,
+                'blockTags' => "no"
 			),
 			'Phrase.getPhrasen:' . strtolower($sprache),
 			$authNotRequired
