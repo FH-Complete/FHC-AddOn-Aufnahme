@@ -8,7 +8,7 @@
 
 <div id="iconHeader">
 	<div id="iconHeaderIcon">
-		<img id="logo_head" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/logo.png'); ?>" />
+		<img id="logo_head" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/logo.png'); ?>" alt="header logo"/>
 	</div>
 	<div id="iconHeaderTitle">
 	<?php
