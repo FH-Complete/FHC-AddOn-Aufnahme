@@ -395,8 +395,8 @@ class Send extends UI_Controller
                                 $studiengang = $this->getData("studiengang");
                                 $studiengang->studiengangstyp = $this->StudiengangstypModel->getStudiengangstyp($studiengang->typ)->retval;
 
-                                $this->_sendMessageMailApplicationConfirmation($this->getData("person"), $studiengang);
-                                $this->_sendMessageMailNewApplicationInfo($this->getData("person"), $studiengang);
+                                $this->_sendMessageMailApplicationConfirmation($this->getData("person"), $studiengang, $studienplan_id);
+                                $this->_sendMessageMailNewApplicationInfo($this->getData("person"), $studiengang, $studienplan_id);
 
                                 if ($this->getData('error') !== null)
                                 {
@@ -461,7 +461,7 @@ class Send extends UI_Controller
         $this->setRawData('error', $error);
     }
 
-    private function _sendMessageMailApplicationConfirmation($person, $studiengang)
+    private function _sendMessageMailApplicationConfirmation($person, $studiengang, $studienplan_id)
     {
         $data = array(
             "anrede" => (is_null($person->anrede)) ? "" : $person->anrede,
@@ -473,6 +473,14 @@ class Send extends UI_Controller
 
         $oe = $studiengang->oe_kurzbz;
         $orgform_kurzbz = $studiengang->orgform_kurzbz;
+
+        foreach($studiengang->studienplaene as $stpl)
+        {
+            if($stpl->studienplan_id == $studienplan_id)
+            {
+                $orgform_kurzbz = $stpl->orgform_kurzbz;
+            }
+        }
 
         (isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData("sprache");
 
@@ -502,7 +510,7 @@ class Send extends UI_Controller
     }
 
 
-    private function _sendMessageMailNewApplicationInfo($person, $studiengang)
+    private function _sendMessageMailNewApplicationInfo($person, $studiengang, $studienplan_id)
     {
         $data = array(
             "anrede" => (is_null($person->anrede)) ? "" : $person->anrede,
@@ -514,6 +522,14 @@ class Send extends UI_Controller
 
         $oe = $studiengang->oe_kurzbz;
         $orgform_kurzbz = $studiengang->orgform_kurzbz;
+
+        foreach($studiengang->studienplaene as $stpl)
+        {
+            if($stpl->studienplan_id == $studienplan_id)
+            {
+                $orgform_kurzbz = $stpl->orgform_kurzbz;
+            }
+        }
 
         (isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData("sprache");
         /*
