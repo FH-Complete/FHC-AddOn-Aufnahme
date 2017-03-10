@@ -30,6 +30,9 @@ $this->load->view('templates/iconHeader', array("name"=>$person->vorname." ".$pe
 echo $this->template->widget("menu", array('aktiv' => 'Aufnahmetermine', 'numberOfUnreadMessages' => $numberOfUnreadMessages, 'studiengaenge' => $studiengaenge)); ?>
     <div class="row">
         <div class="col-sm-12">
+            <?php
+                echo (isset($anmeldeInfoMessage))? "<div class='alert alert-success'>".$anmeldeInfoMessage."</div>":"";
+            ?>
             <?php $this->load_views('view_aufnahmetermine'); ?>
         </div>
     </div>

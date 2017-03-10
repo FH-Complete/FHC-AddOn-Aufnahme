@@ -1119,5 +1119,25 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
             'text' => 'Drittes Aufnahmeverfahren',
             'description' => ''
         )
+    ),
+    array
+    (
+        'phrase' => 'Test/NachrichtWirdInKuerzeGesendet',
+        'phrasentext' => array
+        (
+            'sprache' => 'German',
+            'text' => 'Sie erhalten in kürze eine Nachricht mit detailierten Informationen zum Aufnahmetest.',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'Test/NachrichtWirdInKuerzeGesendet',
+        'phrasentext' => array
+        (
+            'sprache' => 'English',
+            'text' => 'Sie erhalten in kürze eine Nachricht mit detailierten Informationen zum Aufnahmetest.',
+            'description' => ''
+        )
     )
 );
