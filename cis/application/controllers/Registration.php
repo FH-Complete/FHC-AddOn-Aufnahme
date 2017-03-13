@@ -210,8 +210,7 @@ class Registration extends UI_Controller
                     $person->zugangscode = substr(md5(openssl_random_pseudo_bytes(20)), 0, 10);
                     $this->PersonModel->savePerson((array)$person);
 
-                    $message = $this->resendMail($person->zugangscode, $this->getData('email'), $person->person_id);
-                    $this->setRawData('message', $message);
+                    $this->resendMail($person->zugangscode, $this->getData('email'), $person);
                 }
                 else
                 {
@@ -447,39 +446,48 @@ class Registration extends UI_Controller
 		redirect("/Registration/confirm?code=&email=".$email."&studiengang_kz=".$studiengang_kz);
 	}
 	
-	private function resendMail($zugangscode, $email, $person_id = null)
+	private function resendMail($zugangscode, $email, $person)
     {
-		if ($person_id != '')
-		{
-			$person = $this->PersonModel->getPersonByPersonId($person_id);
-			if (hasData($person))
-			{
-				$vorname = $person->retval->vorname;
-				$nachname = $person->retval->nachname;
-				$geschlecht = $person->retval->geschlecht;
-			}
-		}
 
-		if ($geschlecht == 'm')
-			$anrede = $this->lang->line('aufnahme/anredeMaennlich');
-		elseif($geschlecht == 'w')
-			$anrede = $this->lang->line('aufnahme/anredeWeiblich');
-		else
-			$anrede = $this->lang->line('aufnahme/anredeUnknown');
+        $link = site_url('/Registration/confirm?code='.$zugangscode.'&studiengang_kz=&email='.$email);
 
-		$this->load->library('mail', array('to' => $email, 'from' => 'no-reply', 'subject' => $this->lang->line('aufnahme/registration'), 'text' => $this->lang->line('aufnahme/mailtextHtml')));
-		$text = sprintf($this->lang->line('aufnahme/mailtext'), $vorname, $nachname, $zugangscode, $anrede, NULL, $email);
-		$this->mail->setHTMLContent($text);
-		if (!$this->mail->send())
-		{
-			$msg = '<span class="error">' . $this->lang->line('aufnahme/fehlerBeimSenden') . '</span><br /><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
-		}
-		else
-		{
-			$msg = sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . '<br><br><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>';
-		}
+        $data = array(
+            'anrede' => (is_null($person->anrede)) ? '' : $person->anrede,
+            'vorname' => $person->vorname,
+            'nachname' => $person->nachname,
+            'link' => $link,
+            'eMailAdresse' => $email
+        );
 
-		return $msg;
+        if ($this->config->item('root_oe'))
+            $oe = $this->config->item('root_oe');
+        else
+            $oe = 'fhstp';
+
+        (isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData('sprache');
+
+        $message = $this->MessageModel->sendMessageVorlage('MailRegistrationResend', $oe, $data, $sprache, null, null, false, $person->person_id);
+        
+        if (hasData($message))
+        {
+            $this->setRawData(
+                'message',
+                sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . '<br><br><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
+            );
+        }
+        else
+        {
+            $this->setRawData(
+                'message',
+                '<div class=\'alert alert-success\'>'.
+                '<span class="error">'
+                . $this->lang->line('aufnahme/fehlerBeimSenden')
+                . '</span>
+                <br />
+                <a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
+            );
+            $this->_setError(true, $message->error . ' ' . $message->fhcCode);
+        }
 	}
 
 
