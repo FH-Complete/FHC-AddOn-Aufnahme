@@ -146,6 +146,7 @@ if (!isset($plz))
             },
             done: function (e, data)
             {
+                console.log(data);
                 var msg = "";
                 if (data.result.success === true)
                 {
@@ -153,7 +154,8 @@ if (!isset($plz))
                     $('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').parent().hide();
                     $('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').hide();
                     $('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').append(
-                        '<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(' + data.result.dms_id + ', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>');
+                        '<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(' + data.result.dms_id + ', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>'+
+                        '<a href="<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/"; ?>'+data.result.dms_id+'" target="_blank"><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-download-alt"></span></button>');
                     $('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("disabled", true);
                     $('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("checked", false);
                     $('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?> .progress-bar').css(
@@ -255,7 +257,8 @@ if (!isset($plz))
                     $('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').parent().hide();
                     $('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').hide();
                     $('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').append(
-                        '<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(' + data.result.dms_id + ', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>');
+                        '<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(' + data.result.dms_id + ', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>'+
+                        '<a href="<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/"; ?>'+data.result.dms_id+'" target="_blank"><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-download-alt"></span></button>');
                     $('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("disabled", true);
                     $('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("checked", false);
                     $('#<?php echo $this->config->config["dokumentTypen"]["lebenslauf"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?> .progress-bar').css(
@@ -896,7 +899,13 @@ if (!isset($plz))
             { ?>
                 <button type="button" class="btn btn-sm btn-primary"
                         onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id; ?>, <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true) && ($dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->accepted === true)) ? "disabled='disabled'" : ""; ?> >
-                    <span class="glyphicon glyphicon-trash"></span></button>
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+                <a href='<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/".$dokumente[$this->config->config["dokumentTypen"]["reisepass"]]->dms_id; ?>' target="_blank">
+                    <button type="button" class="btn btn-sm btn-primary">
+                        <span class="glyphicon glyphicon-download-alt"></span>
+                    </button>
+                </a>
                 <?php
             }
             ?>
@@ -1019,7 +1028,13 @@ if (!isset($plz))
             { ?>
                 <button type="button" class="btn btn-sm btn-primary"
                         onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id; ?>, <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt == true) && ($dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->accepted === true)) ? "disabled='disabled'" : ""; ?>>
-                    <span class="glyphicon glyphicon-trash"></span></button>
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+                <a href='<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/".$dokumente[$this->config->config["dokumentTypen"]["lebenslauf"]]->dms_id; ?>' target="_blank">
+                    <button type="button" class="btn btn-sm btn-primary">
+                        <span class="glyphicon glyphicon-download-alt"></span>
+                    </button>
+                </a>
                 <?php
             }
             ?>

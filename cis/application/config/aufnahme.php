@@ -290,3 +290,11 @@ $config['ZgvOptionsMapping'] = array(
 	"b" => "ZGV/OptionsBachelor",
 	"m" => "ZGV/OptionsMaster"
 );
+
+/*
+|--------------------------------------------------------------------------
+| Path to a directory where documents can be temporarily created for downlaod
+| Documents will be deleted automatically after download
+|--------------------------------------------------------------------------
+*/
+$config['document_download_path'] = "";

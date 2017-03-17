@@ -129,6 +129,11 @@
 				{
 				?>
 					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dok->dokument->dms_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>
+                    <a href='<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/". $dok->dokument->dms_id; ?>' target="_blank">
+                        <button type="button" class="btn btn-sm btn-primary">
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                        </button>
+                    </a>
 				<?php
 				}
 				?>
@@ -199,7 +204,9 @@
 				if (data.result.success === true)
 				{
 					msg = "Upload erfolgreich";
-					$('#<?php echo $dok->dokument_kurzbz; ?>_delete').append('<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+');"><span class="glyphicon glyphicon-trash"></span></button>');
+					$('#<?php echo $dok->dokument_kurzbz; ?>_delete')
+                        .append('<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+');"><span class="glyphicon glyphicon-trash"></span></button>'+
+                        '<a href="<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/"; ?>'+data.result.dms_id+'" target="_blank"><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-download-alt"></span></button>');
 					$('#<?php echo $dok->dokument_kurzbz; ?>_Upload').hide();
 					
 

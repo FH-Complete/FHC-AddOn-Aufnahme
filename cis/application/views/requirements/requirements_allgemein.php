@@ -173,6 +173,11 @@
 			<div id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>">
 				<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]])) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->nachgereicht == false) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->accepted === false)) { ?>
 					<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dms_id; ?>, <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->accepted ===true)) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
+                    <a href='<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/".$dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]->dms_id; ?>' target="_blank">
+                        <button type="button" class="btn btn-sm btn-primary">
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                        </button>
+                    </a>
 				<?php
 				}
 				?>
@@ -281,6 +286,11 @@
 				<div id="<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>">
 					<?php if((isset($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]])) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->nachgereicht == false) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id != null) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->accepted == false)) { ?>
 						<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id; ?>, <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->accepted ===true)) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
+                        <a href='<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/".$dokumente[$this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]]->dms_id; ?>' target="_blank">
+                            <button type="button" class="btn btn-sm btn-primary">
+                                <span class="glyphicon glyphicon-download-alt"></span>
+                            </button>
+                        </a>
 					<?php
 					}
 					?>
@@ -365,7 +375,8 @@
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').parent().hide();
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').hide();
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').append(
-							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>');
+							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>'+
+                            '<a href="<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/"; ?>'+data.result.dms_id+'" target="_blank"><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-download-alt"></span></button>');
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("disabled", true);
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("checked", false);
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?> .progress-bar').css(
@@ -464,7 +475,8 @@
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').parent().hide();
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').hide();
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').append(
-							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>');
+							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>'+
+                            '<a href="<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/"; ?>'+data.result.dms_id+'" target="_blank"><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-download-alt"></span></button>');
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("disabled", true);
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("checked", false);
 					$('#<?php echo $this->config->config["dokumentTypen"]["letztGueltigesZeugnis"]; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?> .progress-bar').css(

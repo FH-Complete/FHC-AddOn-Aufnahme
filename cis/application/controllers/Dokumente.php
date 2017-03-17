@@ -77,6 +77,67 @@ class Dokumente extends UI_Controller
         $this->load->view('dokumente', $this->getAllData());
     }
 
+    public function download($dms_id)
+    {
+        $this->setData('person', $this->PersonModel->getPerson());
+
+        $this->_loadData();
+
+        $dms = null;
+        foreach($this->getData("dokumente") as $dok)
+        {
+            if($dok->dms_id == $dms_id)
+            {
+                $dms = $dok;
+            }
+        }
+
+        if($dok != null)
+        {
+            if($this->getData('person')->person_id == $dok->person_id)
+            {
+                $file = $this->config->item("document_download_path").$dms->name;
+                file_put_contents($file, base64_decode($dms->file_content));
+
+                if (file_exists($file))
+                {
+                    if ($handle = fopen($file, "r"))
+                    {
+                        if ($dms->mimetype == '')
+                            $dms->mimetype = 'application/octetstream';
+
+                        header('Content-type: ' . $dms->mimetype);
+                        header('Content-Disposition: inline; filename="' . $dms->name . '"');
+                        header('Content-Length: ' . filesize($file));
+
+                        while (!feof($handle))
+                        {
+                            echo fread($handle, 8192);
+                        }
+                        fclose($handle);
+                        unlink($file);
+                    }
+                    else
+                    {
+                        echo 'Fehler: Datei konnte nicht geoeffnet werden';
+                    }
+                }
+                else
+                {
+                    echo 'Die Datei konnte nicht erstellt werden.';
+                }
+            }
+            else
+            {
+                echo 'Sie sind nicht berechtigt diese Datei herunterzuladen.';
+            }
+        }
+        else
+        {
+            echo "dok not found";
+        }
+    }
+
     /**
      *
      */

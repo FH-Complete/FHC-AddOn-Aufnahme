@@ -146,6 +146,11 @@
 					<div id="<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>">
 						<?php if((isset($dokumente[$dok->dokument_kurzbz])) && ($dokumente[$dok->dokument_kurzbz]->nachgereicht == false) && ($dokumente[$dok->dokument_kurzbz]->dms_id != null) && ($dokumente[$dok->dokument_kurzbz]->accepted ===false)) { ?>
 							<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument(<?php echo $dokumente[$dok->dokument_kurzbz]->dms_id; ?>, <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);" <?php echo (isset($bewerbung_abgeschickt) && ($bewerbung_abgeschickt==true) && ($dokumente[$dok->dokument_kurzbz]->accepted ===true)) ? "disabled='disabled'":"";?>><span class="glyphicon glyphicon-trash"></span></button>
+                            <a href='<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/". $dokumente[$dok->dokument_kurzbz]->dms_id; ?>' target="_blank">
+                                <button type="button" class="btn btn-sm btn-primary">
+                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                </button>
+                            </a>
 						<?php
 						}
 						?>
@@ -201,7 +206,8 @@
 					$('#<?php echo $dok->dokument_kurzbz; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').parent().hide();
 					$('#<?php echo $dok->dokument_kurzbz; ?>Progress_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').hide();
 					$('#<?php echo $dok->dokument_kurzbz; ?>Delete_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').append(
-							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>');
+							'<button type="button" class="btn btn-sm btn-primary" onclick="deleteDocument('+data.result.dms_id+', <?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);"><span class="glyphicon glyphicon-trash"></span></button>'+
+                            '<a href="<?php echo base_url($this->config->config["index_page"])."/Dokumente/download/"; ?>'+data.result.dms_id+'" target="_blank"><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-download-alt"></span></button>');
 					$('#<?php echo $dok->dokument_kurzbz; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("disabled", true);
 					$('#<?php echo $dok->dokument_kurzbz; ?>_nachgereicht_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').prop("checked", false);
 					toggleDateField(<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>);
