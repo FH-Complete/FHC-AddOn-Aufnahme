@@ -65,8 +65,16 @@ if (!isset($_GET['start']))
 
 echo '<h2>Aktualisierung der Datenbank</h2>';
 
-// Check ob App in system.tbl_app angelegt ist.
-// ToDo:
+if($result = $db->db_query("SELECT 1 FROM system.tbl_app WHERE app=".$db->db_add_param($app)))
+{
+	if($db->db_num_rows($result)==0)
+	{
+		if($db->db_query("INSERT INTO system.tbl_app(app) VALUES(".$db->db_add_param($app).");"))
+			echo 'Neue APP in system.tbl_app hinzugefügt';
+		else
+			echo 'Fehler beim Anlegen der APP in system.tbl_app';
+	}
+}
 
 // Textphrasen holen
 require_once 'textphrasen.php';
