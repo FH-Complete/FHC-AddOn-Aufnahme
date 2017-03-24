@@ -143,7 +143,12 @@ class Studiengaenge extends UI_Controller
 								$stg->studienplaene[$key_studienplaene]->fristen[] = $row_bewerbungstermin;
 							}
 						}
+						if(empty($stg->studienplaene[$key_studienplaene]->fristen))
+                        {
+                            unset($stg->studienplaene[$key_studienplaene]);
+                        }
 					}
+                    $stg->studienplaene = array_values($stg->studienplaene);
 					$this->benchmark->mark('codepart_end');
 					log_message('debug', 'Time elapsed for Studiengaenge/index->Reihunstest/Termin: ' . $this->benchmark->elapsed_time('codepart_start', 'codepart_end') . 'ms');
 
