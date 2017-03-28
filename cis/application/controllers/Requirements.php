@@ -141,12 +141,15 @@ class Requirements extends UI_Controller
             $geplanter_abschluss[$this->getData('prestudent')->studiengang_kz] = $this->getData('prestudent')->zgvdatum;
             $this->setRawData('geplanter_abschluss', $geplanter_abschluss);
 
+            $this->setRawData('dokumente', $this->AkteModel->getAktenAccepted()->retval);
+
             if (isset($this->input->post()["studiengang_kz"]))
             {
                 if ($this->getData('prestudent')->studiengang_kz == $this->input->post()["studiengang_kz"])
                 {
                     if((isset($this->input->post()[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ] . "_nachreichenDatum_" . $this->input->post("studienplan_id")]))
-                        && ($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ] . "_nachreichenDatum_" . $this->input->post("studienplan_id")) != ''))
+                        && ($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ] . "_nachreichenDatum_" . $this->input->post("studienplan_id")) != '')
+                    )
                     {
                         $prestudent = $this->getData('prestudent');
                         $prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ] . "_nachreichenDatum_" . $this->input->post("studienplan_id"))));
@@ -161,8 +164,11 @@ class Requirements extends UI_Controller
                     }
                     else
                     {
-                        $this->_setError(true, $this->lang->line("requirements_nachreichenAbschlussGeplantDatumFehlt"));
-                        $this->setRawData('geplanter_abschluss_date_fehlt', true);
+                        if(!isset($this->getData('dokumente')[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+                        {
+                            $this->_setError(true, $this->lang->line("requirements_nachreichenAbschlussGeplantDatumFehlt"));
+                            $this->setRawData('geplanter_abschluss_date_fehlt', true);
+                        }
                     }
                 }
             }
@@ -231,7 +237,7 @@ class Requirements extends UI_Controller
             }
 
             //load dokumente
-            $this->setRawData('dokumente', $this->AkteModel->getAktenAccepted()->retval);
+
             $dokumente = $this->getData('dokumente');
 
             if (($this->input->post("doktype") != null) && ($this->input->post("doktype") !== ""))

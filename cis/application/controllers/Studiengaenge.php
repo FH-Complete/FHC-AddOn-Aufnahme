@@ -92,25 +92,28 @@ class Studiengaenge extends UI_Controller
 
             $studiengaenge = array();
 
-            foreach($this->getData("studiengaenge") as $stg)
+            if(is_array($this->getData("studiengaenge")))
             {
-                if((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
+                foreach ($this->getData("studiengaenge") as $stg)
                 {
-                    foreach($stg->prestudenten as $key => $ps)
+                    if ((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
                     {
-                        $tempStg = clone $stg;
-                        $tempStg->prestudenten = array();
-                        $tempStg->prestudenten[0] = $ps;
-                        $tempStg->prestudentstatus = array();
-                        $tempStg->prestudentstatus[0] = $stg->prestudentstatus[$key];
-                        $tempStg->studienplaene = array();
-                        $tempStg->studienplaene[0] = $stg->studienplaene[$key];
-                        array_push($studiengaenge, $tempStg);
+                        foreach ($stg->prestudenten as $key => $ps)
+                        {
+                            $tempStg = clone $stg;
+                            $tempStg->prestudenten = array();
+                            $tempStg->prestudenten[0] = $ps;
+                            $tempStg->prestudentstatus = array();
+                            $tempStg->prestudentstatus[0] = $stg->prestudentstatus[$key];
+                            $tempStg->studienplaene = array();
+                            $tempStg->studienplaene[0] = $stg->studienplaene[$key];
+                            array_push($studiengaenge, $tempStg);
+                        }
                     }
-                }
-                else
-                {
-                    array_push($studiengaenge, $stg);
+                    else
+                    {
+                        array_push($studiengaenge, $stg);
+                    }
                 }
             }
 
