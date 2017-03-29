@@ -114,8 +114,9 @@ class Aufnahmetermine extends UI_Controller
                 $rtToInsert->rt_id = $this->input->post()["rtTermin"];
                 $rtToInsert->studienplan_id = $studienplan_id;
                 $rtToInsert->anmeldedatum = date('Y-m-d');
+                
                 //check if new registration or change
-                if (($this->getData("anmeldungen") !== null) && (!empty($this->getData("anmeldungen")[$studiengang_kz])))
+                if (($this->getData("anmeldungen") !== null) && (!empty($this->getData("registeredReihungstests")[$studiengang_kz])))
                 {
                     foreach ($this->getData("anmeldungen") as $key => $anmeldungen)
                     {
@@ -399,9 +400,11 @@ class Aufnahmetermine extends UI_Controller
 	{
 		$anmeldungen = $this->ReihungstestModel->getReihungstestByPersonID();
 		$registeredReihungstests = array();
+		$anmeldungen_array = array();
 		
 		if (hasData($anmeldungen))
 		{
+
 			foreach($anmeldungen->retval as $registeredReihungstest)
 			{
 				if (isset($registeredReihungstests[$registeredReihungstest->studiengang_kz])
@@ -409,6 +412,13 @@ class Aufnahmetermine extends UI_Controller
 				{
 					$registeredReihungstests[$registeredReihungstest->studiengang_kz] = array();
 				}
+
+                if (!isset($anmeldungen_array[$registeredReihungstest->studiengang_kz]))
+                {
+                    $anmeldungen_array[$registeredReihungstest->studiengang_kz] = array();
+                }
+
+                array_push($anmeldungen_array[$registeredReihungstest->studiengang_kz], $registeredReihungstest);
 				
 				$stufe = 0;
 				if ($registeredReihungstest->stufe != null)
@@ -428,6 +438,7 @@ class Aufnahmetermine extends UI_Controller
 			}
 		}
 
+        $this->setRawData('anmeldungen', $anmeldungen_array);
         $this->setRawData('registeredReihungstests', $registeredReihungstests);
 	}
 
