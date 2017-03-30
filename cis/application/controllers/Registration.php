@@ -266,7 +266,7 @@ class Registration extends UI_Controller
 				'message',
 				'<span class="error">' . $this->lang->line('aufnahme/emailFehlt') . '</span>
 				<br />
-				<a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
+				<a href=' . base_url($this->config->config['index_page']) . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
 			);
 			$this->setRawData('email', '');
 			$this->load->view('login/confirm_login', $this->getAllData());
@@ -293,7 +293,7 @@ class Registration extends UI_Controller
 					'message',
 					'<span class="error">' . $this->lang->line('aufnahme/codeNichtMehrGueltig') . '</span>
 					<br />
-					<a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>')
+					<a href=' . base_url($this->config->config['index_page']) . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>')
 				;
 				$this->load->view('login/confirm_error',  $this->getAllData());
 			}
@@ -309,7 +309,7 @@ class Registration extends UI_Controller
 				'message',
 				'<span class="error">' . $this->lang->line('aufnahme/fehler') . '</span>
 				<br />
-				<a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
+				<a href=' . base_url($this->config->config['index_page']) . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
 			);
 			$this->setRawData('email', '');
 			$this->load->view('login/confirm_login',  $this->getAllData());
@@ -340,7 +340,7 @@ class Registration extends UI_Controller
 			if (hasData($bewerbung))
 			{
 				$data['message'] = '<p class="alert alert-danger" id="danger-alert">' . sprintf($this->lang->line('aufnahme/mailadresseBereitsGenutzt'), $data['email']) . '</p>'
-					. '<a href="' . base_url('index.dist.php/Registration/resendCode?email='.$this->getData('email')) . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button></a>';
+					. '<a href="' . base_url($this->config->config['index_page'].'/Registration/resendCode?email='.$this->getData('email')) . '"><button type="submit" class="btn btn-primary">' . $this->lang->line('aufnahme/codeZuschicken') . '</button></a>';
 				$this->load->view('registration', $data);
 			}
 			else
@@ -472,7 +472,7 @@ class Registration extends UI_Controller
         {
             $this->setRawData(
                 'message',
-                sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . '<br><br><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
+                sprintf($this->lang->line('aufnahme/emailgesendetan'), $email) . '<br><br><a href=' . base_url($this->config->config['index_page']) . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
             );
         }
         else
@@ -484,7 +484,7 @@ class Registration extends UI_Controller
                 . $this->lang->line('aufnahme/fehlerBeimSenden')
                 . '</span>
                 <br />
-                <a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
+                <a href=' . base_url($this->config->config['index_page']) . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
             );
             $this->_setError(true, $message->error . ' ' . $message->fhcCode);
         }
@@ -529,7 +529,6 @@ class Registration extends UI_Controller
 					$this->config->item('root_oe')),
 					$email
 				).'</div>'
-                //. '<br><br><a href=' . base_url('index.dist.php') . '>' . $this->lang->line('aufnahme/zurueckZurAnmeldung') . '</a>'
 			);
 		}
 		else

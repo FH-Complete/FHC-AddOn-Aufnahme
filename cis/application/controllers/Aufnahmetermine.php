@@ -114,7 +114,7 @@ class Aufnahmetermine extends UI_Controller
                 $rtToInsert->rt_id = $this->input->post()["rtTermin"];
                 $rtToInsert->studienplan_id = $studienplan_id;
                 $rtToInsert->anmeldedatum = date('Y-m-d');
-                
+
                 //check if new registration or change
                 if (($this->getData("anmeldungen") !== null) && (!empty($this->getData("registeredReihungstests")[$studiengang_kz])))
                 {
