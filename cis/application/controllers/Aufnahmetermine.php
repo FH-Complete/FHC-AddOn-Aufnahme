@@ -263,7 +263,7 @@ class Aufnahmetermine extends UI_Controller
 
         $this->setRawData("prestudentStufen", $prestudentStufen);
         $this->setRawData("studiengaenge", $studiengaenge);
-        
+
         //load preinteressent data
         $this->setData(
             'prestudent',
@@ -277,7 +277,7 @@ class Aufnahmetermine extends UI_Controller
         );
 
         $this->_loadAvailablesTests();
-        
+
         $this->_loadRegisteredTests();
     }
 
@@ -353,21 +353,21 @@ class Aufnahmetermine extends UI_Controller
 
         $this->setRawData('error', $error);
     }
-	
-    private function _loadAvailablesTests()
+
+	private function _loadAvailablesTests()
 	{
 		$reihungstestsStg = $this->ReihungstestModel->getAvailableReihungstestByPersonId();
 
 		$reihungstests = array();
 		$reihungstestData = array();
-		
+
 		if (hasData($reihungstestsStg))
 		{
 			foreach ($reihungstestsStg->retval as $stg)
 			{
 				$tmp = new stdClass();
 				$tmp->reihungstest = array();
-				
+
 				if (is_array($stg->reihungstest))
 				{
 					foreach($stg->reihungstest as $reihungstest)
@@ -376,32 +376,39 @@ class Aufnahmetermine extends UI_Controller
 						{
 							$reihungstest->stufe = 0;
 						}
-						
+
 						if (isset($tmp->reihungstest[$reihungstest->stufe]) && !is_array($tmp->reihungstest[$reihungstest->stufe]))
 						{
 							$tmp->reihungstest[$reihungstest->stufe] = array();
 						}
 
 						$reihungstestData[$reihungstest->reihungstest_id] = $reihungstest;
-						
-						$tmp->reihungstest[$reihungstest->stufe][$reihungstest->reihungstest_id] = date('d.m.Y', strtotime($reihungstest->datum));
+
+						$uhrzeit = '';
+						if ($reihungstest->uhrzeit != null && $reihungstest->uhrzeit != '')
+							$uhrzeit = date('h:i', strtotime($reihungstest->uhrzeit));
+						$anmerkung = '';
+						if ($reihungstest->anmerkung != null && $reihungstest->anmerkung != '')
+							$anmerkung = '- '.$reihungstest->anmerkung;
+
+						$tmp->reihungstest[$reihungstest->stufe][$reihungstest->reihungstest_id] = date('d.m.Y', strtotime($reihungstest->datum)).' '.$uhrzeit.' '.$anmerkung ;
 					}
 				}
-				
+
 				$reihungstests[$stg->studiengang_kz] = $tmp;
 			}
 		}
-		
+
 		$this->setRawData('reihungstests', $reihungstests);
         $this->setRawData('reihungstestData', $reihungstestData);
 	}
-	
+
 	private function _loadRegisteredTests()
 	{
 		$anmeldungen = $this->ReihungstestModel->getReihungstestByPersonID();
 		$registeredReihungstests = array();
 		$anmeldungen_array = array();
-		
+
 		if (hasData($anmeldungen))
 		{
 
@@ -419,7 +426,7 @@ class Aufnahmetermine extends UI_Controller
                 }
 
                 array_push($anmeldungen_array[$registeredReihungstest->studiengang_kz], $registeredReihungstest);
-				
+
 				$stufe = 0;
 				if ($registeredReihungstest->stufe != null)
 				{
@@ -433,7 +440,7 @@ class Aufnahmetermine extends UI_Controller
                         $registeredReihungstests[$key][$stufe] = $registeredReihungstest->reihungstest_id;
                     }
                 }
-				
+
 
 			}
 		}
