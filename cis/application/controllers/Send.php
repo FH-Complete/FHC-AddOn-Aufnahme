@@ -41,6 +41,7 @@ class Send extends UI_Controller
         $this->load->model('crm/Dokument_model', 'DokumentModel');
         $this->load->model('crm/Dokumentprestudent_model', 'DokumentPrestudentModel');
         $this->load->model('crm/Prestudentstatus_model', 'PrestudentStatusModel');
+        $this->load->model('crm/Bewerbungstermine_model', 'BewerbungstermineModel');
 
         $this->load->model('content/Dms_model', 'DmsModel');
 
@@ -186,6 +187,15 @@ class Send extends UI_Controller
 
             $this->setRawData("completenessError", $this->_checkDataCompleteness());
 
+            // If at least a bewerbungstermine is present for this period
+            // then the user can send the application
+            $validBewerbungstermine = false;
+            if (hasData($this->BewerbungstermineModel->getCurrent()))
+            {
+				$validBewerbungstermine = true;
+            }
+            $this->setRawData("validBewerbungstermine", $validBewerbungstermine);
+            
             $this->load->view('send', $this->getAllData());
 
         }

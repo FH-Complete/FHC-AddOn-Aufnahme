@@ -5,7 +5,6 @@
  * @package default
  */
 
-
 ?>
 <!-- TODO check if all data is provided -->
 <div role="tabpanel" class="tab-pane" id="send">
@@ -48,7 +47,14 @@ else {
             <div class="col-sm-4">
                 <div class="form-group">
 				<?php
-				if(($prestudentStatus->bewerbung_abgeschicktamum != null) || (!empty($completenessError["person"])) || (!empty($completenessError["adresse"])) || (!empty($completenessError["kontakt"])) || (!empty($completenessError["dokumente"][$studiengang->studiengang_kz])) || (!empty($completenessError["doks"])))
+				if(($prestudentStatus->bewerbung_abgeschicktamum != null)
+					|| (!empty($completenessError["person"]))
+					|| (!empty($completenessError["adresse"]))
+					|| (!empty($completenessError["kontakt"]))
+					|| (!empty($completenessError["dokumente"][$studiengang->studiengang_kz]))
+					|| (!empty($completenessError["doks"]))
+					|| !$validBewerbungstermine
+				)
 				{
 					echo form_button(array("content"=>"Daten absenden", "name"=>"submit_btn", "class"=>"btn btn-primary icon-absenden button-absenden", "type"=>"submit", "disabled"=>"disabled"));
 				}
