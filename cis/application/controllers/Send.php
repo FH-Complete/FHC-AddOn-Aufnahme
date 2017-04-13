@@ -187,12 +187,23 @@ class Send extends UI_Controller
 
             $this->setRawData("completenessError", $this->_checkDataCompleteness());
 
-            // If at least a bewerbungstermine is present for this period
-            // then the user can send the application
+            // If at least a bewerbungstermine is present for this period and
+            // its end-date is >= current-date then the user can send the application
             $validBewerbungstermine = false;
-            if (hasData($this->BewerbungstermineModel->getCurrent()))
+            $bewerbungstermine = $this->BewerbungstermineModel->getByStudiengangStudiensemester(
+				$this->getData('studiengang_kz'),
+				$this->getData('studiensemester')->studiensemester_kurzbz
+			);
+            if (hasData($bewerbungstermine))
             {
-				$validBewerbungstermine = true;
+				foreach($bewerbungstermine->retval as $b)
+				{
+					if ($b->ende >= date('Y-m-d H:i:s'))
+					{
+						$validBewerbungstermine = true;
+						break;
+					}
+				}
             }
             $this->setRawData("validBewerbungstermine", $validBewerbungstermine);
             
