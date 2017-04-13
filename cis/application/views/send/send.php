@@ -10,7 +10,11 @@
 <div role="tabpanel" class="tab-pane" id="send">
     <h1 id="sendHeader"><?php echo $this->lang->line("send_header"); ?></h1>
     <fieldset><?php
-if ((empty($completenessError["person"])) && (empty($completenessError["adresse"])) && (empty($completenessError["kontakt"])) && (empty($completenessError["dokumente"][$studiengang->studiengang_kz])) && (empty($completenessError["doks"])) && (empty($completenessError['spezialisierung']))) {
+if (!$validBewerbungstermine)
+{
+	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationPeriodExpired", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz)."</p>";
+}
+else if ((empty($completenessError["person"])) && (empty($completenessError["adresse"])) && (empty($completenessError["kontakt"])) && (empty($completenessError["dokumente"][$studiengang->studiengang_kz])) && (empty($completenessError["doks"])) && (empty($completenessError['spezialisierung']))) {
 	echo "<p class='p'>".$this->getPhrase("Submission/ApplicationReadyForSubmitting", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz)."</p>";
 }
 else {
