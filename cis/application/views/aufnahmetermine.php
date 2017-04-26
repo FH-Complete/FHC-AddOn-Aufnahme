@@ -15,7 +15,7 @@ if((($this->config->item("GoogleTagManager") === true) && (isset($gtm)) && ($gtm
 {
 ?>
 	<script>
-		dataLayer.push({'event': 'Bewerbung', 'eventCategory': 'Bewerbung', 'eventAction': 'Erfolgreich abgeschickt'});
+        dataLayer.push({'event': 'Bewerbung', 'eventCategory': 'Bewerbung', 'eventAction': 'Erfolgreich abgeschickt', 'eventLabel': '<?php echo $dataLayerLabel; ?>'});
 	</script>
 <?php
 }

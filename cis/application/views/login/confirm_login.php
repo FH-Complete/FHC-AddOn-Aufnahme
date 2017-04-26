@@ -10,7 +10,12 @@ $this->load->view('templates/header');
 $this->load->view('templates/metaHeader');
 $this->lang->load(array('aufnahme', 'login'), $sprache);
 ?>
-
+<script type="text/javascript">
+    function pushToDataLayer()
+    {
+        dataLayer.push({'event': 'Registrierung', 'eventCategory': 'Registrierung', 'eventAction': 'Erfolgreich registriert'});
+    }
+</script>
 <div class="container">
 	<?php $this->load->view('templates/iconHeader', array("header" => $this->getPhrase("Registration/HeaderConfirmation", $sprache, $this->config->item('root_oe')))); ?>
     <div class="row">
@@ -18,7 +23,16 @@ $this->lang->load(array('aufnahme', 'login'), $sprache);
 <!--			<ol class="breadcrumb">
 				<li class="active"><a href="<?php echo base_url($this->config->config["index_page"]."/Registration") ?>">Registration</a></li>
 			</ol>-->
-			<?php echo form_open("Registration/code_login?studiengang_kz=".((isset($studiengang_kz)) ? $studiengang_kz : ""), array("id" => "ChangePasswordForm", "name" => "ChangePasswordForm", "class" => "form-horizontal")); ?>
+			<?php
+            if(isset($initial))
+            {
+                echo form_open("Registration/code_login?studiengang_kz=".((isset($studiengang_kz)) ? $studiengang_kz : ""), array("id" => "ChangePasswordForm", "name" => "ChangePasswordForm", "class" => "form-horizontal", "onsubmit"=>"pushToDataLayer()"));
+            }
+            else
+            {
+                echo form_open("Registration/code_login?studiengang_kz=".((isset($studiengang_kz)) ? $studiengang_kz : ""), array("id" => "ChangePasswordForm", "name" => "ChangePasswordForm", "class" => "form-horizontal"));
+            }
+            ?>
 <!--			<div class="row">
 				<div class="col-sm-12">
 					<img style="width:150px;" class="center-block img-responsive" src="<?php echo base_url('themes/' . $this->config->item('theme') . '/images/logo.png'); ?>">

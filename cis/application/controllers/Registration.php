@@ -244,6 +244,11 @@ class Registration extends UI_Controller
 		{
 			$this->setRawData('studiengang_kz', $this->input->get()['studiengang_kz']);
 		}
+
+		if(isset($this->input->get()['initial']))
+        {
+            $this->setRawData('initial', true);
+        }
 		
 		if(!isset($this->session->userdata()['zugangscode']))
 		{
@@ -370,7 +375,7 @@ class Registration extends UI_Controller
 							$this->_sendMessageVorlage(
 								$this->getData('person'),
 								$zugangscode,
-								base_url($this->config->config['index_page'].'/Registration/confirm?code='.$zugangscode.'&studiengang_kz='.$data['studiengang_kz']).'&email='.$data['email'],
+								base_url($this->config->config['index_page'].'/Registration/confirm?code='.$zugangscode.'&studiengang_kz='.$data['studiengang_kz']).'&email='.$data['email'].'&initial',
 								$data['email']
 							);
 							

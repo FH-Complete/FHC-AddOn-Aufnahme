@@ -425,7 +425,7 @@ class Send extends UI_Controller
                                 }
 
                                 $time = time();
-                                redirect("/Aufnahmetermine?send=" . $time);
+                                redirect("/Aufnahmetermine?send=" . $time."&studiengang=".$studiengang->bezeichnung);
                             }
                             else
                             {

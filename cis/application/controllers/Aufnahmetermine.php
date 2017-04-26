@@ -75,9 +75,14 @@ class Aufnahmetermine extends UI_Controller
         if (isset($this->input->get()["send"]))
         {
             $time = time();
-            if (!(($time - $this->input->get()["send"]) > 5))
+            if (!(($time - $this->input->get()["send"]) > 500000000))
             {
                 $this->setRawData("gtm", true);
+
+                if(isset($this->input->get()['studiengang']))
+                {
+                    $this->setRawData("dataLayerLabel", $this->input->get()['studiengang']);
+                }
             }
         }
 
