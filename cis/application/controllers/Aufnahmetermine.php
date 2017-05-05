@@ -154,7 +154,7 @@ class Aufnahmetermine extends UI_Controller
                                     }
                                     else
                                     {
-                                        $this->_setError(true, 'Could not enroll to appiontment');
+                                        $this->_setError(true, 'Could not enroll to appointment');
                                     }
                                 }
                                 else
@@ -181,7 +181,7 @@ class Aufnahmetermine extends UI_Controller
                                 }
                                 else
                                 {
-                                    $this->_setError(true, 'Could not enroll to appiontment');
+                                    $this->_setError(true, 'Could not enroll to appointment');
                                 }
                             }
                         }
@@ -205,7 +205,7 @@ class Aufnahmetermine extends UI_Controller
                     }
                     else
                     {
-                        $this->_setError(true, 'Could not enroll to appiontment');
+                        $this->_setError(true, 'Could not enroll to appointment');
                     }
                 }
                 $this->_loadData();
