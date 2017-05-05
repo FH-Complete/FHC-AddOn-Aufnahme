@@ -375,6 +375,8 @@ class Aufnahmetermine extends UI_Controller
 
 				if (is_array($stg->reihungstest))
 				{
+                    //sort termine by date and time
+                    usort($stg->reihungstest, "sortTermine");
 					foreach($stg->reihungstest as $reihungstest)
 					{
 						if ($reihungstest->stufe == null)
@@ -524,4 +526,11 @@ class Aufnahmetermine extends UI_Controller
             return "Please load phrases first";
         }
     }
+}
+
+function sortTermine($a, $b)
+{
+    $aTime = strtotime($a->datum." ".$a->uhrzeit);
+    $bTime = strtotime($b->datum." ".$b->uhrzeit);
+    return $aTime >= $bTime;
 }
