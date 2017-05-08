@@ -152,8 +152,17 @@ class Requirements extends UI_Controller
                     )
                     {
                         $prestudent = $this->getData('prestudent');
-                        $prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ] . "_nachreichenDatum_" . $this->input->post("studienplan_id"))));
-                        $prestudent->zgvort = "geplanter Abschluss";
+
+                        if($this->getData('studiengang')->typ === "m")
+                        {
+                            $prestudent->zgvmadatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_".$this->getData('studiengang')->typ]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
+                            $prestudent->zgvmaort = "geplanter Abschluss";
+                        }
+                        else
+                        {
+                            $prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ] . "_nachreichenDatum_" . $this->input->post("studienplan_id"))));
+                            $prestudent->zgvort = "geplanter Abschluss";
+                        }
 
                         $updatePrestudent = $this->PrestudentModel->savePrestudent((array)$prestudent);
 
@@ -641,8 +650,17 @@ class Requirements extends UI_Controller
 
                             if($prestudent->studiengang_kz == $this->input->post()["studiengang_kz"])
                             {
-                                $prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_".$this->getData('studiengang')->typ]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
-                                $prestudent->zgvort = "geplanter Abschluss";
+                                if($this->getData('studiengang')->typ === "m")
+                                {
+                                    $prestudent->zgvmadatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_".$this->getData('studiengang')->typ]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
+                                    $prestudent->zgvmaort = "geplanter Abschluss";
+                                }
+                                else
+                                {
+                                    $prestudent->zgvdatum = date("Y-m-d", strtotime($this->input->post($this->config->item('dokumentTypen')["abschlusszeugnis_".$this->getData('studiengang')->typ]."_nachreichenDatum_".$this->input->post("studienplan_id"))));
+                                    $prestudent->zgvort = "geplanter Abschluss";
+                                }
+
                                 $updatePrestudent = $this->PrestudentModel->savePrestudent((array)$prestudent);
                                 if(!isSuccess($updatePrestudent))
                                 {
