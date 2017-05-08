@@ -385,6 +385,9 @@
 					);
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').parent().hide();
 					$('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>_logo_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').show();
+                    $('#<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]; ?>_nachreichenDatum_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>_div').hide();
+                    $('#letztesZeugnis_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').hide();
+
 					var logo = "";
                     data.result.bezeichnung = data.result.bezeichnung.toLowerCase();
 					if(data.result.bezeichnung.indexOf(".docx") !== -1)

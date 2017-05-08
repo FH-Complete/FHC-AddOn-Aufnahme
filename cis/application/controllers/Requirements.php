@@ -660,6 +660,30 @@ class Requirements extends UI_Controller
                                 $this->_setError(true, "could not save document");
                             }
 						}
+
+                        if($typ == $this->config->item('dokumentTypen')["abschlusszeugnis_".$this->getData('studiengang')->typ])
+                        {
+                            $akte = new stdClass();
+
+                            $this->setData('studiengang', $this->StudiengangModel->getStudiengang($this->input->post()["studiengang_kz"]));
+
+                            foreach($this->getData("dokumente") as $akte_temp)
+                            {
+                                if (($akte_temp->dokument_kurzbz == $this->config->item('dokumentTypen')["letztGueltigesZeugnis"]))
+                                {
+                                    $akte = $akte_temp;
+                                }
+                            }
+
+                            $akte->nachgereicht = false;
+
+                            $akte = (array) $akte;
+                            $updateAkte = $this->AkteModel->saveAkte($akte);
+                            if(!isSuccess($updateAkte))
+                            {
+                                $this->_setError(true, "could not save document");
+                            }
+                        }
 						
 						echo json_encode($result);
 					}
