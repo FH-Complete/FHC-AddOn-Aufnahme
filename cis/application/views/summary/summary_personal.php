@@ -118,16 +118,21 @@
     </div>
     <div class="col-sm-6"></div>
 </div>
-<div class="row">
-    <div class="col-sm-6">
-        <div class="col-sm-6"><?php echo $this->lang->line("summary_svnr"); ?></div>
-        <div class="col-sm-6 <?php echo ($person->svnr != null) ? "" : "incomplete"; ?>">
-            <?php echo ($person->svnr != null) ? mb_substr($person->svnr, 0, 10) : ((($person->geburtsnation != null) && ($person->geburtsnation != "A")) ? "" : $this->lang->line("summary_unvollstaendig")); ?>
-        </div>
-    </div>
-    <div class="col-sm-6"></div>
-</div>
 <?php
+if(($person->staatsbuergerschaft != null) && ($person->staatsbuergerschaft == 'A'))
+{
+    ?>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="col-sm-6"><?php echo $this->lang->line("summary_svnr"); ?></div>
+            <div class="col-sm-6 <?php echo ($person->svnr != null) ? "" : "incomplete"; ?>">
+                <?php echo ($person->svnr != null) ? mb_substr($person->svnr, 0, 10) : ((($person->geburtsnation != null) && ($person->geburtsnation != "A")) ? "" : ((($person->staatsbuergerschaft != null) && ($person->staatsbuergerschaft != 'A')) ? "" : $this->lang->line("summary_unvollstaendig"))); ?>
+            </div>
+        </div>
+        <div class="col-sm-6"></div>
+    </div>
+    <?php
+}
 if ($zustell_adresse !== null)
 {
     ?>

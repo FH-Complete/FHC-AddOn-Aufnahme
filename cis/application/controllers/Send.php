@@ -662,7 +662,7 @@ class Send extends UI_Controller
                 $error["person"]["staatsbuergerschaft"] = true;
             }
 
-            if ((($person->svnr == null) || ($person->svnr == "")) && ($person->geburtsnation == "A"))
+            if ((($person->svnr == null) || ($person->svnr == "")) && ($person->geburtsnation == "A") && ($person->staatsbuergerschaft == 'A'))
             {
                 $error["person"]["svnr"] = true;
             }
