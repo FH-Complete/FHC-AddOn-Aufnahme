@@ -297,17 +297,6 @@ class Aufnahmetermine extends UI_Controller
             $termin = date("d.m.Y", strtotime($termin->datum));
         }
 
-        $data = array(
-            "typ" => $studiengang->studiengangstyp->bezeichnung,
-            "studiengang" => $studiengang->bezeichnung,
-            "orgform" => $studiengang->orgform_kurzbz,
-            "termin" => $termin,
-            "anrede" => $person->anrede,
-            "vorname" => $person->vorname,
-            "nachname" => $person->nachname,
-            "stgMail" => $studiengang->email
-        );
-
         $oe = $studiengang->oe_kurzbz;
         $orgform_kurzbz = $studiengang->orgform_kurzbz;
 
@@ -318,6 +307,17 @@ class Aufnahmetermine extends UI_Controller
                 $orgform_kurzbz = $stpl->orgform_kurzbz;
             }
         }
+
+        $data = array(
+            "typ" => $studiengang->studiengangstyp->bezeichnung,
+            "studiengang" => $studiengang->bezeichnung,
+            "orgform" => $orgform_kurzbz,
+            "termin" => $termin,
+            "anrede" => $person->anrede,
+            "vorname" => $person->vorname,
+            "nachname" => $person->nachname,
+            "stgMail" => $studiengang->email
+        );
 
         (isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData("sprache");
 

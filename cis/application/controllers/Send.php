@@ -484,14 +484,6 @@ class Send extends UI_Controller
 
     private function _sendMessageMailApplicationConfirmation($person, $studiengang, $studienplan_id)
     {
-        $data = array(
-            "anrede" => (is_null($person->anrede)) ? "" : $person->anrede,
-            "vorname" => $person->vorname,
-            "nachname" => $person->nachname,
-            "typ" => $studiengang->studiengangstyp->bezeichnung,
-            "studiengang" => $studiengang->bezeichnung
-        );
-
         $oe = $studiengang->oe_kurzbz;
         $orgform_kurzbz = $studiengang->orgform_kurzbz;
 
@@ -502,6 +494,15 @@ class Send extends UI_Controller
                 $orgform_kurzbz = $stpl->orgform_kurzbz;
             }
         }
+
+        $data = array(
+            "anrede" => (is_null($person->anrede)) ? "" : $person->anrede,
+            "vorname" => $person->vorname,
+            "nachname" => $person->nachname,
+            "typ" => $studiengang->studiengangstyp->bezeichnung,
+            "studiengang" => $studiengang->bezeichnung,
+            "orgform" => $orgform_kurzbz
+        );
 
         (isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData("sprache");
 
@@ -533,14 +534,6 @@ class Send extends UI_Controller
 
     private function _sendMessageMailNewApplicationInfo($person, $studiengang, $studienplan_id)
     {
-        $data = array(
-            "anrede" => (is_null($person->anrede)) ? "" : $person->anrede,
-            "vorname" => $person->vorname,
-            "nachname" => $person->nachname,
-            "typ" => $studiengang->studiengangstyp->bezeichnung,
-            "studiengang" => $studiengang->bezeichnung
-        );
-
         $oe = $studiengang->oe_kurzbz;
         $orgform_kurzbz = $studiengang->orgform_kurzbz;
 
@@ -551,6 +544,15 @@ class Send extends UI_Controller
                 $orgform_kurzbz = $stpl->orgform_kurzbz;
             }
         }
+
+        $data = array(
+            "anrede" => (is_null($person->anrede)) ? "" : $person->anrede,
+            "vorname" => $person->vorname,
+            "nachname" => $person->nachname,
+            "typ" => $studiengang->studiengangstyp->bezeichnung,
+            "studiengang" => $studiengang->bezeichnung,
+            "orgform" => $orgform_kurzbz
+        );
 
         (isset($person->sprache) && ($person->sprache !== null)) ? $sprache = $person->sprache : $sprache = $this->getData("sprache");
         /*
