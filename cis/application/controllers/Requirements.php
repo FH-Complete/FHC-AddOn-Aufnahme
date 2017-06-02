@@ -701,6 +701,30 @@ class Requirements extends UI_Controller
                             {
                                 $this->_setError(true, "could not save document");
                             }
+
+                            $prestudent = $this->getData('prestudent');
+
+                            if($this->getData('studiengang')->typ === "m")
+                            {
+                                $prestudent->zgvmadatum = null;
+                                $prestudent->zgvmaort = "";
+                            }
+                            else
+                            {
+                                $prestudent->zgvdatum = null;
+                                $prestudent->zgvort = "";
+                            }
+
+                            $updatePrestudent = $this->PrestudentModel->savePrestudent((array)$prestudent);
+
+                            if(!isSuccess($updatePrestudent))
+                            {
+                                $this->_setError(true, "could not save data");
+                            }
+                            else
+                            {
+                                $this->setRawData("prestudent", $prestudent);
+                            }
                         }
 						
 						echo json_encode($result);
