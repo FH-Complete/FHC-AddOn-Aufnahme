@@ -1139,5 +1139,85 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
             'text' => 'Sie erhalten in kürze eine Nachricht mit detailierten Informationen zum Aufnahmetest.',
             'description' => ''
         )
+    ),
+    array
+    (
+        'phrase' => 'Personal/UserDefinedFields',
+        'phrasentext' => array
+        (
+            'sprache' => 'German',
+            'text' => 'User Defined Fields',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'Personal/UserDefinedFields',
+        'phrasentext' => array
+        (
+            'sprache' => 'English',
+            'text' => 'User Defined Fields',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'ZGV/UserDefinedFields',
+        'phrasentext' => array
+        (
+            'sprache' => 'German',
+            'text' => 'User Defined Fields',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'ZGV/UserDefinedFields',
+        'phrasentext' => array
+        (
+            'sprache' => 'English',
+            'text' => 'User Defined Fields',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'summary/PersonalUserDefinedFields',
+        'phrasentext' => array
+        (
+            'sprache' => 'German',
+            'text' => 'User Defined Fields',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'summary/PersonalUserDefinedFields',
+        'phrasentext' => array
+        (
+            'sprache' => 'English',
+            'text' => 'User Defined Fields',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'summary/RequirementsUserDefinedFields',
+        'phrasentext' => array
+        (
+            'sprache' => 'German',
+            'text' => 'User Defined Fields',
+            'description' => ''
+        )
+    ),
+    array
+    (
+        'phrase' => 'summary/RequirementsUserDefinedFields',
+        'phrasentext' => array
+        (
+            'sprache' => 'English',
+            'text' => 'User Defined Fields',
+            'description' => ''
+        )
     )
 );

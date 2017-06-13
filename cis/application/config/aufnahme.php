@@ -129,10 +129,13 @@ $config['view_studiengaenge'][] = 'studiengaenge/master';
 $config['view_requirements'][] = 'requirements/requirements_allgemein';
 $config['view_requirements'][] = 'bewerbung/spezialisierung';
 $config['view_requirements'][] = 'requirements/requirements_spezifisch';
+$config['view_requirements'][] = 'requirements/requirements_udf';
 
 $config['view_summary'][] = 'summary/summary_personal';
+$config['view_summary'][] = 'summary/summary_personal_udf';
 $config['view_summary'][] = 'summary/summary_requirements';
 $config['view_summary'][] = 'summary/summary_requirements_specific';
+$config['view_summary'][] = 'summary/summary_requirements_udf';
 
 $config['view_send'][] = 'send/send';
 
@@ -298,3 +301,24 @@ $config['ZgvOptionsMapping'] = array(
 |--------------------------------------------------------------------------
 */
 $config['document_download_path'] = "";
+
+/*
+|--------------------------------------------------------------------------
+| Anzeige des Containers für User Defined Fields im Bereich Personal Data
+|--------------------------------------------------------------------------
+*/
+$config['udf_container_personal_data'] = array(
+    "active" => true, //true | false
+    "className" => "udf_personal_data",
+    "udfs" => array("udf_schuhgroesse")
+);
+
+/*
+|--------------------------------------------------------------------------
+| Anzeige des Containers für User Defined Fields im Bereich Requirements
+|--------------------------------------------------------------------------
+*/
+$config['udf_container_requirements'] = array(
+    "active" => true, //true | false
+    "className" => "udf_requirements"
+);
