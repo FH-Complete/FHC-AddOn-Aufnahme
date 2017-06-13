@@ -1,6 +1,5 @@
 <?php
 $udf = $this->config->item("udf_container_requirements");
-var_dump($udf);
 
 if(is_array($udf) && $udf["active"] == true)
 {

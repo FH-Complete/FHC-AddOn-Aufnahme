@@ -1,6 +1,5 @@
 <?php
 $udf = $this->config->item("udf_container_personal_data");
-var_dump($udf);
 
 if(is_array($udf) && $udf["active"] == true)
 {
