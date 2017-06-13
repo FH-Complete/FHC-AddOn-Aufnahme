@@ -92,7 +92,7 @@ $this->template->widget(
 	function checkDataCompleteness(studiengang_kz, studienplan_id)
 	{
 		$.ajax({
-			url: '<?php echo base_url($this->config->config["index_page"]."/Bewerbung/checkDataCompleteness"); ?>?studiengang_kz='+studiengang_kz,
+			url: '<?php echo base_url($this->config->config["index_page"]."/Helper/checkDataCompleteness"); ?>?studiengang_kz='+studiengang_kz,
 			type: 'GET',
 			cache: false,
 			dataType: 'json',
@@ -155,7 +155,7 @@ $this->template->widget(
 	function checkDocuments(studiengang_kz, studienplan_id)
 	{
 		$.ajax({
-			url: '<?php echo base_url($this->config->config["index_page"]."/Dokumente/areDocumentsComplete"); ?>',
+			url: '<?php echo base_url($this->config->config["index_page"]."/Helper/areDocumentsComplete"); ?>',
 			type: 'POST',
 			data: {
 				studiengang_kz: studiengang_kz

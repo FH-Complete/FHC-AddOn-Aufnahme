@@ -206,4 +206,49 @@ class REST_Model extends CI_Model
 		
 		return false;
 	}
+
+    /**
+     *
+     * @return unknown
+     */
+    public function getErrorMessage($result) {
+        if (is_object($result))
+        {
+            if(isset($result->error))
+            {
+                $msg = "";
+                if(isset($result->retval))
+                {
+                    if(is_string($result->retval))
+                    {
+                        $msg = $result->retval;
+                        return "Error Code: ".$result->error."; ".$msg."; ". (isset($result->msg) ? $result->msg : "");
+                    }
+                    elseif(is_string($result->msg))
+                    {
+                        $msg = $result->msg;
+                        return "Error Code: ".$result->error."; ". (isset($result->msg) ? $result->msg : "");
+                    }
+                }
+                elseif(isset($result->msg))
+                {
+                    if(is_string($result->msg))
+                    {
+                        $msg = $result->msg;
+                        return "Error Code: ".$result->error."; ".$msg."; ". (isset($result->msg) ? $result->msg : "");
+                    }
+                }
+                else
+                {
+                    $msg = $result->error;
+                    return "Error: ".$msg;
+                }
+
+            }
+        }
+        else
+        {
+            return $result;
+        }
+    }
 }

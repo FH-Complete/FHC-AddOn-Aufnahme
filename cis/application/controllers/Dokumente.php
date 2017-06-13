@@ -469,7 +469,7 @@ class Dokumente extends UI_Controller
                         //TODO handle error
                         $result->success = false;
                         echo json_encode($result);
-                        $this->_setError(true, $this->DmsModel->getErrorMessage());
+                        $this->_setError(true, $this->DmsModel->getErrorMessage($insertResult));
                     }
 
                     if (unlink($file["tmp_name"][0]))

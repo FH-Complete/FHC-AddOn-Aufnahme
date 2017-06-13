@@ -71,50 +71,6 @@ if (!isset($plz))
 
         $('input[type=file]').on('change', prepareUpload);
 
-        $(".zustelladresse").each(function (i, v)
-        {
-            if ($(v).prop("checked"))
-            {
-                var id = $(v).attr("studienplan_id");
-                $("#zustelladresse_" + id).show();
-            }
-        });
-
-        $(".zustelladresse").click(function (event)
-        {
-            var id = $(event.currentTarget).attr("studienplan_id");
-            if ($(event.currentTarget).prop("checked"))
-            {
-                $("#zustelladresse_" + id).show();
-            }
-            else
-            {
-                $("#zustelladresse_" + id).hide();
-            }
-        });
-
-        $(".adresse_nation").on("change", function (event)
-        {
-            toggleAdresse(event.currentTarget);
-        });
-
-        $(".zustelladresse_nation").on("change", function (event)
-        {
-            toggleZustellAdresse(event.currentTarget);
-        });
-
-        $(".plz").on("change", function (event)
-        {
-            var plz = $(event.currentTarget).val();
-            loadOrtData(plz, $(".ort_dropdown"));
-        });
-
-        $(".zustell_plz").on("change", function (event)
-        {
-            var plz = $(event.currentTarget).val();
-            loadOrtData(plz, $(".zustell_ort_dropdown"));
-        });
-
         // File upload
         $('#<?php echo $this->config->config["dokumentTypen"]["reisepass"]; ?>FileUpload_<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>').fileupload({
             url: '<?php echo base_url($this->config->config["index_page"] . "/Bewerbung/uploadFiles/reisepass"); ?>',
@@ -322,56 +278,7 @@ if (!isset($plz))
             }
         }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
-
-        toggleAdresse($("#adresse_nation<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>"));
-        toggleZustellAdresse($("#zustelladresse_nation<?php echo $studiengang->studienplaene[0]->studienplan_id; ?>"));
     });
-
-    function toggleAdresse(target)
-    {
-        //var code = $("#adresse_nation option:selected").val();
-        var code = $(target).val();
-        if (code === "A")
-        {
-            hideElement($(".ort_input"));
-            showElement($(".ort_dropdown"));
-            var plz = $("#plz").val();
-            loadOrtData(plz, $(".ort_dropdown"));
-        }
-        else
-        {
-            showElement($(".ort_input"));
-            hideElement($(".ort_dropdown"));
-        }
-    }
-
-    function toggleZustellAdresse(target)
-    {
-        //var code = $("#zustelladresse_nation option:selected").val();
-        var code = $(target).val();
-        if (code === "A")
-        {
-            hideElement($(".zustell_ort_input"));
-            showElement($(".zustell_ort_dropdown"));
-            var plz = $("#zustell_plz").val();
-            loadOrtData(plz, $(".zustell_ort_dropdown"));
-        }
-        else
-        {
-            showElement($(".zustell_ort_input"));
-            hideElement($(".zustell_ort_dropdown"));
-        }
-    }
-
-    function hideElement(ele)
-    {
-        $(ele).hide();
-    }
-
-    function showElement(ele)
-    {
-        $(ele).show();
-    }
 
     var files;
 
@@ -1052,3 +959,37 @@ if (!isset($plz))
         </div>
     </div>
 </div>
+<?php
+    $udf_config = $this->config->item("udf_container_personal_data");
+
+    if(is_array($udf_config) && $udf_config["active"] == true)
+    {
+        ?>
+        <div class="<?php echo $udf_config["className"]; ?>">
+            <h3><?php echo $this->getPhrase("Personal/UserDefinedFields", $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?></h3>
+            <?php
+                if(isset($udfs) && is_array($udfs))
+                {
+                    $renderedElements = 0;
+                    foreach($udfs as $udf)
+                    {
+                        if(in_array($udf->name, $udf_config["udfs"]))
+                        {
+                            if(($renderedElements % 2 == 0))
+                            {
+                                echo '</div>';
+                            }
+                            if(($renderedElements % 2 == 0) || ($renderedElements == 0))
+                            {
+                                echo '<div class="row form-row">';
+                            }
+                            echo '<div class="col-sm-6">'.$this->template->widget("userdefinedfield", array('data' => $udf)).'</div>';
+                            $renderedElements++;
+                        }
+                    }
+                }
+            ?>
+        </div>
+        <?php
+    }
+        ?>

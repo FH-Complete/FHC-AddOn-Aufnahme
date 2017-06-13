@@ -1,6 +1,6 @@
 <?php
 /**
- * ./cis/application/core/MY_Controller.php
+ * ./cis/application/core/Helper_Controller.php
  *
  * @package default
  */
@@ -10,7 +10,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /**
  * 
  */
-class UI_Controller extends CI_Controller
+class Helper_Controller extends CI_Controller
 {
 	const NOT_CHECK_LOGIN = false;
 	
@@ -25,29 +25,18 @@ class UI_Controller extends CI_Controller
 		
 		// 
 		$this->_data = array();
-		
-		// Load return message helper
-		$this->load->helper('message');
-		
-		// Loading the 
-		$this->load->model('Language_model', 'LanguageModel');
-		
-		// Loading the 
-		$this->load->model('CheckUserAuth_model', 'CheckUserAuthModel');
 
         // Loading the
-        $this->load->model('system/Sprache_model', 'SpracheModel');
+        $this->load->model('Language_model', 'LanguageModel');
 
         // Loading the
-        $this->load->model('system/UDF_model', 'UdfModel');
+        $this->load->model('CheckUserAuth_model', 'CheckUserAuthModel');
 		
 		// 
 		if ($checkLogin === true)
 		{
 			$this->_checkLogin();
 		}
-
-		$this->_loadUDFs();
 	}
 	
 	/**
@@ -58,34 +47,6 @@ class UI_Controller extends CI_Controller
 		if (!$this->CheckUserAuthModel->isLogged()) redirect('/Registration');
 	}
 
-	private function _loadUDFs()
-    {
-        return $this->UdfModel->getUdf();
-    }
-
-    protected function _getSprache($sprache)
-    {
-        $this->SpracheModel->getSprache(ucfirst($sprache));
-    }
-	
-	/**
-	 * 
-	 */
-	protected function getCurrentLanguage()
-	{
-	    $language = $this->LanguageModel->getCurrentLanguage();
-	    $this->_getSprache($language);
-		return success($language);
-	}
-	
-	/**
-	 * 
-	 */
-	protected function setCurrentLanguage($language)
-	{
-		$this->LanguageModel->setCurrentLanguage($language);
-	}
-	
 	/**
 	 * 
 	 */
@@ -140,12 +101,5 @@ class UI_Controller extends CI_Controller
 		$this->_data = array();
 	}
 
-	/**
-     *
-     */
-	protected function getUDFs()
-    {
-        $udfs = $this->_loadUDFs();
-        return json_decode($udfs->retval[0]->jsons);
-    }
+
 }

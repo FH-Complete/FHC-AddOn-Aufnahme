@@ -76,7 +76,7 @@ class Studiengaenge extends UI_Controller
         }
         else
         {
-            $this->_setError(true, $this->OrgformModel->getErrorMessage());
+            $this->_setError(true, $this->OrgformModel->getErrorMessage($orgform));
         }
 
         $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
@@ -191,7 +191,7 @@ class Studiengaenge extends UI_Controller
 		}
 		else
 		{
-			$this->_setError(true, $this->StudiensemesterModel->getErrorMessage());
+			$this->_setError(true, $this->StudiensemesterModel->getErrorMessage($studiensemester));
 		}
 
 		$this->benchmark->mark('code_end');

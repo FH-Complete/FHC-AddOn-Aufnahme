@@ -53,6 +53,8 @@ class Bewerbung extends UI_Controller
 		$this->load->model('codex/Bundesland_model', 'BundeslandModel');
 		
 		$this->load->model('system/Message_model', 'MessageModel');
+
+		$this->setRawData("udfs", $this->getUDFs());
 	}
 	
 	/**
@@ -342,6 +344,7 @@ class Bewerbung extends UI_Controller
         return $complete;
     }
 
+    /*
     public function checkDataCompleteness()
     {
         $studiengang_kz = $this->input->get("studiengang_kz");
@@ -420,7 +423,7 @@ class Bewerbung extends UI_Controller
         }
 
         echo json_encode($this->_checkDataCompleteness());
-    }
+    }*/
 
     public function studiengang($studiengang_kz, $studienplan_id, $studiensemester_kurzbz)
     {

@@ -734,7 +734,7 @@ class Requirements extends UI_Controller
 						//TODO handle error
 						$result->success = false;
 						echo json_encode($result);
-						$this->_setError(true, $this->DmsModel->getErrorMessage());
+						$this->_setError(true, $this->DmsModel->getErrorMessage($insertResult));
 					}
 
 					if (unlink($file["tmp_name"][0]))
@@ -828,26 +828,6 @@ class Requirements extends UI_Controller
                     $this->PrestudentModel->removeSpecialization(array('notiz_id' => $notiz_id));
                     redirect("/Requirements?studiengang_kz=".$studiengang_kz."&studienplan_id=".$this->getData('prestudentStatus')->studienplan_id);
                 }
-            }
-        }
-	}
-	
-	public function getOption()
-	{
-	    if(isset($this->input->post()["studiengangtyp"]))
-        {
-            $this->setData('person', $this->PersonModel->getPerson());
-            if ($this->getData("person") !== null)
-            {
-                $result = new stdClass();
-                $this->setRawData('dokumente' , $this->AkteModel->getAktenAccepted()->retval);
-
-                if ((isset($this->getData("dokumente")[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$this->input->post()["studiengangtyp"]]])) && ($this->getData("dokumente")[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$this->input->post()["studiengangtyp"]]]->anmerkung != null))
-                {
-                    $result->error = 0;
-                    $result->result = $this->getData("dokumente")[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$this->input->post()["studiengangtyp"]]]->anmerkung;
-                }
-                echo json_encode($result, JSON_UNESCAPED_UNICODE);
             }
         }
 	}

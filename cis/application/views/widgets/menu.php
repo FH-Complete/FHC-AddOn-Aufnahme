@@ -61,7 +61,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$.ajax({
-			url: '<?php echo base_url($this->config->config["index_page"]."/Dokumente/areDocumentsComplete"); ?>',
+			url: '<?php echo base_url($this->config->config["index_page"]."/Helper/areDocumentsComplete"); ?>',
 			type: 'POST',
 			cache: false,
 			dataType: 'json',

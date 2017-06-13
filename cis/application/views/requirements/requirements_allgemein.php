@@ -37,7 +37,7 @@
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$.ajax({
-					url: '<?php echo base_url($this->config->config["index_page"]."/Requirements/getOption"); ?>',
+					url: '<?php echo base_url($this->config->config["index_page"]."/Helper/getOption"); ?>',
 					type: 'POST',
                     data: {
 					  studiengangtyp:  '<?php echo $studiengang->typ;?>'

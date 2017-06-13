@@ -11,11 +11,11 @@ $this->lang->load(array('aufnahme', 'person'), $language);
 echo $this->template->widget("menu", array('aktiv' => 'Person'));
 ?>
 
-<div class="container">
-    <div class="col-xs-12 col-sm-9">
-		<?php echo $this->template->widget("person_nav", array('aktiv' => 'Person')); ?>
-		<?php $this->load_views('view_person'); ?>
+    <div class="container">
+        <div class="col-xs-12 col-sm-9">
+            <?php echo $this->template->widget("person_nav", array('aktiv' => 'Person')); ?>
+            <?php $this->load_views('view_person'); ?>
+        </div>
     </div>
-</div>
 
 <?php $this->load->view('templates/footer');
