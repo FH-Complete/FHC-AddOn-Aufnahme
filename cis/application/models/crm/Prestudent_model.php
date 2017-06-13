@@ -40,9 +40,9 @@ class Prestudent_model extends REST_Model
 	{
         if($forceApiCall)
         {
-            unset($this->session->userdata['Prestudent.Specialization']);
+            unset($this->session->userdata['Prestudent.Specialization:'.$prestudent_id]);
         }
-		return $this->loadOne('crm/Prestudent/Specialization', array('prestudent_id' => $prestudent_id, 'titel' => $titel), 'Prestudent.Specialization');
+		return $this->loadOne('crm/Prestudent/Specialization', array('prestudent_id' => $prestudent_id, 'titel' => $titel), 'Prestudent.Specialization:'.$prestudent_id);
 	}
 	
 	/**

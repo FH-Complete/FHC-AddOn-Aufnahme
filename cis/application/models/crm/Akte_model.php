@@ -31,7 +31,8 @@ class Akte_model extends REST_Model
 			array(
 				'person_id' => $this->getPersonId(),
 				'dokumenttyp_kurzbz' => $dokumenttyp_kurzbz
-			)
+			),
+            "aktenAccepted:".$this->getPersonId()
 		);
 
 	    $dokumente = array();

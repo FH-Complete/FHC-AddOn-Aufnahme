@@ -20,7 +20,8 @@ class Bewerbungstermine_model extends REST_Model
 	{
 		return $this->load(
 			'crm/Bewerbungstermine/ByStudiengangStudiensemester',
-			array('studiengang_kz' => $studiengang_kz, 'studiensemester_kurzbz' => $studiensemester_kurzbz)
+			array('studiengang_kz' => $studiengang_kz, 'studiensemester_kurzbz' => $studiensemester_kurzbz),
+            "getByStudiengangStudiensemester:".$studiengang_kz.":".$studiensemester_kurzbz
 		);
 	}
 	
