@@ -146,6 +146,13 @@ class UI_Controller extends CI_Controller
 	protected function getUDFs()
     {
         $udfs = $this->_loadUDFs();
-        return json_decode($udfs->retval[0]->jsons);
+        if(isset($udfs->retval[0]) && is_object($udfs->retval[0]))
+        {
+            return json_decode($udfs->retval[0]->jsons);
+        }
+        else
+        {
+            return "";
+        }
     }
 }
