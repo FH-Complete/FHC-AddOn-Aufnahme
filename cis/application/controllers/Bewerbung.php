@@ -425,7 +425,7 @@ class Bewerbung extends UI_Controller
         echo json_encode($this->_checkDataCompleteness());
     }*/
 
-    public function studiengang($studiengang_kz, $studienplan_id, $studiensemester_kurzbz)
+    public function studiengang($studiengang_kz, $studienplan_id, $studiensemester_kurzbz=null)
     {
         // Form validation rules
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
@@ -632,6 +632,8 @@ class Bewerbung extends UI_Controller
                         $prestudentStatus['datum'] = date('Y-m-d');
 
                         $this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
+                        //removing cached data
+                        unset($this->session->{'Studiengang.getAppliedStudiengang'});
                     }
                     elseif (($prestudent->studiengang_kz == $studiengang_kz) && (empty($prestudentStatus)))
                     {
@@ -647,6 +649,8 @@ class Bewerbung extends UI_Controller
                         $prestudentStatus['studienplan_id'] = $studienplan_id;
                         $prestudentStatus['datum'] = date('Y-m-d');
                         $this->PrestudentStatusModel->savePrestudentstatus($prestudentStatus);
+                        //removing cached data
+                        unset($this->session->{'Studiengang.getAppliedStudiengang'});
                     }
                 }
 
@@ -674,6 +678,9 @@ class Bewerbung extends UI_Controller
                         $prestudentStatus['datum'] = date('Y-m-d');
 
                         $this->PrestudentStatusModel->savePrestudentStatus($prestudentStatus);
+
+                        //removing cached data
+                        unset($this->session->{'Studiengang.getAppliedStudiengang'});
                     }
                 }
             }

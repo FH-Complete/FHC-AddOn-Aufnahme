@@ -18,7 +18,6 @@ class Dokumentprestudent_model extends REST_Model
 	 */
 	public function setAccepted($prestudent_id, $studiengang_kz)
 	{
-
         unset($this->session->userdata{"aktenAccepted:".$this->getPersonId()});
 
 		return $this->save(
@@ -32,6 +31,8 @@ class Dokumentprestudent_model extends REST_Model
 	 */
 	public function setAcceptedDocuments($prestudent_id, $studiengang_kz, $dokument_kurzbz_array)
 	{
+        unset($this->session->userdata{"aktenAccepted:".$this->getPersonId()});
+
 		return $this->save(
 			'crm/Dokumentprestudent/SetAcceptedDocuments',
 			array(
