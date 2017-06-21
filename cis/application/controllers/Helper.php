@@ -390,7 +390,8 @@ class Helper extends Helper_Controller
         {
             $complete["person"] = false;
         }
-        if ((($person->svnr == null) || ($person->svnr == "")) && ($person->geburtsnation == "A"))
+
+        if ((($person->svnr == null) || ($person->svnr == "")) && ($person->staatsbuergerschaft == "A"))
         {
             $complete["person"] = false;
         }
