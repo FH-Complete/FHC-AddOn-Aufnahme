@@ -175,7 +175,7 @@ class Studiengaenge extends UI_Controller
                 {
                     //load studiengaenge der prestudenten
                     //$prestudent->prestudentStatus = $this->_loadPrestudentStatus($prestudent->prestudent_id);
-                    if (($prestudent->status_kurzbz === "Interessent" || $prestudent->status_kurzbz === "Bewerber"))
+                    if ((isset($prestudent->status_kurzbz) &&  ($prestudent->status_kurzbz === "Interessent" || $prestudent->status_kurzbz === "Bewerber")))
                     {
                         $aktiveBewerbungen[$prestudent->studienplan_id] = $prestudent->studienplan_id;
                     }
@@ -197,4 +197,17 @@ class Studiengaenge extends UI_Controller
 		$this->benchmark->mark('code_end');
 		log_message('debug', 'Time elapsed for Studiengaenge/index(): ' . $this->benchmark->elapsed_time('code_start', 'code_end') . 'ms');
 	}
+
+    /**
+     * @param $bool
+     * @param null $msg
+     */
+    private function _setError($bool, $msg = null)
+    {
+        $error = new stdClass();
+        $error->error = $bool;
+        $error->msg = $msg;
+
+        $this->setRawData('error', $error);
+    }
 }
