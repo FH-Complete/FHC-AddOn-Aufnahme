@@ -306,20 +306,25 @@ $config['document_download_path'] = "";
 /*
 |--------------------------------------------------------------------------
 | Anzeige des Containers für User Defined Fields im Bereich Personal Data
+| Hint: Do not forget to check if the view is activated
+| data saved to person & prestudent
 |--------------------------------------------------------------------------
 */
 $config['udf_container_personal_data'] = array(
-    "active" => true, //true | false
+    "active" => false, //true | false
     "className" => "udf_personal_data",
-    "udfs" => array("udf_schuhgroesse")
+    "udfs" => array() //"udf_schuhgroesse", "udf_nickname", "udf_age", "udf_disagree", "udf_agree"
 );
 
 /*
 |--------------------------------------------------------------------------
 | Anzeige des Containers für User Defined Fields im Bereich Requirements
+| Hint: Do not forget to check if the view is activated
+| data saved to person & prestudent
 |--------------------------------------------------------------------------
 */
 $config['udf_container_requirements'] = array(
-    "active" => true, //true | false
-    "className" => "udf_requirements"
+    "active" => false, //true | false
+    "className" => "udf_requirements",
+    "udfs" => array()
 );
