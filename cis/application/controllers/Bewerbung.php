@@ -27,6 +27,7 @@ class Bewerbung extends UI_Controller
 		
 		// 
 		$this->load->helper('form');
+        $this->load->helper('udf');
 		
 		// Loading the 
 		$this->load->model('system/Phrase_model', 'PhraseModel');
@@ -53,8 +54,6 @@ class Bewerbung extends UI_Controller
 		$this->load->model('codex/Bundesland_model', 'BundeslandModel');
 		
 		$this->load->model('system/Message_model', 'MessageModel');
-
-		$this->setRawData("udfs", $this->getUDFs());
 	}
 	
 	/**
@@ -73,14 +72,14 @@ class Bewerbung extends UI_Controller
             $this->setData('studiensemester', $studiensemester);
         }
 
-        if ((isset($this->input->get()["studiengang_kz"]) && ($this->input->get()["studiengang_kz"] !== null) && ($this->input->get()["studiengang_kz"] !== ''))
-            && (isset($this->input->get()['studienplan_id'])) && ($this->input->get()["studienplan_id"] !== null) && ($this->input->get()["studienplan_id"] !== '')
+        if ((isset($this->input->get()['studiengang_kz']) && ($this->input->get()['studiengang_kz'] !== null) && ($this->input->get()['studiengang_kz'] !== ''))
+            && (isset($this->input->get()['studienplan_id'])) && ($this->input->get()['studienplan_id'] !== null) && ($this->input->get()['studienplan_id'] !== '')
         )
         {
-            $this->setRawData("studiengang_kz", $this->input->get("studiengang_kz"));
-            $this->setRawData("studienplan_id", $this->input->get("studienplan_id"));
+            $this->setRawData('studiengang_kz', $this->input->get('studiengang_kz'));
+            $this->setRawData('studienplan_id', $this->input->get('studienplan_id'));
 
-            redirect("/Bewerbung/studiengang/".$this->getData('studiengang_kz')."/".$this->getData('studienplan_id')."/".$this->getData('studiensemester')->studiensemester_kurzbz);
+            redirect('/Bewerbung/studiengang/'.$this->getData('studiengang_kz').'/'.$this->getData('studienplan_id').'/'.$this->getData('studiensemester')->studiensemester_kurzbz);
         }
 		
 		$this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
@@ -95,8 +94,9 @@ class Bewerbung extends UI_Controller
         ));
 
         $studiengaenge = array();
+        $abgeschickt_array = array();
 
-        foreach($this->getData("studiengaenge") as $stg)
+        foreach($this->getData('studiengaenge') as $stg)
         {
             if((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
             {
@@ -110,15 +110,30 @@ class Bewerbung extends UI_Controller
                     $tempStg->studienplaene = array();
                     $tempStg->studienplaene[0] = $stg->studienplaene[$key];
                     array_push($studiengaenge, $tempStg);
+
+                    if ($tempStg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                    {
+                        $this->setRawData('bewerbung_abgeschickt', true);
+                        $abgeschickt_array[$tempStg->studiengang_kz] = true;
+                    }
                 }
             }
             else
             {
                 array_push($studiengaenge, $stg);
+
+                if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                {
+                    $this->setRawData('bewerbung_abgeschickt', true);
+                    $abgeschickt_array[$stg->studiengang_kz] = true;
+                }
+
             }
         }
 
-        $this->setRawData("studiengaenge", $studiengaenge);
+        $this->setRawData('abgeschickt_array', $abgeschickt_array);
+
+        $this->setRawData('studiengaenge', $studiengaenge);
 
 		$this->setData(
 		    'prestudent',
@@ -130,7 +145,7 @@ class Bewerbung extends UI_Controller
                 true
             ));
 
-		$this->_isAnyApplicationSent();
+		//$this->_isAnyApplicationSent();
 
 		$this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
 		
@@ -152,20 +167,20 @@ class Bewerbung extends UI_Controller
 		
 		// Form validation rules
 		$this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
-		$this->form_validation->set_rules("vorname", "Vorname", "required|max_length[32]");
-		$this->form_validation->set_rules("nachname", "Nachname", "required|max_length[64]");
-		$this->form_validation->set_rules("gebdatum", "Geburtsdatum", "callback_check_date");
-		$this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
+		$this->form_validation->set_rules('vorname', 'Vorname', 'required|max_length[32]');
+		$this->form_validation->set_rules('nachname', 'Nachname', 'required|max_length[64]');
+		$this->form_validation->set_rules('gebdatum', 'Geburtsdatum', 'callback_check_date');
+		$this->form_validation->set_rules('email', 'E-Mail', 'required|valid_email');
 
-        foreach ($this->getData("gemeinden") as $gemeinde)
+        foreach ($this->getData('gemeinden') as $gemeinde)
         {
-            if (($this->getData("adresse") !== null) && ($gemeinde->plz == $this->getData("adresse")->plz) && ($gemeinde->name == $this->getData("adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("adresse")->ort))
+            if (($this->getData('adresse') !== null) && ($gemeinde->plz == $this->getData('adresse')->plz) && ($gemeinde->name == $this->getData('adresse')->gemeinde) && ($gemeinde->ortschaftsname == $this->getData('adresse')->ort))
             {
-                $this->setRawData("ort_dd", $gemeinde->gemeinde_id);
+                $this->setRawData('ort_dd', $gemeinde->gemeinde_id);
             }
-            if (($this->getData("zustell_adresse") !== null) && ($gemeinde->plz == $this->getData("zustell_adresse")->plz) && ($gemeinde->name == $this->getData("zustell_adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("zustell_adresse")->ort))
+            if (($this->getData('zustell_adresse') !== null) && ($gemeinde->plz == $this->getData('zustell_adresse')->plz) && ($gemeinde->name == $this->getData('zustell_adresse')->gemeinde) && ($gemeinde->ortschaftsname == $this->getData('zustell_adresse')->ort))
             {
-                $this->setRawData("zustell_ort_dd", $gemeinde->gemeinde_id);
+                $this->setRawData('zustell_ort_dd', $gemeinde->gemeinde_id);
             }
         }
 
@@ -179,11 +194,11 @@ class Bewerbung extends UI_Controller
      */
     public function check_date()
     {
-        $date = explode(".", $this->input->post("gebdatum"));
+        $date = explode('.', $this->input->post('gebdatum'));
         if ((is_array($date)) && (count($date) == 3) && (!checkdate($date[1], $date[0], $date[2])))
         {
-            //$this->form_validation->set_message("check_email", "E-Mail adresses do not match.");
-            $this->form_validation->set_message("check_date", "Bitte geben Sie ein gültiges Datum an.");
+            //$this->form_validation->set_message('check_email', 'E-Mail adresses do not match.');
+            $this->form_validation->set_message('check_date', 'Bitte geben Sie ein gültiges Datum an.');
             return false;
         }
         return true;
@@ -191,53 +206,53 @@ class Bewerbung extends UI_Controller
 
     private function _checkDataCompleteness()
     {
-        $complete = array("person" => true, "adresse" => true, "kontakt" => true, "zustelladresse" => true, "dokumente" => true, "requirements_dokumente"=>true,"spezialisierung"=>true);
+        $complete = array('person' => true, 'adresse' => true, 'kontakt' => true, 'zustelladresse' => true, 'dokumente' => true, 'requirements_dokumente'=>true,'spezialisierung'=>true);
         //check personal data
-        $person = $this->getData("person");
-        if ($person->vorname == "")
+        $person = $this->getData('person');
+        if ($person->vorname == '')
         {
-            $complete["person"] = false;
+            $complete['person'] = false;
         }
-        if ($person->nachname == "")
+        if ($person->nachname == '')
         {
-            $complete["person"] = false;
+            $complete['person'] = false;
         }
         if ($person->gebdatum == null)
         {
-            $complete["person"] = false;
+            $complete['person'] = false;
         }
-        if (($person->gebort == null) || ($person->gebort == ""))
+        if (($person->gebort == null) || ($person->gebort == ''))
         {
-            $complete["person"] = false;
+            $complete['person'] = false;
         }
-        if (($person->geburtsnation == null) || ($person->geburtsnation == ""))
+        if (($person->geburtsnation == null) || ($person->geburtsnation == ''))
         {
-            $complete["person"] = false;
+            $complete['person'] = false;
         }
-        if (($person->staatsbuergerschaft == null) || ($person->staatsbuergerschaft == ""))
+        if (($person->staatsbuergerschaft == null) || ($person->staatsbuergerschaft == ''))
         {
-            $complete["person"] = false;
+            $complete['person'] = false;
         }
-        if ((($person->svnr == null) || ($person->svnr == "")) && ($person->geburtsnation == "A"))
+        if ((($person->svnr == null) || ($person->svnr == '')) && ($person->geburtsnation == 'A'))
         {
-            $complete["person"] = false;
+            $complete['person'] = false;
         }
         //check adress data
 
-        if ($this->getData("adresse") !== null)
+        if ($this->getData('adresse') !== null)
         {
-            $adresse = $this->getData("adresse");
-            if (($adresse->strasse == null) || ($adresse->strasse == ""))
+            $adresse = $this->getData('adresse');
+            if (($adresse->strasse == null) || ($adresse->strasse == ''))
             {
-                $complete["adresse"] = false;
+                $complete['adresse'] = false;
             }
-            if (($adresse->plz == null) || ($adresse->plz == ""))
+            if (($adresse->plz == null) || ($adresse->plz == ''))
             {
-                $complete["adresse"] = false;
+                $complete['adresse'] = false;
             }
-            if (($adresse->ort == null) || ($adresse->ort == ""))
+            if (($adresse->ort == null) || ($adresse->ort == ''))
             {
-                $complete["adresse"] = false;
+                $complete['adresse'] = false;
             }
         }
         else
@@ -245,87 +260,87 @@ class Bewerbung extends UI_Controller
             $complete['adresse'] = false;
         }
         //check adress data
-        if ($this->getData("zustell_adresse") !== null)
+        if ($this->getData('zustell_adresse') !== null)
         {
-            $adresse = $this->getData("zustell_adresse");
-            if (($adresse->strasse == null) || ($adresse->strasse == ""))
+            $adresse = $this->getData('zustell_adresse');
+            if (($adresse->strasse == null) || ($adresse->strasse == ''))
             {
-                $complete["zustelladresse"] = false;
+                $complete['zustelladresse'] = false;
             }
-            if (($adresse->plz == null) || ($adresse->plz == ""))
+            if (($adresse->plz == null) || ($adresse->plz == ''))
             {
-                $complete["zustelladresse"] = false;
+                $complete['zustelladresse'] = false;
             }
-            if (($adresse->ort == null) || ($adresse->ort == ""))
+            if (($adresse->ort == null) || ($adresse->ort == ''))
             {
-                $complete["zustelladresse"] = false;
+                $complete['zustelladresse'] = false;
             }
         }
         elseif(($this->getData('adresse') !== null) && ($this->getData('adresse')->zustelladresse === false))
         {
-            $complete["zustelladresse"] = false;
+            $complete['zustelladresse'] = false;
         }
 
         //check contact data
-        $kontakt = $this->getData("kontakt");
+        $kontakt = $this->getData('kontakt');
         if($kontakt !== null)
         {
-            if ((!isset($kontakt["telefon"])) || ($kontakt["telefon"]->kontakt == ""))
+            if ((!isset($kontakt['telefon'])) || ($kontakt['telefon']->kontakt == ''))
             {
-                $complete["kontakt"] = false;
+                $complete['kontakt'] = false;
             }
-            if ((!isset($kontakt["email"])) || ($kontakt["email"]->kontakt == ""))
+            if ((!isset($kontakt['email'])) || ($kontakt['email']->kontakt == ''))
             {
-                $complete["kontakt"] = false;
+                $complete['kontakt'] = false;
             }
         }
         else
         {
-            $complete["kontakt"] = false;
+            $complete['kontakt'] = false;
         }
         //check documents
-        if (($this->getData("dokumente") != null ) && (!isset($this->getData("dokumente")[$this->config->config["dokumentTypen"]["lebenslauf"]])))
+        if (($this->getData('dokumente') != null ) && (!isset($this->getData('dokumente')[$this->config->config['dokumentTypen']['lebenslauf']])))
         {
-            $complete["dokumente"] = false;
+            $complete['dokumente'] = false;
         }
-        if (($this->getData("dokumente") != null ) && (!isset($this->getData("dokumente")[$this->config->config["dokumentTypen"]["reisepass"]])))
+        if (($this->getData('dokumente') != null ) && (!isset($this->getData('dokumente')[$this->config->config['dokumentTypen']['reisepass']])))
         {
-            $complete["dokumente"] = false;
+            $complete['dokumente'] = false;
         }
-        if ($this->getData("dokumenteStudiengang") !== null)
+        if ($this->getData('dokumenteStudiengang') !== null)
         {
-            foreach ($this->getData("dokumenteStudiengang") as $key => $doks)
+            foreach ($this->getData('dokumenteStudiengang') as $key => $doks)
             {
                 foreach ($doks as $dokType)
                 {
-                    if (($this->getData("dokumente") !== null) && (!isset($this->getData("dokumente")[$dokType->dokument_kurzbz])) && ($dokType->pflicht == true))
+                    if (($this->getData('dokumente') !== null) && (!isset($this->getData('dokumente')[$dokType->dokument_kurzbz])) && ($dokType->pflicht == true))
                     {
-                        $complete["requirements_dokumente"] = false;
+                        $complete['requirements_dokumente'] = false;
                     }
                 }
 
-                foreach ($this->getData("personalDocuments") as $dokType)
+                foreach ($this->getData('personalDocuments') as $dokType)
                 {
-                    if ((!isset($this->getData("dokumente")[$dokType->dokument_kurzbz])))
+                    if ((!isset($this->getData('dokumente')[$dokType->dokument_kurzbz])))
                     {
-                        $complete["requirements_dokumente"] = false;
+                        $complete['requirements_dokumente'] = false;
                     }
                 }
-                $abschlusszeugnis = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["abschlusszeugnis_".$this->getData("studiengang")->typ])->retval;
-                $letztesZeugnis = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["letztGueltigesZeugnis"])->retval;
-                if ((!isset($this->getData("dokumente")[$abschlusszeugnis->dokument_kurzbz])) || ((!$this->getData("dokumente")[$abschlusszeugnis->dokument_kurzbz]->nachgereicht) && ($this->getData("dokumente")[$abschlusszeugnis->dokument_kurzbz]->dms_id == null )))
+                $abschlusszeugnis = $this->DokumentModel->getDokument($this->config->item('dokumentTypen')['abschlusszeugnis_'.$this->getData('studiengang')->typ])->retval;
+                $letztesZeugnis = $this->DokumentModel->getDokument($this->config->item('dokumentTypen')['letztGueltigesZeugnis'])->retval;
+                if ((!isset($this->getData('dokumente')[$abschlusszeugnis->dokument_kurzbz])) || ((!$this->getData('dokumente')[$abschlusszeugnis->dokument_kurzbz]->nachgereicht) && ($this->getData('dokumente')[$abschlusszeugnis->dokument_kurzbz]->dms_id == null )))
                 {
-                    $complete["requirements_dokumente"] = false;
+                    $complete['requirements_dokumente'] = false;
                 }
-                elseif ((!isset($this->getData("dokumente")[$letztesZeugnis->dokument_kurzbz])) && ($this->getData("dokumente")[$abschlusszeugnis->dokument_kurzbz]->nachgereicht))
+                elseif ((!isset($this->getData('dokumente')[$letztesZeugnis->dokument_kurzbz])) && ($this->getData('dokumente')[$abschlusszeugnis->dokument_kurzbz]->nachgereicht))
                 {
-                    $complete["requirements_dokumente"] = false;
+                    $complete['requirements_dokumente'] = false;
                 }
             }
         }
         else
         {
-            $complete["requirements_dokumente"] = false;
+            $complete['requirements_dokumente'] = false;
         }
 
         $spezPhrase = $this->getData('spezPhrase');
@@ -338,7 +353,7 @@ class Bewerbung extends UI_Controller
         {
             if((!isset($spezialisierung)) || (!isset($spezialisierung[$this->getData('studiengang')->studiengang_kz])) || (empty($spezialisierung[$this->getData('studiengang')->studiengang_kz])))
             {
-                $complete["spezialisierung"] = false;
+                $complete['spezialisierung'] = false;
             }
         }
         return $complete;
@@ -347,7 +362,7 @@ class Bewerbung extends UI_Controller
     /*
     public function checkDataCompleteness()
     {
-        $studiengang_kz = $this->input->get("studiengang_kz");
+        $studiengang_kz = $this->input->get('studiengang_kz');
         $this->setData('person', $this->PersonModel->getPerson());
 
         $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
@@ -366,7 +381,7 @@ class Bewerbung extends UI_Controller
         {
             if ($stg->studiengang_kz === $studiengang_kz)
             {
-                $this->setRawData("studiengang", $stg);
+                $this->setRawData('studiengang', $stg);
             }
         }
 
@@ -378,7 +393,7 @@ class Bewerbung extends UI_Controller
 
         $this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
 
-        $this->setRawData("studiengaenge", array($this->getData('studiengang')));
+        $this->setRawData('studiengaenge', array($this->getData('studiengang')));
 
         $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
         $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
@@ -388,7 +403,7 @@ class Bewerbung extends UI_Controller
         {
             if($stg->studiengang_kz === $studiengang_kz)
             {
-                 $spezPhrase[$studiengang_kz] = $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $stg->oe_kurzbz, $stg->studienplaene[0]->orgform_kurzbz);
+                 $spezPhrase[$studiengang_kz] = $this->getPhrase('Aufnahme/Spezialisierung', $this->getData('sprache'), $stg->oe_kurzbz, $stg->studienplaene[0]->orgform_kurzbz);
             }
         }
         $this->setRawData('spezPhrase', $spezPhrase);
@@ -406,15 +421,15 @@ class Bewerbung extends UI_Controller
         $this->_getPersonalDocuments();
 
         //adding abschlusszeugnis if it is not present in dokumente
-        if(!isset($this->getData('dokumente')[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+        if(!isset($this->getData('dokumente')[$this->config->item('dokumentTypen')['abschlusszeugnis_' . $this->getData('studiengang')->typ]]))
         {
             $akten = $this->AkteModel->getAktenAccepted();
 
             if (hasData($akten))
             {
-                if (isset($akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]]))
+                if (isset($akten->retval[$this->config->item('dokumentTypen')['abschlusszeugnis_' . $this->getData('studiengang')->typ]]))
                 {
-                    $dok = $akten->retval[$this->config->item('dokumentTypen')["abschlusszeugnis_" . $this->getData('studiengang')->typ]];
+                    $dok = $akten->retval[$this->config->item('dokumentTypen')['abschlusszeugnis_' . $this->getData('studiengang')->typ]];
                     $dokumente = $this->getData('dokumente');
                     $dokumente[$dok->dokument_kurzbz] = $dok;
                     $this->setRawData('dokumente', $dokumente);
@@ -429,13 +444,13 @@ class Bewerbung extends UI_Controller
     {
         // Form validation rules
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
-        $this->form_validation->set_rules("vorname", "Vorname", "required|max_length[32]");
-        $this->form_validation->set_rules("nachname", "Nachname", "required|max_length[64]");
-        $this->form_validation->set_rules("gebdatum", "Geburtsdatum", "callback_check_date");
-        $this->form_validation->set_rules("email", "E-Mail", "required|valid_email");
+        $this->form_validation->set_rules('vorname', 'Vorname', 'required|max_length[32]');
+        $this->form_validation->set_rules('nachname', 'Nachname', 'required|max_length[64]');
+        $this->form_validation->set_rules('gebdatum', 'Geburtsdatum', 'callback_check_date');
+        $this->form_validation->set_rules('email', 'E-Mail', 'required|valid_email');
 
-        $this->setRawData("studiengang_kz", $studiengang_kz);
-        $this->setRawData("studienplan_id", $studienplan_id);
+        $this->setRawData('studiengang_kz', $studiengang_kz);
+        $this->setRawData('studienplan_id', $studienplan_id);
 
         if ($this->form_validation->run() == FALSE)
         {
@@ -464,23 +479,23 @@ class Bewerbung extends UI_Controller
             $abgeschickt_array = array();
             if($this->getData('studiengaenge') !== null)
             {
-                foreach ($this->getData('studiengaenge') as $stg)
+                /*foreach ($this->getData('studiengaenge') as $stg)
                 {
                     if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
                     {
-                        $this->setRawData("studiengang", $stg);
+                        $this->setRawData('studiengang', $stg);
                     }
 
                     if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
                     {
-                        $this->setRawData("bewerbung_abgeschickt", true);
+                        $this->setRawData('bewerbung_abgeschickt', true);
                         $abgeschickt_array[$stg->studiengang_kz] = true;
                     }
-                }
+                }*/
 
                 $studiengaenge = array();
 
-                foreach($this->getData("studiengaenge") as $stg)
+                foreach($this->getData('studiengaenge') as $stg)
                 {
                     if((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
                     {
@@ -497,12 +512,12 @@ class Bewerbung extends UI_Controller
 
                             if ($tempStg->studiengang_kz === $this->getData('studiengang_kz') && ($tempStg->prestudentstatus[0]->studienplan_id === $studienplan_id))
                             {
-                                $this->setRawData("studiengang", $tempStg);
+                                $this->setRawData('studiengang', $tempStg);
                             }
 
                             if ($tempStg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
                             {
-                                $this->setRawData("bewerbung_abgeschickt", true);
+                                $this->setRawData('bewerbung_abgeschickt', true);
                                 $abgeschickt_array[$tempStg->studiengang_kz] = true;
                             }
                         }
@@ -512,12 +527,18 @@ class Bewerbung extends UI_Controller
                         array_push($studiengaenge, $stg);
                         if ($stg->studiengang_kz === $this->getData('studiengang_kz') && ($stg->prestudentstatus[0]->studienplan_id === $studienplan_id))
                         {
-                            $this->setRawData("studiengang", $stg);
+                            $this->setRawData('studiengang', $stg);
+
+                            if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                            {
+                                $this->setRawData('bewerbung_abgeschickt', true);
+                                $abgeschickt_array[$stg->studiengang_kz] = true;
+                            }
                         }
                     }
                 }
 
-                $this->setRawData("studiengaenge", $studiengaenge);
+                $this->setRawData('studiengaenge', $studiengaenge);
             }
             $this->setRawData('abgeschickt_array', $abgeschickt_array);
 
@@ -528,7 +549,7 @@ class Bewerbung extends UI_Controller
              */
             if ($this->getData('studiengang') === null)
             {
-                $this->setData("prestudent", $this->PrestudentModel->getPrestudentByPersonId(true));
+                $this->setData('prestudent', $this->PrestudentModel->getPrestudentByPersonId(true));
                 $prestudenten = $this->getData('prestudent');
                 if($prestudenten !== null)
                 {
@@ -556,33 +577,33 @@ class Bewerbung extends UI_Controller
             }
             else
             {
-                $this->setRawData("studiengaenge", array($this->getData('studiengang')));
+                $this->setRawData('studiengaenge', array($this->getData('studiengang')));
                 $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
                 $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
                 $abgeschickt_array = array();
                 if ($this->getData('prestudentStatus')->bewerbung_abgeschicktamum != null)
                 {
-                    $this->setRawData("bewerbung_abgeschickt", true);
-                    $abgeschickt_array[$stg->studiengang_kz] = true;
+                    $this->setRawData('bewerbung_abgeschickt', true);
+                    $abgeschickt_array[$this->getData('prestudent')->studiengang_kz] = true;
                 }
                 $this->setRawData('abgeschickt_array', $abgeschickt_array);
             }
 
-
             //load Studienplan
-            $this->setData("studienplan", $this->StudienplanModel->getStudienplan($studienplan_id));
+            $this->setData('studienplan', $this->StudienplanModel->getStudienplan($studienplan_id));
             $fristen = $this->BewerbungstermineModel->getByStudienplan($studienplan_id)->retval;
             $bewerbungMoeglich = false;
             if (!empty($fristen))
             {
                 foreach ($fristen as $frist)
                 {
-                    if ((date("Y-m-d", strtotime($frist->beginn)) < date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) > date("Y-m-d")))
+                    if ((date('Y-m-d', strtotime($frist->beginn)) < date('Y-m-d')) && (date('Y-m-d', strtotime($frist->ende)) > date('Y-m-d')))
                     {
                         $bewerbungMoeglich = true;
                     }
                 }
             }
+
             if ($bewerbungMoeglich)
             {
                 $exists = false;
@@ -595,14 +616,14 @@ class Bewerbung extends UI_Controller
 
                     if (($prestudentStatus !== null) && ($prestudent->studiengang_kz == $studiengang_kz)
                         && ($prestudentStatus->studienplan_id == $studienplan_id)
-                        && ($prestudentStatus->studiensemester_kurzbz == $this->getData("studiensemester")->studiensemester_kurzbz)
+                        && ($prestudentStatus->studiensemester_kurzbz == $this->getData('studiensemester')->studiensemester_kurzbz)
                     )
                     {
                         $exists = true;
                         $abgeschickt_array = array();
                         if ($prestudentStatus->bewerbung_abgeschicktamum !== null)
                         {
-                            $this->setRawData("bewerbung_abgeschickt", true);
+                            $this->setRawData('bewerbung_abgeschickt', true);
                             $abgeschickt_array[$prestudent->studiengang_kz] = true;
                         }
 
@@ -613,9 +634,9 @@ class Bewerbung extends UI_Controller
                         && ($prestudentStatus != null)
                         && ($prestudentStatus->studienplan_id === $studienplan_id)
                         && (
-                            ($prestudentStatus->status_kurzbz === "Interessent")
-                            || ($prestudentStatus->status_kurzbz === "Bewerber")
-                            || ($prestudentStatus->status_kurzbz === "Abgewiesener")
+                            ($prestudentStatus->status_kurzbz === 'Interessent')
+                            || ($prestudentStatus->status_kurzbz === 'Bewerber')
+                            || ($prestudentStatus->status_kurzbz === 'Abgewiesener')
                         )
                     )
                     {
@@ -624,9 +645,9 @@ class Bewerbung extends UI_Controller
                         $prestudentStatus = array();
                         $prestudentStatus['new'] = true;
                         $prestudentStatus['prestudent_id'] = $prestudent->prestudent_id;
-                        $prestudentStatus['status_kurzbz'] = "Interessent";
+                        $prestudentStatus['status_kurzbz'] = 'Interessent';
                         $prestudentStatus['rt_stufe'] = 1;
-                        $prestudentStatus['studiensemester_kurzbz'] = $this->getData("studiensemester")->studiensemester_kurzbz;
+                        $prestudentStatus['studiensemester_kurzbz'] = $this->getData('studiensemester')->studiensemester_kurzbz;
                         $prestudentStatus['orgform_kurzbz'] = $this->getData('studienplan')->orgform_kurzbz;
                         $prestudentStatus['studienplan_id'] = $studienplan_id;
                         $prestudentStatus['datum'] = date('Y-m-d');
@@ -642,9 +663,9 @@ class Bewerbung extends UI_Controller
                         $prestudentStatus = array();
                         $prestudentStatus['new'] = true;
                         $prestudentStatus['prestudent_id'] = $prestudent->prestudent_id;
-                        $prestudentStatus['status_kurzbz'] = "Interessent";
+                        $prestudentStatus['status_kurzbz'] = 'Interessent';
                         $prestudentStatus['rt_stufe'] = 1;
-                        $prestudentStatus['studiensemester_kurzbz'] = $this->getData("studiensemester")->studiensemester_kurzbz;
+                        $prestudentStatus['studiensemester_kurzbz'] = $this->getData('studiensemester')->studiensemester_kurzbz;
                         $prestudentStatus['orgform_kurzbz'] = $this->getData('studienplan')->orgform_kurzbz;
                         $prestudentStatus['studienplan_id'] = $studienplan_id;
                         $prestudentStatus['datum'] = date('Y-m-d');
@@ -657,11 +678,11 @@ class Bewerbung extends UI_Controller
                 if ((!$exists))
                 {
                     $prestudent = array();
-                    $prestudent["person_id"] = $this->getData('person')->person_id;
-                    $prestudent["studiengang_kz"] = $studiengang_kz;
-                    $prestudent["aufmerksamdurch_kurzbz"] = 'k.A.';
-                    $prestudent["insertamum"] = date('Y-m-d H:i:s');
-                    $prestudent["insertvon"] = 'aufnahme';
+                    $prestudent['person_id'] = $this->getData('person')->person_id;
+                    $prestudent['studiengang_kz'] = $studiengang_kz;
+                    $prestudent['aufmerksamdurch_kurzbz'] = 'k.A.';
+                    $prestudent['insertamum'] = date('Y-m-d H:i:s');
+                    $prestudent['insertvon'] = 'aufnahme';
 
                     $savedPrestudent = $this->PrestudentModel->savePrestudent($prestudent);
 
@@ -670,9 +691,9 @@ class Bewerbung extends UI_Controller
                         $prestudentStatus = array();
                         $prestudentStatus['new'] = true;
                         $prestudentStatus['prestudent_id'] = $savedPrestudent->retval;
-                        $prestudentStatus['status_kurzbz'] = "Interessent";
+                        $prestudentStatus['status_kurzbz'] = 'Interessent';
                         $prestudentStatus['rt_stufe'] = 1;
-                        $prestudentStatus['studiensemester_kurzbz'] = $this->getData("studiensemester")->studiensemester_kurzbz;
+                        $prestudentStatus['studiensemester_kurzbz'] = $this->getData('studiensemester')->studiensemester_kurzbz;
                         $prestudentStatus['orgform_kurzbz'] = $this->getData('studienplan')->orgform_kurzbz;
                         $prestudentStatus['studienplan_id'] = $studienplan_id;
                         $prestudentStatus['datum'] = date('Y-m-d');
@@ -684,9 +705,9 @@ class Bewerbung extends UI_Controller
                     }
                 }
             }
-            else
+            elseif($this->getData('studiengang') == null)
             {
-                redirect("/Studiengaenge");
+                redirect('/Studiengaenge');
             }
 
             $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
@@ -706,7 +727,7 @@ class Bewerbung extends UI_Controller
 
             $studiengaenge = array();
 
-            foreach($this->getData("studiengaenge") as $stg)
+            foreach($this->getData('studiengaenge') as $stg)
             {
                 if((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
                 {
@@ -723,12 +744,12 @@ class Bewerbung extends UI_Controller
 
                         if ($tempStg->studiengang_kz === $this->getData('studiengang_kz') && ($tempStg->prestudentstatus[0]->studienplan_id === $studienplan_id))
                         {
-                            $this->setRawData("studiengang", $tempStg);
+                            $this->setRawData('studiengang', $tempStg);
                         }
 
                         if ($tempStg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
                         {
-                            $this->setRawData("bewerbung_abgeschickt", true);
+                            $this->setRawData('bewerbung_abgeschickt', true);
                             $abgeschickt_array[$tempStg->studiengang_kz] = true;
                         }
                     }
@@ -738,16 +759,22 @@ class Bewerbung extends UI_Controller
                     array_push($studiengaenge, $stg);
                     if ($stg->studiengang_kz === $this->getData('studiengang_kz') && ($stg->prestudentstatus[0]->studienplan_id === $studienplan_id))
                     {
-                        $this->setRawData("studiengang", $stg);
+                        $this->setRawData('studiengang', $stg);
+
+                        if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                        {
+                            $this->setRawData('bewerbung_abgeschickt', true);
+                            $abgeschickt_array[$stg->studiengang_kz] = true;
+                        }
                     }
                 }
             }
 
-            $this->setRawData("studiengaenge", $studiengaenge);
+            $this->setRawData('studiengaenge', $studiengaenge);
 
             $this->setRawData('abgeschickt_array', $abgeschickt_array);
 
-            $this->setRawData("studiengaenge", array($this->getData('studiengang')));
+            $this->setRawData('studiengaenge', array($this->getData('studiengang')));
 
             $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
             $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
@@ -772,15 +799,15 @@ class Bewerbung extends UI_Controller
 
             $this->_missingData();
 
-            foreach ($this->getData("gemeinden") as $gemeinde)
+            foreach ($this->getData('gemeinden') as $gemeinde)
             {
-                if (($this->getData("adresse") !== null) && ($gemeinde->plz == $this->getData("adresse")->plz) && ($gemeinde->name == $this->getData("adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("adresse")->ort))
+                if (($this->getData('adresse') !== null) && ($gemeinde->plz == $this->getData('adresse')->plz) && ($gemeinde->name == $this->getData('adresse')->gemeinde) && ($gemeinde->ortschaftsname == $this->getData('adresse')->ort))
                 {
-                    $this->setRawData("ort_dd", $gemeinde->gemeinde_id);
+                    $this->setRawData('ort_dd', $gemeinde->gemeinde_id);
                 }
-                if (($this->getData("zustell_adresse") !== null) && ($gemeinde->plz == $this->getData("zustell_adresse")->plz) && ($gemeinde->name == $this->getData("zustell_adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("zustell_adresse")->ort))
+                if (($this->getData('zustell_adresse') !== null) && ($gemeinde->plz == $this->getData('zustell_adresse')->plz) && ($gemeinde->name == $this->getData('zustell_adresse')->gemeinde) && ($gemeinde->ortschaftsname == $this->getData('zustell_adresse')->ort))
                 {
-                    $this->setRawData("zustell_ort_dd", $gemeinde->gemeinde_id);
+                    $this->setRawData('zustell_ort_dd', $gemeinde->gemeinde_id);
                 }
             }
 
@@ -815,18 +842,18 @@ class Bewerbung extends UI_Controller
         {
             if ($stg->studiengang_kz === $studiengang_kz)
             {
-                $this->setRawData("studiengang", $stg);
+                $this->setRawData('studiengang', $stg);
             }
 
             if($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
             {
-                $this->setRawData("bewerbung_abgeschickt", true);
+                $this->setRawData('bewerbung_abgeschickt', true);
                 $abgeschickt_array[$stg->studiengang_kz] = true;
             }
         }
         $this->setRawData('abgeschickt_array', $abgeschickt_array);
 
-        $this->setRawData("studiengaenge", array($this->getData('studiengang')));
+        $this->setRawData('studiengaenge', array($this->getData('studiengang')));
 
         $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
         $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
@@ -843,7 +870,7 @@ class Bewerbung extends UI_Controller
                 if($prestudentStatus->bewerbung_abgeschicktamum == null)
                 {
                     $deletedPrestudentStatus = $this->PrestudentStatusModel->removePrestudentStatus((array)$prestudentStatus);
-                    redirect("/Bewerbung");
+                    redirect('/Bewerbung');
                 }
                 else
                 {
@@ -885,13 +912,13 @@ class Bewerbung extends UI_Controller
                     //$this->_isAnyApplicationSent();
 
                     $this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
-                    $this->_setError(true, $this->lang->line("aufnahme/bewerbungKannNichtGeloeschtWerden"));
+                    $this->_setError(true, $this->lang->line('aufnahme/bewerbungKannNichtGeloeschtWerden'));
                     $this->load->view('bewerbung', $this->getAllData());
                 }
             }
             else
             {
-                redirect("/Bewerbung");
+                redirect('/Bewerbung');
             }
 
         }
@@ -907,9 +934,9 @@ class Bewerbung extends UI_Controller
             //load dokumente
             $this->setRawData('dokumente' , $this->AkteModel->getAktenAccepted()->retval);
 
-            if($this->getData("dokumente") !== null)
+            if($this->getData('dokumente') !== null)
             {
-                foreach ($this->getData("dokumente") as $akte)
+                foreach ($this->getData('dokumente') as $akte)
                 {
                     if ($akte->dms_id != null)
                     {
@@ -920,53 +947,53 @@ class Bewerbung extends UI_Controller
             }
             foreach ($files as $key => $file)
             {
-                if (is_uploaded_file($file["tmp_name"][0]))
+                if (is_uploaded_file($file['tmp_name'][0]))
                 {
                     $akte = new stdClass();
                     $obj = new stdClass();
                     $obj->new = true;
                     $obj->version = 0;
-                    $obj->mimetype = $file["type"][0];
-                    $obj->name = $file["name"][0];
+                    $obj->mimetype = $file['type'][0];
+                    $obj->name = $file['name'][0];
                     $obj->oe_kurzbz = null;
                     switch ($key)
                     {
-                        case "reisepass":
-                            $obj->dokument_kurzbz = $this->config->item('dokumentTypen')["reisepass"];
+                        case 'reisepass':
+                            $obj->dokument_kurzbz = $this->config->item('dokumentTypen')['reisepass'];
                             break;
-                        case "lebenslauf":
-                            $obj->dokument_kurzbz = $this->config->item('dokumentTypen')["lebenslauf"];
+                        case 'lebenslauf':
+                            $obj->dokument_kurzbz = $this->config->item('dokumentTypen')['lebenslauf'];
                             break;
                         default:
-                            $obj->dokument_kurzbz = $this->config->item('dokumentTypen')["sonstiges"];
+                            $obj->dokument_kurzbz = $this->config->item('dokumentTypen')['sonstiges'];
                     }
                     if ($typ)
                         $obj->dokument_kurzbz = $this->config->item('dokumentTypen')[$typ];
 
-                    if($this->getData("dokumente") !== null)
+                    if($this->getData('dokumente') !== null)
                     {
-                       foreach ($this->getData("dokumente") as $akte_temp)
+                       foreach ($this->getData('dokumente') as $akte_temp)
                        {
-                           if (($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != $this->config->item('dokumentTypen')["sonstiges"]))
+                           if (($akte_temp->dokument_kurzbz == $obj->dokument_kurzbz) && ($obj->dokument_kurzbz != $this->config->item('dokumentTypen')['sonstiges']))
                            {
                                $akte = $akte_temp;
-                               $akte->updateamum = date("Y-m-d H:i:s");
-                               $akte->updatevon = "online";
+                               $akte->updateamum = date('Y-m-d H:i:s');
+                               $akte->updatevon = 'online';
                                if ($akte->dms_id != null && !is_null($akte->dokument))
                                {
                                    $obj = $akte->dokument;
                                    $obj->new = true;
                                    $obj->version = ($obj->version + 1);
                                    //$obj->version = ($akte->dokument->version+1);
-                                   $obj->mimetype = $file["type"][0];
-                                   $obj->name = $file["name"][0];
+                                   $obj->mimetype = $file['type'][0];
+                                   $obj->name = $file['name'][0];
                                }
                            }
                        }
                     }
-                    $obj->kategorie_kurzbz = "Akte";
-                    $type = pathinfo($file["name"][0], PATHINFO_EXTENSION);
-                    $data = file_get_contents($file["tmp_name"][0]);
+                    $obj->kategorie_kurzbz = 'Akte';
+                    $type = pathinfo($file['name'][0], PATHINFO_EXTENSION);
+                    $data = file_get_contents($file['tmp_name'][0]);
                     $obj->file_content = base64_encode($data);
                     $result = new stdClass();
                     $dms = $this->DmsModel->saveDms((array)$obj);
@@ -977,8 +1004,8 @@ class Bewerbung extends UI_Controller
                         {
                             $akte->dms_id = $dms->retval->dms_id;
                             $result->dms_id = $akte->dms_id;
-                            $akte->person_id = $this->getData("person")->person_id;
-                            $akte->mimetype = $file["type"][0];
+                            $akte->person_id = $this->getData('person')->person_id;
+                            $akte->mimetype = $file['type'][0];
                             $akte->bezeichnung = mb_substr($obj->name, 0, 32);
                             $akte->dokument_kurzbz = $obj->dokument_kurzbz;
                             $akte->titel = $key;
@@ -1006,7 +1033,7 @@ class Bewerbung extends UI_Controller
                         }
                         else
                         {
-                            $akte->mimetype = $file["type"][0];
+                            $akte->mimetype = $file['type'][0];
                             $akte->bezeichnung = mb_substr($obj->name, 0, 32);
                             $akte->dokument_kurzbz = $obj->dokument_kurzbz;
                             $akte->titel = $key;
@@ -1035,7 +1062,7 @@ class Bewerbung extends UI_Controller
                         echo json_encode($result);
                         $this->_setError(true, $dms->error);
                     }
-                    if (unlink($file["tmp_name"][0]))
+                    if (unlink($file['tmp_name'][0]))
                     {
                         //removing tmp file successful
                     }
@@ -1051,12 +1078,12 @@ class Bewerbung extends UI_Controller
     public function deleteDocument()
     {
         $result = new stdClass();
-        if((isset($this->input->post()["dms_id"])))
+        if((isset($this->input->post()['dms_id'])))
         {
-            $dms_id = $this->input->post()["dms_id"];
+            $dms_id = $this->input->post()['dms_id'];
             $this->setRawData('dokumente' , $this->AkteModel->getAktenAccepted()->retval);
 
-            foreach($this->getData("dokumente") as $dok)
+            foreach($this->getData('dokumente') as $dok)
             {
                 if(($dok->dms_id === $dms_id) && ($dok->accepted == false))
                 {
@@ -1070,7 +1097,7 @@ class Bewerbung extends UI_Controller
         {
             //TODO parameter missing
             $result->error = true;
-            $result->msg = "dms_id is missing";
+            $result->msg = 'dms_id is missing';
         }
 
         echo json_encode($result);
@@ -1099,15 +1126,67 @@ class Bewerbung extends UI_Controller
             true
         ));
 
-        $this->setData(
+        if($this->getData('studiengaenge') !== null)
+        {
+            $studiengaenge = array();
+
+            foreach($this->getData('studiengaenge') as $stg)
+            {
+                if((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
+                {
+                    foreach($stg->prestudenten as $key => $ps)
+                    {
+                        $tempStg = clone $stg;
+                        $tempStg->prestudenten = array();
+                        $tempStg->prestudenten[0] = $ps;
+                        $tempStg->prestudentstatus = array();
+                        $tempStg->prestudentstatus[0] = $stg->prestudentstatus[$key];
+                        $tempStg->studienplaene = array();
+                        $tempStg->studienplaene[0] = $stg->studienplaene[$key];
+                        array_push($studiengaenge, $tempStg);
+
+                        if ($tempStg->studiengang_kz === $this->getData('studiengang_kz') && ($tempStg->prestudentstatus[0]->studienplan_id === $this->getData('studienplan_id')))
+                        {
+                            $this->setRawData('studiengang', $tempStg);
+                        }
+                    }
+                }
+                else
+                {
+                    array_push($studiengaenge, $stg);
+                    if ($stg->studiengang_kz === $this->getData('studiengang_kz') && ($stg->prestudentstatus[0]->studienplan_id === $this->getData('studienplan_id')))
+                    {
+                        $this->setRawData('studiengang', $stg);
+                    }
+                }
+            }
+
+            $this->setRawData('studiengaenge', $studiengaenge);
+        }
+
+        $prestudent = $this->getData('studiengang')->prestudenten[0];
+
+        $udf_values = json_decode($prestudent->udf_values);
+        $udf_values = (array) $udf_values;
+        if(is_array($udf_values) && (count($udf_values) > 0))
+        {
+            foreach($udf_values as $udf_key => $udf_value)
+            {
+                $prestudent->{$udf_key} = $udf_value;
+            }
+        }
+
+        $this->setRawData('prestudent', $prestudent);
+
+        /*$this->setData(
             'prestudent',
             $this->PrestudentModel->getLastStatuses(
                 $this->getData('person')->person_id,
                 $this->getData('studiensemester')->studiensemester_kurzbz,
                 null,
-                null,
+                'Interessent',
                 true
-            ));
+            ));*/
 
         //$this->_isAnyApplicationSent();
 
@@ -1129,60 +1208,86 @@ class Bewerbung extends UI_Controller
 
         $this->_missingData();
 
-        foreach ($this->getData("gemeinden") as $gemeinde)
+        foreach ($this->getData('gemeinden') as $gemeinde)
         {
-            if (($this->getData("adresse") !== null) && ($gemeinde->plz == $this->getData("adresse")->plz) && ($gemeinde->name == $this->getData("adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("adresse")->ort))
+            if (($this->getData('adresse') !== null) && ($gemeinde->plz == $this->getData('adresse')->plz) && ($gemeinde->name == $this->getData('adresse')->gemeinde) && ($gemeinde->ortschaftsname == $this->getData('adresse')->ort))
             {
-                $this->setRawData("ort_dd", $gemeinde->gemeinde_id);
+                $this->setRawData('ort_dd', $gemeinde->gemeinde_id);
             }
-            if (($this->getData("zustell_adresse") !== null) && ($gemeinde->plz == $this->getData("zustell_adresse")->plz) && ($gemeinde->name == $this->getData("zustell_adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("zustell_adresse")->ort))
+            if (($this->getData('zustell_adresse') !== null) && ($gemeinde->plz == $this->getData('zustell_adresse')->plz) && ($gemeinde->name == $this->getData('zustell_adresse')->gemeinde) && ($gemeinde->ortschaftsname == $this->getData('zustell_adresse')->ort))
             {
-                $this->setRawData("zustell_ort_dd", $gemeinde->gemeinde_id);
+                $this->setRawData('zustell_ort_dd', $gemeinde->gemeinde_id);
             }
         }
 
         $post = $this->input->post();
-        $person = $this->getData("person");
-        $person->vorname = $post["vorname"];
-        $person->nachname = $post["nachname"];
-        //$person->bundesland_code = $post["bundesland"];
-        if (isset($post["gebdatum"]))
+        $person = $this->getData('person');
+        $person->vorname = $post['vorname'];
+        $person->nachname = $post['nachname'];
+        //$person->bundesland_code = $post['bundesland'];
+        if (isset($post['gebdatum']))
         {
-            $person->gebdatum = date('Y-m-d', strtotime($post["gebdatum"]));
+            $person->gebdatum = date('Y-m-d', strtotime($post['gebdatum']));
         }
-        $person->gebort = (($post["geburtsort"] != '') && ($post["geburtsort"] != 'null')) ? $post["geburtsort"] : null;
-        $person->geburtsnation = (($post["nation"] != '') && ($post["nation"] != 'null')) ? $post["nation"] : null;
-        if ($post["anrede"] === "Herr")
+        $person->gebort = (($post['geburtsort'] != '') && ($post['geburtsort'] != 'null')) ? $post['geburtsort'] : null;
+        $person->geburtsnation = (($post['nation'] != '') && ($post['nation'] != 'null')) ? $post['nation'] : null;
+        if ($post['anrede'] === 'Herr')
         {
-            $person->geschlecht = "m";
-            $person->anrede = $post["anrede"];
+            $person->geschlecht = 'm';
+            $person->anrede = $post['anrede'];
         }
-        elseif ($post["anrede"] === "Frau")
+        elseif ($post['anrede'] === 'Frau')
         {
-            $person->geschlecht = "w";
-            $person->anrede = $post["anrede"];
+            $person->geschlecht = 'w';
+            $person->anrede = $post['anrede'];
         }
         else
         {
-            $person->geschlecht = "u";
+            $person->geschlecht = 'u';
         }
-        $person->staatsbuergerschaft = (($post["staatsbuergerschaft"] != '') && ($post["staatsbuergerschaft"] != 'null')) ? $post["staatsbuergerschaft"] : null;
+        $person->staatsbuergerschaft = (($post['staatsbuergerschaft'] != '') && ($post['staatsbuergerschaft'] != 'null')) ? $post['staatsbuergerschaft'] : null;
         // An die SVNR wird v1, v2, v3, etc hinzugefuegt wenn die SVNR bereits vorhanden ist
         // In der Anzeige wird dies herausgefiltert. Deshalb muss beim Speichern der Daten
         // wieder die SVNR mit v1 etc geschickt werden wenn diese nicht geaendert wurde
-        if ($post["svnr_orig"] != '' && mb_substr($post["svnr_orig"], 0, 10) == $post["svnr"])
+        if ($post['svnr_orig'] != '' && mb_substr($post['svnr_orig'], 0, 10) == $post['svnr'])
         {
-            $person->svnr = $post["svnr_orig"];
+            $person->svnr = $post['svnr_orig'];
         }
         else
         {
-            if ($post["svnr"] != '')
+            if ($post['svnr'] != '')
             {
-                $person->svnr = $post["svnr"];
+                $person->svnr = $post['svnr'];
             }
         }
-        $person->titelpre = $post["titelpre"] != '' ? $post["titelpre"] : null;
-        $person->titelpost = $post["titelpost"] != '' ? $post["titelpost"] : null;
+        $person->titelpre = $post['titelpre'] != '' ? $post['titelpre'] : null;
+        $person->titelpost = $post['titelpost'] != '' ? $post['titelpost'] : null;
+
+        $udf_config = $this->config->item('udf_container_personal_data');
+
+        if($udf_config['active'] == true)
+        {
+            $data = parseUdfData($udf_config, $this->getData('udfs'), $this->input->post(), $person, $this->lang);
+
+            $prestudent = $this->getData('prestudent');
+
+            $prestudent = parseUdfData($udf_config, $this->getData('udfs'), $this->input->post(), $prestudent, $this->lang);
+
+            if (is_string($data) || is_string($prestudent))
+            {
+                $this->_setError(true, $data . $prestudent);
+            }
+            else
+            {
+                $person = $data;
+                $updatePrestudent = $this->PrestudentModel->savePrestudent((array)$prestudent);
+
+                if (!hasData($updatePrestudent))
+                {
+                    $this->_setError(true, $updatePrestudent->retval);
+                }
+            }
+        }
 
         $updatePerson = $this->PersonModel->savePerson((array)$person);
 
@@ -1193,20 +1298,20 @@ class Bewerbung extends UI_Controller
 
         $adresse = new stdClass();
         $zustell_adresse = new stdClass();
-        if ($post["adresse_nation"] === "A")
+        if ($post['adresse_nation'] === 'A')
         {
-            if (($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort_dd"] != ""))
+            if (($post['strasse'] != '') && ($post['plz'] != '') && ($post['ort_dd'] != ''))
             {
-                if ($this->getData("adresse") !== null)
+                if ($this->getData('adresse') !== null)
                 {
-                    $adresse = $this->getData("adresse");
+                    $adresse = $this->getData('adresse');
                 }
                 else
                 {
-                    $adresse->person_id = $this->getData("person")->person_id;
+                    $adresse->person_id = $this->getData('person')->person_id;
                     $adresse->heimatadresse = true;
                 }
-                if (($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
+                if (($post['zustell_strasse'] != '') && ((($post['zustell_plz'] != '') && ($post['zustell_ort'] != ''))))
                 {
                     $adresse->zustelladresse = false;
                 }
@@ -1214,13 +1319,13 @@ class Bewerbung extends UI_Controller
                 {
                     $adresse->zustelladresse = true;
                 }
-                $adresse->strasse = $post["strasse"];
-                $adresse->nation = $post["adresse_nation"];
-                $adresse->plz = $post["plz"];
+                $adresse->strasse = $post['strasse'];
+                $adresse->nation = $post['adresse_nation'];
+                $adresse->plz = $post['plz'];
 
-                foreach ($this->getData("gemeinden") as $gemeinde)
+                foreach ($this->getData('gemeinden') as $gemeinde)
                 {
-                    if ($gemeinde->gemeinde_id === $post["ort_dd"])
+                    if ($gemeinde->gemeinde_id === $post['ort_dd'])
                     {
                         $adresse->gemeinde = $gemeinde->name;
                         $adresse->ort = $gemeinde->ortschaftsname;
@@ -1244,18 +1349,18 @@ class Bewerbung extends UI_Controller
         }
         else
         {
-            if (($post["strasse"] != "") && ($post["plz"] != "") && ($post["ort"] != ""))
+            if (($post['strasse'] != '') && ($post['plz'] != '') && ($post['ort'] != ''))
             {
-                if ($this->getData("adresse") !== null)
+                if ($this->getData('adresse') !== null)
                 {
-                    $adresse = $this->getData("adresse");
+                    $adresse = $this->getData('adresse');
                 }
                 else
                 {
-                    $adresse->person_id = $this->getData("person")->person_id;
+                    $adresse->person_id = $this->getData('person')->person_id;
                     $adresse->heimatadresse = true;
                 }
-                if (($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
+                if (($post['zustell_strasse'] != '') && ((($post['zustell_plz'] != '') && ($post['zustell_ort'] != ''))))
                 {
                     $adresse->zustelladresse = false;
                 }
@@ -1263,10 +1368,10 @@ class Bewerbung extends UI_Controller
                 {
                     $adresse->zustelladresse = true;
                 }
-                $adresse->strasse = $post["strasse"];
-                $adresse->plz = $post["plz"];
-                $adresse->ort = $post["ort"];
-                $adresse->nation = $post["adresse_nation"];
+                $adresse->strasse = $post['strasse'];
+                $adresse->plz = $post['plz'];
+                $adresse->ort = $post['ort'];
+                $adresse->nation = $post['adresse_nation'];
                 $updateAdresse = $this->AdresseModel->saveAdresse((array)$adresse);
 
                 if(!isSuccess($updateAdresse))
@@ -1275,29 +1380,29 @@ class Bewerbung extends UI_Controller
                 }
             }
         }
-        if ($post["zustelladresse_nation"] === "A")
+        if ($post['zustelladresse_nation'] === 'A')
         {
-            if (($post["zustell_strasse"] != "") && (($post["zustell_plz"] != "") && ($post["zustell_ort_dd"] != "")))
+            if (($post['zustell_strasse'] != '') && (($post['zustell_plz'] != '') && ($post['zustell_ort_dd'] != '')))
             {
-                if ($this->getData("zustell_adresse") !== null)
+                if ($this->getData('zustell_adresse') !== null)
                 {
-                    $zustell_adresse = $this->getData("zustell_adresse");
+                    $zustell_adresse = $this->getData('zustell_adresse');
                 }
                 else
                 {
-                    $zustell_adresse->person_id = $this->getData("person")->person_id;
+                    $zustell_adresse->person_id = $this->getData('person')->person_id;
                     $zustell_adresse->heimatadresse = false;
                     $zustell_adresse->zustelladresse = true;
                 }
-                $zustell_adresse->strasse = $post["zustell_strasse"];
-                $zustell_adresse->nation = $post["zustelladresse_nation"];
-                $zustell_adresse->plz = $post["zustell_plz"];
+                $zustell_adresse->strasse = $post['zustell_strasse'];
+                $zustell_adresse->nation = $post['zustelladresse_nation'];
+                $zustell_adresse->plz = $post['zustell_plz'];
 
                 $this->GemeindeModel->getGemeindeByPlz($zustell_adresse->plz);
 
-                foreach ($this->getData("gemeinden") as $gemeinde)
+                foreach ($this->getData('gemeinden') as $gemeinde)
                 {
-                    if ($gemeinde->gemeinde_id === $post["zustell_ort_dd"])
+                    if ($gemeinde->gemeinde_id === $post['zustell_ort_dd'])
                     {
                         $zustell_adresse->gemeinde = $gemeinde->name;
                         $zustell_adresse->ort = $gemeinde->ortschaftsname;
@@ -1315,22 +1420,22 @@ class Bewerbung extends UI_Controller
         }
         else
         {
-            if (($post["zustell_strasse"] != "") && ((($post["zustell_plz"] != "") && ($post["zustell_ort"] != ""))))
+            if (($post['zustell_strasse'] != '') && ((($post['zustell_plz'] != '') && ($post['zustell_ort'] != ''))))
             {
-                if ($this->getData("zustell_adresse") !== null)
+                if ($this->getData('zustell_adresse') !== null)
                 {
-                    $zustell_adresse = $this->getData("zustell_adresse");
+                    $zustell_adresse = $this->getData('zustell_adresse');
                 }
                 else
                 {
-                    $zustell_adresse->person_id = $this->getData("person")->person_id;
+                    $zustell_adresse->person_id = $this->getData('person')->person_id;
                     $zustell_adresse->heimatadresse = false;
                     $zustell_adresse->zustelladresse = true;
                 }
-                $zustell_adresse->strasse = $post["zustell_strasse"];
-                $zustell_adresse->plz = $post["zustell_plz"];
-                $zustell_adresse->ort = $post["zustell_ort"];
-                $zustell_adresse->nation = $post["zustelladresse_nation"];
+                $zustell_adresse->strasse = $post['zustell_strasse'];
+                $zustell_adresse->plz = $post['zustell_plz'];
+                $zustell_adresse->ort = $post['zustell_ort'];
+                $zustell_adresse->nation = $post['zustelladresse_nation'];
                 $updateZustellAdresse = $this->AdresseModel->saveZustellAdresse((array)$zustell_adresse);
 
                 if(!isSuccess($updateZustellAdresse))
@@ -1339,20 +1444,20 @@ class Bewerbung extends UI_Controller
                 }
             }
         }
-        if (($post["email"] != ""))
+        if (($post['email'] != ''))
         {
-            if (!(isset($this->getData("kontakt")["email"])))
+            if (!(isset($this->getData('kontakt')['email'])))
             {
                 $kontakt = new stdClass();
-                $kontakt->person_id = $this->getData("person")->person_id;
-                $kontakt->kontakttyp = "email";
-                $kontakt->kontakt = $post["email"];
+                $kontakt->person_id = $this->getData('person')->person_id;
+                $kontakt->kontakttyp = 'email';
+                $kontakt->kontakt = $post['email'];
                 $kontakt->zustellung = true;
             }
             else
             {
-                $kontakt = $this->getData("kontakt")["email"];
-                $kontakt->kontakt = $post["email"];
+                $kontakt = $this->getData('kontakt')['email'];
+                $kontakt->kontakt = $post['email'];
             }
             $updateKontakt = $this->KontaktModel->saveKontakt((array)$kontakt);
 
@@ -1361,19 +1466,19 @@ class Bewerbung extends UI_Controller
                 $this->_setError(true, $updateKontakt->retval);
             }
         }
-        if ((isset($post["telefon"])) && ($post["telefon"] != ""))
+        if ((isset($post['telefon'])) && ($post['telefon'] != ''))
         {
-            if (!(isset($this->getData("kontakt")["telefon"])))
+            if (!(isset($this->getData('kontakt')['telefon'])))
             {
                 $kontakt = new stdClass();
-                $kontakt->person_id = $this->getData("person")->person_id;
-                $kontakt->kontakttyp = "telefon";
-                $kontakt->kontakt = $post["telefon"];
+                $kontakt->person_id = $this->getData('person')->person_id;
+                $kontakt->kontakttyp = 'telefon';
+                $kontakt->kontakt = $post['telefon'];
             }
             else
             {
-                $kontakt = $this->getData("kontakt")["telefon"];
-                $kontakt->kontakt = $post["telefon"];
+                $kontakt = $this->getData('kontakt')['telefon'];
+                $kontakt->kontakt = $post['telefon'];
             }
             $updateKontakt = $this->KontaktModel->saveKontakt((array)$kontakt);
 
@@ -1382,19 +1487,19 @@ class Bewerbung extends UI_Controller
                 $this->_setError(true, $updateKontakt->retval);
             }
         }
-        if ((isset($post["fax"])) && ($post["fax"] != ""))
+        if ((isset($post['fax'])) && ($post['fax'] != ''))
         {
-            if (!(isset($this->getData("kontakt")["fax"])))
+            if (!(isset($this->getData('kontakt')['fax'])))
             {
                 $kontakt = new stdClass();
-                $kontakt->person_id = $this->getData("person")->person_id;
-                $kontakt->kontakttyp = "fax";
-                $kontakt->kontakt = $post["fax"];
+                $kontakt->person_id = $this->getData('person')->person_id;
+                $kontakt->kontakttyp = 'fax';
+                $kontakt->kontakt = $post['fax'];
             }
             else
             {
-                $kontakt = $this->getData("kontakt")["fax"];
-                $kontakt->kontakt = $post["fax"];
+                $kontakt = $this->getData('kontakt')['fax'];
+                $kontakt->kontakt = $post['fax'];
             }
             $updateKontakt = $this->KontaktModel->saveKontakt((array)$kontakt);
 
@@ -1412,15 +1517,15 @@ class Bewerbung extends UI_Controller
 
         $this->setData('zustell_adresse', $this->AdresseModel->getZustelladresse());
 
-        foreach ($this->getData("gemeinden") as $gemeinde)
+        foreach ($this->getData('gemeinden') as $gemeinde)
         {
-            if (($this->getData("adresse") !== null) && ($gemeinde->plz == $this->getData("adresse")->plz) && ($gemeinde->name == $this->getData("adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("adresse")->ort))
+            if (($this->getData('adresse') !== null) && ($gemeinde->plz == $this->getData('adresse')->plz) && ($gemeinde->name == $this->getData('adresse')->gemeinde) && ($gemeinde->ortschaftsname == $this->getData('adresse')->ort))
             {
-                $this->setRawData("ort_dd", $gemeinde->gemeinde_id);
+                $this->setRawData('ort_dd', $gemeinde->gemeinde_id);
             }
-            if (($this->getData("zustell_adresse") !== null) && ($gemeinde->plz == $this->getData("zustell_adresse")->plz) && ($gemeinde->name == $this->getData("zustell_adresse")->gemeinde) && ($gemeinde->ortschaftsname == $this->getData("zustell_adresse")->ort))
+            if (($this->getData('zustell_adresse') !== null) && ($gemeinde->plz == $this->getData('zustell_adresse')->plz) && ($gemeinde->name == $this->getData('zustell_adresse')->gemeinde) && ($gemeinde->ortschaftsname == $this->getData('zustell_adresse')->ort))
             {
-                $this->setRawData("zustell_ort_dd", $gemeinde->gemeinde_id);
+                $this->setRawData('zustell_ort_dd', $gemeinde->gemeinde_id);
             }
         }
 
@@ -1442,31 +1547,31 @@ class Bewerbung extends UI_Controller
         {
             if ($stg->studiengang_kz === $this->getData('studiengang_kz'))
             {
-                $this->setRawData("studiengang", $stg);
+                $this->setRawData('studiengang', $stg);
             }
 
             if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
             {
-                $this->setRawData("bewerbung_abgeschickt", true);
+                $this->setRawData('bewerbung_abgeschickt', true);
                 $abgeschickt_array[$stg->studiengang_kz] = true;
             }
         }
         $this->setRawData('abgeschickt_array', $abgeschickt_array);
 
-        $this->setRawData("studiengaenge", array($this->getData('studiengang')));
+        $this->setRawData('studiengaenge', array($this->getData('studiengang')));
 
         $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
         $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
 
-        if (($this->getData("error") === null) && ($this->getData("studiengang_kz") !== null) && ($this->getData('studienplan_id') !== null))
+        if (($this->getData('error') === null) && ($this->getData('studiengang_kz') !== null) && ($this->getData('studienplan_id') !== null))
         {
-            redirect("/Requirements?studiengang_kz=" . $this->getData("studiengang_kz") . "&studienplan_id=" . $this->getData('studienplan_id'));
-            $this->setRawData("complete", $this->_checkDataCompleteness());
+            redirect('/Requirements?studiengang_kz=' . $this->getData('studiengang_kz') . '&studienplan_id=' . $this->getData('studienplan_id'));
+            $this->setRawData('complete', $this->_checkDataCompleteness());
             $this->load->view('bewerbung', $this->getAllData());
         }
         else
         {
-            $this->setRawData("complete", $this->_checkDataCompleteness());
+            $this->setRawData('complete', $this->_checkDataCompleteness());
             $this->load->view('bewerbung', $this->getAllData());
         }
     }
@@ -1516,14 +1621,14 @@ class Bewerbung extends UI_Controller
 	{
 		$personalDocumentsArray = array();
 		
-		if (isSuccess($reisepass = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["reisepass"])))
+		if (isSuccess($reisepass = $this->DokumentModel->getDokument($this->config->item('dokumentTypen')['reisepass'])))
 		{
-			$personalDocumentsArray[$this->config->item("dokumentTypen")["reisepass"]] = $reisepass->retval;
+			$personalDocumentsArray[$this->config->item('dokumentTypen')['reisepass']] = $reisepass->retval;
 		}
 		
-		if (isSuccess($lebenslauf = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["lebenslauf"])))
+		if (isSuccess($lebenslauf = $this->DokumentModel->getDokument($this->config->item('dokumentTypen')['lebenslauf'])))
 		{
-			$personalDocumentsArray[$this->config->item("dokumentTypen")["lebenslauf"]] = $lebenslauf->retval;
+			$personalDocumentsArray[$this->config->item('dokumentTypen')['lebenslauf']] = $lebenslauf->retval;
 		}
 		
 		$this->setData('personalDocuments', success($personalDocumentsArray));
@@ -1536,13 +1641,13 @@ class Bewerbung extends UI_Controller
     {
         //check if any application is sent
         $abgeschickt_array = array();
-        if($this->getData("prestudent") !== null)
+        if($this->getData('prestudent') !== null)
         {
-            foreach($this->getData("prestudent") as $prestudent)
+            foreach($this->getData('prestudent') as $prestudent)
             {
                 if ((isset($prestudent->bewerbung_abgeschicktamum)) && ($prestudent->bewerbung_abgeschicktamum != null))
                 {
-                    $this->setRawData("bewerbung_abgeschickt", true);
+                    $this->setRawData('bewerbung_abgeschickt', true);
                     $abgeschickt_array[$prestudent->studiengang_kz] = true;
                 }
             }
@@ -1579,7 +1684,7 @@ class Bewerbung extends UI_Controller
 
             if (is_array($phrasen))
             {
-                $text = "";
+                $text = '';
                 $sprache = ucfirst($sprache);
 
                 foreach ($phrasen as $p)
@@ -1589,39 +1694,39 @@ class Bewerbung extends UI_Controller
                         if (($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz) && ($p->sprache == $sprache))
                         {
                             if ($this->config->item('display_phrase_name'))
-                                $text = $p->text . " <i>[$p->phrase]</i>";
+                                $text = $p->text . ' <i>[$p->phrase]</i>';
                             else
                                 $text = $p->text;
                         }
                         elseif (($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
                         {
                             if ($this->config->item('display_phrase_name'))
-                                $text = $p->text . " <i>[$p->phrase]</i>";
+                                $text = $p->text . ' <i>[$p->phrase]</i>';
                             else
                                 $text = $p->text;
                         }
-                        elseif (($p->orgeinheit_kurzbz == $this->config->item("root_oe")) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+                        elseif (($p->orgeinheit_kurzbz == $this->config->item('root_oe')) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
                         {
                             if ($this->config->item('display_phrase_name'))
-                                $text = $p->text . " <i>[$p->phrase]</i>";
+                                $text = $p->text . ' <i>[$p->phrase]</i>';
                             else
                                 $text = $p->text;
                         }
                         elseif (($p->orgeinheit_kurzbz == null) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
                         {
                             if ($this->config->item('display_phrase_name'))
-                                $text = $p->text . " <i>[$p->phrase]</i>";
+                                $text = $p->text . ' <i>[$p->phrase]</i>';
                             else
                                 $text = $p->text;
                         }
                     }
                 }
 
-                if($text != "")
+                if($text != '')
                     return $text;
 
                 if ($this->config->item('display_phrase_name'))
-                    return "<i>[$phrase]</i>";
+                    return '<i>[$phrase]</i>';
             }
             else
             {
@@ -1630,7 +1735,7 @@ class Bewerbung extends UI_Controller
         }
         else
         {
-            return "Please load phrases first";
+            return 'Please load phrases first';
         }
     }
 }

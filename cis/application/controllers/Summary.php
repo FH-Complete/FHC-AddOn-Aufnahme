@@ -51,8 +51,8 @@ class Summary extends UI_Controller
 	 */
 	public function index()
 	{
-        if ((isset($this->input->get()["studiengang_kz"]) && ($this->input->get()["studiengang_kz"] !== null) && ($this->input->get()["studiengang_kz"] !== ''))
-            && (isset($this->input->get()['studienplan_id'])) && ($this->input->get()["studienplan_id"] !== null) && ($this->input->get()["studienplan_id"] !== '')
+        if ((isset($this->input->get()['studiengang_kz']) && ($this->input->get()['studiengang_kz'] !== null) && ($this->input->get()['studiengang_kz'] !== ''))
+            && (isset($this->input->get()['studienplan_id'])) && ($this->input->get()['studienplan_id'] !== null) && ($this->input->get()['studienplan_id'] !== '')
         )
         {
             $this->PhraseModel->getPhrasen(
@@ -63,8 +63,8 @@ class Summary extends UI_Controller
             $this->setData('numberOfUnreadMessages', $this->MessageModel->getCountUnreadMessages());
             $this->setData('person', $this->PersonModel->getPerson());
 
-            $this->setRawData("studiengang_kz", $this->input->get("studiengang_kz"));
-            $this->setRawData("studienplan_id", $this->input->get("studienplan_id"));
+            $this->setRawData('studiengang_kz', $this->input->get('studiengang_kz'));
+            $this->setRawData('studienplan_id', $this->input->get('studienplan_id'));
 
             $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
             if (hasData($studiensemester))
@@ -82,7 +82,7 @@ class Summary extends UI_Controller
             $abgeschickt_array = array();
             $studiengaenge = array();
 
-            foreach($this->getData("studiengaenge") as $stg)
+            foreach($this->getData('studiengaenge') as $stg)
             {
                 if((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
                 {
@@ -97,14 +97,14 @@ class Summary extends UI_Controller
                         $tempStg->studienplaene[0] = $stg->studienplaene[$key];
                         array_push($studiengaenge, $tempStg);
 
-                        if ($tempStg->studiengang_kz === $this->getData('studiengang_kz') && ($tempStg->prestudentstatus[0]->studienplan_id === $this->getData("studienplan_id")))
+                        if ($tempStg->studiengang_kz === $this->getData('studiengang_kz') && ($tempStg->prestudentstatus[0]->studienplan_id === $this->getData('studienplan_id')))
                         {
-                            $this->setRawData("studiengang", $tempStg);
+                            $this->setRawData('studiengang', $tempStg);
                         }
 
                         if ($tempStg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
                         {
-                            $this->setRawData("bewerbung_abgeschickt", true);
+                            $this->setRawData('bewerbung_abgeschickt', true);
                             $abgeschickt_array[$tempStg->studiengang_kz] = true;
                         }
                     }
@@ -112,17 +112,17 @@ class Summary extends UI_Controller
                 else
                 {
                     array_push($studiengaenge, $stg);
-                    if ($stg->studiengang_kz === $this->getData('studiengang_kz') && ($stg->prestudentstatus[0]->studienplan_id === $this->getData("studienplan_id")))
+                    if ($stg->studiengang_kz === $this->getData('studiengang_kz') && ($stg->prestudentstatus[0]->studienplan_id === $this->getData('studienplan_id')))
                     {
-                        $this->setRawData("studiengang", $stg);
+                        $this->setRawData('studiengang', $stg);
                     }
                 }
             }
 
-            $this->setRawData("studiengaenge", $studiengaenge);
+            $this->setRawData('studiengaenge', $studiengaenge);
             $this->setRawData('abgeschickt_array', $abgeschickt_array);
 
-            $this->setRawData("studiengaenge", array($this->getData('studiengang')));
+            $this->setRawData('studiengaenge', array($this->getData('studiengang')));
 
             $this->setRawData('kontakt', $this->KontaktModel->getOnlyKontaktByPersonId()->retval);
 
@@ -141,7 +141,21 @@ class Summary extends UI_Controller
                 )
             );
 
-            $this->setRawData('prestudent', $this->getData('studiengang')->prestudenten[0]);
+            //manually parsing udf_values
+            $prestudent = $this->getData('studiengang')->prestudenten[0];
+
+            $udf_values = json_decode($prestudent->udf_values);
+            $udf_values = (array) $udf_values;
+            if(is_array($udf_values) && (count($udf_values) > 0))
+            {
+                foreach($udf_values as $udf_key => $udf_value)
+                {
+                    $prestudent->{$udf_key} = $udf_value;
+                }
+            }
+
+            $this->setRawData('prestudent', $prestudent);
+
             $this->setRawData('prestudentStatus', $this->getData('studiengang')->prestudentstatus[0]);
 
             //load Dokumente from Studiengang
@@ -203,7 +217,7 @@ class Summary extends UI_Controller
 
             //load phrase for specialization
             $spezPhrase = array();
-            $spezPhrase[$this->getData('prestudent')->studiengang_kz] = $this->getPhrase("Aufnahme/Spezialisierung", $this->getData('sprache'), $this->getData('studiengang')->oe_kurzbz, $this->getData('studiengang')->studienplaene[0]->orgform_kurzbz);
+            $spezPhrase[$this->getData('prestudent')->studiengang_kz] = $this->getPhrase('Aufnahme/Spezialisierung', $this->getData('sprache'), $this->getData('studiengang')->oe_kurzbz, $this->getData('studiengang')->studienplaene[0]->orgform_kurzbz);
             $this->setRawData('spezPhrase', $spezPhrase);
 
             $this->load->view('summary', $this->getAllData());
@@ -222,14 +236,14 @@ class Summary extends UI_Controller
 	{
 		$personalDocumentsArray = array();
 		
-		if (isSuccess($reisepass = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["reisepass"])))
+		if (isSuccess($reisepass = $this->DokumentModel->getDokument($this->config->item('dokumentTypen')['reisepass'])))
 		{
-			$personalDocumentsArray[$this->config->item("dokumentTypen")["reisepass"]] = $reisepass->retval;
+			$personalDocumentsArray[$this->config->item('dokumentTypen')['reisepass']] = $reisepass->retval;
 		}
 		
-		if (isSuccess($lebenslauf = $this->DokumentModel->getDokument($this->config->item("dokumentTypen")["lebenslauf"])))
+		if (isSuccess($lebenslauf = $this->DokumentModel->getDokument($this->config->item('dokumentTypen')['lebenslauf'])))
 		{
-			$personalDocumentsArray[$this->config->item("dokumentTypen")["lebenslauf"]] = $lebenslauf->retval;
+			$personalDocumentsArray[$this->config->item('dokumentTypen')['lebenslauf']] = $lebenslauf->retval;
 		}
 		
 		$this->setData('personalDocuments', success($personalDocumentsArray));
@@ -251,7 +265,7 @@ class Summary extends UI_Controller
 
             if (is_array($phrasen))
             {
-                $text = "";
+                $text = '';
                 $sprache = ucfirst($sprache);
 
                 foreach ($phrasen as $p)
@@ -261,39 +275,39 @@ class Summary extends UI_Controller
                         if (($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == $orgform_kurzbz) && ($p->sprache == $sprache))
                         {
                             if ($this->config->item('display_phrase_name'))
-                                $text = $p->text . " <i>[$p->phrase]</i>";
+                                $text = $p->text . ' <i>[$p->phrase]</i>';
                             else
                                 $text = $p->text;
                         }
                         elseif (($p->orgeinheit_kurzbz == $oe_kurzbz) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
                         {
                             if ($this->config->item('display_phrase_name'))
-                                $text = $p->text . " <i>[$p->phrase]</i>";
+                                $text = $p->text . ' <i>[$p->phrase]</i>';
                             else
                                 $text = $p->text;
                         }
-                        elseif (($p->orgeinheit_kurzbz == $this->config->item("root_oe")) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
+                        elseif (($p->orgeinheit_kurzbz == $this->config->item('root_oe')) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
                         {
                             if ($this->config->item('display_phrase_name'))
-                                $text = $p->text . " <i>[$p->phrase]</i>";
+                                $text = $p->text . ' <i>[$p->phrase]</i>';
                             else
                                 $text = $p->text;
                         }
                         elseif (($p->orgeinheit_kurzbz == null) && ($p->orgform_kurzbz == null) && ($p->sprache == $sprache))
                         {
                             if ($this->config->item('display_phrase_name'))
-                                $text = $p->text . " <i>[$p->phrase]</i>";
+                                $text = $p->text . ' <i>[$p->phrase]</i>';
                             else
                                 $text = $p->text;
                         }
                     }
                 }
 
-                if($text != "")
+                if($text != '')
                     return $text;
 
                 if ($this->config->item('display_phrase_name'))
-                    return "<i>[$phrase]</i>";
+                    return '<i>[$phrase]</i>';
             }
             else
             {
@@ -302,7 +316,7 @@ class Summary extends UI_Controller
         }
         else
         {
-            return "Please load phrases first";
+            return 'Please load phrases first';
         }
     }
 }

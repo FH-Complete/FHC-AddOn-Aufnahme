@@ -236,4 +236,8 @@ $lang['aufnahme/unvollständig']='Bewerbung unvollständig';
 $lang['aufnahme/backToApplications']='Zurück zur Bewerbungsübersicht';
 $lang['aufnahme/absenden']='Absenden';
 $lang["aufnahme/bewerbungKannNichtGeloeschtWerden"]='Die Bewerbung kann nicht gelöscht werden, da Sie bereits abgesandt wurde.';
+$lang["aufnahme/notValid"]='ist nicht gültig.';
+$lang["aufnahme/greaterThanMaxValue"]='ist größer als der Maximalwert.';
+$lang["aufnahme/lessThanMinValue"]='ist kleiner als der Minimalwert.';
+
 ?>

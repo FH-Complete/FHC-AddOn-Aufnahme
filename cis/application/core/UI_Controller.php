@@ -47,7 +47,7 @@ class UI_Controller extends CI_Controller
 			$this->_checkLogin();
 		}
 
-		$this->_loadUDFs();
+        $this->setRawData("udfs", $this->getUDFs());
 	}
 	
 	/**
@@ -148,11 +148,27 @@ class UI_Controller extends CI_Controller
         $udfs = $this->_loadUDFs();
         if(isset($udfs->retval[0]) && is_object($udfs->retval[0]))
         {
-            return json_decode($udfs->retval[0]->jsons);
+            $data = json_decode($udfs->retval[0]->jsons);
+
+            if(is_array($data))
+            {
+                usort($data,"sort_udfs");
+            }
+
+            return $data;
         }
         else
         {
             return "";
         }
     }
+}
+
+function sort_udfs($a,$b)
+{
+    if ($a->sort==$b->sort)
+    {
+        return 0;
+    }
+    return ($a->sort < $b->sort)?-1:1;
 }

@@ -226,6 +226,9 @@ $lang['aufnahme/unvollständig']='Application incomplete';
 $lang['aufnahme/backToApplications']='back to applications overview';
 $lang['aufnahme/absenden']='Send';
 $lang["aufnahme/bewerbungKannNichtGeloeschtWerden"]='The application can not be deleted because it has already been sent.';
+$lang["aufnahme/notValid"]='is not valid.';
+$lang["aufnahme/greaterThanMaxValue"]='is greater than die max value.';
+$lang["aufnahme/lessThanMinValue"]='is less than the min value.';
 
 //TODO translate
 $lang['aufnahme/anredeUnknown']='geehrte/r Frau/Herr';
