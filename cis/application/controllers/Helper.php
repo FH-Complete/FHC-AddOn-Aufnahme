@@ -32,6 +32,13 @@ class Helper extends Helper_Controller
 
         parent::__construct();
 
+        $currentLanguage = $this->getCurrentLanguage();
+        if (hasData($currentLanguage))
+        {
+            $this->setData('sprache', $currentLanguage);
+            $this->lang->load(array('dokumente'), $this->getData('sprache'));
+        }
+
     }
 
     /**

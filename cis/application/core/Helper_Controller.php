@@ -26,8 +26,14 @@ class Helper_Controller extends CI_Controller
 		// 
 		$this->_data = array();
 
+        // Load return message helper
+        $this->load->helper('message');
+
         // Loading the
         $this->load->model('Language_model', 'LanguageModel');
+
+        // Loading the
+        $this->load->model('system/Sprache_model', 'SpracheModel');
 
         // Loading the
         $this->load->model('CheckUserAuth_model', 'CheckUserAuthModel');
@@ -101,5 +107,16 @@ class Helper_Controller extends CI_Controller
 		$this->_data = array();
 	}
 
+    protected function getCurrentLanguage()
+    {
+        $language = $this->LanguageModel->getCurrentLanguage();
+        $this->_getSprache($language);
+        return success($language);
+    }
+
+    protected function _getSprache($sprache)
+    {
+        $this->SpracheModel->getSprache(ucfirst($sprache));
+    }
 
 }
