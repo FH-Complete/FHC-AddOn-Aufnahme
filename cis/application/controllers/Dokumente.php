@@ -89,8 +89,18 @@ class Dokumente extends UI_Controller
             if($dok->dms_id == $dms_id)
             {
                 $dms = $dok;
+
+                if(!isset($dms->file_content))
+                {
+                    $retval = $this->DmsModel->getDms($dms_id);
+                    if(hasData($retval))
+                    {
+                        $dms = $retval->retval;
+                    }
+                }
             }
         }
+
 
         if($dok != null)
         {

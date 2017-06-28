@@ -28,7 +28,7 @@ class Dms_model extends REST_Model
 	{
 		$result = $this->load(
 			'content/Dms/AktenAcceptedDms',
-			array('person_id' => $this->getPersonId(), 'dokument_kurzbz' => $dokument_kurzbz)
+			array('person_id' => $this->getPersonId(), 'dokument_kurzbz' => $dokument_kurzbz, 'no_file' => true)
 		);
 
 		if (isSuccess($result))
