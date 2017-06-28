@@ -144,13 +144,16 @@ class Summary extends UI_Controller
             //manually parsing udf_values
             $prestudent = $this->getData('studiengang')->prestudenten[0];
 
-            $udf_values = json_decode($prestudent->udf_values);
-            $udf_values = (array) $udf_values;
-            if(is_array($udf_values) && (count($udf_values) > 0))
+            if(isset($prestudent->udf_values))
             {
-                foreach($udf_values as $udf_key => $udf_value)
+                $udf_values = json_decode($prestudent->udf_values);
+                $udf_values = (array) $udf_values;
+                if(is_array($udf_values) && (count($udf_values) > 0))
                 {
-                    $prestudent->{$udf_key} = $udf_value;
+                    foreach($udf_values as $udf_key => $udf_value)
+                    {
+                        $prestudent->{$udf_key} = $udf_value;
+                    }
                 }
             }
 
