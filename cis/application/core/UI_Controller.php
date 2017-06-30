@@ -148,7 +148,12 @@ class UI_Controller extends CI_Controller
         $udfs = $this->_loadUDFs();
         if(isset($udfs->retval[0]) && is_object($udfs->retval[0]))
         {
-            $data = json_decode($udfs->retval[0]->jsons);
+            $data = array();
+            foreach($udfs->retval as $udf)
+            {
+                $array = json_decode($udf->jsons);
+                $data = array_merge($data, $array);
+            }
 
             if(is_array($data))
             {
