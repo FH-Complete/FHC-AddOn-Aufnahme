@@ -24,17 +24,17 @@
                 $label = $value->description;
             }
 
-            if((isset($object->{$data->name})) && ($object->{$data->name} == $label))
+            if((isset($object->{$data->name})) && ($object->{$data->name} == $val))
             {
-                echo "<option value='$label' selected>$label</option>";
+                echo "<option value='$val' selected>$label</option>";
             }
-            if((!isset($object->{$data->name})) && $data->defaultValue == $label)
+            if((!isset($object->{$data->name})) && $data->defaultValue == $val)
             {
-                echo "<option value='$label' selected>$label</option>";
+                echo "<option value='$val' selected>$label</option>";
             }
             else
             {
-                echo "<option value='$label'>$label</option>";
+                echo "<option value='$val'>$label</option>";
             }
         }
         ?>
