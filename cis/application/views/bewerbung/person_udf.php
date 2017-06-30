@@ -10,9 +10,10 @@ if(is_array($udf_config) && $udf_config["active"] == true)
         if(isset($udfs) && is_array($udfs))
         {
             $renderedElements = 0;
+            $renderedElementsArray = array();
             foreach($udfs as $udf)
             {
-                if(isset($udf_config["udfs"]) && in_array($udf->name, $udf_config["udfs"]))
+                if(isset($udf_config["udfs"]) && in_array($udf->name, $udf_config["udfs"]) && (!isset($renderedElementsArray[$udf->name])))
                 {
                     if(($renderedElements % 2 == 0))
                     {
@@ -24,6 +25,7 @@ if(is_array($udf_config) && $udf_config["active"] == true)
                     }
                     echo '<div class="col-sm-6">'.$this->template->widget("userdefinedfield", array('data' => $udf, 'object' => $person)).'</div>';
                     $renderedElements++;
+                    $renderedElementsArray[$udf->name] = true;
                 }
             }
         }
