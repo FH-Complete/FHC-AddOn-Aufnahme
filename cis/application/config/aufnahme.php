@@ -192,7 +192,7 @@ $config['organisation'] = array(
 	"plz" => "3100",
 	"ort" => "St. Pölten",
 	"telefon" => "+43/2742/313 228 - 200",
-	"fax" => "F: +43/2742/313 228 - 339",
+	"fax" => "+43/2742/313 228 - 339",
 	"mail" => "<a href='mailto:csc@fhstp.ac.at'>csc@fhstp.ac.at</a>"
 );
 
