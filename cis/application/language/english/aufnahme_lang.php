@@ -229,6 +229,8 @@ $lang["aufnahme/bewerbungKannNichtGeloeschtWerden"]='The application can not be 
 $lang["aufnahme/notValid"]='is not valid.';
 $lang["aufnahme/greaterThanMaxValue"]='is greater than die max value.';
 $lang["aufnahme/lessThanMinValue"]='is less than the min value.';
+$lang["aufnahme/greaterThanMaxLength"]='is longer than the maximum permitted length.';
+$lang["aufnahme/lessThanMinLength"]='is shorter than the required minimum length.';
 
 //TODO translate
 $lang['aufnahme/anredeUnknown']='geehrte/r Frau/Herr';

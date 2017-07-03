@@ -193,7 +193,7 @@ class Requirements extends UI_Controller
 
                             if (is_string($data) || is_string($person))
                             {
-                                $this->_setError(true, $data . $person);
+                                $this->_setError(true, $data);
                             }
                             else
                             {
@@ -202,7 +202,22 @@ class Requirements extends UI_Controller
 
                                 if (!hasData($updatePerson))
                                 {
-                                    $this->_setError(true, $updatePerson->retval);
+                                    if(is_string($updatePerson->retval))
+                                    {
+                                        $this->_setError(true, $updatePerson->retval);
+                                    }
+                                    elseif($updatePerson->error != 0)
+                                    {
+                                        $msg = "";
+                                        foreach ($updatePerson->retval as $udfError)
+                                        {
+                                            foreach($udfError as $validationError)
+                                            {
+                                                $msg .= $validationError->msg.": ".$validationError->retval."<br>";
+                                            }
+                                        }
+                                        $this->_setError(true, $msg);
+                                    }
                                 }
                             }
                         }
@@ -211,7 +226,22 @@ class Requirements extends UI_Controller
 
                         if (!isSuccess($updatePrestudent))
                         {
-                            $this->_setError(true, 'could not save data');
+                            if(is_string($updatePrestudent->retval))
+                            {
+                                $this->_setError(true, 'could not save data');
+                            }
+                            elseif($updatePrestudent->error != 0)
+                            {
+                                $msg = "";
+                                foreach ($updatePrestudent->retval as $udfError)
+                                {
+                                    foreach($udfError as $validationError)
+                                    {
+                                        $msg .= $validationError->msg.": ".$validationError->retval."<br>";
+                                    }
+                                }
+                                $this->_setError(true, $msg);
+                            }
                         }
                         else
                         {

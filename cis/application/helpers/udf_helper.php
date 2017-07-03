@@ -11,7 +11,7 @@ function parseUdfData($udf_config, $udfs, $data, $target, $lang)
 {
     if(is_array($udf_config) && $udf_config["active"] == true)
     {
-        //$udfs = $this->getData("udfs");
+        $testedUdfs = array();
 
         if(isset($udfs) && is_array($udfs))
         {
@@ -19,61 +19,84 @@ function parseUdfData($udf_config, $udfs, $data, $target, $lang)
 
             foreach($udfs as $udf)
             {
-                if(isset($data[$udf->name]))
+                if(!isset($testedUdfs[$udf->name]))
                 {
-                    if($udf->type == 'checkbox')
+                    if (isset($data[$udf->name]))
                     {
-                        $target->{$udf->name} = true;
-                    }
-                    else
-                    {
-                        $validation = $udf->validation;
-                        $isValid = true;
-
-                        if(isset($validation->{'max-value'}))
+                        if ($udf->type == 'checkbox')
                         {
-                            if($data[$udf->name] > $validation->{'max-value'})
-                            {
-                                $isValid = false;
-                                $errormsg .= $udf->name." ".$lang->line("aufnahme/greaterThanMaxValue").'<br>';
-                            }
+                            $target->{$udf->name} = true;
                         }
-
-                        if(isset($validation->{'min-value'}))
+                        else
                         {
-                            if($data[$udf->name] < $validation->{'min-value'})
-                            {
-                                $isValid = false;
-                                $errormsg .= $udf->name." ".$lang->line("aufnahme/lessThanMinValue").'<br>';
-                            }
-                        }
+                            $validation = $udf->validation;
+                            $isValid = true;
 
-                        if (isset($validation->regex) && is_array($validation->regex))
-                        {
-                            foreach($validation->regex as $regexIndx => $regex)
+                            if (isset($validation->{'max-value'}))
                             {
-                                if ($regex->language == 'php')
+                                if ($data[$udf->name] > $validation->{'max-value'})
                                 {
-                                    if (preg_match($regex->expression, $data[$udf->name]) != 1)
+                                    $isValid = false;
+                                    $errormsg .= $udf->name . " " . $lang->line("aufnahme/greaterThanMaxValue") . '<br>';
+                                }
+                            }
+
+                            if (isset($validation->{'min-value'}))
+                            {
+                                if ($data[$udf->name] < $validation->{'min-value'})
+                                {
+                                    $isValid = false;
+                                    $errormsg .= $udf->name . " " . $lang->line("aufnahme/lessThanMinValue") . '<br>';
+                                }
+                            }
+
+                            if (isset($validation->{'min-length'}))
+                            {
+                                if (strlen($data[$udf->name]) < $validation->{'min-length'})
+                                {
+                                    $isValid = false;
+                                    $errormsg .= $udf->name . " " . $lang->line("aufnahme/lessThanMinLength") . '<br>';
+                                }
+                            }
+
+                            if (isset($validation->{'max-length'}))
+                            {
+                                if (strlen($data[$udf->name]) > $validation->{'max-length'})
+                                {
+                                    $isValid = false;
+                                    $errormsg .= $udf->name . " " . $lang->line("aufnahme/greaterThanMaxLength") . '<br>';
+                                }
+                            }
+
+                            if (isset($validation->regex) && is_array($validation->regex))
+                            {
+                                foreach ($validation->regex as $regexIndx => $regex)
+                                {
+                                    if ($regex->language == 'php')
                                     {
-                                        $isValid = false;
-                                        $errormsg .= $udf->name." ".$lang->line("aufnahme/notValid").'<br>';
-                                        break;
+                                        if (preg_match($regex->expression, $data[$udf->name]) != 1)
+                                        {
+                                            $isValid = false;
+                                            $errormsg .= $udf->name . " " . $lang->line("aufnahme/notValid") . '<br>';
+                                            break;
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        if($isValid)
-                        {
-                            $target->{$udf->name} = $data[$udf->name];
+                            if ($isValid)
+                            {
+                                $target->{$udf->name} = $data[$udf->name];
+                            }
                         }
                     }
+                    elseif ((in_array($udf->name, $udf_config["udfs"])) && ($udf->type == 'checkbox'))
+                    {
+                        $target->{$udf->name} = false;
+                    }
                 }
-                elseif((in_array($udf->name, $udf_config["udfs"])) && ($udf->type == 'checkbox'))
-                {
-                    $target->{$udf->name} = false;
-                }
+
+                $testedUdfs[$udf->name] = true;
             }
         }
     }

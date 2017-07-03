@@ -9,5 +9,6 @@
         title="<?php echo $this->getPhrase($data->description, $sprache, $studiengang->oe_kurzbz, $studiengang->studienplaene[0]->orgform_kurzbz); ?>"
         <?php echo (isset($data->validation->required) && ($data->validation->required == true)) ? 'required' : ''; ?>
         name="<?php echo $data->name; ?>"
+       <?php echo (isset($data->validation->{'max-length'})) ?  " maxlength=".$data->validation->{'max-length'}."'" : ''; ?>
     />
 </div>

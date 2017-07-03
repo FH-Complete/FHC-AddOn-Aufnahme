@@ -1275,7 +1275,7 @@ class Bewerbung extends UI_Controller
 
             if (is_string($data) || is_string($prestudent))
             {
-                $this->_setError(true, $data . $prestudent);
+                $this->_setError(true, $data);
             }
             else
             {
@@ -1284,7 +1284,22 @@ class Bewerbung extends UI_Controller
 
                 if (!hasData($updatePrestudent))
                 {
-                    $this->_setError(true, $updatePrestudent->retval);
+                    if(is_string($updatePrestudent->retval))
+                    {
+                        $this->_setError(true, $updatePrestudent->retval);
+                    }
+                    elseif($updatePrestudent->error != 0)
+                    {
+                        $msg = "";
+                        foreach ($updatePrestudent->retval as $udfError)
+                        {
+                            foreach($udfError as $validationError)
+                            {
+                                $msg .= $validationError->msg.": ".$validationError->retval."<br>";
+                            }
+                        }
+                        $this->_setError(true, $msg);
+                    }
                 }
             }
         }
@@ -1293,7 +1308,22 @@ class Bewerbung extends UI_Controller
 
         if(!hasData($updatePerson))
         {
-            $this->_setError(true, $updatePerson->retval);
+            if(is_string($updatePerson->retval))
+            {
+                $this->_setError(true, $updatePerson->retval);
+            }
+            elseif($updatePerson->error != 0)
+            {
+                $msg = "";
+                foreach ($updatePerson->retval as $udfError)
+                {
+                    foreach($udfError as $validationError)
+                    {
+                        $msg .= $validationError->msg.": ".$validationError->retval."<br>";
+                    }
+                }
+                $this->_setError(true, $msg);
+            }
         }
 
         $adresse = new stdClass();
@@ -1334,9 +1364,21 @@ class Bewerbung extends UI_Controller
                 }
                 $updatePerson = $this->PersonModel->savePerson((array)$person);
 
-                if(!hasData($updatePerson))
+                if(is_string($updatePerson->retval))
                 {
                     $this->_setError(true, $updatePerson->retval);
+                }
+                elseif($updatePerson->error != 0)
+                {
+                    $msg = "";
+                    foreach ($updatePerson->retval as $udfError)
+                    {
+                        foreach($udfError as $validationError)
+                        {
+                            $msg .= $validationError->msg.": ".$validationError->retval."<br>";
+                        }
+                    }
+                    $this->_setError(true, $msg);
                 }
 
                 $updateAdresse = $this->AdresseModel->saveAdresse((array)$adresse);

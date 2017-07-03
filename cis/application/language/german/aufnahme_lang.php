@@ -239,5 +239,8 @@ $lang["aufnahme/bewerbungKannNichtGeloeschtWerden"]='Die Bewerbung kann nicht ge
 $lang["aufnahme/notValid"]='ist nicht gültig.';
 $lang["aufnahme/greaterThanMaxValue"]='ist größer als der Maximalwert.';
 $lang["aufnahme/lessThanMinValue"]='ist kleiner als der Minimalwert.';
+$lang["aufnahme/greaterThanMaxLength"]='ist länger als die maximal erlaubte Länge.';
+$lang["aufnahme/lessThanMinLength"]='ist kürzer als die erforderliche Mindestlänge.';
+
 
 ?>
