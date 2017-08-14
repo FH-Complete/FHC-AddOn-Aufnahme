@@ -66,14 +66,13 @@ class Requirements extends UI_Controller
                 ucfirst($this->getData('sprache'))
             );
 
-            $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+            $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
+
             if (hasData($studiensemester))
             {
                 $this->setData('studiensemester', $studiensemester);
-                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                    $this->getData('studiensemester')->studiensemester_kurzbz,
+                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                     '',
-                    'Interessent',
                     true
                 ));
             }
@@ -159,7 +158,7 @@ class Requirements extends UI_Controller
             $geplanter_abschluss[$this->getData('prestudent')->studiengang_kz] = $this->getData('prestudent')->zgvdatum;
             $this->setRawData('geplanter_abschluss', $geplanter_abschluss);
 
-            $this->setRawData('dokumente', $this->AkteModel->getAktenAccepted()->retval);
+            $this->setRawData('dokumente', $this->DmsModel->getAktenAcceptedDms()->retval);
 
             if (isset($this->input->post()['studiengang_kz']))
             {
@@ -261,10 +260,8 @@ class Requirements extends UI_Controller
 
 
             //reload saved data
-            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                $this->getData('studiensemester')->studiensemester_kurzbz,
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                 '',
-                'Interessent',
                 true
             ));
 
@@ -305,6 +302,12 @@ class Requirements extends UI_Controller
                     if ($stg->studiengang_kz === $this->getData('studiengang_kz') && ($stg->prestudentstatus[0]->studienplan_id === $this->getData('studienplan_id')))
                     {
                         $this->setRawData('studiengang', $stg);
+
+                        if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                        {
+                            $this->setRawData('bewerbung_abgeschickt', true);
+                            $abgeschickt_array[$stg->studiengang_kz] = true;
+                        }
                     }
                 }
             }
@@ -350,6 +353,13 @@ class Requirements extends UI_Controller
 
                     unset($akte->inhalt_vorhanden);
 
+                    unset($akte->oe_kurzbz);
+                    unset($akte->kategorie_kurzbz);
+                    unset($akte->version);
+                    unset($akte->filename);
+                    unset($akte->name);
+                    unset($akte->beschreibung);
+
                 }
                 else
                 {
@@ -367,6 +377,7 @@ class Requirements extends UI_Controller
                     $akte->nachgereicht = true;
                 }
                 $akte = (array)$akte;
+
                 $updateAkte = $this->AkteModel->saveAkte((array)$akte);
 
                 if (!isSuccess($updateAkte))
@@ -542,17 +553,15 @@ class Requirements extends UI_Controller
 			//load person data
             $this->setData('person', $this->PersonModel->getPerson());
 
-            $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+            $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
 
             $this->setRawData('studiengang_kz', $this->input->post('studiengang_kz'));
 
             if (hasData($studiensemester))
             {
                 $this->setData('studiensemester', $studiensemester);
-                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                    $this->getData('studiensemester')->studiensemester_kurzbz,
+                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                     '',
-                    'Interessent',
                     true
                 ));
 
@@ -803,6 +812,8 @@ class Requirements extends UI_Controller
                                 $this->setRawData('prestudent', $prestudent);
                             }
                         }
+
+                        unset($this->session->userdata["aktenAccepted:".$this->getPersonId()]);
 						
 						echo json_encode($result);
 					}
@@ -863,14 +874,12 @@ class Requirements extends UI_Controller
         $this->setData('person', $this->PersonModel->getPerson());
         $this->setRawData('studiengang_kz', $studiengang_kz);
 
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
-            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                $this->getData('studiensemester')->studiensemester_kurzbz,
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                 '',
-                'Interessent',
                 true
             ));
         }

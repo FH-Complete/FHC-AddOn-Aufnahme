@@ -79,15 +79,14 @@ class Studiengaenge extends UI_Controller
             $this->_setError(true, $this->OrgformModel->getErrorMessage($orgform));
         }
 
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
             $this->setRawData('studiensemester_kurzbz', $studiensemester->retval->studiensemester_kurzbz);
-            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                $this->getData('studiensemester')->studiensemester_kurzbz,
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                 '',
-                'Interessent'
+                true
             ));
 
             $studiengaenge = array();

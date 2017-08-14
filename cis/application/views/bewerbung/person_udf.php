@@ -13,7 +13,7 @@ if(is_array($udf_config) && $udf_config["active"] == true)
             $renderedElementsArray = array();
             foreach($udfs as $udf)
             {
-                if(isset($udf_config["udfs"]) && in_array($udf->name, $udf_config["udfs"]) && (!isset($renderedElementsArray[$udf->name])))
+                if(isset($udf_config["udfs"]) && ((in_array($udf->name, $udf_config["udfs"]) || ($udf->validation->required))) && (!isset($renderedElementsArray[$udf->name])))
                 {
                     if(($renderedElements % 2 == 0))
                     {

@@ -158,7 +158,7 @@ class Login extends UI_Controller
 	private function _redirect($person)
 	{
 		$prestudent = null;
-		$studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+		$studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
 		
 		if (hasData($studiensemester))
 		{

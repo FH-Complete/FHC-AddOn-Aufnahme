@@ -15,6 +15,7 @@ class UI_Controller extends CI_Controller
 	const NOT_CHECK_LOGIN = false;
 	
 	private $_data;
+    private $_personSessionName = 'Person.getPerson';
 	
 	/**
 	 * 
@@ -166,6 +167,25 @@ class UI_Controller extends CI_Controller
         {
             return "";
         }
+    }
+
+    /**
+     *
+     */
+    protected function getPersonId()
+    {
+        $person_id = null;
+
+        if (isset($this->session->{$this->_personSessionName}))
+        {
+            $person = $this->session->{$this->_personSessionName};
+            if (hasData($person))
+            {
+                $person_id = $person->retval->person_id;
+            }
+        }
+
+        return $person_id;
     }
 }
 

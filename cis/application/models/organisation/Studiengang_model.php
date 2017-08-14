@@ -77,4 +77,20 @@ class Studiengang_model extends REST_Model
 			),
 			'Studiengang.getAppliedStudiengang');
 	}
+
+    public function getAppliedStudiengangFromNow($titel, $forceApiCall = false)
+    {
+        if($forceApiCall)
+        {
+            unset($this->session->userdata['Studiengang.getAppliedStudiengang']);
+        }
+
+        return $this->load(
+            'organisation/Studiengang/AppliedStudiengangFromNow',
+            array(
+                'person_id' => $this->getPersonId(),
+                'titel' => $titel
+            ),
+            'Studiengang.getAppliedStudiengang');
+    }
 }

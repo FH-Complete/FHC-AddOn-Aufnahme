@@ -256,14 +256,12 @@ class Messages extends UI_Controller
 		
 		$studiengaengeArray = array();
 		
-		$studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+		$studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
 		if (hasData($studiensemester))
 		{
 			$this->setData('studiensemester', $studiensemester);
-			$studiengaenge = $this->StudiengangModel->getAppliedStudiengang(
-				$this->getData('studiensemester')->studiensemester_kurzbz,
+			$studiengaenge = $this->StudiengangModel->getAppliedStudiengangFromNow(
 				'',
-				'Interessent',
                 true
 			);
 			

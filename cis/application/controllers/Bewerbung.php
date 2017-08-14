@@ -66,7 +66,7 @@ class Bewerbung extends UI_Controller
 			ucfirst($this->getData('sprache'))
 		);
 
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
@@ -86,48 +86,50 @@ class Bewerbung extends UI_Controller
 		
 		$this->setData('person', $this->PersonModel->getPerson());
 
-        $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-            $this->getData('studiensemester')->studiensemester_kurzbz,
+        $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
             '',
-            'Interessent',
             true
         ));
 
         $studiengaenge = array();
         $abgeschickt_array = array();
 
-        foreach($this->getData('studiengaenge') as $stg)
+        if($this->getData('studiengaenge') != null)
         {
-            if((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
-            {
-                foreach($stg->prestudenten as $key => $ps)
-                {
-                    $tempStg = clone $stg;
-                    $tempStg->prestudenten = array();
-                    $tempStg->prestudenten[0] = $ps;
-                    $tempStg->prestudentstatus = array();
-                    $tempStg->prestudentstatus[0] = $stg->prestudentstatus[$key];
-                    $tempStg->studienplaene = array();
-                    $tempStg->studienplaene[0] = $stg->studienplaene[$key];
-                    array_push($studiengaenge, $tempStg);
 
-                    if ($tempStg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+            foreach ($this->getData('studiengaenge') as $stg)
+            {
+                if ((count($stg->prestudenten) > 1) && (count($stg->prestudentstatus) > 1))
+                {
+                    foreach ($stg->prestudenten as $key => $ps)
                     {
-                        $this->setRawData('bewerbung_abgeschickt', true);
-                        $abgeschickt_array[$tempStg->studiengang_kz] = true;
+                        $tempStg = clone $stg;
+                        $tempStg->prestudenten = array();
+                        $tempStg->prestudenten[0] = $ps;
+                        $tempStg->prestudentstatus = array();
+                        $tempStg->prestudentstatus[0] = $stg->prestudentstatus[$key];
+                        $tempStg->studienplaene = array();
+                        $tempStg->studienplaene[0] = $stg->studienplaene[$key];
+                        array_push($studiengaenge, $tempStg);
+
+                        if ($tempStg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                        {
+                            $this->setRawData('bewerbung_abgeschickt', true);
+                            $abgeschickt_array[$tempStg->studiengang_kz] = true;
+                        }
                     }
                 }
-            }
-            else
-            {
-                array_push($studiengaenge, $stg);
-
-                if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                else
                 {
-                    $this->setRawData('bewerbung_abgeschickt', true);
-                    $abgeschickt_array[$stg->studiengang_kz] = true;
-                }
+                    array_push($studiengaenge, $stg);
 
+                    if ($stg->prestudentstatus[0]->bewerbung_abgeschicktamum != null)
+                    {
+                        $this->setRawData('bewerbung_abgeschickt', true);
+                        $abgeschickt_array[$stg->studiengang_kz] = true;
+                    }
+
+                }
             }
         }
 
@@ -365,7 +367,7 @@ class Bewerbung extends UI_Controller
         $studiengang_kz = $this->input->get('studiengang_kz');
         $this->setData('person', $this->PersonModel->getPerson());
 
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
@@ -463,14 +465,20 @@ class Bewerbung extends UI_Controller
 
             $this->setData('person', $this->PersonModel->getPerson());
 
-            $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+            if($studiensemester_kurzbz == null)
+            {
+                $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
+            }
+            else
+            {
+                $studiensemester = $this->StudiensemesterModel->getStudiensemester($studiensemester_kurzbz, true);
+            }
+
             if (hasData($studiensemester))
             {
                 $this->setData('studiensemester', $studiensemester);
-                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                    $this->getData('studiensemester')->studiensemester_kurzbz,
+                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                     '',
-                    'Interessent',
                     true
                 ));
             }
@@ -710,14 +718,20 @@ class Bewerbung extends UI_Controller
                 redirect('/Studiengaenge');
             }
 
-            $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+            if($studiensemester_kurzbz == null)
+            {
+                $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
+            }
+            else
+            {
+                $studiensemester = $this->StudiensemesterModel->getStudiensemester($studiensemester_kurzbz);
+            }
+
             if (hasData($studiensemester))
             {
                 $this->setData('studiensemester', $studiensemester);
-                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                    $this->getData('studiensemester')->studiensemester_kurzbz,
+                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                     '',
-                    'Interessent',
                     true
                 ));
             }
@@ -824,14 +838,12 @@ class Bewerbung extends UI_Controller
      */
     public function storno($studiengang_kz, $studienplan_id)
     {
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
-            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                $this->getData('studiensemester')->studiensemester_kurzbz,
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                 '',
-                'Interessent',
                 true
             ));
         }
@@ -877,14 +889,12 @@ class Bewerbung extends UI_Controller
                     //TODO call load data method
 
 
-                    $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+                    $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
                     if (hasData($studiensemester))
                     {
                         $this->setData('studiensemester', $studiensemester);
-                        $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                            $this->getData('studiensemester')->studiensemester_kurzbz,
+                        $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                             '',
-                            'Interessent',
                             true
                         ));
                     }
@@ -1054,6 +1064,9 @@ class Bewerbung extends UI_Controller
                                 $result->success = false;
                             }
                         }
+
+                        unset($this->session->userdata["aktenAccepted:".$this->getPersonId()]);
+
                         echo json_encode($result);
                     }
                     else
@@ -1083,12 +1096,30 @@ class Bewerbung extends UI_Controller
             $dms_id = $this->input->post()['dms_id'];
             $this->setRawData('dokumente' , $this->AkteModel->getAktenAccepted()->retval);
 
+            //adding abschlusszeugnis if it is not present in dokumente
+            if (!isset($this->getData('dokumente')[$this->config->item('dokumentTypen')['abschlusszeugnis_b']]))
+            {
+                $akten = $this->getData('dokumente');
+
+                //if (hasData($akten))
+                {
+                    if (isset($akten->retval[$this->config->item('dokumentTypen')['abschlusszeugnis_b']]))
+                    {
+                        $dok = $akten->retval[$this->config->item('dokumentTypen')['abschlusszeugnis_b']];
+                        $dokumente = $this->getData('dokumente');
+                        $dokumente[$dok->dokument_kurzbz] = $dok;
+                        $this->setRawData('dokumente', $dokumente);
+                    }
+                }
+            }
+
             foreach($this->getData('dokumente') as $dok)
             {
                 if(($dok->dms_id === $dms_id) && ($dok->accepted == false))
                 {
                     $result = $this->DmsModel->deleteDms($dok->dms_id);
                     $result->dokument_kurzbz = $dok->dokument_kurzbz;
+                    unset($this->session->userdata["aktenAccepted:".$this->getPersonId()]);
                 }
 //				var_dump($result);
             }
@@ -1110,7 +1141,7 @@ class Bewerbung extends UI_Controller
             ucfirst($this->getData('sprache'))
         );
 
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
@@ -1119,10 +1150,8 @@ class Bewerbung extends UI_Controller
 
         $this->setData('person', $this->PersonModel->getPerson());
 
-        $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-            $this->getData('studiensemester')->studiensemester_kurzbz,
+        $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
             '',
-            'Interessent',
             true
         ));
 
@@ -1571,14 +1600,12 @@ class Bewerbung extends UI_Controller
             }
         }
 
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
-            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                $this->getData('studiensemester')->studiensemester_kurzbz,
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                 '',
-                'Interessent',
                 true
             ));
         }

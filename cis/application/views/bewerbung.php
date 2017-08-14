@@ -55,7 +55,7 @@ if (isset($error) && ($error->error === true))
                                 "send" => site_url("/Send?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id),
                                 "summary" => site_url("/Summary?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id),
                                 "requirements" => site_url("/Requirements?studiengang_kz=" . $studiengang->studiengang_kz . "&studienplan_id=" . $studiengang->studienplaene[0]->studienplan_id),
-                                "personalData" => site_url("/Bewerbung/studiengang/" . $studiengang->studiengang_kz . "/" . $studiengang->studienplaene[0]->studienplan_id)
+                                "personalData" => site_url("/Bewerbung/studiengang/" . $studiengang->studiengang_kz . "/" . $studiengang->studienplaene[0]->studienplan_id."/".$studiengang->prestudentstatus[0]->studiensemester_kurzbz)
                             ),
                             "studienplan_id"=>$studiengang->studienplaene[0]->studienplan_id
                         )

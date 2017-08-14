@@ -154,14 +154,12 @@ class Dokumente extends UI_Controller
     private function _loadData()
     {
         //load preinteressent data
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
-            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                $this->getData('studiensemester')->studiensemester_kurzbz,
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                 '',
-                'Interessent',
                 true
             ));
         }
@@ -494,14 +492,12 @@ class Dokumente extends UI_Controller
     public function areDocumentsComplete()
     {
         //load preinteressent data
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
-            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                $this->getData('studiensemester')->studiensemester_kurzbz,
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                 '',
-                'Interessent',
                 true
             ));
 

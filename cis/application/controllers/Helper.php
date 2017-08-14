@@ -64,14 +64,12 @@ class Helper extends Helper_Controller
 
 
         //load preinteressent data
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
-            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                $this->getData('studiensemester')->studiensemester_kurzbz,
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                 '',
-                'Interessent',
                 true
             ));
 
@@ -198,15 +196,13 @@ class Helper extends Helper_Controller
         $studiengang_kz = $this->input->get("studiengang_kz");
         $this->setData('person', $this->PersonModel->getPerson());
 
-        $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+        $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
 
         if (hasData($studiensemester))
         {
             $this->setData('studiensemester', $studiensemester);
-            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                $this->getData('studiensemester')->studiensemester_kurzbz,
+            $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                 '',
-                'Interessent',
                 true
             ));
         }

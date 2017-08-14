@@ -94,7 +94,7 @@ class CheckSystem extends MY_Controller
 		else
 			$this->_setError(true, $this->OrgformModel->getErrorMessage());
 
-		$this->StudiensemesterModel->getNextStudiensemester('WS');
+		$this->StudiensemesterModel->getAktStudiensemester();
 		//var_dump($this->StudiensemesterModel->result);
 		$studiensemester = $this->StudiensemesterModel->result;
 

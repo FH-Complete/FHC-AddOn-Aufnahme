@@ -21,7 +21,7 @@ function parseUdfData($udf_config, $udfs, $data, $target, $lang)
             {
                 if(!isset($testedUdfs[$udf->name]))
                 {
-                    if (isset($data[$udf->name]))
+                    if ((isset($data[$udf->name])) && ($data[$udf->name] != "") && ($data[$udf->name] != null))
                     {
                         if ($udf->type == 'checkbox')
                         {

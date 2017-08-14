@@ -47,12 +47,18 @@ foreach ($studiengaengeForBewerbung as $stg)
 					{
 						foreach ($studienplan->fristen as $frist)
 						{
+                            $studiensemesterForButtonLabel = "";
+                            if((count($studienplan->fristen) > 1) || ($studiensemester->studiensemester_kurzbz != $frist->studiensemester_kurzbz))
+                            {
+                                $studiensemesterForButtonLabel = ' ('.$frist->studiensemester_kurzbz.')';
+                            }
+
 							if ((date("Y-m-d", strtotime($frist->beginn)) < date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) > date("Y-m-d")))
 							{
 								$bewerbungMoeglich = true;
 								?>
 								<div class="row">
-									<div class="col-sm-3 col-md-offset-3"><a href="<?php echo base_url($this->config->config["index_page"] . "/Bewerbung/studiengang/" . $stg->studiengang_kz . "/" . $studienplan->studienplan_id . "/" . $frist->studiensemester_kurzbz) ?>"><button id="button_<?php echo $studienplan->studienplan_id; ?>" type="button" class="btn btn-sm icon-bewerben"><?php echo ((isset($aktiveBewerbungen[$studienplan->studienplan_id]) && ($aktiveBewerbungen[$studienplan->studienplan_id] == $studienplan->studienplan_id))) ? $this->lang->line('studiengaenge/buttonTextBewebungAktiv') : $this->lang->line('studiengaenge/buttonText'); ?></button></a></div>
+									<div class="col-sm-3 col-md-offset-3"><a href="<?php echo base_url($this->config->config["index_page"] . "/Bewerbung/studiengang/" . $stg->studiengang_kz . "/" . $studienplan->studienplan_id . "/" . $frist->studiensemester_kurzbz) ?>"><button id="button_<?php echo $studienplan->studienplan_id; ?>" type="button" class="btn btn-sm icon-bewerben"><?php echo ((isset($aktiveBewerbungen[$studienplan->studienplan_id]) && ($aktiveBewerbungen[$studienplan->studienplan_id] == $studienplan->studienplan_id))) ? $this->lang->line('studiengaenge/buttonTextBewebungAktiv').$studiensemesterForButtonLabel : $this->lang->line('studiengaenge/buttonText').$studiensemesterForButtonLabel; ?></button></a></div>
 								</div>
 								<?php
 							}

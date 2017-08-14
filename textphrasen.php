@@ -1219,5 +1219,25 @@ Danach erhalten Sie eine E-Mail mit Zugangscode an die angegebene Adresse. Mit d
             'text' => 'User Defined Fields',
             'description' => ''
         )
+    ),
+    array
+    (
+        'phrase' => 'Submission/ApplicationPeriodExpired',
+        'phrasentext' => array
+        (
+            'sprache' => 'German',
+            'text' => 'Die Bewerbungsfrist ist abgelaufen!',
+            'description' => 'Die Bewerbungsfrist ist abgelaufen'
+        )
+    ),
+    array
+    (
+        'phrase' => 'Submission/ApplicationPeriodExpired',
+        'phrasentext' => array
+        (
+            'sprache' => 'English',
+            'text' => 'Application period has expired.',
+            'description' => 'Application period has expired.'
+        )
     )
 );

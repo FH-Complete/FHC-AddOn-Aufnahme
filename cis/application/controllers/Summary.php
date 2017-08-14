@@ -66,14 +66,12 @@ class Summary extends UI_Controller
             $this->setRawData('studiengang_kz', $this->input->get('studiengang_kz'));
             $this->setRawData('studienplan_id', $this->input->get('studienplan_id'));
 
-            $studiensemester = $this->StudiensemesterModel->getNextStudiensemester('WS');
+            $studiensemester = $this->StudiensemesterModel->getAktStudiensemester();
             if (hasData($studiensemester))
             {
                 $this->setData('studiensemester', $studiensemester);
-                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengang(
-                    $this->getData('studiensemester')->studiensemester_kurzbz,
+                $this->setData('studiengaenge', $this->StudiengangModel->getAppliedStudiengangFromNow(
                     '',
-                    'Interessent',
                     true
                 ));
             }

@@ -27,8 +27,8 @@ if(is_array($udf_config) && $udf_config["active"] == true)
                           <div class="col-sm-6">' .
                         $udf->name
                         . '</div>
-                          <div class="col-sm-6 '.(!isset($person->{$udf->name}) ? "incomplete" : "").'">' .
-                        (isset($person->{$udf->name}) ? (($person->{$udf->name} === true) ? "true" : (($person->{$udf->name} === false) ? "false" : $person->{$udf->name})) : $this->lang->line("summary_unvollstaendig"))
+                          <div class="col-sm-6 '.((!isset($prestudent->{$udf->name}) && (!isset($person->{$udf->name}))) ? "incomplete" : "").'">' .
+                        (isset($prestudent->{$udf->name}) ? (($prestudent->{$udf->name} === true) ? "true" : (($prestudent->{$udf->name} === false) ? "false" : $prestudent->{$udf->name})) : (isset($person->{$udf->name}) ? (($person->{$udf->name} === true) ? "true" : (($person->{$udf->name} === false) ? "false" : $person->{$udf->name})) : $this->lang->line("summary_unvollstaendig")))
                         . '</div></div>';
                     $renderedElements++;
                     $renderedElementsArray[$udf->name] = true;
