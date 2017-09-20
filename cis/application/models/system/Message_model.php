@@ -18,7 +18,7 @@ class Message_model extends REST_Model
 	 */
 	public function getMessagesByPersonId()
 	{
-		return $this->load('system/Message/MessagesByPersonId', array('person_id' => $this->getPersonId()));
+		return $this->load('system/Message/MessagesByPersonId', array('person_id' => $this->getPersonId(), 'oe_kurzbz' => $this->config->item('root_oe_stg')));
 	}
 	
 	/**
@@ -26,7 +26,7 @@ class Message_model extends REST_Model
 	 */
 	public function getSentMessagesByPersonId()
 	{
-		return $this->load('system/Message/SentMessagesByPerson', array('person_id' => $this->getPersonId()));
+		return $this->load('system/Message/SentMessagesByPerson', array('person_id' => $this->getPersonId(), 'oe_kurzbz' => $this->config->item('root_oe_stg')));
 	}
 	
 	/**
@@ -34,7 +34,7 @@ class Message_model extends REST_Model
 	 */
 	public function getCountUnreadMessages()
 	{
-		return $this->loadOne('system/Message/CountUnreadMessages', array('person_id' => $this->getPersonId()));
+		return $this->loadOne('system/Message/CountUnreadMessages', array('person_id' => $this->getPersonId(), 'oe_kurzbz' => $this->config->item('root_oe_stg')));
 	}
 	
 	/**

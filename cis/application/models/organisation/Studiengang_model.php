@@ -54,7 +54,7 @@ class Studiengang_model extends REST_Model
 	 */
 	public function getStudiengangBewerbung()
 	{
-		return $this->load('organisation/Studiengang/StudiengangBewerbung', null, 'Studiengang.getStudiengangBewerbung');
+		return $this->load('organisation/Studiengang/StudiengangBewerbung', array('oe_kurzbz' => $this->config->item('root_oe_stg')), 'Studiengang.getStudiengangBewerbung');
 	}
 	
 	/**
@@ -86,10 +86,11 @@ class Studiengang_model extends REST_Model
         }
 
         return $this->load(
-            'organisation/Studiengang/AppliedStudiengangFromNow',
+            'organisation/Studiengang/AppliedStudiengangFromNowOe',
             array(
                 'person_id' => $this->getPersonId(),
-                'titel' => $titel
+                'titel' => $titel,
+                'oe_kurzbz' => $this->config->item('root_oe_stg')
             ),
             'Studiengang.getAppliedStudiengang');
     }
