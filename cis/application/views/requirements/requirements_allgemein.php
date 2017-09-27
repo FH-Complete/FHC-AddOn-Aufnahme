@@ -118,7 +118,6 @@
 		?>
 	</div>
     <div class="col-sm-6">
-	<!--<?php echo form_label($this->lang->line('requirements_abschlusszeugnis'), "maturazeugnis", array("name" => "Maturaze", "for" => "Maturaze", "class" => "control-label")) ?>-->
 		<div class="form-group" id="<?php echo $this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ].'_hochgeladen'; ?>">
 			<?php
 				if ((!isset($dokumente[$this->config->config["dokumentTypen"]["abschlusszeugnis_".$studiengang->typ]]))

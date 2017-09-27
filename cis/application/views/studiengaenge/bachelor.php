@@ -8,76 +8,98 @@
 <h2 class="bachelor_header"><?php echo $this->lang->line('studiengaenge/bachelor'); ?></h2>
 
 <?php
+$count = false;
+
 foreach ($studiengaengeForBewerbung as $stg)
 {
 	if ($stg->typ == "b")
 	{
-		foreach ($stg->studienplaene as $studienplan)
-		{
-			?>
-			<a class="collapsed collapseLink" data-toggle='collapse' data-target='#<?php echo $studienplan->studienplan_id; ?>'><?php echo $stg->bezeichnung ?> (<?php echo $studienplan->orgform_kurzbz; ?>)</a></br>
-			<div id="<?php echo $studienplan->studienplan_id; ?>" class='collapse collapsePanel'>
-				<div class="stgContent">
-					<div class="row">
-						<div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/abschluss') ?>: </div><div class="col-sm-6"><?php echo (isset($stg->akadgrad) && ($stg->akadgrad != null)) ?  $stg->akadgrad[0]->titel." (".$stg->akadgrad[0]->akadgrad_kurzbz.")" : ""; ?></div>
-					</div>
-					<div class="row">
-						<div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/dauer'); ?>: </div><div class="col-sm-6"><?php echo $studienplan->regelstudiendauer; ?> Semester</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-3">
-							<?php echo $this->lang->line('studiengaenge/orgform'); ?>:
-						</div>
-						<div class="col-sm-6">
-							<?php
-							foreach ($orgform as $of)
-							{
-								if ($of->orgform_kurzbz == $studienplan->orgform_kurzbz)
-								{
-									echo $of->bezeichnung;
-								}
-							}
-							?>
-						</div>
-					</div>
-
-					<?php
-					$bewerbungMoeglich = false;
-					if (!empty($studienplan->fristen))
-					{
-						foreach ($studienplan->fristen as $frist)
-						{
-                            $studiensemesterForButtonLabel = "";
-                            if((count($studienplan->fristen) > 1) || ($studiensemester->studiensemester_kurzbz != $frist->studiensemester_kurzbz))
+        foreach ($stg->studienplaene as $studienplan)
+        {
+            $count = true;
+            ?>
+            <a class="collapsed collapseLink" data-toggle='collapse'
+               data-target='#<?php echo $studienplan->studienplan_id; ?>'><?php echo $stg->bezeichnung ?>
+                (<?php echo $studienplan->orgform_kurzbz; ?>)</a></br>
+            <div id="<?php echo $studienplan->studienplan_id; ?>" class='collapse collapsePanel'>
+                <div class="stgContent">
+                    <div class="row">
+                        <div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/abschluss') ?>:</div>
+                        <div class="col-sm-6"><?php echo (isset($stg->akadgrad) && ($stg->akadgrad != null)) ? $stg->akadgrad[0]->titel . " (" . $stg->akadgrad[0]->akadgrad_kurzbz . ")" : ""; ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3"><?php echo $this->lang->line('studiengaenge/dauer'); ?>:</div>
+                        <div class="col-sm-6"><?php echo $studienplan->regelstudiendauer; ?> Semester</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <?php echo $this->lang->line('studiengaenge/orgform'); ?>:
+                        </div>
+                        <div class="col-sm-6">
+                            <?php
+                            foreach ($orgform as $of)
                             {
-                                $studiensemesterForButtonLabel = ' ('.$frist->studiensemester_kurzbz.')';
+                                if ($of->orgform_kurzbz == $studienplan->orgform_kurzbz)
+                                {
+                                    echo $of->bezeichnung;
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+
+                    <?php
+                    $bewerbungMoeglich = false;
+                    if (!empty($studienplan->fristen))
+                    {
+                        foreach ($studienplan->fristen as $frist)
+                        {
+                            $studiensemesterForButtonLabel = "";
+                            if ((count($studienplan->fristen) > 1) || ($studiensemester->studiensemester_kurzbz != $frist->studiensemester_kurzbz))
+                            {
+                                $studiensemesterForButtonLabel = ' (' . $frist->studiensemester_kurzbz . ')';
                             }
 
-							if ((date("Y-m-d", strtotime($frist->beginn)) < date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) > date("Y-m-d")))
-							{
-								$bewerbungMoeglich = true;
-								?>
-								<div class="row">
-									<div class="col-sm-3 col-md-offset-3"><a href="<?php echo base_url($this->config->config["index_page"] . "/Bewerbung/studiengang/" . $stg->studiengang_kz . "/" . $studienplan->studienplan_id . "/" . $frist->studiensemester_kurzbz) ?>"><button id="button_<?php echo $studienplan->studienplan_id; ?>" type="button" class="btn btn-sm icon-bewerben"><?php echo ((isset($aktiveBewerbungen[$studienplan->studienplan_id]) && ($aktiveBewerbungen[$studienplan->studienplan_id] == $studienplan->studienplan_id))) ? $this->lang->line('studiengaenge/buttonTextBewebungAktiv').$studiensemesterForButtonLabel : $this->lang->line('studiengaenge/buttonText').$studiensemesterForButtonLabel; ?></button></a></div>
-								</div>
-								<?php
-							}
-						}
-					}
+                            if ((date("Y-m-d", strtotime($frist->beginn)) <= date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) >= date("Y-m-d")))
+                            {
+                                $bewerbungMoeglich = true;
+                                ?>
+                                <div class="row">
+                                    <div class="col-sm-3 col-md-offset-3"><a
+                                                href="<?php echo base_url($this->config->config["index_page"] . "/Bewerbung/studiengang/" . $stg->studiengang_kz . "/" . $studienplan->studienplan_id . "/" . $frist->studiensemester_kurzbz) ?>">
+                                            <button id="button_<?php echo $studienplan->studienplan_id; ?>"
+                                                    type="button"
+                                                    class="btn btn-sm icon-bewerben"><?php echo ((isset($aktiveBewerbungen[$studienplan->studienplan_id]) && ($aktiveBewerbungen[$studienplan->studienplan_id] == $studienplan->studienplan_id))) ? $this->lang->line('studiengaenge/buttonTextBewebungAktiv') . $studiensemesterForButtonLabel : $this->lang->line('studiengaenge/buttonText') . $studiensemesterForButtonLabel; ?></button>
+                                        </a></div>
+                                </div>
+                                <?php
+                            }
+                        }
+                    }
 
-					if (!$bewerbungMoeglich)
-					{
-						?>
-						<div class="row">
-							<div class="col-sm-3 col-md-offset-3"><a href="<?php echo base_url($this->config->config["index_page"] . "/Bewerbung/studiengang/" . $stg->studiengang_kz . "/" . $studienplan->studienplan_id) ?>"><button id="button_<?php echo $studienplan->studienplan_id; ?>" type="button" class="btn btn-sm icon-bewerben" disabled title="<?php echo $this->lang->line("studiengaenge/BewerbungNichtMoeglich"); ?>"><?php echo $this->lang->line('studiengaenge/buttonText'); ?></button></a></div>
-						</div>
-						<?php
-					}
-					?>
-				</div>
-			</div>
-			<?php
-		}
+                    if (!$bewerbungMoeglich)
+                    {
+                        ?>
+                        <div class="row">
+                            <div class="col-sm-3 col-md-offset-3"><a
+                                        href="<?php echo base_url($this->config->config["index_page"] . "/Bewerbung/studiengang/" . $stg->studiengang_kz . "/" . $studienplan->studienplan_id) ?>">
+                                    <button id="button_<?php echo $studienplan->studienplan_id; ?>" type="button"
+                                            class="btn btn-sm icon-bewerben" disabled
+                                            title="<?php echo $this->lang->line("studiengaenge/BewerbungNichtMoeglich"); ?>"><?php echo $this->lang->line('studiengaenge/buttonText'); ?></button>
+                                </a></div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                </div>
+            </div>
+            <?php
+        }
 	}
+}
+
+if(empty($studiengaengeForBewerbung) || !$count)
+{
+    echo $this->lang->line('aufnahme/keineBewerbungMoeglich');
 }
 ?>

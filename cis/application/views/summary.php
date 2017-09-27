@@ -112,7 +112,7 @@ $this->template->widget(
                     || (data.requirements_dokumente == false)
                 )
                 {
-                    $("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
+                    $("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollstaendig'); ?>");
                 }
                 else
                 {
@@ -171,7 +171,7 @@ $this->template->widget(
 			{
 				if((data.complete !== undefined) && (data.complete == false))
 				{
-					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
+					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollstaendig'); ?>");
 				}
 				else
 				{

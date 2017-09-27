@@ -18,7 +18,26 @@ class Message_model extends REST_Model
 	 */
 	public function getMessagesByPersonId()
 	{
-		return $this->load('system/Message/MessagesByPersonId', array('person_id' => $this->getPersonId(), 'oe_kurzbz' => $this->config->item('root_oe_stg')));
+        if(($this->config->item('root_oe_stg') !== null) &&  ($this->config->item('root_oe_stg') !== ''))
+        {
+            return $this->load(
+                'system/Message/MessagesByPersonId',
+                array(
+                    'person_id' => $this->getPersonId(),
+                    'oe_kurzbz' => $this->config->item('root_oe_stg')
+                )
+            );
+        }
+        else
+        {
+            return $this->load(
+                'system/Message/MessagesByPersonId',
+                array(
+                    'person_id' => $this->getPersonId()
+                )
+            );
+        }
+
 	}
 	
 	/**
@@ -26,7 +45,26 @@ class Message_model extends REST_Model
 	 */
 	public function getSentMessagesByPersonId()
 	{
-		return $this->load('system/Message/SentMessagesByPerson', array('person_id' => $this->getPersonId(), 'oe_kurzbz' => $this->config->item('root_oe_stg')));
+        if(($this->config->item('root_oe_stg') !== null) &&  ($this->config->item('root_oe_stg') !== ''))
+        {
+            return $this->load(
+                'system/Message/SentMessagesByPerson',
+                array(
+                    'person_id' => $this->getPersonId(),
+                    'oe_kurzbz' => $this->config->item('root_oe_stg')
+                )
+            );
+        }
+        else
+        {
+            return $this->load(
+                'system/Message/SentMessagesByPerson',
+                array(
+                    'person_id' => $this->getPersonId()
+                )
+            );
+        }
+
 	}
 	
 	/**
@@ -34,7 +72,25 @@ class Message_model extends REST_Model
 	 */
 	public function getCountUnreadMessages()
 	{
-		return $this->loadOne('system/Message/CountUnreadMessages', array('person_id' => $this->getPersonId(), 'oe_kurzbz' => $this->config->item('root_oe_stg')));
+        if(($this->config->item('root_oe_stg') !== null) &&  ($this->config->item('root_oe_stg') !== ''))
+        {
+            return $this->loadOne(
+                'system/Message/CountUnreadMessages',
+                array(
+                    'person_id' => $this->getPersonId(),
+                    'oe_kurzbz' => $this->config->item('root_oe_stg')
+                )
+            );
+        }
+        else
+        {
+            return $this->loadOne(
+                'system/Message/CountUnreadMessages',
+                array(
+                    'person_id' => $this->getPersonId()
+                )
+            );
+        }
 	}
 	
 	/**

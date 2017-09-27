@@ -54,7 +54,23 @@ class Studiengang_model extends REST_Model
 	 */
 	public function getStudiengangBewerbung()
 	{
-		return $this->load('organisation/Studiengang/StudiengangBewerbung', array('oe_kurzbz' => $this->config->item('root_oe_stg')), 'Studiengang.getStudiengangBewerbung');
+	    if(($this->config->item('root_oe_stg') !== null) &&  ($this->config->item('root_oe_stg') !== ''))
+        {
+            return $this->load(
+                'organisation/Studiengang/StudiengangBewerbung',
+                array(
+                    'oe_kurzbz' => $this->config->item('root_oe_stg')
+                ),
+                'Studiengang.getStudiengangBewerbung');
+        }
+        else
+        {
+            return $this->load(
+                'organisation/Studiengang/StudiengangBewerbung',
+                array(),
+                'Studiengang.getStudiengangBewerbung');
+        }
+
 	}
 	
 	/**
@@ -85,13 +101,26 @@ class Studiengang_model extends REST_Model
             unset($this->session->userdata['Studiengang.getAppliedStudiengang']);
         }
 
-        return $this->load(
-            'organisation/Studiengang/AppliedStudiengangFromNowOe',
-            array(
-                'person_id' => $this->getPersonId(),
-                'titel' => $titel,
-                'oe_kurzbz' => $this->config->item('root_oe_stg')
-            ),
-            'Studiengang.getAppliedStudiengang');
+        if(($this->config->item('root_oe_stg') !== null) &&  ($this->config->item('root_oe_stg') !== ''))
+        {
+            return $this->load(
+                'organisation/Studiengang/AppliedStudiengangFromNowOe',
+                array(
+                    'person_id' => $this->getPersonId(),
+                    'titel' => $titel,
+                    'oe_kurzbz' => $this->config->item('root_oe_stg')
+                ),
+                'Studiengang.getAppliedStudiengang');
+        }
+        else
+        {
+            return $this->load(
+                'organisation/Studiengang/AppliedStudiengangFromNowOe',
+                array(
+                    'person_id' => $this->getPersonId(),
+                    'titel' => $titel
+                ),
+                'Studiengang.getAppliedStudiengang');
+        }
     }
 }

@@ -8,12 +8,14 @@
 <h2 class="master_header"><?php echo $this->lang->line('studiengaenge/master'); ?></h2>
 
 <?php
+$count = false;
 foreach ($studiengaengeForBewerbung as $stg)
 {
 	if ($stg->typ == "m")
 	{
 		foreach ($stg->studienplaene as $studienplan)
 		{
+            $count = true;
 			?>
 			<a class="collapsed collapseLink" data-toggle='collapse' data-target='#<?php echo $studienplan->studienplan_id; ?>'><?php echo $stg->bezeichnung ?> (<?php echo $studienplan->orgform_kurzbz; ?>)</a></br>
 			<div id="<?php echo $studienplan->studienplan_id ?>" class='collapse collapsePanel'>
@@ -46,7 +48,7 @@ foreach ($studiengaengeForBewerbung as $stg)
 					{
 						foreach ($studienplan->fristen as $frist)
 						{
-							if ((date("Y-m-d", strtotime($frist->beginn)) < date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) > date("Y-m-d")))
+							if ((date("Y-m-d", strtotime($frist->beginn)) <= date("Y-m-d")) && (date("Y-m-d", strtotime($frist->ende)) >= date("Y-m-d")))
 							{
 								$bewerbungMoeglich = true;
 								?>
@@ -72,5 +74,10 @@ foreach ($studiengaengeForBewerbung as $stg)
 			<?php
 		}
 	}
+}
+
+if(empty($studiengaengeForBewerbung) || !$count)
+{
+    echo $this->lang->line('aufnahme/keineBewerbungMoeglich');
 }
 ?>

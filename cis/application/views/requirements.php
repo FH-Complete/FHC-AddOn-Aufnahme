@@ -184,7 +184,7 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
                     || (data.requirements_dokumente == false)
                 )
                 {
-                    $("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
+                    $("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollstaendig'); ?>");
                 }
                 else
                 {
@@ -243,7 +243,7 @@ if (isset($error) && ($error->error === true) && ($error->msg !== null))
 			{
 				if((data.complete !== undefined) && (data.complete == false))
 				{
-					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollständig'); ?>");
+					$("#infotext_"+studienplan_id).html("<?php echo $this->lang->line('aufnahme/unvollstaendig'); ?>");
 				}
 				else
 				{

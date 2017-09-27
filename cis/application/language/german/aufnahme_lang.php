@@ -232,7 +232,7 @@ $lang['aufnahme/Maennlich']='männlich';
 $lang['aufnahme/Weiblich']='weiblich';
 $lang['aufnahme/registrieren']='Registrieren';
 $lang['aufnahme/nochNichtAbgeschickt']='Noch nicht abgesandt';
-$lang['aufnahme/unvollständig']='Bewerbung unvollständig';
+$lang['aufnahme/unvollstaendig']='Bewerbung unvollständig';
 $lang['aufnahme/backToApplications']='Zurück zur Bewerbungsübersicht';
 $lang['aufnahme/absenden']='Absenden';
 $lang["aufnahme/bewerbungKannNichtGeloeschtWerden"]='Die Bewerbung kann nicht gelöscht werden, da Sie bereits abgesandt wurde.';
@@ -241,6 +241,7 @@ $lang["aufnahme/greaterThanMaxValue"]='ist größer als der Maximalwert.';
 $lang["aufnahme/lessThanMinValue"]='ist kleiner als der Minimalwert.';
 $lang["aufnahme/greaterThanMaxLength"]='ist länger als die maximal erlaubte Länge.';
 $lang["aufnahme/lessThanMinLength"]='ist kürzer als die erforderliche Mindestlänge.';
+$lang["aufnahme/keineBewerbungMoeglich"]='Derzeit ist keine Bewerbung möglich.';
 
 
 ?>

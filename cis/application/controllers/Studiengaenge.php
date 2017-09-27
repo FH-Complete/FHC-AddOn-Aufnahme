@@ -120,6 +120,12 @@ class Studiengaenge extends UI_Controller
 
 			$this->benchmark->mark('codepart_start');
 			$this->setData("studiengaengeForBewerbung", $this->StudiengangModel->getStudiengangBewerbung());
+
+            if(!is_array($this->getData('studiengaengeForBewerbung')))
+            {
+                $this->setRawData("studiengaengeForBewerbung", array());
+            }
+
 			$this->benchmark->mark('codepart_end');
 			log_message('debug', 'Time elapsed for Studiengaenge/index->getStudienplan: ' . $this->benchmark->elapsed_time('codepart_start', 'codepart_end') . 'ms');
 
@@ -138,13 +144,16 @@ class Studiengaenge extends UI_Controller
 					foreach ($stg->studienplaene as $key_studienplaene => $row_studienplaene)
 					{
 						$stg->studienplaene[$key_studienplaene]->fristen = array();
-						foreach ($bewerbungstermine as $row_bewerbungstermin)
-						{
-							if ($row_studienplaene->studienplan_id == $row_bewerbungstermin->studienplan_id)
-							{
-								$stg->studienplaene[$key_studienplaene]->fristen[] = $row_bewerbungstermin;
-							}
-						}
+						if(is_array($bewerbungstermine))
+                        {
+                            foreach ($bewerbungstermine as $row_bewerbungstermin)
+                            {
+                                if ($row_studienplaene->studienplan_id == $row_bewerbungstermin->studienplan_id)
+                                {
+                                    $stg->studienplaene[$key_studienplaene]->fristen[] = $row_bewerbungstermin;
+                                }
+                            }
+                        }
 						if(empty($stg->studienplaene[$key_studienplaene]->fristen))
                         {
                             unset($stg->studienplaene[$key_studienplaene]);

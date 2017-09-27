@@ -222,7 +222,7 @@ $lang['aufnahme/Maennlich']='male';
 $lang['aufnahme/Weiblich']='female';
 $lang['aufnahme/registrieren']='Register';
 $lang['aufnahme/nochNichtAbgeschickt']='Not yet sent';
-$lang['aufnahme/unvollständig']='Application incomplete';
+$lang['aufnahme/unvollstaendig']='Application incomplete';
 $lang['aufnahme/backToApplications']='back to applications overview';
 $lang['aufnahme/absenden']='Send';
 $lang["aufnahme/bewerbungKannNichtGeloeschtWerden"]='The application can not be deleted because it has already been sent.';
@@ -243,5 +243,6 @@ $lang['aufnahme/mailtext']='Sehr %4$s %1$s %2$s!<br><br>
         Dieser Link ist 24 Stunden gültig.<br><br>
         Mit freundlichen Grüßen, <br>
         FH';
+$lang["aufnahme/keineBewerbungMoeglich"]='Derzeit ist keine Bewerbung möglich.';
 
 ?>
