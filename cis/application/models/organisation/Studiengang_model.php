@@ -115,7 +115,7 @@ class Studiengang_model extends REST_Model
         else
         {
             return $this->load(
-                'organisation/Studiengang/AppliedStudiengangFromNowOe',
+                'organisation/Studiengang/AppliedStudiengangFromNow',
                 array(
                     'person_id' => $this->getPersonId(),
                     'titel' => $titel
