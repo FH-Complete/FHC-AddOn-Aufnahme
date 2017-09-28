@@ -24,8 +24,12 @@ class Akte_model extends REST_Model
 	/**
 	 * 
 	 */
-	public function getAktenAccepted($dokumenttyp_kurzbz = null)
+	public function getAktenAccepted($dokumenttyp_kurzbz = null, $forceApiCall = false)
 	{
+        if($forceApiCall)
+        {
+            unset($this->session->userdata["aktenAccepted:".$this->getPersonId()]);
+        }
 	    $result = $this->load(
 			'crm/Akte/Aktenaccepted',
 			array(

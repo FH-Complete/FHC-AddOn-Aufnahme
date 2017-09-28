@@ -394,7 +394,7 @@ class Requirements extends UI_Controller
                 }
             }
 
-            $this->setRawData('dokumente', $this->AkteModel->getAktenAccepted()->retval);
+            $this->setRawData('dokumente', $this->AkteModel->getAktenAccepted(null, true)->retval);
 
             $temp_doks = array();
             if (isset($this->input->post()['studiengang_kz']))
@@ -844,7 +844,7 @@ class Requirements extends UI_Controller
 		if((isset($this->input->post()['dms_id'])))
 		{
 			$dms_id = $this->input->post()['dms_id'];
-            $this->setRawData('dokumente' , $this->AkteModel->getAktenAccepted()->retval);
+            $this->setRawData('dokumente' , $this->AkteModel->getAktenAccepted(null, true)->retval);
 
 			foreach($this->getData('dokumente') as $dok)
 			{
