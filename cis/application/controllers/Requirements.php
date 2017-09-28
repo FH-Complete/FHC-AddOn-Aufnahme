@@ -326,6 +326,7 @@ class Requirements extends UI_Controller
             }
 
             //load dokumente
+            $this->setRawData('dokumente', $this->AkteModel->getAktenAccepted(null, true)->retval);
 
             $dokumente = $this->getData('dokumente');
 
