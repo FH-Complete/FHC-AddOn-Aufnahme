@@ -20,7 +20,7 @@ class Benutzer_model extends REST_Model
 	{
         if($forceApiCall)
         {
-            unset($this->session->userdata{'Benutzer.getBenutzer'});
+            unset($this->session->userdata['Benutzer.getBenutzer']);
         }
 
 		return $this->loadOne(

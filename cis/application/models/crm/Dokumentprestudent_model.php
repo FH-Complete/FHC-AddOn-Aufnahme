@@ -18,7 +18,7 @@ class Dokumentprestudent_model extends REST_Model
 	 */
 	public function setAccepted($prestudent_id, $studiengang_kz)
 	{
-        unset($this->session->userdata{"aktenAccepted:".$this->getPersonId()});
+        	unset($this->session->userdata["aktenAccepted:".$this->getPersonId()]);
 
 		return $this->save(
 			'crm/Dokumentprestudent/SetAccepted',
