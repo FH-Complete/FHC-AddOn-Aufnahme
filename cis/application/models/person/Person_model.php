@@ -20,7 +20,7 @@ class Person_model extends REST_Model
 	{
         if($forceApiCall)
         {
-            unset($this->session->userdata{'Person.getPerson'});
+            unset($this->session->userdata['Person.getPerson']);
         }
 
 		return $this->loadOne(
@@ -42,7 +42,7 @@ class Person_model extends REST_Model
 	{
 	    if($forceApiCall)
         {
-            unset($this->session->userdata{'Person.getPerson'});
+            unset($this->session->userdata['Person.getPerson']);
         }
 
 		return $this->loadOne(
@@ -62,7 +62,7 @@ class Person_model extends REST_Model
 	{
 	    if($forceApiCall)
         {
-            unset($this->session->userdata{'Person.getPerson'});
+            unset($this->session->userdata['Person.getPerson']);
         }
 
 		return $this->loadOne(
